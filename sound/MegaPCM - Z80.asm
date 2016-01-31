@@ -16,14 +16,14 @@
 
 ; Memory variables
 
-Stack		equ	0FF0h
+Stack		equ	0DF0h
 Ptr_InitPlayback equ	Event_InitPlayback+1	; Init Playback event pointer
 Ptr_SoundProc	equ	Event_SoundProc+1	; Sound process event pointer
 Ptr_Interrupt	equ	Event_Interrupt+1	; Sound interrupt event pointer
 Ptr_EndPlayback	equ	Event_EndPlayback+1	; End playback event pointer
-DAC_Number	equ	0FFFh			; Number of DAC sample to play ($81-based)
-DAC_Volume	equ	0FFEh			; DAC volume
-DAC_Type	equ	0FFDh			; Type of DAC ($00 - music, $FF - SFX), this is effectively an 'ignore volume' flag
+DAC_Number	equ	0DFFh			; Number of DAC sample to play ($81-based)
+DAC_Volume	equ	0DFEh			; DAC volume
+DAC_Type	equ	0DFDh			; Type of DAC ($00 - music, $FF - SFX), this is effectively an 'ignore volume' flag
 						; There are special numbers to control playback:
 						;	$80	- Stop Playback
 						;	$7F	- Pause Playback
@@ -257,14 +257,6 @@ QuitPlaybackLoop:
 	exx
 	jr	Event_EndPlayback	; Clownacy | (jp -> jr)
 
-; ===============================================================
-	; Clownacy | Moved over here: requires less padding
-	align	100h	; it's important to align this way, or the code above won't work properly
-
-DPCM_DeltaArray:
-	db	0, 1, 2, 4, 8, 10h, 20h, 40h
-	db	-80h, -1, -2, -4, -8, -10h, -20h, -40h
-
 ; ---------------------------------------------------------------
 ; Routines to control bank-switching
 ; ---------------------------------------------------------------
@@ -435,7 +427,6 @@ Init_DPCM:
 	ld	d,(ix+s_pos+1)		;
 	ld	e,(ix+s_pos)		; de = start offset
 	set	7,d			; make it 8000h-based if it's not (perverts memory damage if playing corrupted slots)
-	ld	h,DPCM_DeltaArray>>8	; load delta table base
 	ld	(iy+0),2Ah		; YM => prepare to fetch DAC bytes
 	ld	b,80h			; init DAC value
 
@@ -443,11 +434,7 @@ Process_DPCM:
 
 	; Calculate and send 2 values to DAC
 	ld	a,(de)			; 7	; get a byte from DPCM stream
-	rrca				; 4	; get first nibble
-	rrca				; 4	;
-	rrca				; 4	;
-	rrca				; 4	;
-	and	0Fh			; 7	; mask nibble
+	ld	h,DPCM_HighNibble>>8	; 7	; load delta table base
 	ld	l,a			; 4	; setup delta table index
 	ld	a,b			; 4	; load DAC Value
 	add	a,(hl)			; 7	; add delta to it
@@ -459,10 +446,10 @@ Process_DPCM:
 	ld	a,(de)			; 7	; Clownacy | get volume-adjusted PCM byte
 	exx				; 4
 	ld	(YM_Port0_Data),a	; 13	; write to DAC
-	; Cycles: 92
+	; Cycles: 76
 
 	ld	a,(de)			; 7	; reload DPCM stream byte
-	and	0Fh			; 7	; get second nibble
+	ld	h,DPCM_LowNibble>>8	; 7	; load delta table base
 	ld	l,a			; 4	; setup delta table index
 	ld	a,b			; 4	; load DAC Value
 	add	a,(hl)			; 7	; add delta to it
@@ -688,6 +675,40 @@ ptr_dacE0:	DAC_Entry	08h, SegaPCM,		pcm	; $E0	- Sega!
 	if $ > Stack
 		fatal "There's too much data before the volume lookup table! There should be less than \{Stack}h bytes of data, but you're using \{$}h bytes!"
 	endif
+
+	align 0E00h
+DPCM_LowNibble:	db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
+DPCM_HighNibble:db 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
+		db 1, 1, 1, 1, 1, 1, 1,	1, 1, 1, 1, 1, 1, 1, 1,	1
+		db 2, 2, 2, 2, 2, 2, 2,	2, 2, 2, 2, 2, 2, 2, 2,	2
+		db 4, 4, 4, 4, 4, 4, 4,	4, 4, 4, 4, 4, 4, 4, 4,	4
+		db 8, 8, 8, 8, 8, 8, 8,	8, 8, 8, 8, 8, 8, 8, 8,	8
+		db 10h,	10h, 10h, 10h, 10h, 10h, 10h, 10h, 10h,	10h, 10h, 10h, 10h, 10h, 10h, 10h
+		db 20h,	20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h,	20h, 20h, 20h, 20h, 20h, 20h, 20h
+		db 40h,	40h, 40h, 40h, 40h, 40h, 40h, 40h, 40h,	40h, 40h, 40h, 40h, 40h, 40h, 40h
+		db 80h,	80h, 80h, 80h, 80h, 80h, 80h, 80h, 80h,	80h, 80h, 80h, 80h, 80h, 80h, 80h
+		db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
+		db 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh
+		db 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh
+		db 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h
+		db 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h
+		db 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h
+		db 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h
 
 	align 1000h
 VolumeTbls:
