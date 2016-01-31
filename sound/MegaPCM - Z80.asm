@@ -29,6 +29,11 @@ DAC_Type	equ	0DFDh			; Type of DAC ($00 - music, $FF - SFX), this is effectively
 						;	$7F	- Pause Playback
 						;	$00	- Continue Playback
 
+; Look-up tables
+
+DPCM_LowNibble	equ	0E00h
+DPCM_HighNibble	equ	0F00h
+
 ; System ports
 
 YM_Port0_Ctrl	equ	4000h
@@ -58,6 +63,7 @@ e_pos	equ	6	; end offset (in last bank)
 
 	; Setup variables
 	ld	sp,Stack		; init SP
+	call	GenerateTables
 	xor	a			; a = 0
 	ld	(DAC_Number),a		; reset DAC to play
 	ld	h,a
@@ -116,8 +122,7 @@ LoadDAC:
 	inc	de			; skip a byte in events table ('jp' opcode)
 	djnz	-
 
-	; Clownacy | Cycles aren't that important here, so let's save some space instead (jp -> jr)
-	jr	Event_InitPlayback	; launch 'InitPlayback' event
+	jp	Event_InitPlayback	; launch 'InitPlayback' event
 
 ; ---------------------------------------------------------------
 ; Setup YM to playback DAC
@@ -154,6 +159,45 @@ SetupVolume:
 	ld	(LoadBank.volume+1),a
 	ld	(Init_PCM.volume+1),a
 	ret
+
+; ---------------------------------------------------------------
+; Generate tables used by driver
+; ---------------------------------------------------------------
+
+GenerateTables:
+	; First, generate DPCM_LowNibble
+	ld	de,DPCM_LowNibble
+	ld	b,10h
+-
+	push	bc
+	ld	hl,DPCM_DeltaArray
+	ld	bc,DPCM_DeltaArray_End-DPCM_DeltaArray
+	ldir
+	pop	bc
+	djnz	-
+
+	; Now for DPCM_HighNibble
+	ld	de,DPCM_HighNibble
+	ld	hl,DPCM_DeltaArray
+	ld	b,10h
+-
+	push	bc
+	ld	a,(hl)
+	ld	b,10h
+-
+	ld	(de),a
+	inc	de
+	djnz	-
+	inc	hl
+	pop	bc
+	djnz	--
+	
+	ret
+
+DPCM_DeltaArray:
+	db	0, 1, 2, 4, 8, 10h, 20h, 40h
+	db	-80h, -1, -2, -4, -8, -10h, -20h, -40h
+DPCM_DeltaArray_End
 
 ; ---------------------------------------------------------------
 
@@ -675,40 +719,6 @@ ptr_dacE0:	DAC_Entry	08h, SegaPCM,		pcm	; $E0	- Sega!
 	if $ > Stack
 		fatal "There's too much data before the volume lookup table! There should be less than \{Stack}h bytes of data, but you're using \{$}h bytes!"
 	endif
-
-	align 0E00h
-DPCM_LowNibble:	db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-		db 0, 1, 2, 4, 8, 10h, 20h, 40h, 80h, 0FFh, 0FEh, 0FCh,	0F8h, 0F0h, 0E0h, 0C0h
-DPCM_HighNibble:db 0, 0, 0, 0, 0, 0, 0,	0, 0, 0, 0, 0, 0, 0, 0,	0
-		db 1, 1, 1, 1, 1, 1, 1,	1, 1, 1, 1, 1, 1, 1, 1,	1
-		db 2, 2, 2, 2, 2, 2, 2,	2, 2, 2, 2, 2, 2, 2, 2,	2
-		db 4, 4, 4, 4, 4, 4, 4,	4, 4, 4, 4, 4, 4, 4, 4,	4
-		db 8, 8, 8, 8, 8, 8, 8,	8, 8, 8, 8, 8, 8, 8, 8,	8
-		db 10h,	10h, 10h, 10h, 10h, 10h, 10h, 10h, 10h,	10h, 10h, 10h, 10h, 10h, 10h, 10h
-		db 20h,	20h, 20h, 20h, 20h, 20h, 20h, 20h, 20h,	20h, 20h, 20h, 20h, 20h, 20h, 20h
-		db 40h,	40h, 40h, 40h, 40h, 40h, 40h, 40h, 40h,	40h, 40h, 40h, 40h, 40h, 40h, 40h
-		db 80h,	80h, 80h, 80h, 80h, 80h, 80h, 80h, 80h,	80h, 80h, 80h, 80h, 80h, 80h, 80h
-		db 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh
-		db 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh, 0FEh
-		db 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh, 0FCh
-		db 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h, 0F8h
-		db 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h
-		db 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h, 0E0h
-		db 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h, 0C0h
 
 	align 1000h
 VolumeTbls:
