@@ -2576,16 +2576,16 @@ cfChangePSGVolume:
 locret_72CAA:
 	rts
 ; ===========================================================================
+    if PushBehaviour
 ; loc_72BEE:
 cfClearPush:
-    if PushBehaviour
 	bclr	#f_push_playing,misc_flags2(a6)	; Allow push sound to be played once more
 	rts
     endif
 ; ===========================================================================
+    if EnableSpecSFX
 ; loc_72BF4:
 cfStopSpecialFM4:
-    if EnableSpecSFX
 	bclr	#7,zTrack.PlaybackControl(a5)	; Stop track
 	bclr	#4,zTrack.PlaybackControl(a5)	; Clear 'do not attack next note' bit
 	bsr.w	FMNoteOff
@@ -3003,8 +3003,8 @@ cfSetVolume:
 ;
 ; Has a 2-byte parameter, the jump target address.
 ;
-cfLoopContinuousSFX:
     if EnableContSFX
+cfLoopContinuousSFX:
 	btst	#f_continuous_sfx,misc_flags(a6)	; Is the flag for continuous playback mode set?
 	bne.s	.continuousmode				; If so, branch
 	clr.b	v_current_contsfx(a6)			; Communicate that there is no continuous SFX playing
