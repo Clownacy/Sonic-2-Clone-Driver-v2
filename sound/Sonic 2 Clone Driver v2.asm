@@ -1651,7 +1651,7 @@ InitMusicPlayback:
 	move.b	f_1up_playing(a6),d2
 	move.b	f_speedup(a6),d3
 	move.b	v_fadein_counter(a6),d4
-	move.w	v_playsnd1(a6),d5
+	move.l	v_playsnd1(a6),d5
 	move.w	#((v_music_track_ram_end-v_startofvariables)/4)-1,d0	; Clear $220 bytes: all variables and music track data
 	moveq	#0,d6
 
@@ -1673,7 +1673,7 @@ InitMusicPlayback:
 	move.b	d2,f_1up_playing(a6)
 	move.b	d3,f_speedup(a6)
 	move.b	d4,v_fadein_counter(a6)
-	move.w	d5,v_playsnd1(a6)
+	move.l	d5,v_playsnd1(a6)
 	move.b	d6,v_playsnd0(a6)	; set music to $00 (silence)
 	moveq	#0|((VolumeTbls&$F000)>>8),d0	; Clownacy | Reset DAC volume to maximum
 	bsr.w	WriteDACVolume
