@@ -598,52 +598,43 @@ ResumeTrack:
 
 
 Sound_Play:
+	tst.b	v_playsnd0(a6)		; Is v_playsnd0 a $00 (empty)?
+	bne.s	locret_71F4A		; If yes, branch
 	lea	SoundPriorities(pc),a0
 	lea	v_playsnd1(a6),a1	; Load music track number
 	move.b	v_sndprio(a6),d3	; Get priority of currently playing SFX
 	moveq	#3,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
-	moveq	#0,d0			; Clownacy | Added as a replacement for the below andi.w
+	moveq	#0,d0
 ; loc_71F12:
 .inputloop:
 	move.b	(a1),d0			; Move track number to d0
 	move.b	d0,d1
 	clr.b	(a1)+			; Clear entry
-	tst.b	d0			; Make it into 0-based index
-	beq.s	.nextinput		; If negative (i.e., it was $80 or lower), branch
-	cmpi.b	#SndID__End,d0		; Is it a special command?		; Clownacy | Part of S2's SFX-only priority system
-	bhs.s	.musicorflag		; If so, branch				; Clownacy | Part of S2's SFX-only priority system
-	subi.b	#SndID__First,d0	; Subtract first SFX index		; Clownacy | Part of S2's SFX-only priority system
-	blo.s	.musicorflag		; If it was music, branch		; Clownacy | Part of S2's SFX-only priority system
-	tst.b	v_playsnd0(a6)		; Is v_playsnd0 a $00 (empty)?
-	beq.s	.havesound		; If yes, branch
-	move.b	d1,v_playsnd1(a6)	; Put sound into v_playsnd1
-	bra.s	.nextinput
-; ===========================================================================
-
-.musicorflag:
-	tst.b	v_playsnd0(a6)		; Is v_playsnd0 a $00 (empty)?		; Clownacy | Part of S2's SFX-only priority system
-	beq.s	.skippriority		; If yes, branch			; Clownacy | Part of S2's SFX-only priority system
-	move.b	d1,v_playsnd1(a6)	; Put sound into v_playsnd1		; Clownacy | Part of S2's SFX-only priority system
-	bra.s	.nextinput							; Clownacy | Part of S2's SFX-only priority system
-; ===========================================================================
-
-; loc_71F2C:
-.havesound:
-;	andi.w	#$7F,d0			; Clear high byte and sign bit		; Clownacy | Commented out to accomidate the greater number of slots
+	cmpi.b	#MusID__First,d0	; Make it into 0-based index
+	blo.s	.nextinput		; If negative (i.e., it was $80 or lower), branch
+	cmpi.b	#SndID__End,d0		; Is it a special command?
+	bhs.s	.queueinput		; If so, branch
+	subi.b	#SndID__First,d0	; Subtract first SFX index
+	blo.s	.queueinput		; If it was music, branch
 	move.b	(a0,d0.w),d2		; Get sound type
 	cmp.b	d3,d2			; Is it a lower priority sound?
-	blo.s	.nextinput		; Branch if yes
+	blo.s	.lowerpriority		; Branch if yes
 	move.b	d2,d3			; Store new priority
+	bsr.s	.queueinput
 
-.skippriority:
-	move.b	d1,v_playsnd0(a6)	; Queue sound for play
-; loc_71F3E:
-.nextinput:
-	dbf	d4,.inputloop
-
+.lowerpriority:
 	tst.b	d3			; We don't want to change sound priority if it is negative
 	bmi.s	locret_71F4A
 	move.b	d3,v_sndprio(a6)	; Set new sound priority
+	rts
+
+; loc_71F3E:
+.nextinput:
+	dbf	d4,.inputloop
+	rts
+
+.queueinput:
+	move.b	d1,v_playsnd0(a6)	; Queue sound for play
 locret_71F4A:
 	rts
 ; End of function Sound_Play
