@@ -603,7 +603,7 @@ Sound_Play:
 	lea	SoundPriorities(pc),a0
 	lea	v_playsnd1(a6),a1	; Load music track number
 	move.b	v_sndprio(a6),d3	; Get priority of currently playing SFX
-	moveq	#3,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
+	moveq	#(SOUND_QUEUES_END-SOUND_QUEUES_START)-1,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
 	moveq	#0,d0
 ; loc_71F12:
 .inputloop:

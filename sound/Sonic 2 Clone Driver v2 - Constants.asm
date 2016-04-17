@@ -58,10 +58,12 @@ v_speeduptempo:			ds.b 1	; music - tempo modifier with speed shoes
 f_speedup:			ds.b 1	; flag indicating whether speed shoes tempo is on ($80) or off ($00)
 
 v_playsnd0:			ds.b 1	; sound or music copied from below
+SOUND_QUEUES_START:
 v_playsnd1:			ds.b 1	; music to play	; Clownacy | Note to all, must be on even address!
 v_playsnd2:			ds.b 1	; sound to play
 v_playsnd3:			ds.b 1	; secondary sound to play
 v_playsnd4:			ds.b 1	; secondary music to play
+SOUND_QUEUES_END:
 
 v_voice_ptr:			ds.l 1	; voice data pointer (4 bytes)
 
