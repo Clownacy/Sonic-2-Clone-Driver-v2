@@ -1,5 +1,3 @@
-; Do not replace this file when updating unless instructed to
-
 ; ---------------------------------------------------------------------------
 ; Priority of sound. New music or SFX must have a priority higher than or equal
 ; to what is stored in v_sndprio or it won't play. If bit 7 of new priority is

@@ -1,5 +1,3 @@
-; Do not replace this file when updating unless instructed to
-
 ; ---------------------------------------------------------------------------
 ; Music	pointers
 
