@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Sound driver equates
+; Track variables
 ; ---------------------------------------------------------------------------
 zTrack STRUCT DOTS
 	PlaybackControl:	ds.b 1		; All tracks
@@ -34,7 +34,7 @@ zTrack STRUCT DOTS
 zTrack ENDSTRUCT
 
 ; ---------------------------------------------------------------------------
-; RAM variables
+; Global sound driver variables
 ; ---------------------------------------------------------------------------
 ireallydontknow:
 

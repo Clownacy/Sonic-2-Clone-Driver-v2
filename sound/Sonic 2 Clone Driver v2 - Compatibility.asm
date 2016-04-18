@@ -4,8 +4,9 @@
 ; ========SONIC 2 GIT EQUATES========
 
 ; ---MACROS---
-; Dummy. Just here for S1 compatibility
 waitZ80 macro
+	; Dummy. Just here for S1 compatibility.
+	; stopZ80 already waits for the Z80.
     endm
 
 ; ---EQUATES---

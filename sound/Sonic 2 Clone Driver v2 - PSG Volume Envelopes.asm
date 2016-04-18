@@ -2,7 +2,7 @@
 ; PSG pointers
 ; ---------------------------------------------------------------------------
 PSG_Index:
-	if S1PSGEnvelopes|S2PSGEnvelopes
+	if S1PSGEnvelopes||S2PSGEnvelopes
 		; S1 + S2
 ptr_s1psg01:	dc.l S1_PSG01
 ptr_s1psg02:	dc.l S1_PSG02
@@ -23,7 +23,7 @@ ptr_s2psg0C:	dc.l S2_PSG0C
 ptr_s2psg0D:	dc.l S2_PSG0D
 	endif
 
-	if S3PSGEnvelopes|SKPSGEnvelopes|S3DPSGEnvelopes
+	if S3PSGEnvelopes||SKPSGEnvelopes||S3DPSGEnvelopes
 		; S3 + S&K + S3D
 ptr_s3psg01:	dc.l S3_PSG01
 ptr_s3psg02:	dc.l S3_PSG02
@@ -60,12 +60,12 @@ ptr_s3psg27:	dc.l S3_PSG27
 ptr_s3psg26:	dc.l S3_PSG26
 	endif
 
-	if S3PSGEnvelopes|SKPSGEnvelopes
+	if S3PSGEnvelopes||SKPSGEnvelopes
 		; S3 + S&K
 ptr_s3psg04:	dc.l S3_PSG04
 	endif
 
-	if SKPSGEnvelopes|S3DPSGEnvelopes
+	if SKPSGEnvelopes||S3DPSGEnvelopes
 		; S&K + S3D
 ptr_skpsg26:	dc.l SK_PSG26
 	endif
@@ -79,7 +79,7 @@ ptr_s3dpsg28:	dc.l S3D_PSG28
 ; ---------------------------------------------------------------------------
 ; PSG instruments used in music
 ; ---------------------------------------------------------------------------
-	if S1PSGEnvelopes|S2PSGEnvelopes
+	if S1PSGEnvelopes||S2PSGEnvelopes
 ; Envelopes found in S1 and S2
 S1_PSG01:	BINCLUDE	"sound/PSG/Sonic 1 & 2/PSG 1.bin"
 S1_PSG02:	BINCLUDE	"sound/PSG/Sonic 1 & 2/PSG 2.bin"
@@ -100,7 +100,7 @@ S2_PSG0C:	BINCLUDE	"sound/PSG/Sonic 1 & 2/PSG C (S2).bin"
 S2_PSG0D:	BINCLUDE	"sound/PSG/Sonic 1 & 2/PSG D (S2).bin"
 	endif
 
-	if S3PSGEnvelopes|SKPSGEnvelopes|S3DPSGEnvelopes
+	if S3PSGEnvelopes||SKPSGEnvelopes||S3DPSGEnvelopes
 ; Envelopes found in S3, S&K, and S3D (some aren't here, since they're just duplicates)
 S3_PSG01:	BINCLUDE	"sound/PSG/Sonic 3 & K & 3D/PSG 1.bin"
 S3_PSG02:	BINCLUDE	"sound/PSG/Sonic 3 & K & 3D/PSG 2.bin"
@@ -137,12 +137,12 @@ S3_PSG27:	BINCLUDE	"sound/PSG/Sonic 3 & K & 3D/PSG 27.bin"
 S3_PSG26:	BINCLUDE	"sound/PSG/Sonic 3 & K & 3D/PSG 26 (S3).bin"
 	endif
 
-	if S3PSGEnvelopes|SKPSGEnvelopes
+	if S3PSGEnvelopes||SKPSGEnvelopes
 ; Envelopes found in S3 and S&K only
 S3_PSG04:	BINCLUDE	"sound/PSG/Sonic 3 & K & 3D/PSG 4 (S3, SK).bin"
 	endif
 
-	if SKPSGEnvelopes|S3DPSGEnvelopes
+	if SKPSGEnvelopes||S3DPSGEnvelopes
 ; Envelopes found in S&K and S3D only
 SK_PSG26:	BINCLUDE	"sound/PSG/Sonic 3 & K & 3D/PSG 26 (SK, S3D).bin"
 	endif
