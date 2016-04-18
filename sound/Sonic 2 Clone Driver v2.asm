@@ -24,7 +24,7 @@ waitYMspec macro target
 .skip:
 	endm	; optimal cycle count: 18(4/0) + target test cycles
 
-	dc.b	"Clownacy's Sonic 2 Clone Driver v2 (v2.5)"
+	dc.b	"Clownacy's Sonic 2 Clone Driver v2 (v2.5+)"
 	even
 
 Fix_DriverBugs	= 1
