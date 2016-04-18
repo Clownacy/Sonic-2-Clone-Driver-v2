@@ -33,7 +33,7 @@ offset :=	PSG_Index
 ptrsize :=	4
 idstart :=	1
 
-	if S1PSGEnvelopes|S2PSGEnvelopes
+	if S1PSGEnvelopes||S2PSGEnvelopes
 ; S1/S2
 fTone_01 =		id(ptr_s1psg01)
 fTone_02 =		id(ptr_s1psg02)
@@ -54,7 +54,7 @@ fTone_0C =		id(ptr_s2psg0C)
 fTone_0D =		id(ptr_s2psg0D)
 	endif
 
-	if S3PSGEnvelopes|SKPSGEnvelopes|S3DPSGEnvelopes
+	if S3PSGEnvelopes||SKPSGEnvelopes||S3DPSGEnvelopes
 ; S3/S&K/S3D
 sTone_01 =		id(ptr_s3psg01)
 sTone_02 =		id(ptr_s3psg02)
@@ -92,12 +92,12 @@ sTone_27 =		id(ptr_s3psg27)
 sTone_26a =		id(ptr_s3psg26)
 	endif
 
-	if S3PSGEnvelopes|SKPSGEnvelopes
+	if S3PSGEnvelopes||SKPSGEnvelopes
 ; S3/S&K
 sTone_04a =		id(ptr_s3psg04)
 	endif
 
-	if SKPSGEnvelopes|S3DPSGEnvelopes
+	if SKPSGEnvelopes||S3DPSGEnvelopes
 ; S&K/S3D
 sTone_26b =		id(ptr_skpsg26)
 	endif
@@ -108,7 +108,7 @@ sTone_04b =		id(ptr_s3dpsg04)
 sTone_28 =		id(ptr_s3dpsg28)
 	endif
 
-	if S3PSGEnvelopes|SKPSGEnvelopes|S3DPSGEnvelopes
+	if S3PSGEnvelopes||SKPSGEnvelopes||S3DPSGEnvelopes
 ; Duplicates
 sTone_0E = sTone_01
 sTone_0F = sTone_02
@@ -126,7 +126,7 @@ offset :=	DAC_Table
 ptrsize :=	8
 idstart :=	$81
 
-	if S1DACSamples|S2DACSamples
+	if S1DACSamples||S2DACSamples
 ; Sonic 1 & 2
 dKick =				id(ptr_dac81)
 dSnare =			id(ptr_dac82)
@@ -155,7 +155,7 @@ dMidClap = dMidBongo
 dLowClap = dLowBongo
 	endif
 
-	if S3DACSamples|SKDACSamples|S3DDACSamples
+	if S3DACSamples||SKDACSamples||S3DDACSamples
 ; Sonic 3 & K & 3D
 dSnareS3 =			id(ptr_dac92)
 dHighTom =			id(ptr_dac93)
@@ -189,7 +189,7 @@ dPowerKick =			id(ptr_dacAE)
 dQuickGlassCrash =		id(ptr_dacAF)
 	endif
 
-	if S3DACSamples|SKDACSamples
+	if S3DACSamples||SKDACSamples
 ; Sonic 3 & K
 dGlassCrashSnare =		id(ptr_dacB0)
 dGlassCrash =			id(ptr_dacB1)
@@ -360,7 +360,7 @@ smpsHeaderTempo macro div,mod
 ; Header - Set up DAC Channel
 smpsHeaderDAC macro loc,pitch,vol
 	if MOMPASS==2
-	if ((loc>=songStart) & (loc-songStart>=$8000))
+	if ((loc>=songStart) && (loc-songStart>=$8000))
 		fatal "Track is too far away from its header"
 	endif
 	endif
@@ -380,7 +380,7 @@ smpsHeaderDAC macro loc,pitch,vol
 ; Header - Set up FM Channel
 smpsHeaderFM macro loc,pitch,vol
 	if MOMPASS==2
-	if ((loc>=songStart) & (loc-songStart>=$8000))
+	if ((loc>=songStart) && (loc-songStart>=$8000))
 		fatal "Track is too far away from its header"
 	endif
 	endif
@@ -391,7 +391,7 @@ smpsHeaderFM macro loc,pitch,vol
 ; Header - Set up PSG Channel
 smpsHeaderPSG macro loc,pitch,vol,mod,voice
 	if MOMPASS==2
-	if ((loc>=songStart) & (loc-songStart>=$8000))
+	if ((loc>=songStart) && (loc-songStart>=$8000))
 		fatal "Track is too far away from its header"
 	endif
 	endif
@@ -418,7 +418,7 @@ smpsHeaderSFXChannel macro chanid,loc,pitch,vol
 	endif
 	dc.b	$80,chanid
 	if MOMPASS==2
-	if ((loc>=songStart) & (loc-songStart>=$8000))
+	if ((loc>=songStart) && (loc-songStart>=$8000))
 		fatal "Track is too far away from its header"
 	endif
 	endif
@@ -464,7 +464,7 @@ smpsReturn macro
 
 ; Fade in previous song (ie. 1-Up)
 smpsFade macro val
-	if (SourceDriver>=3) & ("val"<>"") & ("val"<>"$FF")
+	if (SourceDriver>=3) && ("val"<>"") && ("val"<>"$FF")
 		; This is one of those stupid S3+ "fades" that we don't need
 	else
 		dc.b	$FF,$04
