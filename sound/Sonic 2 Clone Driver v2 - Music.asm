@@ -8,6 +8,44 @@ SMPS_MUSIC macro address,flags
 	endm
 
 ; ---------------------------------------------------------------------------
+; Music tempos while speed shoes are active
+; ---------------------------------------------------------------------------
+; byte_71A94:
+SpeedUpIndex:
+	dc.b	s2TempotoS3($68)	; 81 - 2 Player Menu
+	dc.b	s2TempotoS3($BE)	; 82 - EHZ
+	dc.b	s2TempotoS3($FF)	; 83 - MCZ 2P
+	dc.b	s2TempotoS3($F0)	; 84 - OOZ
+	dc.b	s2TempotoS3($FF)	; 85 - MTZ
+	dc.b	s2TempotoS3($DE)	; 86 - HTZ
+	dc.b	s2TempotoS3($FF)	; 87 - ARZ
+	dc.b	s2TempotoS3($DD)	; 88 - CNZ 2P
+	dc.b	s2TempotoS3($68)	; 89 - CNZ
+	dc.b	s2TempotoS3($80)	; 8A - DEZ
+	dc.b	s2TempotoS3($D6)	; 8B - MCZ
+	dc.b	s2TempotoS3($7B)	; 8C - EHZ 2P
+	dc.b	s2TempotoS3($7B)	; 8D - SCZ
+	dc.b	s2TempotoS3($FF)	; 8E - CPZ
+	dc.b	s2TempotoS3($A8)	; 8F - WFZ
+	dc.b	s2TempotoS3($FF)	; 90 - HPZ
+	dc.b	s2TempotoS3($87)	; 91 - Options
+	dc.b	s2TempotoS3($FF)	; 92 - Special Stage
+	dc.b	s2TempotoS3($FF)	; 93 - Boss
+	dc.b	s2TempotoS3($C9)	; 94 - Final Boss
+	dc.b	s2TempotoS3($97)	; 95 - SWEET SWEET SWEET
+	dc.b	s2TempotoS3($FF)	; 96 - Super Sonic
+	dc.b	s2TempotoS3($FF)	; 97 - Invincible
+	dc.b	s2TempotoS3($CD)	; 98 - Extra Life
+	dc.b	s2TempotoS3($CD)	; 99 - Title Screen
+	dc.b	s2TempotoS3($AA)	; 9A - End of Act
+	dc.b	s2TempotoS3($F2)	; 9B - Game Over
+	dc.b	s2TempotoS3($DB)	; 9C - Continue
+	dc.b	s2TempotoS3($D5)	; 9D - Got Emerald
+	dc.b	s2TempotoS3($F0)	; 9E - Credits
+	dc.b	s2TempotoS3($80)	; 9F - Drowning
+	even
+
+; ---------------------------------------------------------------------------
 ; Music	pointers and flags
 ; ---------------------------------------------------------------------------
 MusicIndex:

@@ -1,12 +1,34 @@
 ; ---------------------------------------------------------------------------
-; Sound effect macros and constants
+; SFX macros and constants
 ; ---------------------------------------------------------------------------
 SMPS_SFX macro address,flags
 	dc.l	address|flags
 	endm
 
 ; ---------------------------------------------------------------------------
-; Sound effect pointers and flags
+; Priority of sound. New music or SFX must have a priority higher than or equal
+; to what is stored in v_sndprio or it won't play. If bit 7 of new priority is
+; set ($80 and up), the new music or SFX will not set its priority -- meaning
+; any music or SFX can override it (as long as it can override whatever was
+; playing before). Usually, SFX will only override SFX, special SFX ($D0-$DF)
+; will only override special SFX and music will only override music.
+; Of course, this isn't the case anymore, as priorities no longer apply to
+; special SFX or music.
+; ---------------------------------------------------------------------------
+; SoundTypes:
+SoundPriorities:
+	; These are from zSFXPriority in s2.sounddriver.asm
+	; The table only spanned the SFX entries
+	dc.b $80,$70,$70,$70,$70,$70,$70,$70,$70,$70,$68,$70,$70,$70,$60,$70	; $80
+	dc.b $70,$60,$70,$60,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$7F	; $90
+	dc.b $6F,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$6F,$70,$70	; $A0
+	dc.b $70,$60,$60,$70,$70,$70,$70,$70,$70,$70,$60,$62,$60,$60,$60,$70	; $B0
+	dc.b $70,$70,$70,$70,$60,$60,$60,$6F,$70,$70,$6F,$6F,$70,$71,$70,$70	; $C0
+	dc.b $6F								; $D0
+	even
+
+; ---------------------------------------------------------------------------
+; SFX pointers and flags
 ; ---------------------------------------------------------------------------
 SoundIndex:
 ptr_sndA0:	SMPS_SFX	SoundA0, 0
@@ -93,7 +115,7 @@ ptr_sndF0:	SMPS_SFX	SoundF0, 0
 ptr_sndend
 
 ; ---------------------------------------------------------------------------
-; Sound effect 'include's
+; SFX 'include's
 ; ---------------------------------------------------------------------------
 SoundA0:	include	"sound/SFX/A0 - Jump.asm"
 		even

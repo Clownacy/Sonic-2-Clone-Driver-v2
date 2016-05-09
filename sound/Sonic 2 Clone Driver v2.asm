@@ -600,7 +600,7 @@ ResumeTrack:
 Sound_Play:
 	tst.b	v_playsnd0(a6)		; Is v_playsnd0 a $00 (empty)?
 	bne.s	locret_71F4A		; If yes, branch
-	lea	SoundPriorities(pc),a0
+	lea	(SoundPriorities).l,a0
 	lea	v_playsnd1(a6),a1	; Load music track number
 	move.b	v_sndprio(a6),d3	; Get priority of currently playing SFX
 	moveq	#(SOUND_QUEUES_END-SOUND_QUEUES_START)-1,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
@@ -1092,7 +1092,7 @@ Sound_PlaySFX:
 	cmp.b	d7,d0					; Is this the same continuous sound that was playing?
 	bne.s	.sfx_notsame				; If not, branch
 	bset	#f_continuous_sfx,misc_flags(a6)	; Set flag for continuous playback mode
-	lea	SoundIndex(pc),a0
+	lea	(SoundIndex).l,a0
 	subi.b	#SndID__First,d7
 	add.w	d7,d7				; Convert sfx ID into index
 	add.w	d7,d7
@@ -1107,7 +1107,7 @@ Sound_PlaySFX:
 .sfx_notcont:
     endif
 
-	lea	SoundIndex(pc),a0
+	lea	(SoundIndex).l,a0
 	subi.b	#SndID__First,d7	; Make it 0-based
 	add.w	d7,d7			; Convert sfx ID into index
 	add.w	d7,d7
@@ -1257,7 +1257,7 @@ Sound_PlaySpecial:
 ;	bne.w	.locret				; Exit if it is
 	btst	#f_fadein_flag,misc_flags(a6)	; Is music being faded in?
 	bne.w	.locret				; Exit if it is
-	lea	SpecSoundIndex(pc),a0
+	lea	(SpecSoundIndex).l,a0
 	subi.b	#SpecID__First,d7		; Make it 0-based
 	add.w	d7,d7
 	add.w	d7,d7
@@ -3032,25 +3032,26 @@ cfChanFMCommand:
 	bra.w	WriteFMIorII				; Send it to YM2612
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
-; Priorities and speedup tempos
-; ---------------------------------------------------------------------------
-	include "sound/Sonic 2 Clone Driver v2 - Other.asm"
-
-; ---------------------------------------------------------------------------
 ; PSG volume envelopes 'include's and pointers
 ; ---------------------------------------------------------------------------
 	include "sound/Sonic 2 Clone Driver v2 - PSG Volume Envelopes.asm"
-
-; ---------------------------------------------------------------------------
-; Sound effects 'include's and pointers
-; ---------------------------------------------------------------------------
-	include "sound/Sonic 2 Clone Driver v2 - Sounds.asm"
 
 ; ---------------------------------------------------------------------------
 ; Music 'include's and pointers
 ; ---------------------------------------------------------------------------
 	include "sound/Sonic 2 Clone Driver v2 - Music.asm"
 
+; ---------------------------------------------------------------------------
+; SFX 'include's and pointers
+; ---------------------------------------------------------------------------
+	include "sound/Sonic 2 Clone Driver v2 - SFX.asm"
+
+; ---------------------------------------------------------------------------
+; Special SFX 'include's and pointers
+; ---------------------------------------------------------------------------
+    if EnableSpecSFX
+	include "sound/Sonic 2 Clone Driver v2 - Special SFX.asm"
+    endif
 ; ---------------------------------------------------------------------------
 ; FM Universal Voice Bank
 ; ---------------------------------------------------------------------------
@@ -3065,7 +3066,6 @@ cfChanFMCommand:
 ; ---------------------------------------------------------------------------
 ; 'Sega chant' PCM
 ; ---------------------------------------------------------------------------
-
 SegaPCM:
 	BINCLUDE	"sound/PCM/Sega PCM.bin"
 SegaPCM_End
