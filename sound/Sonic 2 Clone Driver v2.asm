@@ -2129,7 +2129,7 @@ PSGDoVolFX:
 	moveq	#0,d0
 	move.b	zTrack.VoiceIndex(a5),d0 ; Get PSG tone
 	beq.s	SetPSGVolume
-	lea	PSG_Index(pc),a0
+	lea	(PSG_Index).l,a0
 	subq.w	#1,d0
 	add.w	d0,d0
 	add.w	d0,d0
@@ -3032,11 +3032,6 @@ cfChanFMCommand:
 	bra.w	WriteFMIorII				; Send it to YM2612
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
-; PSG volume envelopes 'include's and pointers
-; ---------------------------------------------------------------------------
-	include "sound/Sonic 2 Clone Driver v2 - PSG Volume Envelopes.asm"
-
-; ---------------------------------------------------------------------------
 ; Music 'include's and pointers
 ; ---------------------------------------------------------------------------
 	include "sound/Sonic 2 Clone Driver v2 - Music.asm"
@@ -3058,6 +3053,11 @@ cfChanFMCommand:
     if EnableUniversalVoiceBank
 	include "sound/Sonic 2 Clone Driver v2 - FM Universal Voice Bank.asm"
     endif
+; ---------------------------------------------------------------------------
+; PSG volume envelopes 'include's and pointers
+; ---------------------------------------------------------------------------
+	include "sound/Sonic 2 Clone Driver v2 - PSG Volume Envelopes.asm"
+
 ; ---------------------------------------------------------------------------
 ; Vladikcomper's Mega PCM DAC driver
 ; ---------------------------------------------------------------------------
