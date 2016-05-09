@@ -1,88 +1,95 @@
 ; ---------------------------------------------------------------------------
-; Sound effect pointers
+; Sound effect macros and constants
+; ---------------------------------------------------------------------------
+SMPS_SFX macro address,flags
+	dc.l	address|flags
+	endm
+
+; ---------------------------------------------------------------------------
+; Sound effect pointers and flags
 ; ---------------------------------------------------------------------------
 SoundIndex:
-ptr_sndA0:	dc.l SoundA0
-ptr_sndA1:	dc.l SoundA1
-ptr_sndA2:	dc.l SoundA2
-ptr_sndA3:	dc.l SoundA3
-ptr_sndA4:	dc.l SoundA4
-ptr_sndA5:	dc.l SoundA5
-ptr_sndA6:	dc.l SoundA6
-ptr_sndA7:	dc.l SoundA7
-ptr_sndA8:	dc.l SoundA8
-ptr_sndA9:	dc.l SoundA9
-ptr_sndAA:	dc.l SoundAA
-ptr_sndAB:	dc.l SoundAB
-ptr_sndAC:	dc.l SoundAC
-ptr_sndAD:	dc.l SoundAD
-ptr_sndAE:	dc.l SoundAE
-ptr_sndAF:	dc.l SoundAF
-ptr_sndB0:	dc.l SoundB0
-ptr_sndB1:	dc.l SoundB1
-ptr_sndB2:	dc.l SoundB2
-ptr_sndB3:	dc.l SoundB3
-ptr_sndB4:	dc.l SoundB4
-ptr_sndB5:	dc.l SoundB5
-ptr_sndB6:	dc.l SoundB6
-ptr_sndB7:	dc.l SoundB7
-ptr_sndB8:	dc.l SoundB8
-ptr_sndB9:	dc.l SoundB9
-ptr_sndBA:	dc.l SoundBA
-ptr_sndBB:	dc.l SoundBB
-ptr_sndBC:	dc.l SoundBC
-ptr_sndBD:	dc.l SoundBD
-ptr_sndBE:	dc.l SoundBE
-ptr_sndBF:	dc.l SoundBF
-ptr_sndC0:	dc.l SoundC0
-ptr_sndC1:	dc.l SoundC1
-ptr_sndC2:	dc.l SoundC2
-ptr_sndC3:	dc.l SoundC3
-ptr_sndC4:	dc.l SoundC4
-ptr_sndC5:	dc.l SoundC5
-ptr_sndC6:	dc.l SoundC6
-ptr_sndC7:	dc.l SoundC7
-ptr_sndC8:	dc.l SoundC8
-ptr_sndC9:	dc.l SoundC9
-ptr_sndCA:	dc.l SoundCA
-ptr_sndCB:	dc.l SoundCB
-ptr_sndCC:	dc.l SoundCC
-ptr_sndCD:	dc.l SoundCD
-ptr_sndCE:	dc.l SoundCE
-ptr_sndCF:	dc.l SoundCF
-ptr_sndD0:	dc.l SoundD0
-ptr_sndD1:	dc.l SoundD1
-ptr_sndD2:	dc.l SoundD2
-ptr_sndD3:	dc.l SoundD3
-ptr_sndD4:	dc.l SoundD4
-ptr_sndD5:	dc.l SoundD5
-ptr_sndD6:	dc.l SoundD6
-ptr_sndD7:	dc.l SoundD7
-ptr_sndD8:	dc.l SoundD8
-ptr_sndD9:	dc.l SoundD9
-ptr_sndDA:	dc.l SoundDA
-ptr_sndDB:	dc.l SoundDB
-ptr_sndDC:	dc.l SoundDC
-ptr_sndDD:	dc.l SoundDD
-ptr_sndDE:	dc.l SoundDE
-ptr_sndDF:	dc.l SoundDF
-ptr_sndE0:	dc.l SoundE0
-ptr_sndE1:	dc.l SoundE1
-ptr_sndE2:	dc.l SoundE2
-ptr_sndE3:	dc.l SoundE3
-ptr_sndE4:	dc.l SoundE4
-ptr_sndE5:	dc.l SoundE5
-ptr_sndE6:	dc.l SoundE6
-ptr_sndE7:	dc.l SoundE7
-ptr_sndE8:	dc.l SoundE8
-ptr_sndE9:	dc.l SoundE9
-ptr_sndEA:	dc.l SoundEA
-ptr_sndEB:	dc.l SoundEB
-ptr_sndEC:	dc.l SoundEC
-ptr_sndED:	dc.l SoundED
-ptr_sndEE:	dc.l SoundEE
-ptr_sndEF:	dc.l SoundEF
-ptr_sndF0:	dc.l SoundF0
+ptr_sndA0:	SMPS_SFX	SoundA0, 0
+ptr_sndA1:	SMPS_SFX	SoundA1, 0
+ptr_sndA2:	SMPS_SFX	SoundA2, 0
+ptr_sndA3:	SMPS_SFX	SoundA3, 0
+ptr_sndA4:	SMPS_SFX	SoundA4, 0
+ptr_sndA5:	SMPS_SFX	SoundA5, 0
+ptr_sndA6:	SMPS_SFX	SoundA6, 0
+ptr_sndA7:	SMPS_SFX	SoundA7, 0
+ptr_sndA8:	SMPS_SFX	SoundA8, 0
+ptr_sndA9:	SMPS_SFX	SoundA9, 0
+ptr_sndAA:	SMPS_SFX	SoundAA, 0
+ptr_sndAB:	SMPS_SFX	SoundAB, 0
+ptr_sndAC:	SMPS_SFX	SoundAC, 0
+ptr_sndAD:	SMPS_SFX	SoundAD, 0
+ptr_sndAE:	SMPS_SFX	SoundAE, 0
+ptr_sndAF:	SMPS_SFX	SoundAF, 0
+ptr_sndB0:	SMPS_SFX	SoundB0, 0
+ptr_sndB1:	SMPS_SFX	SoundB1, 0
+ptr_sndB2:	SMPS_SFX	SoundB2, 0
+ptr_sndB3:	SMPS_SFX	SoundB3, 0
+ptr_sndB4:	SMPS_SFX	SoundB4, 0
+ptr_sndB5:	SMPS_SFX	SoundB5, 0
+ptr_sndB6:	SMPS_SFX	SoundB6, 0
+ptr_sndB7:	SMPS_SFX	SoundB7, 0
+ptr_sndB8:	SMPS_SFX	SoundB8, 0
+ptr_sndB9:	SMPS_SFX	SoundB9, 0
+ptr_sndBA:	SMPS_SFX	SoundBA, 0
+ptr_sndBB:	SMPS_SFX	SoundBB, 0
+ptr_sndBC:	SMPS_SFX	SoundBC, 0
+ptr_sndBD:	SMPS_SFX	SoundBD, 0
+ptr_sndBE:	SMPS_SFX	SoundBE, 0
+ptr_sndBF:	SMPS_SFX	SoundBF, 0
+ptr_sndC0:	SMPS_SFX	SoundC0, 0
+ptr_sndC1:	SMPS_SFX	SoundC1, 0
+ptr_sndC2:	SMPS_SFX	SoundC2, 0
+ptr_sndC3:	SMPS_SFX	SoundC3, 0
+ptr_sndC4:	SMPS_SFX	SoundC4, 0
+ptr_sndC5:	SMPS_SFX	SoundC5, 0
+ptr_sndC6:	SMPS_SFX	SoundC6, 0
+ptr_sndC7:	SMPS_SFX	SoundC7, 0
+ptr_sndC8:	SMPS_SFX	SoundC8, 0
+ptr_sndC9:	SMPS_SFX	SoundC9, 0
+ptr_sndCA:	SMPS_SFX	SoundCA, 0
+ptr_sndCB:	SMPS_SFX	SoundCB, 0
+ptr_sndCC:	SMPS_SFX	SoundCC, 0
+ptr_sndCD:	SMPS_SFX	SoundCD, 0
+ptr_sndCE:	SMPS_SFX	SoundCE, 0
+ptr_sndCF:	SMPS_SFX	SoundCF, 0
+ptr_sndD0:	SMPS_SFX	SoundD0, 0
+ptr_sndD1:	SMPS_SFX	SoundD1, 0
+ptr_sndD2:	SMPS_SFX	SoundD2, 0
+ptr_sndD3:	SMPS_SFX	SoundD3, 0
+ptr_sndD4:	SMPS_SFX	SoundD4, 0
+ptr_sndD5:	SMPS_SFX	SoundD5, 0
+ptr_sndD6:	SMPS_SFX	SoundD6, 0
+ptr_sndD7:	SMPS_SFX	SoundD7, 0
+ptr_sndD8:	SMPS_SFX	SoundD8, 0
+ptr_sndD9:	SMPS_SFX	SoundD9, 0
+ptr_sndDA:	SMPS_SFX	SoundDA, 0
+ptr_sndDB:	SMPS_SFX	SoundDB, 0
+ptr_sndDC:	SMPS_SFX	SoundDC, 0
+ptr_sndDD:	SMPS_SFX	SoundDD, 0
+ptr_sndDE:	SMPS_SFX	SoundDE, 0
+ptr_sndDF:	SMPS_SFX	SoundDF, 0
+ptr_sndE0:	SMPS_SFX	SoundE0, 0
+ptr_sndE1:	SMPS_SFX	SoundE1, 0
+ptr_sndE2:	SMPS_SFX	SoundE2, 0
+ptr_sndE3:	SMPS_SFX	SoundE3, 0
+ptr_sndE4:	SMPS_SFX	SoundE4, 0
+ptr_sndE5:	SMPS_SFX	SoundE5, 0
+ptr_sndE6:	SMPS_SFX	SoundE6, 0
+ptr_sndE7:	SMPS_SFX	SoundE7, 0
+ptr_sndE8:	SMPS_SFX	SoundE8, 0
+ptr_sndE9:	SMPS_SFX	SoundE9, 0
+ptr_sndEA:	SMPS_SFX	SoundEA, 0
+ptr_sndEB:	SMPS_SFX	SoundEB, 0
+ptr_sndEC:	SMPS_SFX	SoundEC, 0
+ptr_sndED:	SMPS_SFX	SoundED, 0
+ptr_sndEE:	SMPS_SFX	SoundEE, 0
+ptr_sndEF:	SMPS_SFX	SoundEF, 0
+ptr_sndF0:	SMPS_SFX	SoundF0, 0
 ptr_sndend
 
 ; ---------------------------------------------------------------------------
