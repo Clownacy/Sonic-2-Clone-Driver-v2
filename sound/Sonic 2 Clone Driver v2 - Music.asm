@@ -1,13 +1,11 @@
 ; ---------------------------------------------------------------------------
 ; Music	macros and constants
 ; ---------------------------------------------------------------------------
-SMPS_MUSIC_FORCE_PAL_SPEED = $00000001	; Forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)
-
 SMPS_MUSIC macro address,flags,fasttempo
-	dc.l	address|flags
-	dc.b	fasttempo
-	dc.b	0
+	dc.l	(fasttempo<<24)|((address|flags)&$FFFFFF)
 	endm
+
+SMPS_MUSIC_FORCE_PAL_SPEED = $00000001	; Forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)
 
 ; ---------------------------------------------------------------------------
 ; Music metadata (pointers, flags, speed shoes tempos)
@@ -48,7 +46,7 @@ ptr_mus9F:	SMPS_MUSIC	Music9F, SMPS_MUSIC_FORCE_PAL_SPEED, s2TempotoS3($80)	; Dr
 ptr_musend
 
 ; ---------------------------------------------------------------------------
-; Music 'include's
+; Music data
 ; ---------------------------------------------------------------------------
 Music81:	include		"sound/music/81 - 2 Player Menu.asm"
 		even

@@ -2,9 +2,7 @@
 ; SFX macros and constants
 ; ---------------------------------------------------------------------------
 SMPS_SFX macro address,flags,priority
-	dc.l	address|flags
-	dc.b	priority
-	dc.b	0
+	dc.l	(priority<<24)|(address&$FFFFFF)
 	endm
 
 ; ---------------------------------------------------------------------------
@@ -106,7 +104,7 @@ ptr_sndF0:	SMPS_SFX	SoundF0, 0, $6F
 ptr_sndend
 
 ; ---------------------------------------------------------------------------
-; SFX 'include's
+; SFX data
 ; ---------------------------------------------------------------------------
 SoundA0:	include	"sound/SFX/A0 - Jump.asm"
 		even

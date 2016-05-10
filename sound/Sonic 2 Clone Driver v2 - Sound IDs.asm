@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 ; Music IDs
 offset :=	MusicIndex
-ptrsize :=	6
+ptrsize :=	4
 idstart :=	1
 ; $00 is reserved for silence
 
@@ -48,7 +48,7 @@ MusID__End =			id(ptr_musend)	; 20
 
 ; Sound IDs
 offset :=       SoundIndex
-ptrsize :=      6
+ptrsize :=      4
 idstart :=      $80
 
 SndID__First                    = idstart

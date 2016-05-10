@@ -616,10 +616,8 @@ Sound_Play:
 	subi.b	#SndID__First,d0	; Subtract first SFX index
 	blo.s	.queueinput		; If it was music, branch
 	add.w	d0,d0
-	move.w	d0,d5
 	add.w	d0,d0
-	add.w	d5,d0
-	lea	(SoundIndex+4).l,a0
+	lea	(SoundIndex).l,a0
 	move.b	(a0,d0.w),d2		; Get sound type
 	cmp.b	d3,d2			; Is it a lower priority sound?
 	blo.s	.lowerpriority		; Branch if yes
@@ -832,13 +830,10 @@ Sound_PlayBGM:
 	bsr.w	InitMusicPlayback
 	subi.b	#MusID__First,d7
 	add.w	d7,d7
-	move.w	d7,d0
 	add.w	d7,d7
-	add.w	d0,d7
 	lea	MusicIndex(pc),a4
-	lea	(a4,d7.w),a4
-	move.l	(a4)+,d1
-	move.b	(a4),v_speeduptempo(a6)
+	move.l	(a4,d7.w),d1
+	move.b	(a4,d7.w),v_speeduptempo(a6)
 	bclr	#0,d1				; Clownacy | Is this a forced-PAL tempo song? (we clear PAL tempo flag so it doesn't interfere later on)
 	beq.s	.nopalmode
 	bset	#f_force_pal_tempo,misc_flags(a6) ; Clownacy | If so, set flag
@@ -1100,9 +1095,7 @@ Sound_PlaySFX:
 	bset	#f_continuous_sfx,misc_flags(a6)	; Set flag for continuous playback mode
 	subi.b	#SndID__First,d7
 	add.w	d7,d7				; Convert sfx ID into index
-	move.w	d7,d0
 	add.w	d7,d7
-	add.w	d0,d7
 	lea	(SoundIndex).l,a0
 	movea.l	(a0,d7.w),a0
 	move.b	3+2(a0),v_contsfx_channels(a6)	; Save number of channels in SFX
@@ -1117,9 +1110,7 @@ Sound_PlaySFX:
 
 	subi.b	#SndID__First,d7	; Make it 0-based
 	add.w	d7,d7			; Convert sfx ID into index
-	move.w	d7,d0
 	add.w	d7,d7
-	add.w	d0,d7
 	lea	(SoundIndex).l,a0
 	movea.l	(a0,d7.w),a3		; SFX data pointer
 	movea.l	a3,a1
