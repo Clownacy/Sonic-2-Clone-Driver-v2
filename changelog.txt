@@ -1,0 +1,359 @@
+Changelog
+
+31/03/2014 (DD/MM/YYYY)
+= v2.0 =
+-- Initial release --
+- Ported to AS
+- Replaced local labels with unique labels
+- Added Hivebrain labels
+- Added Mega PCM
+- Applied 'Optimising Z80 Stops' guide
+- Added SMPS2ASM
+- Added S2 Priorities
+- Added S2 DACs
+- Added S2 PSGs
+- Added Spin Dash support
+- Added Gloop support
+- Fixed bug causing sounds with an index entry of >=$40 to crash
+- Fixed v_playsnd3 to be fully usable
+- Replaced S1's music with the original Clone Driver's music
+- Replaced S1's sound effects with S2's sound effects
+- Relocated Silence value to $00
+- Extended starting sound slot from $81 to $01
+- Relocated MusicIndex to above music 'BINCLUDE's
+- Removed special sound effect code
+- Relocated *special* special SFXs from $E0-$E4 to $F9-$FD
+
+01/04/2014
+= v2.0.1 =
+- Removed unused SoundIndex entry
+- Removed redundant Sega PCM alignment
+- Fixed sound priority
+- Used constants to make sound group changing more accessible
+- Reworded >=$E0 sound bug explanation
+
+15/04/2014
+= v2.1 =
+- Fixed Priorities list not including the Sound Flags ($FB-$FF)
+- Adapted Sonic 2's feature of having the priorities system only apply to SFXs
+- Added Sound Flag $FA, StopSFX, now back from Sonic 2, and fully functional
+- Added S3+ PSG instruments
+- Added S3+ DAC samples
+- Added S3+ Universal Voice Bank
+- Modified _smps2asm_inc.asm to have an option for the Clone Driver 2, 'SonicDriverVer = 0'
+- Removed remainder of the Special SFXs ($D0-$DF), freeing up $60 bytes of RAM
+- Rearranged data and indexes:
+	- Data (UniVoiceBank, PSG, Music, SFX) at bottom
+	- Indexes (PSG, Music, SFX) at top
+- Music and SFXs use absolute (longword) pointers for their Voices, this is to allow UniVoiceBank support
+- Removed all 'Go_Index' nonsense, references are now direct
+- Made Sega PCM ID dynamic
+- Added Flag IDs
+
+19/04/2014
+= v2.1.1 =
+- Compressed Mega PCM Z80 code, DAC tables are still uncompressed though
+- Reintroduced Mega PCM .wav compatibility
+- Matched S2 DAC pitches to those in the S2 driver, but they're still inaccurate, the snare seems to be BETWEEN 3 and 4
+- Added Crackers DACs
+- Fixed SMPS2ASM's dLowerEchoedClapHit entry
+
+20/04/2014
+= v2.1.2 =
+- Relocated Coord. flags from $E0+ to $FE+, as a result, there are now free DAC slots and a total of $7C DAC slots
+- Corrected S3/K/3D DAC order
+- Named all S3/K/3D/C DACs
+- Removed cfStopSpecialFM4
+
+16/06/2014
+= v2.1.3 =
+- Removed more Special SFX remnants, namely v_special_voice_ptr
+- Freed up a tiny amount of RAM by turning some byte-sized flags to bit-size. They are grouped under the RAM address 'misc_flags'. Flags include:
+	- v_gloop_toggle
+	- Spindash_LastSound_Flag
+	- v_ring_speaker
+	- f_updating_dac
+	- f_fadein_flag
+- f_updating_dac and f_fadein_flag been changed to a bit, so their 'On' state isn't defined by being set to $80, but to 1
+- Removed f_fastmusic entirely, it's not even used in this version of the Community disasm. It's just v_1up_ram_copy's copy of f_speedup
+- Fixed typo in instruction under PSFX_NotSpinDashRev label
+- Rearranged RAM variables to group all unused RAM in one area ($19-$39)
+- Split music and sound 'include's from main asm file, allowing users to update their s1.sounddriver.asm without overwriting their custom music and sound 'include's
+- Done the above to the music and SFX pointers, also. Said pointers have also been moved to above their respective 'include's, for sake the of ease when updating
+- Added missing equate under Sound_PlaySpecial
+- Modified installation guide to feature a full-speed PAL audio fix, straight from MJ's Moonwalker
+
+29/06/2014
+= v2.2 =
+- Rearranged indexes and data again, now they are all located after the driver's code
+- Reformatted PSGDoVolFX
+- Ported three new PSG flags, two are used by S3K's PSGs, the final is unused, but added for the sake of completion
+- Now using stock S3K PSGs instead of converted-to-S1 equivalents
+- Ported S1 & S2 PSGs
+- Added missing 'even' after the Universal Voice Bank
+- Optimised the unused coordination flags' code
+- Optimised some code under Sound_Play
+- Corrected some comments
+- Ported S3K's TempoWait, allowing full access to S3K-style tempos
+- Added S2 speedup tempos, converted to S3K tempos
+- Replaced the Original Clone Driver's modified S2 music with stock S2 music
+
+01/07/2014
+= v2.2.1 =
+- Removed 68K-freeze code in PlaySega, it has negative effects in Sonic 2
+- Added coordination flag cfSilenceStopTrack
+- Added coordination flag cfPlayDACSample
+- Added coordination flag cfPlaySound
+- Added coordination flag cfSetKey
+- Added coordination flag cfSetVolume
+- Added FMSilenceChannel
+- Removed two unused coordination flags
+- Redone PAL mode
+- Replicated S2's ability to force PAL slowness on certain songs
+
+03/07/2014
+= v2.2.1.1 =
+- Optimised PAL mode
+- Ported S2's PAL timer system
+- Made PAL_Audio_CountDown part of the Clone Driver's RAM
+
+04/07/2014
+= v2.2.1.2 =
+- Fixed broken PAL mode double-update code. JSRs had to be remove because they interfered with the Stack
+
+18/07/2014
+= v2.2.2 =
+- Added fourth sound queue
+- Replaced all 'jsr's with 'bsr.w's, and 'jmp's with 'bra.w's
+- Made small optimisations under PBGM_BGMLoadMusic, PSGUpdate_NoteGoing, SetVoice_SendTL, UnpausedAllFM, FadeIn_FadedDone, FM_UpdateFreq
+- Renamed Snd_FadeOutSFX and Snd_FadeOutSFX2
+- Changed bcc into bhs under PSFX_TimerActive
+- Optimised some of the Spin Dash rev code
+- Optimised waitYM macro (nothing uses d2 afterwards, and bit instructions can affect memory)
+- Restored cfUnused1 (cfSetCommunication)
+- Removed Size_of_SegaPCM macro (unused leftover from 2.0 :P)
+- Fixed error made while removing Special SFX code under FadeOut_TrackPSG
+- Fixed (my) error in the smpsStopSpecial macro
+- Optimised some code around PSFX_SFXInitPSG (code was made less efficient back when I was trying to fix the $40+ index bug)
+- Fixed Sound_PlaySpecial (it didn't support absolute voice pointers, and also has the $40+ index bug)
+
+14/08/2014
+= v2.2.2.1 =
+- Made slight optimisation around the branch to TempoWait by removing the branch altogether :P
+- Optimised some lsl into add
+- Optimised some clr.l into move.l
+- Optimised some branches from .w to .s
+- Made a bunch of bsr.w into bsr.s
+- Fixed (my) error in _smps2asm_inc.asm that caused missing coordination flags to not be detected
+
+11/09/2014
+= v2.2.3 =
+- Added S3K's additional PSG frequencies
+- Added S3K's continuous SFX system
+- Split sound priorities and speedup tempos from main asm into s1.sounddriver.other.asm
+
+13/09/2014
+= v2.2.3.1 =
+- Moved troublesome PSG frequency
+- Reverted PSGPitchConvert to an earlier, more readable state
+
+06/10/2014
+= v2.2.4 =
+- Fixed FM6 fade-in
+- Modified cfFadeToPrevious to work on FM and PSG tracks
+- Optimised some locrets (recycling!)
+- Annotated Vladikcomper's modified WriteFMI(I)
+- Removed a startZ80 that I missed back in v2.0
+- Renamed several constants to be more S1-like
+- Restored original local labels (With tweaks for compatibility)
+- Optimised lea Clone_Driver_RAM into .w
+- Optimised 68k version of PlaySega
+- Ported S3K's NoteFill
+- Optimised some 'bsr & bra' into 'pea & bra'
+- Further optimised the waitYM macro by using tst.b instead of btst
+- Optimised all btst #7 to tst
+- Even further optimised waitYM by moving ym2612_a0 to a register
+- Updated channel RAM addresses description
+- Optimised NoteFillUpdate
+
+15/10/2014
+= v2.2.4.1 =
+- Optimised WriteFMI(I) with a nice trick I picked up from Ristar's driver
+- Optimised some writes to psg_input
+- Optimised all adda.x #x,aN to lea x(aN),aN
+- Optimised FM and PSG's .gotduration by replacing them with SetDuration_pea
+- Added a nop to WaitYM to avoid missed writes
+- Optimised PSG flags by reordering their checks in order of most-to-least common
+- Replaced a 'branch to rts' with an rts
+- Restored the music and SFXs to their 'as-of-2011' state. They shouldn't be modified in the first place
+- Added to _smps2asm_inc.asm to work around DAC typo
+
+17/10/2014
+= v2.2.4.1b =
+- Added several toggles to allow for Sonic 1 support
+
+27/12/2014
+= v2.2.5 =
+- Updated to latest Git (fixing a newly-pointed-out bug along the way)
+- Merged all compatibility layers into s1.sounddriver.compatibility.asm
+- Moved v2.2.4.1b's toggles to s1.sounddriver.compatibility.asm
+- Reverted some dangerous 'moveq's to 'move.b's
+- Optimised a branch under PSGUpdateVolFX
+- Optimised a branch under VolEnv_Reset
+- Removed a branch under VolEnv_Off by moving it above the branch's target
+- Size-optimised MegaPCM, reducing the uncompressed binary's size from 210h to 1E5h
+- Added another nop instruction to waitYM (the beginning of S2's title screen theme plays a goofy note in Regen with just the one)
+- Optimised FMSetFreq by making it write directly from FM_Notes to zTrackFreq
+- Replaced the 'clr.b's under bgmnot1up with a faster moveq/move.b combination
+- Removed the redundant 'clr.b v_sndprio'
+- Optimised Sound_PlayBGM and Sound_PlaySpecial by making them write their voice pointers directly to v_voice_ptr/v_special_voice_ptr (old leftover from v2.1's longword voice pointer hack)
+- Optimised SpeedUpMusic, SpeedUpMusic_1up, SlowDownMusic and SlowDownMusic_1up with some register usage
+- Optimised some zTrackVolume(a5) usage under DoFadeOut
+- Optimised .bgm_psgloadloop by using an addq to skip the 'redundant' byte
+- Optimised Sound_ChkValue by removing the redundant check for Sound Commands
+- bsr -> bra in .specfmdone
+- Renamed all s1.sounddriver files and moved them to the sound folder
+- Changed which v_sndprio clear is used in Sound_PlayBGM (Sonic 2 uses the last one)
+- Added new waitYMspec macro that uses parameter as target for tst
+- Used above modification to optimise WriteFMI
+- Optimised cfSetPSGNoise with better register use
+- Rearranged files at end of driver (Mega PCM, PSGs, music, sounds, others) to put many within 'SoundIndex(pc)' range
+- Fixed oversight in cfNoteFillS3K (d1 isn't loaded if tempo divider = 1), increasing compatibility with S3K music
+- Added two missing S1 equates
+- Excluded nops from waitYM loop
+- Used more appropriate locret under FMNoteOn
+- Added S3K tweak to cfSetPSGTone and cfSetVoice
+
+21/02/2015
+= v2.2.5.1 =
+- Updated SMPS2ASM
+
+03/03/2015
+= v2.2.5.2 =
+- Added waitZ80 macro, for S1 compatibility
+- Added cfSendFMI
+- Replaced cfOpF9 with above
+- Added cfChanFMCommand
+- Added some flag documentation from S3K and flamewing's driver
+- Better-formatted Sonic 2 Clone Driver v2 - Compatibility.asm
+- Relocated DAC ID equates from _smps2asm_inc.asm to Sonic 2 Clone Driver v2 - Compatibility.asm
+- Made said IDs dynamic, in the same way as the music and SFXs
+- Corrected IDs to account for absent dHipHopHitKick3
+- Added id function to Sonic 2 Clone Driver v2 - Compatibility.asm
+
+09/03/2015
+= v2.2.6 =
+- Sonic 2-ifications
+	- Added to FMUpdateTrack and PSGUpdateTrack the way S2's driver does
+	- Made TrackSetRest no longer continue to FinishTrackUpdate
+	- Fixed modulation on rests by adding a check to DoModulation (noticeable at start of ARZ's theme after it's looped)
+	- Relocated a check in FMPrepareNote to occur a little earlier
+	- Changed a reference to a locret in Sound_PlayBGM with one to .bgm_loadMusic, which should make it so that the extra life music can interrupt itself
+	- Made .bgmnot1up clear v_fadeout_counter
+	- .bmg_fmloadloop and .bgm_psgloadloop now set the 'track at rest' bit, avoiding hanging notes (noticeable at start of DEZ's theme)
+	- Optimised .silencefm6 using some S2 logic
+	- Sound_PlaySFX no longer checks v_fadeout_counter
+	- FadeOutMusic no longer calls FadeOutSFX
+	- SpeedUpMusic and SlowDownMusic no longer set v_main_tempo_timeout
+	- PSGSetVolume now corrects values that are >=$10
+	- PSGSetFreq and .restpsg don't continue to FinishTrackUpdate
+	- An 'add' in PSGSendVolume is replaced with an 'ori'
+	- cfPanningAMSFMS has an additional check
+	- Added a (commented out) call to FadeOutSFX in Sound_PlayBGM
+- .nospeedshoes no longer sets v_main_tempo_timeout to the header tempo. This is to avoid unintended tempo overflow on the first frame of playback, delaying the song by a frame. This also helps to prevent hanging notes (noticeable at start of DEZ's theme)
+- Removed useless 'even' from under FMDACInitBytes
+- Removed last '0's from FMDACInitBytes and PSGInitBytes (were actually 'even's)
+
+09/07/2015
+= v2.3 =
+- Made FadeOutSFX use d6 instead of d7, so that it doesn't conflict with Sound_PlayBGM
+- Optimised PSG envelopes with more efficient use of flags
+- Made previous version's bugs toggleable with Fix_DriverBugs
+- Added Valley Bell's Sega chant pan fix
+- Added Valley Bell's 0 FM track fix
+- Added Valley Bell's cfFadeInToPrevious PSG noise type fix
+- Added a (commented out) call to FadeOutSpecSFX in Sound_PlayBGM
+- Un-commented-out the calls under Sound_PlayBGM
+- S2-ified FadeOutSFX
+- Corrected StopSoundAndMusic comment
+- Improved cfFadeInToPrevious FM6 fix
+- Reduced RAM usage by employing a trick from S&K's driver: the SFX/special SFX share RAM with the 1up music backup
+- Switched to using 'STRUCT' to define track RAM
+- Defined driver RAM with phase/ds.b combo
+- Split v_1up_ram_copy into v_1up_ram_copy and v_1up_variables (variables now go after tracks)
+- As part of the SFX/track backup share, the playback control bytes of all tracks are separately backed-up
+- Made Sound_PlayBGM's extra life code clear the special SFX tracks' 'is playing' bit
+- Special SFX code above FMDACInitBytes now uses tst.b instead of tst.w
+- Moved v_special_voice_ptr back next to v_voice_ptr (RAM is dynamic now, so it can go here without wasting any RAM if unused)
+- Made continuous SFX RAM toggleable
+- Reduced zTrack size to $2E by changing LoopCounters from 4 bytes to 2 bytes, as S&K's driver has it
+- Reduced zTrack size to $2C with some track-specific RAM usage
+- FinishTrackUpdate no longer clears VolFlutter on non-PSG tracks
+- Removed now-useless label (loc_721B6)
+
+01/12/2015
+= v2.4 =
+- Added Vladikcomper's fix for interrupt crash, and optimisation of horizontal interrupts
+- Made Mega PCM assemble with the rest of the driver
+- Merged DAC_Table into Mega PCM source code
+- Split 'Sonic 2 Clone Driver v2.asm' from 'Sonic 2 Clone Driver v2 - Compatibility.asm', because of how constants are now generated
+- Added DAC volume control
+- Removed some excessive optimisation
+- Removed needless 'Clownacy |' comments
+- Removed pointless commented-out code
+- Rearranged constants and flags, allowing DAC ID constants to be used in your hack's code
+- Switched back to S1's Sega chant sample (S2's is just S1's with a bit cut off at the end)
+- Fixed mistake in Mega PCM's code I made at some point (an iy+3 was changed to iy+2, breaking panning)
+- Made everything case-sensitive-friendly
+
+05/12/2015
+= v2.4.1 =
+- Added (proper, unlike S2!) fix for music interrupting SFX, causing distortion
+- Made .silencefm6 more like it was in S2's driver
+- Removed some instances where DAC is enabled with WriteFMI. Mega PCM can do that on its own
+- Allowed FM6 to enable itself, letting a song use both FM6 and DAC tracks (the channel itself alternates, so they can't run at the same time)
+- Removed some instances where DAC is disabled with WriteFMI. The above change means FM6 can do that on its own
+- Made PlaySega (68k mode) manually enable DAC
+
+12/12/2015
+= v2.4.2 =
+- Removed redundant instructions under .silencefm6
+- Removed WriteFMIorIIMain, and merged its function into the one thing that used it, like S2's driver
+- Fixed PSG noise channel not shutting up when a new song starts
+- Rewrote PauseMusic to be more like it was in S2's driver
+- Fixed Mega PCM DAC samples not pausing properly (holy shit this has been here since v2.0)
+
+??/01/2016
+= v2.5 =
+- Fixed hanging notes on music that doesn't define all tracks
+- Optimised some track RAM write looping
+- Added missing S3/S3D PSG envelopes
+- Overhauled SMPS2ASM PSG defining
+- Slightly lowered pitch on all DAC samples
+- Updated SMPS2ASM
+- Renamed DAC_Entry arguments to not conflict with comments
+- Removed support for other drivers from _smps2asm_inc.asm (a pain to maintain)
+- Updated sound driver disassembly (track RAM is better-defined)
+- Made some 'move' instructions safer
+- Made disabled coordination flags safer
+- Removed old unused SMPS 68k Type 1a track pointers
+- Made SFX_SFXChannelRAM and SFX_BGMChannelRAM word-sized
+- Ported SMPS Z80's TL handling, fixing S3K DEZ1 (bit 7 lets it be changed by volume)
+- Added support for negative transpositions, fixing S3D intro (S3D uses these)
+- Shrinked FM_Notes, to allow for negative transpositions
+- Removed ReverseFreqs. It was fun while it lasted, but I'm not about to waste time figuring out how to make a negative shrunken FM_Notes
+- Corrected smpsVcTotalLevel errors in OOZ, Ending, and Title Screen
+- Corrected smpsVcTotalLevel errors in SFX 55 and 5C (D5 and DC)
+- Corrected FM5 channel transposition in SFX BC (Spin Dash release)
+- Added 'readme.txt' files to 'music' and 'SFX' folders, detailing bugfixes made and where to find SMPS2ASM
+- Added URLs to Mega PCM's thread at start of Mega PCM files
+- Split PSG volume envelopes to 'Sonic 2 Clone Driver v2 - PSG Volume Envelopes.asm'
+- Split FM Universal Voice Bank to 'Sonic 2 Clone Driver v2 - FM Universal Voice Bank.asm'
+- Slightly reordered data at end of driver
+- Added option to not include FM Universal Voice Bank
+- Added option to not include certain games' PSG volume envelopes
+- Removed SetDuration_pea
+- Fixed cfSetPSGTone when it's run on FM track (forgot to advance the track pointer)
+- Enhanced SMPS2ASM to ignore S3-specific smpsFade
+- Reverted bugged optimisations to PSG volume envelopes (fixes VVZ2)
+- Added support for negative track pointers, fixing SFX CC (holy cow, another one I haven't noticed since v2.0)
