@@ -826,13 +826,15 @@ Sound_PlayBGM:
 ; loc_7202C:
 .bgm_loadMusic:
 	bsr.w	InitMusicPlayback
-	lea	SpeedUpIndex(pc),a4
 	subi.b	#MusID__First,d7
-	move.b	(a4,d7.w),v_speeduptempo(a6)
+	add.w	d7,d7
+	move.w	d7,d0
+	add.w	d7,d7
+	add.w	d0,d7
 	lea	MusicIndex(pc),a4
-	add.w	d7,d7
-	add.w	d7,d7
-	movea.l	(a4,d7.w),d1
+	lea	(a4,d7.w),a4
+	move.l	(a4)+,d1
+	move.b	(a4),v_speeduptempo(a6)
 	bclr	#0,d1				; Clownacy | Is this a forced-PAL tempo song? (we clear PAL tempo flag so it doesn't interfere later on)
 	beq.s	.nopalmode
 	bset	#f_force_pal_tempo,misc_flags(a6) ; Clownacy | If so, set flag
