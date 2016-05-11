@@ -1,5 +1,3 @@
-	include "sound/Sonic 2 Clone Driver v2 - Sound IDs.asm"
-
 ; ---------------------------------------------------------------------------
 ; Track variables
 ; ---------------------------------------------------------------------------
@@ -175,6 +173,6 @@ v_sounddriverramend:
 	dephase
 
     if MOMPASS=1
-	message "Clone Driver v2 RAM size is $\{v_sounddriverramend-v_sounddriverramstart} bytes!"
+	message "Sonic 2 Clone Driver v2 RAM size is $\{v_sounddriverramend-v_sounddriverramstart} bytes!"
     endif
 	!org ireallydontknow
