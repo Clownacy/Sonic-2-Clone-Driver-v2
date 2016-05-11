@@ -41,6 +41,12 @@ ireallydontknow:
 	phase 0
 v_sounddriverramstart:
 
+SMPS_running_flag:		ds.b 1
+
+	if (*)&1	; pretty much an 'even'
+				ds.b 1
+	endif
+
 v_startofvariables:
 v_sndprio:			ds.b 1	; sound priority (priority of new music/SFX must be higher or equal to this value or it won't play; bit 7 of priority being set prevents this value from changing)
 v_main_tempo_timeout:		ds.b 1	; Has v_main_tempo added to it; when it carries, delays song by 1 frame

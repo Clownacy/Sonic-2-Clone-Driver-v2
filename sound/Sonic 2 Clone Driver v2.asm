@@ -72,7 +72,7 @@ UpdateMusic:
 	lea	(Clone_Driver_RAM).w,a6		; Clownacy | If you get errors, use (Clone_Driver_RAM).l instead
 	clr.b	f_voice_selector(a6)
 	tst.b	f_stopmusic(a6)			; Is music paused?
-	bne.w	PauseMusic			; If yes, branch
+	bne.w	DoPauseMusic			; If yes, branch
 	move.b	v_fadeout_counter(a6),d0
 	beq.s	.skipfadeout
 	bsr.w	DoFadeOut
@@ -520,9 +520,9 @@ locret_71E48:
 ; End of function FMPrepareNote
 
 ; ===========================================================================
-; loc_71E50:
-PauseMusic:
-	bmi.s	UnpauseMusic		; Branch if music is being unpaused
+; loc_71E50: PauseMusic:
+DoPauseMusic:
+	bmi.s	DoUnpauseMusic		; Branch if music is being unpaused
 	cmpi.b	#2,f_stopmusic(a6)
 	beq.w	locret_71EFE
 	move.b	#2,f_stopmusic(a6)
@@ -538,8 +538,8 @@ PauseMusic:
 
 	rts
 ; ===========================================================================
-; loc_71E94: .unpausemusic:
-UnpauseMusic:
+; loc_71E94: .unpausemusic: UnpauseMusic:
+DoUnpauseMusic:
 	clr.b	f_stopmusic(a6)
 
 	lea	v_music_fmdac_tracks(a6),a5
