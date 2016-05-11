@@ -1,48 +1,48 @@
 ; ---------------------------------------------------------------------------
 ; Music	macros and constants
 ; ---------------------------------------------------------------------------
-SMPS_MUSIC macro address,fasttempo,flags
+SMPS_MUSIC_METADATA macro address,fasttempo,flags
 	dc.l	(fasttempo<<24)|((address|flags)&$FFFFFF)
 	endm
 
-SMPS_MUSIC_FORCE_PAL_SPEED = $00000001	; Forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)
+SMPS_MUSIC_METADATA_FORCE_PAL_SPEED = $00000001	; Forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)
 
 ; ---------------------------------------------------------------------------
 ; Music metadata (pointers, flags, speed shoes tempos)
 ; ---------------------------------------------------------------------------
 ; byte_71A94: SpeedUpIndex:
 MusicIndex:
-ptr_mus81:	SMPS_MUSIC	Music81, s2TempotoS3($68), 0	; 2 Player Menu
-ptr_mus82:	SMPS_MUSIC	Music82, s2TempotoS3($BE), 0	; EHZ
-ptr_mus83:	SMPS_MUSIC	Music83, s2TempotoS3($FF), 0	; MCZ 2P
-ptr_mus84:	SMPS_MUSIC	Music84, s2TempotoS3($F0), 0	; OOZ
-ptr_mus85:	SMPS_MUSIC	Music85, s2TempotoS3($FF), 0	; MTZ
-ptr_mus86:	SMPS_MUSIC	Music86, s2TempotoS3($DE), 0	; HTZ
-ptr_mus87:	SMPS_MUSIC	Music87, s2TempotoS3($FF), 0	; ARZ
-ptr_mus88:	SMPS_MUSIC	Music88, s2TempotoS3($DD), 0	; CNZ 2P
-ptr_mus89:	SMPS_MUSIC	Music89, s2TempotoS3($68), 0	; CNZ
-ptr_mus8A:	SMPS_MUSIC	Music8A, s2TempotoS3($80), 0	; DEZ
-ptr_mus8B:	SMPS_MUSIC	Music8B, s2TempotoS3($D6), 0	; MCZ
-ptr_mus8C:	SMPS_MUSIC	Music8C, s2TempotoS3($7B), 0	; EHZ 2P
-ptr_mus8D:	SMPS_MUSIC	Music8D, s2TempotoS3($7B), 0	; SCZ
-ptr_mus8E:	SMPS_MUSIC	Music8E, s2TempotoS3($FF), 0	; CPZ
-ptr_mus8F:	SMPS_MUSIC	Music8F, s2TempotoS3($A8), 0	; WFZ
-ptr_mus90:	SMPS_MUSIC	Music90, s2TempotoS3($FF), 0	; HPZ
-ptr_mus91:	SMPS_MUSIC	Music91, s2TempotoS3($87), 0	; Options
-ptr_mus92:	SMPS_MUSIC	Music92, s2TempotoS3($FF), 0	; Special Stage
-ptr_mus93:	SMPS_MUSIC	Music93, s2TempotoS3($FF), 0	; Boss
-ptr_mus94:	SMPS_MUSIC	Music94, s2TempotoS3($C9), 0	; Final Boss
-ptr_mus95:	SMPS_MUSIC	Music95, s2TempotoS3($97), 0	; SWEET SWEET SWEET
-ptr_mus96:	SMPS_MUSIC	Music96, s2TempotoS3($FF), 0	; Super Sonic
-ptr_mus97:	SMPS_MUSIC	Music97, s2TempotoS3($FF), 0	; Invincible
-ptr_mus98:	SMPS_MUSIC	Music98, s2TempotoS3($CD), 0	; Extra Life
-ptr_mus99:	SMPS_MUSIC	Music99, s2TempotoS3($CD), 0	; Title Screen
-ptr_mus9A:	SMPS_MUSIC	Music9A, s2TempotoS3($AA), 0	; End of Act
-ptr_mus9B:	SMPS_MUSIC	Music9B, s2TempotoS3($F2), 0	; Game Over
-ptr_mus9C:	SMPS_MUSIC	Music9C, s2TempotoS3($DB), 0	; Continue
-ptr_mus9D:	SMPS_MUSIC	Music9D, s2TempotoS3($D5), 0	; Got Emerald
-ptr_mus9E:	SMPS_MUSIC	Music9E, s2TempotoS3($F0), 0	; Credits
-ptr_mus9F:	SMPS_MUSIC	Music9F, s2TempotoS3($80), SMPS_MUSIC_FORCE_PAL_SPEED	; Drowning
+ptr_mus81:	SMPS_MUSIC_METADATA	Music81, s2TempotoS3($68), 0	; 2 Player Menu
+ptr_mus82:	SMPS_MUSIC_METADATA	Music82, s2TempotoS3($BE), 0	; EHZ
+ptr_mus83:	SMPS_MUSIC_METADATA	Music83, s2TempotoS3($FF), 0	; MCZ 2P
+ptr_mus84:	SMPS_MUSIC_METADATA	Music84, s2TempotoS3($F0), 0	; OOZ
+ptr_mus85:	SMPS_MUSIC_METADATA	Music85, s2TempotoS3($FF), 0	; MTZ
+ptr_mus86:	SMPS_MUSIC_METADATA	Music86, s2TempotoS3($DE), 0	; HTZ
+ptr_mus87:	SMPS_MUSIC_METADATA	Music87, s2TempotoS3($FF), 0	; ARZ
+ptr_mus88:	SMPS_MUSIC_METADATA	Music88, s2TempotoS3($DD), 0	; CNZ 2P
+ptr_mus89:	SMPS_MUSIC_METADATA	Music89, s2TempotoS3($68), 0	; CNZ
+ptr_mus8A:	SMPS_MUSIC_METADATA	Music8A, s2TempotoS3($80), 0	; DEZ
+ptr_mus8B:	SMPS_MUSIC_METADATA	Music8B, s2TempotoS3($D6), 0	; MCZ
+ptr_mus8C:	SMPS_MUSIC_METADATA	Music8C, s2TempotoS3($7B), 0	; EHZ 2P
+ptr_mus8D:	SMPS_MUSIC_METADATA	Music8D, s2TempotoS3($7B), 0	; SCZ
+ptr_mus8E:	SMPS_MUSIC_METADATA	Music8E, s2TempotoS3($FF), 0	; CPZ
+ptr_mus8F:	SMPS_MUSIC_METADATA	Music8F, s2TempotoS3($A8), 0	; WFZ
+ptr_mus90:	SMPS_MUSIC_METADATA	Music90, s2TempotoS3($FF), 0	; HPZ
+ptr_mus91:	SMPS_MUSIC_METADATA	Music91, s2TempotoS3($87), 0	; Options
+ptr_mus92:	SMPS_MUSIC_METADATA	Music92, s2TempotoS3($FF), 0	; Special Stage
+ptr_mus93:	SMPS_MUSIC_METADATA	Music93, s2TempotoS3($FF), 0	; Boss
+ptr_mus94:	SMPS_MUSIC_METADATA	Music94, s2TempotoS3($C9), 0	; Final Boss
+ptr_mus95:	SMPS_MUSIC_METADATA	Music95, s2TempotoS3($97), 0	; SWEET SWEET SWEET
+ptr_mus96:	SMPS_MUSIC_METADATA	Music96, s2TempotoS3($FF), 0	; Super Sonic
+ptr_mus97:	SMPS_MUSIC_METADATA	Music97, s2TempotoS3($FF), 0	; Invincible
+ptr_mus98:	SMPS_MUSIC_METADATA	Music98, s2TempotoS3($CD), 0	; Extra Life
+ptr_mus99:	SMPS_MUSIC_METADATA	Music99, s2TempotoS3($CD), 0	; Title Screen
+ptr_mus9A:	SMPS_MUSIC_METADATA	Music9A, s2TempotoS3($AA), 0	; End of Act
+ptr_mus9B:	SMPS_MUSIC_METADATA	Music9B, s2TempotoS3($F2), 0	; Game Over
+ptr_mus9C:	SMPS_MUSIC_METADATA	Music9C, s2TempotoS3($DB), 0	; Continue
+ptr_mus9D:	SMPS_MUSIC_METADATA	Music9D, s2TempotoS3($D5), 0	; Got Emerald
+ptr_mus9E:	SMPS_MUSIC_METADATA	Music9E, s2TempotoS3($F0), 0	; Credits
+ptr_mus9F:	SMPS_MUSIC_METADATA	Music9F, s2TempotoS3($80), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Drowning
 ptr_musend
 
 ; ---------------------------------------------------------------------------
