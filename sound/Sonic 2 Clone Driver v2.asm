@@ -600,7 +600,6 @@ ResumeTrack:
 Sound_Play:
 	tst.b	v_playsnd0(a6)		; Is v_playsnd0 a $00 (empty)?
 	bne.s	locret_71F4A		; If yes, branch
-	lea	(SoundPriorities).l,a0
 	lea	v_playsnd1(a6),a1	; Load music track number
 	move.b	v_sndprio(a6),d3	; Get priority of currently playing SFX
 	moveq	#(SOUND_QUEUES_END-SOUND_QUEUES_START)-1,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
@@ -616,6 +615,11 @@ Sound_Play:
 	bhs.s	.queueinput		; If so, branch
 	subi.b	#SndID__First,d0	; Subtract first SFX index
 	blo.s	.queueinput		; If it was music, branch
+	add.w	d0,d0
+	move.w	d0,d5
+	add.w	d0,d0
+	add.w	d5,d0
+	lea	(SoundIndex+4).l,a0
 	move.b	(a0,d0.w),d2		; Get sound type
 	cmp.b	d3,d2			; Is it a lower priority sound?
 	blo.s	.lowerpriority		; Branch if yes
@@ -1094,10 +1098,12 @@ Sound_PlaySFX:
 	cmp.b	d7,d0					; Is this the same continuous sound that was playing?
 	bne.s	.sfx_notsame				; If not, branch
 	bset	#f_continuous_sfx,misc_flags(a6)	; Set flag for continuous playback mode
-	lea	(SoundIndex).l,a0
 	subi.b	#SndID__First,d7
 	add.w	d7,d7				; Convert sfx ID into index
+	move.w	d7,d0
 	add.w	d7,d7
+	add.w	d0,d7
+	lea	(SoundIndex).l,a0
 	movea.l	(a0,d7.w),a0
 	move.b	3+2(a0),v_contsfx_channels(a6)	; Save number of channels in SFX
 	rts
@@ -1109,10 +1115,12 @@ Sound_PlaySFX:
 .sfx_notcont:
     endif
 
-	lea	(SoundIndex).l,a0
 	subi.b	#SndID__First,d7	; Make it 0-based
 	add.w	d7,d7			; Convert sfx ID into index
+	move.w	d7,d0
 	add.w	d7,d7
+	add.w	d0,d7
+	lea	(SoundIndex).l,a0
 	movea.l	(a0,d7.w),a3		; SFX data pointer
 	movea.l	a3,a1
 	moveq	#0,d1

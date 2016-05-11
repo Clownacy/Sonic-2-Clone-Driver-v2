@@ -1,11 +1,15 @@
 ; ---------------------------------------------------------------------------
 ; SFX macros and constants
 ; ---------------------------------------------------------------------------
-SMPS_SFX macro address,flags
+SMPS_SFX macro address,flags,priority
 	dc.l	address|flags
+	dc.b	priority
+	dc.b	0
 	endm
 
 ; ---------------------------------------------------------------------------
+; SFX metadata (pointers, flags, priorities)
+
 ; Priority of sound. New music or SFX must have a priority higher than or equal
 ; to what is stored in v_sndprio or it won't play. If bit 7 of new priority is
 ; set ($80 and up), the new music or SFX will not set its priority -- meaning
@@ -14,104 +18,91 @@ SMPS_SFX macro address,flags
 ; will only override special SFX and music will only override music.
 ; Of course, this isn't the case anymore, as priorities no longer apply to
 ; special SFX or music.
+; TODO Maybe I should make it apply to Special SFX, too.
 ; ---------------------------------------------------------------------------
-; SoundTypes:
-SoundPriorities:
-	; These are from zSFXPriority in s2.sounddriver.asm
-	; The table only spanned the SFX entries
-	dc.b $80,$70,$70,$70,$70,$70,$70,$70,$70,$70,$68,$70,$70,$70,$60,$70	; $80
-	dc.b $70,$60,$70,$60,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$7F	; $90
-	dc.b $6F,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$70,$6F,$70,$70	; $A0
-	dc.b $70,$60,$60,$70,$70,$70,$70,$70,$70,$70,$60,$62,$60,$60,$60,$70	; $B0
-	dc.b $70,$70,$70,$70,$60,$60,$60,$6F,$70,$70,$6F,$6F,$70,$71,$70,$70	; $C0
-	dc.b $6F								; $D0
-	even
-
-; ---------------------------------------------------------------------------
-; SFX pointers and flags
-; ---------------------------------------------------------------------------
+; SoundTypes: SoundPriorities:
 SoundIndex:
-ptr_sndA0:	SMPS_SFX	SoundA0, 0
-ptr_sndA1:	SMPS_SFX	SoundA1, 0
-ptr_sndA2:	SMPS_SFX	SoundA2, 0
-ptr_sndA3:	SMPS_SFX	SoundA3, 0
-ptr_sndA4:	SMPS_SFX	SoundA4, 0
-ptr_sndA5:	SMPS_SFX	SoundA5, 0
-ptr_sndA6:	SMPS_SFX	SoundA6, 0
-ptr_sndA7:	SMPS_SFX	SoundA7, 0
-ptr_sndA8:	SMPS_SFX	SoundA8, 0
-ptr_sndA9:	SMPS_SFX	SoundA9, 0
-ptr_sndAA:	SMPS_SFX	SoundAA, 0
-ptr_sndAB:	SMPS_SFX	SoundAB, 0
-ptr_sndAC:	SMPS_SFX	SoundAC, 0
-ptr_sndAD:	SMPS_SFX	SoundAD, 0
-ptr_sndAE:	SMPS_SFX	SoundAE, 0
-ptr_sndAF:	SMPS_SFX	SoundAF, 0
-ptr_sndB0:	SMPS_SFX	SoundB0, 0
-ptr_sndB1:	SMPS_SFX	SoundB1, 0
-ptr_sndB2:	SMPS_SFX	SoundB2, 0
-ptr_sndB3:	SMPS_SFX	SoundB3, 0
-ptr_sndB4:	SMPS_SFX	SoundB4, 0
-ptr_sndB5:	SMPS_SFX	SoundB5, 0
-ptr_sndB6:	SMPS_SFX	SoundB6, 0
-ptr_sndB7:	SMPS_SFX	SoundB7, 0
-ptr_sndB8:	SMPS_SFX	SoundB8, 0
-ptr_sndB9:	SMPS_SFX	SoundB9, 0
-ptr_sndBA:	SMPS_SFX	SoundBA, 0
-ptr_sndBB:	SMPS_SFX	SoundBB, 0
-ptr_sndBC:	SMPS_SFX	SoundBC, 0
-ptr_sndBD:	SMPS_SFX	SoundBD, 0
-ptr_sndBE:	SMPS_SFX	SoundBE, 0
-ptr_sndBF:	SMPS_SFX	SoundBF, 0
-ptr_sndC0:	SMPS_SFX	SoundC0, 0
-ptr_sndC1:	SMPS_SFX	SoundC1, 0
-ptr_sndC2:	SMPS_SFX	SoundC2, 0
-ptr_sndC3:	SMPS_SFX	SoundC3, 0
-ptr_sndC4:	SMPS_SFX	SoundC4, 0
-ptr_sndC5:	SMPS_SFX	SoundC5, 0
-ptr_sndC6:	SMPS_SFX	SoundC6, 0
-ptr_sndC7:	SMPS_SFX	SoundC7, 0
-ptr_sndC8:	SMPS_SFX	SoundC8, 0
-ptr_sndC9:	SMPS_SFX	SoundC9, 0
-ptr_sndCA:	SMPS_SFX	SoundCA, 0
-ptr_sndCB:	SMPS_SFX	SoundCB, 0
-ptr_sndCC:	SMPS_SFX	SoundCC, 0
-ptr_sndCD:	SMPS_SFX	SoundCD, 0
-ptr_sndCE:	SMPS_SFX	SoundCE, 0
-ptr_sndCF:	SMPS_SFX	SoundCF, 0
-ptr_sndD0:	SMPS_SFX	SoundD0, 0
-ptr_sndD1:	SMPS_SFX	SoundD1, 0
-ptr_sndD2:	SMPS_SFX	SoundD2, 0
-ptr_sndD3:	SMPS_SFX	SoundD3, 0
-ptr_sndD4:	SMPS_SFX	SoundD4, 0
-ptr_sndD5:	SMPS_SFX	SoundD5, 0
-ptr_sndD6:	SMPS_SFX	SoundD6, 0
-ptr_sndD7:	SMPS_SFX	SoundD7, 0
-ptr_sndD8:	SMPS_SFX	SoundD8, 0
-ptr_sndD9:	SMPS_SFX	SoundD9, 0
-ptr_sndDA:	SMPS_SFX	SoundDA, 0
-ptr_sndDB:	SMPS_SFX	SoundDB, 0
-ptr_sndDC:	SMPS_SFX	SoundDC, 0
-ptr_sndDD:	SMPS_SFX	SoundDD, 0
-ptr_sndDE:	SMPS_SFX	SoundDE, 0
-ptr_sndDF:	SMPS_SFX	SoundDF, 0
-ptr_sndE0:	SMPS_SFX	SoundE0, 0
-ptr_sndE1:	SMPS_SFX	SoundE1, 0
-ptr_sndE2:	SMPS_SFX	SoundE2, 0
-ptr_sndE3:	SMPS_SFX	SoundE3, 0
-ptr_sndE4:	SMPS_SFX	SoundE4, 0
-ptr_sndE5:	SMPS_SFX	SoundE5, 0
-ptr_sndE6:	SMPS_SFX	SoundE6, 0
-ptr_sndE7:	SMPS_SFX	SoundE7, 0
-ptr_sndE8:	SMPS_SFX	SoundE8, 0
-ptr_sndE9:	SMPS_SFX	SoundE9, 0
-ptr_sndEA:	SMPS_SFX	SoundEA, 0
-ptr_sndEB:	SMPS_SFX	SoundEB, 0
-ptr_sndEC:	SMPS_SFX	SoundEC, 0
-ptr_sndED:	SMPS_SFX	SoundED, 0
-ptr_sndEE:	SMPS_SFX	SoundEE, 0
-ptr_sndEF:	SMPS_SFX	SoundEF, 0
-ptr_sndF0:	SMPS_SFX	SoundF0, 0
+ptr_sndA0:	SMPS_SFX	SoundA0, 0, $80
+ptr_sndA1:	SMPS_SFX	SoundA1, 0, $70
+ptr_sndA2:	SMPS_SFX	SoundA2, 0, $70
+ptr_sndA3:	SMPS_SFX	SoundA3, 0, $70
+ptr_sndA4:	SMPS_SFX	SoundA4, 0, $70
+ptr_sndA5:	SMPS_SFX	SoundA5, 0, $70
+ptr_sndA6:	SMPS_SFX	SoundA6, 0, $70
+ptr_sndA7:	SMPS_SFX	SoundA7, 0, $70
+ptr_sndA8:	SMPS_SFX	SoundA8, 0, $70
+ptr_sndA9:	SMPS_SFX	SoundA9, 0, $70
+ptr_sndAA:	SMPS_SFX	SoundAA, 0, $68
+ptr_sndAB:	SMPS_SFX	SoundAB, 0, $70
+ptr_sndAC:	SMPS_SFX	SoundAC, 0, $70
+ptr_sndAD:	SMPS_SFX	SoundAD, 0, $70
+ptr_sndAE:	SMPS_SFX	SoundAE, 0, $60
+ptr_sndAF:	SMPS_SFX	SoundAF, 0, $70
+ptr_sndB0:	SMPS_SFX	SoundB0, 0, $70
+ptr_sndB1:	SMPS_SFX	SoundB1, 0, $60
+ptr_sndB2:	SMPS_SFX	SoundB2, 0, $70
+ptr_sndB3:	SMPS_SFX	SoundB3, 0, $60
+ptr_sndB4:	SMPS_SFX	SoundB4, 0, $70
+ptr_sndB5:	SMPS_SFX	SoundB5, 0, $70
+ptr_sndB6:	SMPS_SFX	SoundB6, 0, $70
+ptr_sndB7:	SMPS_SFX	SoundB7, 0, $70
+ptr_sndB8:	SMPS_SFX	SoundB8, 0, $70
+ptr_sndB9:	SMPS_SFX	SoundB9, 0, $70
+ptr_sndBA:	SMPS_SFX	SoundBA, 0, $70
+ptr_sndBB:	SMPS_SFX	SoundBB, 0, $70
+ptr_sndBC:	SMPS_SFX	SoundBC, 0, $70
+ptr_sndBD:	SMPS_SFX	SoundBD, 0, $70
+ptr_sndBE:	SMPS_SFX	SoundBE, 0, $70
+ptr_sndBF:	SMPS_SFX	SoundBF, 0, $7F
+ptr_sndC0:	SMPS_SFX	SoundC0, 0, $6F
+ptr_sndC1:	SMPS_SFX	SoundC1, 0, $70
+ptr_sndC2:	SMPS_SFX	SoundC2, 0, $70
+ptr_sndC3:	SMPS_SFX	SoundC3, 0, $70
+ptr_sndC4:	SMPS_SFX	SoundC4, 0, $70
+ptr_sndC5:	SMPS_SFX	SoundC5, 0, $70
+ptr_sndC6:	SMPS_SFX	SoundC6, 0, $70
+ptr_sndC7:	SMPS_SFX	SoundC7, 0, $70
+ptr_sndC8:	SMPS_SFX	SoundC8, 0, $70
+ptr_sndC9:	SMPS_SFX	SoundC9, 0, $70
+ptr_sndCA:	SMPS_SFX	SoundCA, 0, $70
+ptr_sndCB:	SMPS_SFX	SoundCB, 0, $70
+ptr_sndCC:	SMPS_SFX	SoundCC, 0, $70
+ptr_sndCD:	SMPS_SFX	SoundCD, 0, $6F
+ptr_sndCE:	SMPS_SFX	SoundCE, 0, $70
+ptr_sndCF:	SMPS_SFX	SoundCF, 0, $70
+ptr_sndD0:	SMPS_SFX	SoundD0, 0, $70
+ptr_sndD1:	SMPS_SFX	SoundD1, 0, $60
+ptr_sndD2:	SMPS_SFX	SoundD2, 0, $60
+ptr_sndD3:	SMPS_SFX	SoundD3, 0, $70
+ptr_sndD4:	SMPS_SFX	SoundD4, 0, $70
+ptr_sndD5:	SMPS_SFX	SoundD5, 0, $70
+ptr_sndD6:	SMPS_SFX	SoundD6, 0, $70
+ptr_sndD7:	SMPS_SFX	SoundD7, 0, $70
+ptr_sndD8:	SMPS_SFX	SoundD8, 0, $70
+ptr_sndD9:	SMPS_SFX	SoundD9, 0, $70
+ptr_sndDA:	SMPS_SFX	SoundDA, 0, $60
+ptr_sndDB:	SMPS_SFX	SoundDB, 0, $62
+ptr_sndDC:	SMPS_SFX	SoundDC, 0, $60
+ptr_sndDD:	SMPS_SFX	SoundDD, 0, $60
+ptr_sndDE:	SMPS_SFX	SoundDE, 0, $60
+ptr_sndDF:	SMPS_SFX	SoundDF, 0, $70
+ptr_sndE0:	SMPS_SFX	SoundE0, 0, $70
+ptr_sndE1:	SMPS_SFX	SoundE1, 0, $70
+ptr_sndE2:	SMPS_SFX	SoundE2, 0, $70
+ptr_sndE3:	SMPS_SFX	SoundE3, 0, $70
+ptr_sndE4:	SMPS_SFX	SoundE4, 0, $60
+ptr_sndE5:	SMPS_SFX	SoundE5, 0, $60
+ptr_sndE6:	SMPS_SFX	SoundE6, 0, $60
+ptr_sndE7:	SMPS_SFX	SoundE7, 0, $6F
+ptr_sndE8:	SMPS_SFX	SoundE8, 0, $70
+ptr_sndE9:	SMPS_SFX	SoundE9, 0, $70
+ptr_sndEA:	SMPS_SFX	SoundEA, 0, $6F
+ptr_sndEB:	SMPS_SFX	SoundEB, 0, $6F
+ptr_sndEC:	SMPS_SFX	SoundEC, 0, $70
+ptr_sndED:	SMPS_SFX	SoundED, 0, $71
+ptr_sndEE:	SMPS_SFX	SoundEE, 0, $70
+ptr_sndEF:	SMPS_SFX	SoundEF, 0, $70
+ptr_sndF0:	SMPS_SFX	SoundF0, 0, $6F
 ptr_sndend
 
 ; ---------------------------------------------------------------------------
