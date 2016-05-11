@@ -27,6 +27,16 @@ PushBehaviour	= 0
 EnableSpecSFX	= 0
 ;	| If 1, include the Special SFX system. Used by S1's waterfall SFX
 ;
+EnableSpinDashSFX = 1
+;	| If 1, include S2's spin dash SFX pitch system
+;
+EnableContSFX	= 0
+;	| If 1, include S3K's continuous SFX system
+;
+First_ContSFX	= $BC
+;	| Set this to the sound ID of your first continous SFX. This ID must be a higher number than any of your normal SFXes
+;	| (Default value is S&K's)
+;
 IdlingSegaSound	= 0
 ;	| If 1, the Sega sound makes the 68k idle. Needed for stock Sonic 1
 ;
@@ -118,6 +128,16 @@ PushBehaviour	= 0
 EnableSpecSFX	= 0
 ;	| If 1, include the Special SFX system. Used by S1's waterfall SFX
 ;
+EnableSpinDashSFX = 1
+;	| If 1, include S2's spin dash SFX pitch system
+;
+EnableContSFX	= 0
+;	| If 1, include S3K's continuous SFX system
+;
+First_ContSFX	= $BC
+;	| Set this to the sound ID of your first continous SFX. This ID must be a higher number than any of your normal SFXes
+;	| (Default value is S&K's)
+;
 IdlingSegaSound	= 0
 ;	| If 1, the Sega sound makes the 68k idle. Needed for stock Sonic 1
 ;
@@ -187,7 +207,7 @@ SndID_RingLeft	= sfx_RingLeft
 ;	| ID of your alternate ring SFX
 ;
 SndID_SpindashRev = $00
-;	| Set this to the ID of your Spin Dash SFX (if you have one)
+;	| Set this to the ID of your Spin Dash SFX (if you have one). Use with EnableSpinDashSFX
 ;
 
 ; ---EQUATES---
@@ -216,6 +236,16 @@ PushBehaviour	= 1
 ;
 EnableSpecSFX	= 1
 ;	| If 1, include the Special SFX system. Used by S1's waterfall SFX
+;
+EnableSpinDashSFX = 0
+;	| If 1, include S2's spin dash SFX pitch system
+;
+EnableContSFX	= 0
+;	| If 1, include S3K's continuous SFX system
+;
+First_ContSFX	= $BC
+;	| Set this to the sound ID of your first continous SFX. This ID must be a higher number than any of your normal SFXes
+;	| (Default value is S&K's)
 ;
 IdlingSegaSound	= 1
 ;	| If 1, the Sega sound makes the 68k idle. Needed for stock Sonic 1

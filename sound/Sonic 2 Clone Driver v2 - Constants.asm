@@ -73,8 +73,10 @@ f_voice_selector:		ds.b 1	; $00 = use music voice pointer; $80 = use track voice
 
 f_1up_playing:			ds.b 1	; flag indicating 1-up song is playing
 
+	if EnableSpinDashSFX
 v_spindash_timer:		ds.b 1
 v_spindash_pitch:		ds.b 1
+	endif
 
 v_pal_audio_countdown:		ds.b 1
 v_communication_byte:		ds.b 1

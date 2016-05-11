@@ -93,10 +93,12 @@ UpdateMusic:
 	bsr.w	Sound_ChkValue
 ; loc_71BC8:
 .nonewsound:
+    if EnableSpinDashSFX
 	tst.b   v_spindash_timer(a6)
 	beq.s	.notimer
 	subq.b	#1,v_spindash_timer(a6)
 .notimer:
+    endif
 	; Clownacy | Pretty large rearrangements have been made here for the
 	; Sonic 2-style selective PAL mode. With S2's driver, if the drowning music played on a PAL
 	; system, the drowning theme would play at 50fps speed, or 'PAL speed'
@@ -1070,6 +1072,7 @@ Sound_PlaySFX:
     endif
 
 .sfx_notgloop:
+    if EnableSpinDashSFX
 	cmpi.b	#SndID_SpindashRev,d7		; Is this the Spin Dash sound?
 	bne.s	.sfx_notspindashrev		; If not, branch
 	move.b	v_spindash_pitch(a6),d0		; Store extra frequency
@@ -1088,6 +1091,7 @@ Sound_PlaySFX:
 	move.b	#60,v_spindash_timer(a6)		; Set timer
 
 .sfx_notspindashrev:
+    endif
 
     if EnableContSFX
 	cmpi.b	#First_ContSFX,d7		; Is this a continuous SFX?
@@ -1190,11 +1194,13 @@ Sound_PlaySFX:
 	move.l	d0,zTrack.DataPointer(a5)		; Store track pointer
 	move.w	(a1)+,zTrack.Transpose(a5)		; load FM/PSG channel modifier
 	move.b	#1,zTrack.DurationTimeout(a5)		; Set duration of first "note"
+    if EnableSpinDashSFX
 	btst	#f_spindash_lastsound,misc_flags(a6)	; Is the Spin Dash sound playing?
 	beq.s	.notspindash				; If not, branch
 	move.b	v_spindash_pitch(a6),d0
 	add.b	d0,zTrack.Transpose(a5)
 .notspindash:
+    endif
 	move.b	d6,zTrack.StackPointer(a5)	; Set "gosub" (coord flag F8h) stack init value
 	tst.b	d4				; Is this a PSG channel?
 	bmi.s	.sfxpsginitdone			; Branch if yes
