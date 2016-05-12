@@ -67,6 +67,8 @@ HW_Port_1_Data = $A10003
 Joypad_Read = ReadJoypads.read
 ;	| Post-Hivebrain had the wonderful idea of removing a useful label. Luckily, AS lets us do this
 ;
+PlaySound = SMPS_PlayMusic
+PlaySound_Special = SMPS_PlaySound
 
 GloopBehaviour	= 0
 ;	| If 1, SndID_Gloop only plays on every other call.

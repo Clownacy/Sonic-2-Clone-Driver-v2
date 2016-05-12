@@ -29,7 +29,7 @@ SoundDriverLoad:
 ; If Music_to_play is clear, move d0 into Music_to_play,
 ; else move d0 into Music_to_play_2.
 ; sub_135E:
-PlayMusic:
+SMPS_PlayMusic:
 	tst.b	(Clone_Driver_RAM+v_playsnd1).w
 	bne.s	+
 	move.b	d0,(Clone_Driver_RAM+v_playsnd1).w
@@ -47,7 +47,7 @@ PlaySoundLocal:
 	tst.b	render_flags(a0)
 	bpl.s	+	; rts
 ; sub_1370:
-PlaySound:
+SMPS_PlaySound:
 	move.b	d0,(Clone_Driver_RAM+v_playsnd2).w
 +	rts
 ; End of function PlaySoundLocal
