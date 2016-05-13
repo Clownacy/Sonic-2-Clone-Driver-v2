@@ -6,7 +6,7 @@ SMPS_SPECIAL_SFX_METADATA macro address,flags
 	endm
 
 ; ---------------------------------------------------------------------------
-; Special SFX metadata (pointers, flags, priorities)
+; Special SFX metadata (pointers, flags)
 ; ---------------------------------------------------------------------------
 SpecSoundIndex:
 ptr_sndD0:	SMPS_SPECIAL_SFX_METADATA	SoundWaterfall, 0
