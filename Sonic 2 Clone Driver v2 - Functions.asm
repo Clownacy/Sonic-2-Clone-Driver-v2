@@ -1,8 +1,7 @@
 ; ---------------------------------------------------------------------------
 ; Load DAC driver (Mega PCM)
 ; ---------------------------------------------------------------------------
-JmpTo_SoundDriverLoad 	; Misnomer
-; SoundDriverLoad:
+; SoundDriverLoad: JmpTo_SoundDriverLoad 
 SMPS_LoadDACDriver:
 	SMPS_stopZ80
 	SMPS_resetZ80

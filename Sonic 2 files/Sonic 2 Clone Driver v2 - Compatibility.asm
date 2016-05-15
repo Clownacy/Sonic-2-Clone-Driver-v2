@@ -1,9 +1,12 @@
 ; ========SONIC 2 GIT EQUATES========
 
-PlayMusic = SMPS_PlayMusic
-PlaySoundLocal = SMPS_PlaySoundLocal
-PlaySound = SMPS_PlaySound
-PlaySoundStereo = SMPS_PlaySound2
+JmpTo_SoundDriverLoad =	SMPS_LoadDACDriver
+SoundDriverLoad =	SMPS_LoadDACDriver
+
+PlayMusic =		SMPS_PlayMusic
+PlaySoundLocal =	SMPS_PlaySoundLocal
+PlaySound =		SMPS_PlaySound
+PlaySoundStereo =	SMPS_PlaySound2
 
 SMPS_GloopSFXBehaviour	= 1
 ;	| If 1, SndID_Gloop only plays on every other call.

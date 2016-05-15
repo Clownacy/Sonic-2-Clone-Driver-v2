@@ -28,7 +28,7 @@ SMPS_startZ80	macro
 	endm
 
 ; ---------------------------------------------------------------------------
-; Macros to wait for when the YM2612 isn't busy
+; macros to wait for when the YM2612 isn't busy
 ; ---------------------------------------------------------------------------
 SMPS_waitYM macro
 	nop		; 4(1/0) ; Gotta give the YM2612 some time to read
@@ -52,6 +52,6 @@ SMPS_waitYMspec macro target
 	endm	; optimal cycle count: 18(4/0) + target test cycles
 
 ; ---------------------------------------------------------------------------
-; Helper for sound IDs
+; helper for sound IDs
 ; ---------------------------------------------------------------------------
 SMPS_id function ptr,((ptr-offset)/ptrsize+idstart)

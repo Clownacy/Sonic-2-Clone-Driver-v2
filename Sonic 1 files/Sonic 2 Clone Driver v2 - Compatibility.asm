@@ -1,8 +1,9 @@
 ; ========SONIC 1 GIT EQUATES========
 
-PlaySound = SMPS_PlayMusic
-PlaySound_Special = SMPS_PlaySound
-SoundDriverLoad = SMPS_LoadDACDriver
+SoundDriverLoad =	SMPS_LoadDACDriver
+
+PlaySound =		SMPS_PlayMusic
+PlaySound_Special =	SMPS_PlaySound
 
 ; ---BOUNDARIES---
 MusID__First	= bgm__First
