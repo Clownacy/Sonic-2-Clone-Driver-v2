@@ -229,7 +229,6 @@ UpdateDAC:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80
 	SMPS_waitZ80
-	sf.b	(SMPS_z80_ram+DAC_Type).l	; This is music DAC; change according to volume
 	move.b	d0,(SMPS_z80_ram+DAC_Number).l
 	SMPS_startZ80
 
@@ -666,7 +665,6 @@ PlaySega:
 
 	SMPS_stopZ80
 	SMPS_waitZ80
-	st.b	(SMPS_z80_ram+DAC_Type).l	; This is a DAC SFX; ignore music DAC volume
 	move.b	#dSega_S2,(SMPS_z80_ram+DAC_Number).l	; Queue Sega PCM
 	SMPS_startZ80
 	    if SMPS_IdlingSegaSound
@@ -1435,6 +1433,7 @@ FadeOutMusic:
 ;    endif
 	move.b	#3,v_fadeout_delay(a6)		; Set fadeout delay to 3
 	move.b	#$28,v_fadeout_counter(a6)	; Set fadeout counter
+	clr.b	v_music_dac_track.PlaybackControl(a6)	; Stop DAC track
 	clr.b	f_speedup(a6)			; Disable speed shoes tempo
 	rts
 
@@ -1452,19 +1451,6 @@ DoFadeOut:
 	subq.b	#1,v_fadeout_counter(a6)	; Update fade counter
 	beq.w	StopSoundAndMusic		; Branch if fade is done
 	move.b	#3,v_fadeout_delay(a6)		; Reset fade delay
-	lea	v_music_dac_track(a6),a5
-	tst.b	zTrack.PlaybackControl(a5)	; Is track playing?
-	bpl.s	.fadefm				; Branch if not
-	addq.b	#4,zTrack.Volume(a5)		; Increase volume attenuation
-	bpl.s	.senddacvol			; Branch if still positive
-	bclr	#7,zTrack.PlaybackControl(a5)	; Stop track
-	bra.s	.fadefm
-; ===========================================================================
-
-.senddacvol:
-	bsr.w	SetDACVolume
-
-.fadefm:
 	lea	v_music_track_ram(a6),a5
 	moveq	#((v_music_fm_tracks_end-v_music_fm_tracks)/zTrack.len)-1,d7	; 6 FM tracks
 ; loc_72524:
@@ -1630,8 +1616,6 @@ InitMusicPlayback:
 	move.b	d4,v_fadein_counter(a6)
 	move.l	d5,v_playsnd1(a6)
 	move.b	d6,v_playsnd0(a6)	; set music to $00 (silence)
-	moveq	#0|((VolumeTbls&$F000)>>8),d0	; Clownacy | Reset DAC volume to maximum
-	bsr.w	WriteDACVolume
 
     if SMPS_FixBugs
 	; InitMusicPlayback, and Sound_PlayBGM for that matter,
@@ -1733,13 +1717,6 @@ DoFadeIn:
 	beq.s	.fadedone		; Branch if yes
 	subq.b	#1,v_fadein_counter(a6)	; Update fade counter
 	move.b	#2,v_fadein_delay(a6)	; Reset fade delay
-	lea	v_music_dac_track(a6),a5
-	tst.b	zTrack.PlaybackControl(a5) ; Is track playing?
-	bpl.s	.fadefm			; Branch if not
-	subq.b	#4,zTrack.Volume(a5)	; Reduce volume attenuation
-	bsr.w	SetDACVolume
-
-.fadefm:
 	lea	v_music_fm_tracks(a6),a5
 	moveq	#((v_music_fm_tracks_end-v_music_fm_tracks)/zTrack.len)-1,d7	; 6 FM tracks
 ; loc_7269E:
@@ -1774,6 +1751,7 @@ DoFadeIn:
 ; ===========================================================================
 ; loc_726D6:
 .fadedone:	; Modified version of MJ's original DAC fade-in fix
+	bclr	#2,v_music_dac_track.PlaybackControl(a6)	; Make DAC track audible again
 	bclr	#f_fadein_flag,misc_flags(a6)		; Stop fadein
 	tst.b	v_music_dac_track.PlaybackControl(a6)		; is the DAC channel running?
 	bpl.s	.locret					; if not, return
@@ -1787,30 +1765,6 @@ DoFadeIn:
 ; End of function DoFadeIn
 
 ; ===========================================================================
-
-SetDACVolume:
-	moveq	#0,d0
-	move.b	zTrack.Volume(a5),d0
-	cmpi.b	#$7F,d0	; $7F is the last valid volume
-	bhi.s	.maxreached
-	lsr.b	#3,d0
-	andi.b	#$F,d0
-	ori.b	#(VolumeTbls&$F000)>>8,d0
-	bra.s	WriteDACVolume
-.maxreached:
-	moveq	#$F|((VolumeTbls&$F000)>>8),d0	; cap at maximum value (minimum volume)
-	;bra.s	WriteDACVolume
-
-WriteDACVolume:
-	SMPS_stopZ80
-	SMPS_waitZ80
-	move.b	d0,(SMPS_z80_ram+DAC_Volume).l
-	SMPS_startZ80
-	rts
-; End of function SetDACVolume
-
-; ===========================================================================
-
 ; loc_726E2:
 FMNoteOn:
 	btst	#1,zTrack.PlaybackControl(a5)	; Is track resting?
@@ -2394,22 +2348,10 @@ cfFadeInToPrevious:
 	lea	zTrack.len(a0),a0
 	dbf	d0,.restoreplaybackloop
 
+	bset	#2,v_music_dac_track.PlaybackControl(a6)	; Mute DAC track
 	movea.l	a5,a3
 	moveq	#$28,d6
 	sub.b	v_fadein_counter(a6),d6			; If fade already in progress, this adjusts track volume accordingly
-	lea	v_music_dac_track(a6),a5
-	btst	#7,zTrack.PlaybackControl(a5)	; Is track playing?
-	beq.s	.fadefm				; Branch if not
-	bset	#1,zTrack.PlaybackControl(a5)	; Set 'track at rest' bit
-	move.b	d6,d0
-	add.b	d0,d0
-	add.b	d0,d0
-	add.b	d0,zTrack.Volume(a5)		; Apply current volume fade-in
-	btst	#2,zTrack.PlaybackControl(a5)	; Is SFX overriding?
-	bne.s	.fadefm				; Branch if yes
-	bsr.w	SetDACVolume
-
-.fadefm:
 	moveq	#((v_music_fm_tracks_end-v_music_fm_tracks)/zTrack.len)-1,d7 ; 6 FM tracks
 	lea	v_music_fm_tracks(a6),a5
 ; loc_72B3A:
@@ -2466,8 +2408,6 @@ cfSetTempoDivider:
 cfChangeFMVolume:
 	move.b	(a4)+,d0		; Get parameter
 	add.b	d0,zTrack.Volume(a5)	; Add to current volume
-	btst	#f_updating_dac,misc_flags(a6)
-	bne.w	SetDACVolume
 	bra.w	SendVoiceTL
 ; ===========================================================================
 ; loc_72BAE:
@@ -2896,7 +2836,6 @@ cfSilenceStopTrack:
 cfPlayDACSample:
 	SMPS_stopZ80
 	SMPS_waitZ80
-	st.b	(SMPS_z80_ram+DAC_Type).l	; This is a DAC SFX; ignore music DAC volume
 	move.b	(a4)+,(SMPS_z80_ram+DAC_Number).l
 	SMPS_startZ80
 	rts

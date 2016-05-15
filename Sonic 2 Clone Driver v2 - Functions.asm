@@ -64,7 +64,6 @@ SMPS_PlaySound2:
 ; ---------------------------------------------------------------------------
 SMPS_PlaySample:
 	SMPS_stopZ80
-	st.b	(SMPS_z80_ram+DAC_Type).l	; This is a DAC SFX; ignore music DAC volume
 	move.b  d0,(SMPS_z80_ram+DAC_Number).l
 	SMPS_startZ80
 	rts
