@@ -1,11 +1,4 @@
 ; ---------------------------------------------------------------------------
-; SFX macros and constants
-; ---------------------------------------------------------------------------
-SMPS_SFX_METADATA macro address,priority,flags
-	dc.l	((priority)<<24)|(address&$FFFFFF)
-	endm
-
-; ---------------------------------------------------------------------------
 ; SFX metadata (pointers, flags, priorities)
 
 ; Priority of sound. New music or SFX must have a priority higher than or equal
