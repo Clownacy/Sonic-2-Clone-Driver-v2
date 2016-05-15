@@ -714,7 +714,7 @@ PlaySega:
 	lea	(SegaPCM).l,a2			; Load the SEGA PCM sample into a2. It's important that we use a2 since a0 and a1 are going to be used up ahead when reading the joypad ports
 	lea	(SMPS_ym2612_d0).l,a3		; Load $A04001 (YM2612 register D0) into a3
 	lea	(Ctrl_1).w,a4			; Load address where JoyPad states are written into a4
-	lea	(HW_Port_1_Data).l,a5		; Load address where JoyPad states are read from into a5
+	lea	(SMPS_HW_Port_1_Data).l,a5	; Load address where JoyPad states are read from into a5
 	move.w	#(SegaPCM_End-SegaPCM)-1,d3	; Load the size of the SEGA PCM sample into d3
 	SMPS_waitYM
 	move.b	#$2A,(a0)			; $A04000 = $2A -> Write to DAC channel

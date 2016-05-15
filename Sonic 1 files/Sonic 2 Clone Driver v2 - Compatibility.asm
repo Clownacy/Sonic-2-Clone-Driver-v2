@@ -57,9 +57,6 @@ Graphics_Flags	= v_megadrive
 Ctrl_1 = v_jpadhold1
 ;	| Just an equate
 ;
-HW_Port_1_Data = $A10003
-;	| Just an equate
-;
 Joypad_Read = ReadJoypads.read
 ;	| Post-Hivebrain had the wonderful idea of removing a useful label. Luckily, AS lets us do this
 ;
