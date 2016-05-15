@@ -323,7 +323,7 @@ Changelog
 - Rewrote PauseMusic to be more like it was in S2's driver
 - Fixed Mega PCM DAC samples not pausing properly (holy shit this has been here since v2.0)
 
-??/01/2016
+18/01/2016
 = v2.5 =
 - Fixed hanging notes on music that doesn't define all tracks
 - Optimised some track RAM write looping
