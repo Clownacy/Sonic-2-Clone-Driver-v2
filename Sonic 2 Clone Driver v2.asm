@@ -1301,7 +1301,7 @@ Sound_PlaySpecial:
 	bpl.s	.locret					; Branch if not
 	bset	#2,v_spcsfx_psg3_track.PlaybackControl(a6) ; Set 'SFX is overriding' track
 	ori.b	#$1F,d4					; Command to silence channel
-	lea	(PSG_input).l,a1
+	lea	(SMPS_psg_input).l,a1
 	move.b	d4,(a1)
 	bchg	#5,d4					; Command to silence noise channel
 	move.b	d4,(a1)
@@ -1385,7 +1385,7 @@ StopSFX:
 	bset	#1,zTrack.PlaybackControl(a0)		; Set 'track at rest' bit
 	cmpi.b	#$E0,zTrack.VoiceControl(a0)		; Is this a noise channel?
 	bne.s	.nexttrack				; Branch if not
-	move.b	zTrack.PSGNoise(a0),(PSG_input).l	; Set noise type
+	move.b	zTrack.PSGNoise(a0),(SMPS_psg_input).l	; Set noise type
 ; loc_72472:
 .nexttrack:
 	lea	zTrack.len(a5),a5
@@ -1430,7 +1430,7 @@ StopSpecSFX:
 	bpl.s	.fadedpsg				; Return if not
 	cmpi.b	#$E0,zTrack.VoiceControl(a5)		; Is this a noise channel?
 	bne.s	.fadedpsg				; Return if not
-	move.b	zTrack.PSGNoise(a5),(PSG_input).l	; Set noise type
+	move.b	zTrack.PSGNoise(a5),(SMPS_psg_input).l	; Set noise type
 ; locret_724E4:
 .fadedpsg
 	rts
@@ -2078,7 +2078,7 @@ PSGUpdateFreq:
 	or.b	d1,d0		; Latch tone data to channel
 	lsr.w	#4,d6		; Get upper 6 bits of frequency
 	andi.b	#$3F,d6		; Send to latched channel
-	lea	(PSG_input).l,a0
+	lea	(SMPS_psg_input).l,a0
 	move.b	d0,(a0)
 	move.b	d6,(a0)
 ; locret_7291E:
@@ -2158,7 +2158,7 @@ PSGSendVolume:
 +
 	or.b	zTrack.VoiceControl(a5),d6	; Add in track selector bits
 	ori.b	#$10,d6				; Mark it as a volume command
-	move.b	d6,(PSG_input).l
+	move.b	d6,(SMPS_psg_input).l
 
 locret_7298A:
 	rts
@@ -2208,7 +2208,7 @@ PSGNoteOff:
 SendPSGNoteOff:
 	move.b	zTrack.VoiceControl(a5),d0	; PSG channel to change
 	ori.b	#$1F,d0				; Maximum volume attenuation
-	move.b	d0,(PSG_input).l
+	move.b	d0,(SMPS_psg_input).l
     if SMPS_FixBugs
 	; Without InitMusicPlayback forcefully muting all channels, there's the
 	; risk of music accidentally playing noise because it can't detect if
@@ -2217,7 +2217,7 @@ SendPSGNoteOff:
 	; music uses the noise channel. S&K's driver contains a fix just like this.
 	cmpi.b	#$DF,d0			; Are we stopping PSG 3?
 	bne.s	locret_729B4
-	move.b	#$FF,(PSG_input).l	; If so, stop noise channel while we're at it
+	move.b	#$FF,(SMPS_psg_input).l	; If so, stop noise channel while we're at it
     endif
 locret_729B4:
 	rts
@@ -2228,7 +2228,7 @@ locret_729B4:
 
 ; sub_729B6:
 PSGSilenceAll:
-	lea	(PSG_input).l,a0
+	lea	(SMPS_psg_input).l,a0
 	move.b	#$9F,(a0)	; Silence PSG 1
 	move.b	#$BF,(a0)	; Silence PSG 2
 	move.b	#$DF,(a0)	; Silence PSG 3
@@ -2456,7 +2456,7 @@ cfFadeInToPrevious:
 	; Clownacy | One of Valley Bell's fixes: this restores the noise mode if need be, avoiding a bug where unwanted noise plays
 	cmpi.b	#$E0,zTrack.VoiceControl(a5)		; Is this a noise channel?
 	bne.s	.nextpsg				; Branch if not
-	move.b	zTrack.PSGNoise(a5),(PSG_input).l	; Set noise type
+	move.b	zTrack.PSGNoise(a5),(SMPS_psg_input).l	; Set noise type
     endif
 
 ; loc_72B78:
@@ -2824,7 +2824,7 @@ cfStopTrack:
 	bset	#1,zTrack.PlaybackControl(a0)	; Set 'track at rest' bit
 	cmpi.b	#$E0,zTrack.VoiceControl(a0)	; Is this a noise pointer?
 	bne.s	.locexit			; Branch if not
-	move.b	zTrack.PSGNoise(a0),(PSG_input).l ; Set noise tone
+	move.b	zTrack.PSGNoise(a0),(SMPS_psg_input).l ; Set noise tone
 ; loc_72E02:
 .locexit:
 	addq.w	#8,sp			; Tamper with return value so we don't go back to caller
@@ -2837,7 +2837,7 @@ cfSetPSGNoise:
 	move.b	d0,zTrack.PSGNoise(a5)		; Save it
 	btst	#2,zTrack.PlaybackControl(a5)	; Is track being overridden?
 	bne.s	.locret				; Return if yes
-	move.b	d0,(PSG_input).l		; Set tone
+	move.b	d0,(SMPS_psg_input).l		; Set tone
 ; locret_72E1E:
 .locret:
 	rts
