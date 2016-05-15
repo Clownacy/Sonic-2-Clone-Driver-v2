@@ -2,28 +2,6 @@
 ; Sonic 2 Clone Driver v2
 ; ===========================================================================
 
-; Macro to wait for when the YM2612 isn't busy
-waitYM macro
-	nop		; 4(1/0) ; Gotta give the YM2612 some time to read
-	nop		; 4(1/0)
-	nop		; 4(1/0)
-	; If you're gonna overclock your 68k, you may need to pad this out with more 'nop's to avoid missed writes
-.loop:
-	tst.b	(a0)	; 8(2/0)
-	bmi.s	.loop	; 10(2/0) | 8(1/0)
-	endm	; optimial cycle count: 24(5/0)
-
-waitYMspec macro target
-	nop		; 4(1/0) ; Gotta give the YM2612 some time to read
-	nop		; 4(1/0)
-	nop		; 4(1/0)
-	tst.b	target
-	bpl.s	.skip	; 10(2/0) | 8(1/0)
-.loop:	tst.b	(a0)	; 8(2/0)
-	bmi.s	.loop	; 10(2/0) | 8(1/0)
-.skip:
-	endm	; optimal cycle count: 18(4/0) + target test cycles
-
 	dc.b	"Clownacy's Sonic 2 Clone Driver v2 (v2.5+)"
 	even
 
@@ -43,8 +21,8 @@ UpdateMusic:
 	; "This is the code to stop Z80.
 	; Thus, SMPS stops it at the beginning of its main routine execution and starts it at the end.
 	; You won't need this code anymore."
-;	stopZ80
-;	waitZ80
+;	SMPS_stopZ80
+;	SMPS_waitZ80
 ;	nop
 ;	nop
 ;	nop
@@ -59,7 +37,7 @@ UpdateMusic:
 
 ;	tst.b	(z80_dac_status).l		; Is DAC accepting new samples?
 ;	bpl.s	.driverinput			; Branch if yes
-;	startZ80
+;	SMPS_startZ80
 ;	nop
 ;	nop
 ;	nop
@@ -198,7 +176,7 @@ UpdateMusic:
 ;	bmi.s	DoStartZ80
 ;	move.b	#$2A,(ym2612_a0).l
 
-;	startZ80
+;	SMPS_startZ80
 .locret:
 	rts
 ; End of function UpdateMusic
@@ -249,11 +227,11 @@ UpdateDAC:
 
 	; From Vladikcomper:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	stopZ80
-	waitZ80
+	SMPS_stopZ80
+	SMPS_waitZ80
 	sf.b	(z80_dac_type).l	; This is music DAC; change according to volume
 	move.b	d0,(z80_dac_sample).l
-	startZ80
+	SMPS_startZ80
 
 locret_71CAA:
 	rts
@@ -531,10 +509,10 @@ DoPauseMusic:
 	; From Vladikcomper:
 	; "Playing sample $7F executes pause command."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	stopZ80
-	waitZ80
+	SMPS_stopZ80
+	SMPS_waitZ80
 	move.b  #$7F,(z80_dac_sample).l	; pause DAC
-	startZ80
+	SMPS_startZ80
 
 	rts
 ; ===========================================================================
@@ -562,10 +540,10 @@ DoUnpauseMusic:
 	; From Vladikcomper:
 	; "Playing sample $00 cancels pause mode."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	stopZ80
-	waitZ80
+	SMPS_stopZ80
+	SMPS_waitZ80
 	clr.b  (z80_dac_sample).l	; unpause DAC
-	startZ80
+	SMPS_startZ80
 
 ; loc_71EFE:
 locret_71EFE:
@@ -701,11 +679,11 @@ ptr_flgend
 PlaySega:
     if SegaPCM_68k = 0
 
-	stopZ80
-	waitZ80
+	SMPS_stopZ80
+	SMPS_waitZ80
 	st.b	(z80_dac_type).l	; This is a DAC SFX; ignore music DAC volume
 	move.b	#dSega_S2,(z80_dac_sample).l	; Queue Sega PCM
-	startZ80
+	SMPS_startZ80
 	    if IdlingSegaSound
 		move.w	#$11,d1
 ; loc_71FC0:
@@ -730,17 +708,17 @@ PlaySega:
 	moveq	#$2B,d0		; DAC enable/disable register
 	move.b	#$80,d1		; Enable DAC
 	bsr.w	WriteFMI
-	stopZ80
-	waitZ80
+	SMPS_stopZ80
+	SMPS_waitZ80
 	lea	(ym2612_a0).l,a0		; Load $A04000 (YM2612 register A0) into a0 for some temporary use
 	lea	(SegaPCM).l,a2			; Load the SEGA PCM sample into a2. It's important that we use a2 since a0 and a1 are going to be used up ahead when reading the joypad ports
 	lea	(ym2612_d0).l,a3		; Load $A04001 (YM2612 register D0) into a3
 	lea	(Ctrl_1).w,a4			; Load address where JoyPad states are written into a4
 	lea	(HW_Port_1_Data).l,a5		; Load address where JoyPad states are read from into a5
 	move.w	#(SegaPCM_End-SegaPCM)-1,d3	; Load the size of the SEGA PCM sample into d3
-	waitYM
+	SMPS_waitYM
 	move.b	#$2A,(a0)			; $A04000 = $2A -> Write to DAC channel
-	waitYM
+	SMPS_waitYM
 .loop:
 	move.b	(a2)+,(a3)			; Write the PCM data (contained in a2) to YM2612 register D0 (contained in a3)
 	moveq	#$18,d0				; Write the pitch ($18 in this case) to d0
@@ -753,7 +731,7 @@ PlaySega:
 	bmi.s	.endloop			; If start is pressed, stop playing, leave this loop, and unfreeze the 68K, otherwise, continue playing PCM sample
 	dbf	d3,.loop			; Count down d3 and loop. If d3 = 0, we finished playing the PCM sample, so stop playing, leave this loop, and unfreeze the 68K
 .endloop:
-	startZ80
+	SMPS_startZ80
     endif
 
 	addq.w	#4,sp				; Tamper return value so we don't return to caller
@@ -1625,10 +1603,10 @@ StopSoundAndMusic:
 	; From Vladikcomper:
 	; "Playing sample $80 forces to stop playback."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	stopZ80
-	waitZ80
+	SMPS_stopZ80
+	SMPS_waitZ80
 	move.b  #$80,(z80_dac_sample).l	; stop DAC playback
-	startZ80
+	SMPS_startZ80
 
 	pea	PSGSilenceAll(pc)
 	bra.w	FMSilenceAll
@@ -1839,10 +1817,10 @@ SetDACVolume:
 	;bra.s	WriteDACVolume
 
 WriteDACVolume:
-	stopZ80
-	waitZ80
+	SMPS_stopZ80
+	SMPS_waitZ80
 	move.b	d0,(z80_dac_volume).l
-	startZ80
+	SMPS_startZ80
 	rts
 ; End of function SetDACVolume
 
@@ -1935,16 +1913,16 @@ WriteFMIorII:
 ; Vladikcomper's modified WriteFMI, optimised by Clownacy
 ; sub_7272E:
 WriteFMI:
-	stopZ80
-	waitZ80
+	SMPS_stopZ80
+	SMPS_waitZ80
 	lea	(ym2612_a0).l,a0		; 12(3/0)
-	waitYM					; 24(5/0)
+	SMPS_waitYM					; 24(5/0)
 	move.b	d0,(a0)		; ym2612_a0	; 8(1/1)
-	waitYMspec (a0)+			; 8(2/0) + 18(4/0)
+	SMPS_waitYMspec (a0)+			; 8(2/0) + 18(4/0)
 	move.b	d1,(a0)		; ym2612_d0	; 8(1/1)
-	waitYMspec -(a0)			; 10(2/0) + 18(4/0)
+	SMPS_waitYMspec -(a0)			; 10(2/0) + 18(4/0)
 	move.b	#$2A,(a0)	; ym2612_a0	; 12(2/1)
-	startZ80				; Total: 40(7/3) + 78(17/0)
+	SMPS_startZ80				; Total: 40(7/3) + 78(17/0)
 
 locret_72714:
 	rts
@@ -1962,16 +1940,16 @@ WriteFMIIPart:
 ; Vladikcomper's modified WriteFMII, optimised by Clownacy
 ; sub_72764:
 WriteFMII:
-	stopZ80
-	waitZ80
+	SMPS_stopZ80
+	SMPS_waitZ80
 	lea	(ym2612_a0).l,a0		; 12(3/0)
-	waitYM					; 24(5/0)
+	SMPS_waitYM				; 24(5/0)
 	move.b	d0,2(a0)	; ym2612_a1	; 12(2/1)
-	waitYM					; 24(5/0)
+	SMPS_waitYM				; 24(5/0)
 	move.b	d1,3(a0)	; ym2612_d1	; 12(2/1)
-	waitYM					; 24(5/0)
+	SMPS_waitYM				; 24(5/0)
 	move.b	#$2A,(a0)	; ym2612_a0	; 12(2/1)
-	startZ80				; Total: 48(9/3) + 72(15/0)
+	SMPS_startZ80				; Total: 48(9/3) + 72(15/0)
 	rts
 ; End of function WriteFMII
 
@@ -2931,11 +2909,11 @@ cfSilenceStopTrack:
 ; Has one parameter, the index (1-based) of the DAC sample to play.
 ;
 cfPlayDACSample:
-	stopZ80
-	waitZ80
+	SMPS_stopZ80
+	SMPS_waitZ80
 	st.b	(z80_dac_type).l	; This is a DAC SFX; ignore music DAC volume
 	move.b	(a4)+,(z80_dac_sample).l
-	startZ80
+	SMPS_startZ80
 	rts
 ; ===========================================================================
 ; Plays another song or SFX.

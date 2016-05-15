@@ -1,15 +1,13 @@
 ; ---------------------------------------------------------------------------
 ; Load DAC driver (Mega PCM)
 ; ---------------------------------------------------------------------------
-
-; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
-
 JmpTo_SoundDriverLoad 	; Misnomer
-SoundDriverLoad:
-	move.w	#$100,(Z80_Bus_Request).l	; stop the Z80
-	move.w	#$100,(Z80_Reset).l	; reset the Z80
+; SoundDriverLoad:
+SMPS_LoadDACDriver:
+	SMPS_stopZ80
+	SMPS_resetZ80
 
-	; load Mega PCM (kosinski-compressed)
+	; load Mega PCM (Kosinski-compressed)
 	lea	(MegaPCM).l,a0	; source
 	lea	(Z80_RAM).l,a1	; destination
 	bsr.w	KosDec
@@ -20,15 +18,15 @@ SoundDriverLoad:
 	nop
 	nop
 	nop
-	move.w	#$100,(Z80_Reset).l	; reset the Z80
+	SMPS_resetZ80
 	move.w	d1,(Z80_Bus_Request).l	; start the Z80
 	rts
-; End of function SoundDriverLoad
+; End of function SMPS_LoadDACDriver
 
-; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
-; If Music_to_play is clear, move d0 into Music_to_play,
-; else move d0 into Music_to_play_2.
-; sub_135E:
+; ---------------------------------------------------------------------------
+; Queue sound for play (queue 1)
+; ---------------------------------------------------------------------------
+; sub_135E: PlayMusic:
 SMPS_PlayMusic:
 	tst.b	(Clone_Driver_RAM+v_playsnd1).w
 	bne.s	+
@@ -37,61 +35,62 @@ SMPS_PlayMusic:
 +
 	move.b	d0,(Clone_Driver_RAM+v_playsnd4).w
 	rts
-; End of function PlayMusic
+; End of function SMPS_PlayMusic
 
-
-; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
-
-; sub_137C:
-PlaySoundLocal:
+; ---------------------------------------------------------------------------
+; Queue sound for play (queue 2)
+; and optionally only do so if object is on-screen (Sonic engine feature)
+; ---------------------------------------------------------------------------
+; sub_137C: PlaySoundLocal:
+SMPS_PlaySoundLocal:
 	tst.b	render_flags(a0)
 	bpl.s	+	; rts
-; sub_1370:
+; sub_1370: PlaySound:
 SMPS_PlaySound:
 	move.b	d0,(Clone_Driver_RAM+v_playsnd2).w
 +	rts
-; End of function PlaySoundLocal
+; End of function SMPS_PlaySoundLocal
 
-
-; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
-; play a sound in alternating speakers (as in the ring collection sound)
-; sub_1376:
-PlaySoundStereo:
+; ---------------------------------------------------------------------------
+; Queue sound for play (queue 3)
+; ---------------------------------------------------------------------------
+; sub_1376: PlaySoundStereo:
+SMPS_PlaySound2:
 	move.b	d0,(Clone_Driver_RAM+v_playsnd3).w
 	rts
-; End of function PlaySoundStereo
+; End of function SMPS_PlaySound2
 
 ; ---------------------------------------------------------------------------
-; Subroutine to play a DAC sample
+; Play a DAC sample
 ; ---------------------------------------------------------------------------
-PlaySample:
-	stopZ80
+SMPS_PlaySample:
+	SMPS_stopZ80
 	st.b	(z80_dac_type).l	; This is a DAC SFX; ignore music DAC volume
 	move.b  d0,(z80_dac_sample).l
-	startZ80
+	SMPS_startZ80
 	rts
-; End of function PlaySample
+; End of function SMPS_PlaySample
 
 ; ---------------------------------------------------------------------------
-; Subroutine to pause music
+; Pause music
 ; ---------------------------------------------------------------------------
-PauseMusic:
+SMPS_PauseMusic:
 	move.b	#1,(Clone_Driver_RAM+f_stopmusic).w
 	rts
-; End of function PauseMusic
+; End of function SMPS_PauseMusic
 
 ; ---------------------------------------------------------------------------
-; Subroutine to unpause music
+; Unpause music
 ; ---------------------------------------------------------------------------
-UnpauseMusic:
+SMPS_UnpauseMusic:
 	move.b	#$80,(Clone_Driver_RAM+f_stopmusic).w
 	rts
-; End of function UnpauseMusic
+; End of function SMPS_UnpauseMusic
 
 ; ---------------------------------------------------------------------------
-; Subroutine to update sound driver
+; Update sound driver
 ; ---------------------------------------------------------------------------
-UpdateSoundDriver:
+SMPS_UpdateSoundDriver:
 	move	#$2300,sr				; enable interrupts (we can accept horizontal interrupts from now on)
 	bset	#0,(Clone_Driver_RAM+SMPS_running_flag).w	; set "SMPS running flag"
 	bne.s	+					; if it was set already, don't call another instance of SMPS
@@ -99,4 +98,4 @@ UpdateSoundDriver:
 	clr.b	(Clone_Driver_RAM+SMPS_running_flag).w	; reset "SMPS running flag"
 +
 	rts
-; End of function UpdateSoundDriver
+; End of function SMPS_UpdateSoundDriver
