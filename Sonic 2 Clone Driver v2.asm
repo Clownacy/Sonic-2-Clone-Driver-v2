@@ -1064,7 +1064,7 @@ Sound_PlaySFX:
     endif
 
     if SMPS_EnableContSFX
-	cmpi.b	#First_ContSFX,d7		; Is this a continuous SFX?
+	cmpi.b	#SMPS_First_ContSFX,d7		; Is this a continuous SFX?
 	blo.s	.sfx_notcont			; If not, branch
 	moveq	#0,d0
 	move.b	v_current_contsfx(a6),d0
