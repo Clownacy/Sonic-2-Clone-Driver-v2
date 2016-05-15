@@ -589,7 +589,7 @@ pri	= 1
 ; ---------------------------------------------------------------
 
 DAC_Table:
-	if S1DACSamples|S2DACSamples
+	if SMPS_S1DACSamples|SMPS_S2DACSamples
 		; Sonic 1 & 2
 ptr_dac81:	DAC_Entry	17h+2, Kick,		dpcm	; $81	- Kick
 ptr_dac82:	DAC_Entry	01h+2, Snare,		dpcm	; $82	- Snare
@@ -600,7 +600,7 @@ ptr_dac8A:	DAC_Entry	1Ch+2, Timpani,		dpcm	; $8A	- Low-Timpani
 ptr_dac8B:	DAC_Entry	1Dh+2, Timpani,		dpcm	; $8B	- Very Low-Timpani
 	endif
 
-	if S2DACSamples
+	if SMPS_S2DACSamples
 		; Sonic 2
 ptr_dac83:	DAC_Entry	06h+2, Clap,		dpcm	; $83	- Clap
 ptr_dac84:	DAC_Entry	08h+2, Scratch,		dpcm	; $84	- Scratch
@@ -614,7 +614,7 @@ ptr_dac90:	DAC_Entry	0Bh+2, Bongo,		dpcm	; $90	- Mid-Bongo
 ptr_dac91:	DAC_Entry	12h+2, Bongo,		dpcm	; $91	- Low-Bongo
 	endif
 
-	if S3DACSamples|SKDACSamples|S3DDACSamples
+	if SMPS_S3DACSamples|SMPS_SKDACSamples|SMPS_S3DDACSamples
 		; Sonic 3 & K & 3D
 ptr_dac92:	DAC_Entry	04h+1, SnareS3,		dpcm	; $92	- Snare (S3)
 ptr_dac93:	DAC_Entry	0Eh+1, TomS3,		dpcm	; $93	- Hi-Tom (S3)
@@ -648,7 +648,7 @@ ptr_dacAE:	DAC_Entry	18h+1, PowerKick,	dpcm	; $AE	- Power Kick
 ptr_dacAF:	DAC_Entry	18h+1, QuickGlassCrash,	dpcm	; $AF	- Quick Glass Crash
 	endif
 
-	if S3DACSamples|SKDACSamples
+	if SMPS_S3DACSamples|SMPS_SKDACSamples
 		; Sonic 3 & K
 ptr_dacB0:	DAC_Entry	0Ch+1, GlassCrashSnare,	dpcm	; $B0	- Glass Crash Snare
 ptr_dacB1:	DAC_Entry	0Ch+1, GlassCrash,	dpcm	; $B1	- Glass Crash
@@ -689,19 +689,19 @@ ptr_dacD3:	DAC_Entry	12h+1, HipHopHitKick,	dpcm	; $D3	- Lower Power Kick Hit
 ptr_dacD4:	DAC_Entry	0Bh+1, HipHopHitKick,	dpcm	; $D4	- Lowest Power Kick Hit
 	endif
 
-	if S3DDACSamples
+	if SMPS_S3DDACSamples
 		; Sonic 3D
 ptr_dacD5:	DAC_Entry	01h+1, MetalCrashS3D,	dpcm	; $D5	- Final Fight Metal Crash
 ptr_dacD6:	DAC_Entry	12h+1, IntroKickS3D,	dpcm	; $D6	- Intro Kick
 	endif
 
-	if S3DACSamples
+	if SMPS_S3DACSamples
 		; Sonic 3
 ptr_dacD7:	DAC_Entry	16h+1, EchoedClapHitS3,	dpcm	; $D7	- Echoed Clap Hit (S3)
 ptr_dacD8:	DAC_Entry	20h+1, EchoedClapHitS3,	dpcm	; $D8	- Lower Echoed Clap Hit(S3)	; Clownacy | Good golly, we're close to reaching Mega PCM's limit...
 	endif
 
-	if SCDACSamples
+	if SMPS_SCDACSamples
 		; Sonic Crackers
 ptr_dacD9:	DAC_Entry	30h+1, Beat,		dpcm	; $D9	- Beat
 ptr_dacDA:	DAC_Entry	0Ah+1, SnareSC,		dpcm	; $DA	- Snare (SC)
@@ -712,7 +712,7 @@ ptr_dacDE:	DAC_Entry	0Ah+1, LetsGo,		dpcm	; $DE	- "Let's Go!"
 ptr_dacDF:	DAC_Entry	0Ah+1, Hey,		dpcm	; $DF	- "Hey!"	; Clownacy | X_X Extending the DAC range is going to take some creativity...
 	endif
 
-	if SegaPCM_68k = 0
+	if SMPS_SegaPCM_68k = 0
 ptr_dacE0:	DAC_Entry	08h, SegaPCM,		pcm	; $E0	- Sega!
 	endif
 

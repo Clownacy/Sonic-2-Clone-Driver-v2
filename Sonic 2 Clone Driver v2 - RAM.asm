@@ -67,7 +67,7 @@ SOUND_QUEUES_END:
 
 v_voice_ptr:			ds.l 1	; voice data pointer (4 bytes)
 
-	if EnableSpecSFX
+	if SMPS_EnableSpecSFX
 v_special_voice_ptr:		ds.l 1	; voice data pointer for special SFX ($D0-$DF) (4 bytes)
 	endif
 
@@ -75,7 +75,7 @@ f_voice_selector:		ds.b 1	; $00 = use music voice pointer; $80 = use track voice
 
 f_1up_playing:			ds.b 1	; flag indicating 1-up song is playing
 
-	if EnableSpinDashSFX
+	if SMPS_EnableSpinDashSFX
 v_spindash_timer:		ds.b 1
 v_spindash_pitch:		ds.b 1
 	endif
@@ -83,7 +83,7 @@ v_spindash_pitch:		ds.b 1
 v_pal_audio_countdown:		ds.b 1
 v_communication_byte:		ds.b 1
 
-	if EnableContSFX
+	if SMPS_EnableContSFX
 v_current_contsfx:		ds.b 1
 v_contsfx_channels:		ds.b 1
 	endif

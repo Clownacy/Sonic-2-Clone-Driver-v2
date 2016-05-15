@@ -44,20 +44,20 @@ Name_End:	label *
 ; ---------------------------------------------------------------
 
 ;			| Filename	| Extension	| Folder (if any)
-    if S1DACSamples|S2DACSamples
+    if SMPS_S1DACSamples|SMPS_S2DACSamples
 	IncludeDAC	Kick,		bin,		Sonic 1 & 2
 	IncludeDAC	Snare,		bin,		Sonic 1 & 2
 	IncludeDAC	Timpani,	bin,		Sonic 1 & 2
     endif
 
-    if S2DACSamples
+    if SMPS_S2DACSamples
 	IncludeDAC	Clap,		bin,		Sonic 1 & 2
 	IncludeDAC	Scratch,	bin,		Sonic 1 & 2
 	IncludeDAC	Tom,		bin,		Sonic 1 & 2
 	IncludeDAC	Bongo,		bin,		Sonic 1 & 2
     endif
 
-    if S3DACSamples|SKDACSamples|S3DDACSamples
+    if SMPS_S3DACSamples|SMPS_SKDACSamples|SMPS_S3DDACSamples
 	IncludeDAC	SnareS3,	bin,		Sonic 3 & K & 3D
 	IncludeDAC	TomS3,		bin,		Sonic 3 & K & 3D
 	IncludeDAC	KickS3,		bin,		Sonic 3 & K & 3D
@@ -77,7 +77,7 @@ Name_End:	label *
 	IncludeDAC	QuickGlassCrash,bin,		Sonic 3 & K & 3D
     endif
 
-    if S3DACSamples|SKDACSamples
+    if SMPS_S3DACSamples|SMPS_SKDACSamples
 	IncludeDAC	GlassCrashSnare,bin,		Sonic 3 & K & 3D
 	IncludeDAC	GlassCrash,	bin,		Sonic 3 & K & 3D
 	IncludeDAC	GlassCrashKick,	bin,		Sonic 3 & K & 3D
@@ -110,16 +110,16 @@ Name_End:	label *
 	IncludeDAC	KickHey,	bin,		Sonic 3 & K & 3D
     endif
 
-    if S3DDACSamples
+    if SMPS_S3DDACSamples
 	IncludeDAC	MetalCrashS3D,	bin,		Sonic 3 & K & 3D
 	IncludeDAC	IntroKickS3D,	bin,		Sonic 3 & K & 3D
     endif
 
-    if S3DACSamples
+    if SMPS_S3DACSamples
 	IncludeDAC	EchoedClapHitS3,bin,		Sonic 3 & K & 3D
     endif
 
-    if SCDACSamples
+    if SMPS_SCDACSamples
 	IncludeDAC	Beat,		bin,		Sonic Crackers
 	IncludeDAC	SnareSC,	bin,		Sonic Crackers
 	IncludeDAC	TimTom,		bin,		Sonic Crackers

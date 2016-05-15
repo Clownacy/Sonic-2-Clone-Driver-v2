@@ -33,7 +33,7 @@ offset :=	PSG_Index
 ptrsize :=	4
 idstart :=	1
 
-	if S1PSGEnvelopes||S2PSGEnvelopes
+	if SMPS_S1PSGEnvelopes||SMPS_S2PSGEnvelopes
 ; S1/S2
 fTone_01 =		SMPS_id(ptr_s1psg01)
 fTone_02 =		SMPS_id(ptr_s1psg02)
@@ -46,7 +46,7 @@ fTone_08 =		SMPS_id(ptr_s1psg08)
 fTone_09 =		SMPS_id(ptr_s1psg09)
 	endif
 
-	if S2PSGEnvelopes
+	if SMPS_S2PSGEnvelopes
 ; S2
 fTone_0A =		SMPS_id(ptr_s2psg0A)
 fTone_0B =		SMPS_id(ptr_s2psg0B)
@@ -54,7 +54,7 @@ fTone_0C =		SMPS_id(ptr_s2psg0C)
 fTone_0D =		SMPS_id(ptr_s2psg0D)
 	endif
 
-	if S3PSGEnvelopes||SKPSGEnvelopes||S3DPSGEnvelopes
+	if SMPS_S3PSGEnvelopes||SMPS_SKPSGEnvelopes||SMPS_S3DPSGEnvelopes
 ; S3/S&K/S3D
 sTone_01 =		SMPS_id(ptr_s3psg01)
 sTone_02 =		SMPS_id(ptr_s3psg02)
@@ -87,28 +87,28 @@ sTone_25 =		SMPS_id(ptr_s3psg25)
 sTone_27 =		SMPS_id(ptr_s3psg27)
 	endif
 
-	if S3PSGEnvelopes
+	if SMPS_S3PSGEnvelopes
 ; S3
 sTone_26a =		SMPS_id(ptr_s3psg26)
 	endif
 
-	if S3PSGEnvelopes||SKPSGEnvelopes
+	if SMPS_S3PSGEnvelopes||SMPS_SKPSGEnvelopes
 ; S3/S&K
 sTone_04a =		SMPS_id(ptr_s3psg04)
 	endif
 
-	if SKPSGEnvelopes||S3DPSGEnvelopes
+	if SMPS_SKPSGEnvelopes||SMPS_S3DPSGEnvelopes
 ; S&K/S3D
 sTone_26b =		SMPS_id(ptr_skpsg26)
 	endif
 
-	if S3DPSGEnvelopes
+	if SMPS_S3DPSGEnvelopes
 ; S3D
 sTone_04b =		SMPS_id(ptr_s3dpsg04)
 sTone_28 =		SMPS_id(ptr_s3dpsg28)
 	endif
 
-	if S3PSGEnvelopes||SKPSGEnvelopes||S3DPSGEnvelopes
+	if SMPS_S3PSGEnvelopes||SMPS_SKPSGEnvelopes||SMPS_S3DPSGEnvelopes
 ; Duplicates
 sTone_0E = sTone_01
 sTone_0F = sTone_02
@@ -126,7 +126,7 @@ offset :=	DAC_Table
 ptrsize :=	8
 idstart :=	$81
 
-	if S1DACSamples||S2DACSamples
+	if SMPS_S1DACSamples||SMPS_S2DACSamples
 ; Sonic 1 & 2
 dKick =				SMPS_id(ptr_dac81)
 dSnare =			SMPS_id(ptr_dac82)
@@ -137,7 +137,7 @@ dLowTimpani =			SMPS_id(ptr_dac8A)
 dVLowTimpani =			SMPS_id(ptr_dac8B)
 	endif
 
-	if S2DACSamples
+	if SMPS_S2DACSamples
 ; Sonic 2
 dClap =				SMPS_id(ptr_dac83)
 dScratch =			SMPS_id(ptr_dac84)
@@ -155,7 +155,7 @@ dMidClap = dMidBongo
 dLowClap = dLowBongo
 	endif
 
-	if S3DACSamples||SKDACSamples||S3DDACSamples
+	if SMPS_S3DACSamples||SMPS_SKDACSamples||SMPS_S3DDACSamples
 ; Sonic 3 & K & 3D
 dSnareS3 =			SMPS_id(ptr_dac92)
 dHighTom =			SMPS_id(ptr_dac93)
@@ -189,7 +189,7 @@ dPowerKick =			SMPS_id(ptr_dacAE)
 dQuickGlassCrash =		SMPS_id(ptr_dacAF)
 	endif
 
-	if S3DACSamples||SKDACSamples
+	if SMPS_S3DACSamples||SMPS_SKDACSamples
 ; Sonic 3 & K
 dGlassCrashSnare =		SMPS_id(ptr_dacB0)
 dGlassCrash =			SMPS_id(ptr_dacB1)
@@ -232,19 +232,19 @@ dLowestPowerKickHit =		SMPS_id(ptr_dacD4)
 dHipHopHitKick3 = dHipHopHitKick2
 	endif
 
-	if S3DDACSamples
+	if SMPS_S3DDACSamples
 ; Sonic 3D
 dFinalFightMetalCrash =		SMPS_id(ptr_dacD5)
 dIntroKick =			SMPS_id(ptr_dacD6)
 	endif
 
-	if S3DACSamples
+	if SMPS_S3DACSamples
 ; Sonic 3
 dEchoedClapHit_S3 =		SMPS_id(ptr_dacD7)
 dLowerEchoedClapHit_S3 =	SMPS_id(ptr_dacD8)
 	endif
 
-	if SCDACSamples
+	if SMPS_SCDACSamples
 ; Sonic Crackers
 dBeat =				SMPS_id(ptr_dacD9)
 dSnareSC =			SMPS_id(ptr_dacDA)
@@ -255,7 +255,7 @@ dLetsGo =			SMPS_id(ptr_dacDE)
 dHey =				SMPS_id(ptr_dacDF)
 	endif
 
-	if SegaPCM_68k = 0
+	if SMPS_SegaPCM_68k = 0
 ; Sonic 2
 dSega_S2 =			SMPS_id(ptr_dacE0)
 	endif

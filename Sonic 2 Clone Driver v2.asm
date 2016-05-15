@@ -5,7 +5,7 @@
 	dc.b	"Clownacy's Sonic 2 Clone Driver v2 (v2.5+)"
 	even
 
-Fix_DriverBugs	= 1
+SMPS_FixBugs	= 1
 ;	| Fix bugs, what else?
 ;
 ; ---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ UpdateMusic:
 	bsr.w	Sound_ChkValue
 ; loc_71BC8:
 .nonewsound:
-    if EnableSpinDashSFX
+    if SMPS_EnableSpinDashSFX
 	tst.b   v_spindash_timer(a6)
 	beq.s	.notimer
 	subq.b	#1,v_spindash_timer(a6)
@@ -149,7 +149,7 @@ UpdateMusic:
 .sfxpsgnext:
 	dbf	d7,.sfxpsgloop
 
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 	move.b	#$40,f_voice_selector(a6)	; Now at special SFX tracks
 	lea	zTrack.len(a5),a5
 	tst.b	zTrack.PlaybackControl(a5)	; Is track playing?
@@ -171,10 +171,10 @@ UpdateMusic:
 	; However, SMPS does writes to YM, storing different registers.
 	; So, it must restore register 2A before releasing Z80 bus and continuing Z80 playback program."
 	; "This pulls a little trick required for Mega PCM. We'll need this one, but not here."
-;	move.b	(ym2612_a0).l,d2
+;	move.b	(SMPS_ym2612_a0).l,d2
 ;	tst.b	d2
 ;	bmi.s	DoStartZ80
-;	move.b	#$2A,(ym2612_a0).l
+;	move.b	#$2A,(SMPS_ym2612_a0).l
 
 ;	SMPS_startZ80
 .locret:
@@ -229,8 +229,8 @@ UpdateDAC:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80
 	SMPS_waitZ80
-	sf.b	(z80_dac_type).l	; This is music DAC; change according to volume
-	move.b	d0,(z80_dac_sample).l
+	sf.b	(SMPS_z80_ram+DAC_Type).l	; This is music DAC; change according to volume
+	move.b	d0,(SMPS_z80_ram+DAC_Number).l
 	SMPS_startZ80
 
 locret_71CAA:
@@ -247,7 +247,7 @@ locret_71CAA:
 	; Warning: this affects the raw pitch of sample $83, meaning it will
 	; use this value from then on.
 ;	move.b	d0,(z80_dac3_pitch).l
-;	move.b	#$83,(z80_dac_sample).l	; Use timpani
+;	move.b	#$83,(SMPS_z80_ram+DAC_Number).l	; Use timpani
 ;	rts
 ; End of function UpdateDAC
 
@@ -419,7 +419,7 @@ NoteFillUpdate:
 
 ; sub_71DC6:
 DoModulation:
-    if Fix_DriverBugs
+    if SMPS_FixBugs
 	; Clownacy | (From S2) Corrects modulation during rests (can be heard in ARZ's theme, as beeping right after the song loops)
 	btst	#1,zTrack.PlaybackControl(a5)	; Is track at rest?
 	bne.s	.locret				; Return if so
@@ -511,7 +511,7 @@ DoPauseMusic:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80
 	SMPS_waitZ80
-	move.b  #$7F,(z80_dac_sample).l	; pause DAC
+	move.b  #$7F,(SMPS_z80_ram+DAC_Number).l	; pause DAC
 	SMPS_startZ80
 
 	rts
@@ -529,7 +529,7 @@ DoUnpauseMusic:
 	moveq	#((v_sfx_fm_tracks_end-v_sfx_fm_tracks)/zTrack.len)-1,d7	; 3 FM
 	bsr.s	ResumeTrack
 
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 	move.b	#$40,f_voice_selector(a6)			; Now at SFX tracks
 	lea	v_spcsfx_fm_tracks(a6),a5
 	moveq	#((v_spcsfx_fm_tracks_end-v_spcsfx_fm_tracks)/zTrack.len)-1,d7	; 1 FM
@@ -542,7 +542,7 @@ DoUnpauseMusic:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80
 	SMPS_waitZ80
-	clr.b  (z80_dac_sample).l	; unpause DAC
+	clr.b  (SMPS_z80_ram+DAC_Number).l	; unpause DAC
 	SMPS_startZ80
 
 ; loc_71EFE:
@@ -635,7 +635,7 @@ Sound_ChkValue:	; For the love of god, don't rearrange the order of the groups, 
 	blo.s	locret_71F4A		; Return if yes
 	cmpi.b	#SndID__End,d7		; Is this sfx ($80-$D0)?
 	blo.w	Sound_PlaySFX		; Branch if yes
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 	cmpi.b	#SpecID__First,d7	; Is this after sfx but before spec sfx?
 	blo.s	locret_71F4A		; Return if yes
 	; These are old special SFX slots (GHZ waterfall)
@@ -677,14 +677,14 @@ ptr_flgend
 ; ---------------------------------------------------------------------------
 ; Sound_E1:
 PlaySega:
-    if SegaPCM_68k = 0
+    if SMPS_SegaPCM_68k = 0
 
 	SMPS_stopZ80
 	SMPS_waitZ80
-	st.b	(z80_dac_type).l	; This is a DAC SFX; ignore music DAC volume
-	move.b	#dSega_S2,(z80_dac_sample).l	; Queue Sega PCM
+	st.b	(SMPS_z80_ram+DAC_Type).l	; This is a DAC SFX; ignore music DAC volume
+	move.b	#dSega_S2,(SMPS_z80_ram+DAC_Number).l	; Queue Sega PCM
 	SMPS_startZ80
-	    if IdlingSegaSound
+	    if SMPS_IdlingSegaSound
 		move.w	#$11,d1
 ; loc_71FC0:
 .busyloop_outer:
@@ -698,7 +698,7 @@ PlaySega:
 	    endif
     else
 
-    if Fix_DriverBugs
+    if SMPS_FixBugs
 	; Clownacy | One of Valley Bell's fixes: this resets the DAC pan, so the SEGA chant isn't accidentally panned by a previously-playing song
 	move.b	#$B6,d0		; AMS/FMS/panning of FM6
 	move.b	#$C0,d1		; Stereo
@@ -710,9 +710,9 @@ PlaySega:
 	bsr.w	WriteFMI
 	SMPS_stopZ80
 	SMPS_waitZ80
-	lea	(ym2612_a0).l,a0		; Load $A04000 (YM2612 register A0) into a0 for some temporary use
+	lea	(SMPS_ym2612_a0).l,a0		; Load $A04000 (YM2612 register A0) into a0 for some temporary use
 	lea	(SegaPCM).l,a2			; Load the SEGA PCM sample into a2. It's important that we use a2 since a0 and a1 are going to be used up ahead when reading the joypad ports
-	lea	(ym2612_d0).l,a3		; Load $A04001 (YM2612 register D0) into a3
+	lea	(SMPS_ym2612_d0).l,a3		; Load $A04001 (YM2612 register D0) into a3
 	lea	(Ctrl_1).w,a4			; Load address where JoyPad states are written into a4
 	lea	(HW_Port_1_Data).l,a5		; Load address where JoyPad states are read from into a5
 	move.w	#(SegaPCM_End-SegaPCM)-1,d3	; Load the size of the SEGA PCM sample into d3
@@ -746,7 +746,7 @@ Sound_PlayBGM:
 	; Clownacy | The commented-out is from S2's driver, which was used to hide a certain bug.
 	; Lucky for us, though, we just fix the bug directly, so we don't need this.
 ;	bsr.w	StopSFX			; Clownacy | (From S2) Helps stop audio artefacts after SFX interruption
-;    if EnableSpecSFX
+;    if SMPS_EnableSpecSFX
 ;	bsr.w	StopSpecSFX
 ;    endif
 	cmpi.b	#MusID_ExtraLife,d7	; Is the "extra life" music to be played?
@@ -833,7 +833,7 @@ Sound_PlayBGM:
 	movea.l	a4,a3
 
 	addq.w	#6+2,a4			; Point past header			; Clownacy | +2 to accommodate the voices' new longword pointer
-    if Fix_DriverBugs
+    if SMPS_FixBugs
 	; Clownacy | One of Valley Bell's fixes: this vital code is skipped if FM/DAC channels is 0, so it's been moved to avoid that
 	move.b	4+2(a3),d4		; Load tempo dividing timing		; Clownacy | +2 to accommodate the voices' new longword pointer
 	moveq	#zTrack.len,d6
@@ -844,24 +844,24 @@ Sound_PlayBGM:
 	beq.w	.bgm_fmdone		; Branch if zero
 	subq.b	#1,d7
 	move.b	#$C0,d1			; Default AMS+FMS+Panning
-    if ~Fix_DriverBugs
+    if ~SMPS_FixBugs
 	move.b	4+2(a3),d4		; Load tempo dividing timing		; Clownacy | +2 to accommodate the voices' new longword pointer
 	moveq	#zTrack.len,d6
 	moveq	#1,d5			; Note duration for first "note"
     endif
 	lea	v_music_fmdac_tracks(a6),a1
-    if ~Fix_DriverBugs
+    if ~SMPS_FixBugs
 	lea	FMDACInitBytes(pc),a2	; Clownacy | InitMusicPlayback will do this instead
     endif
 ; loc_72098:
 .bmg_fmloadloop:
-    if Fix_DriverBugs
+    if SMPS_FixBugs
 	; Clownacy | (From S2) Now sets 'track at rest' bit to prevent hanging notes
 	move.b	#$82,zTrack.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
     else
 	bset	#7,zTrack.PlaybackControl(a1)	; Initial playback control: set 'track playing' bit
     endif
-    if ~Fix_DriverBugs
+    if ~SMPS_FixBugs
 	move.b	(a2)+,zTrack.VoiceControl(a1)	; Voice control bits	; Clownacy | InitMusicPlayback will do this instead
     endif
 	move.b	d4,zTrack.TempoDivider(a1)
@@ -903,18 +903,18 @@ Sound_PlayBGM:
 	beq.s	.bgm_psgdone	; Branch if zero
 	subq.b	#1,d7
 	lea	v_music_psg_tracks(a6),a1
-    if ~Fix_DriverBugs
+    if ~SMPS_FixBugs
 	lea	PSGInitBytes(pc),a2	; Clownacy | InitMusicPlayback will do this instead
     endif
 ; loc_72126:
 .bgm_psgloadloop:
-    if Fix_DriverBugs
+    if SMPS_FixBugs
 	; Clownacy | (From S2) Now sets 'track at rest' bit to prevent hanging notes
 	move.b	#$82,zTrack.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
     else
 	bset	#7,zTrack.PlaybackControl(a1)	; Initial playback control: set 'track playing' bit
     endif
-    if ~Fix_DriverBugs
+    if ~SMPS_FixBugs
 	move.b	(a2)+,zTrack.VoiceControl(a1)	; Voice control bits	; Clownacy | InitMusicPlayback will do this instead
     endif
 	move.b	d4,zTrack.TempoDivider(a1)
@@ -959,7 +959,7 @@ Sound_PlayBGM:
 	adda.w	d6,a1
 	dbf	d7,.sfxstoploop
 
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 	tst.b	v_spcsfx_fm4_track.PlaybackControl(a6)	; Is special SFX being played?
 	bpl.s	.checkspecialpsg			; Branch if not
 	bset	#2,v_music_fm4_track.PlaybackControl(a6)	; Set 'SFX is overriding' bit
@@ -1021,7 +1021,7 @@ Sound_PlaySFX:
 	bchg	#v_ring_speaker,misc_flags(a6)	; Change speaker
 ; Sound_notB5:
 .sfx_notRing:
-    if PushBehaviour
+    if SMPS_PushSFXBehaviour
 	cmpi.b	#sfx_Push,d7			; Is "pushing" sound played?
 	bne.s	.sfx_notPush			; If not, branch
 
@@ -1031,7 +1031,7 @@ Sound_PlaySFX:
     endif
 ; Sound_notA7:
 .sfx_notPush:
-    if GloopBehaviour
+    if SMPS_GloopSFXBehaviour
 	; Turns out S2 uses a version of the above code for the gloop SFX (zPlaySound_CheckGloop).
 	; This is my best attempt at porting it.
 	cmpi.b	#SndID_Gloop,d7			; Is bloop/gloop sound played?
@@ -1042,7 +1042,7 @@ Sound_PlaySFX:
     endif
 
 .sfx_notgloop:
-    if EnableSpinDashSFX
+    if SMPS_EnableSpinDashSFX
 	cmpi.b	#SndID_SpindashRev,d7		; Is this the Spin Dash sound?
 	bne.s	.sfx_notspindashrev		; If not, branch
 	move.b	v_spindash_pitch(a6),d0		; Store extra frequency
@@ -1063,7 +1063,7 @@ Sound_PlaySFX:
 .sfx_notspindashrev:
     endif
 
-    if EnableContSFX
+    if SMPS_EnableContSFX
 	cmpi.b	#First_ContSFX,d7		; Is this a continuous SFX?
 	blo.s	.sfx_notcont			; If not, branch
 	moveq	#0,d0
@@ -1111,7 +1111,7 @@ Sound_PlaySFX:
 	; DANGER! there is a missing 'moveq	#0,d7' here, without which SFXes whose
 	; index entry is above $3F will cause a crash. This is actually the same way that
 	; this bug is fixed in Ristar's driver.
-    if Fix_DriverBugs
+    if SMPS_FixBugs
 	moveq	#0,d7
     endif
 	move.b	(a1)+,d7	; Number of tracks (FM + PSG)
@@ -1140,7 +1140,7 @@ Sound_PlaySFX:
 	bne.s	.sfxoverridedone	; Branch if not
 	move.b	d4,d0
 	ori.b	#$1F,d0			; Command to silence PSG 3
-	lea	(PSG_input).l,a5
+	lea	(SMPS_psg_input).l,a5
 	move.b	d0,(a5)
 	bchg	#5,d0			; Command to silence noise channel
 	move.b	d0,(a5)
@@ -1164,7 +1164,7 @@ Sound_PlaySFX:
 	move.l	d0,zTrack.DataPointer(a5)		; Store track pointer
 	move.w	(a1)+,zTrack.Transpose(a5)		; load FM/PSG channel modifier
 	move.b	#1,zTrack.DurationTimeout(a5)		; Set duration of first "note"
-    if EnableSpinDashSFX
+    if SMPS_EnableSpinDashSFX
 	btst	#f_spindash_lastsound,misc_flags(a6)	; Is the Spin Dash sound playing?
 	beq.s	.notspindash				; If not, branch
 	move.b	v_spindash_pitch(a6),d0
@@ -1180,7 +1180,7 @@ Sound_PlaySFX:
 .sfxpsginitdone:
 	dbf	d7,.sfx_loadloop
 
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 	tst.b	v_sfx_fm4_track.PlaybackControl(a6)	; Is SFX being played?
 	bpl.s	.doneoverride				; Branch if not
 	bset	#2,v_spcsfx_fm4_track.PlaybackControl(a6)	; Set SFX is overriding bit
@@ -1227,7 +1227,7 @@ SFX_BGMChannelRAM:
 ; ---------------------------------------------------------------------------
 ; Play GHZ waterfall sound
 ; ---------------------------------------------------------------------------
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 ; Sound_D0toDF:
 Sound_PlaySpecial:
 	tst.b	f_1up_playing(a6)		; Is 1-up playing?
@@ -1248,7 +1248,7 @@ Sound_PlaySpecial:
 	; DANGER! there is a missing 'moveq	#0,d7' here, without which Special SFXes whose
 	; index entry is above $3F will cause a crash. Ristar's driver didn't have this
 	; particular instance fixed.
-    if Fix_DriverBugs
+    if SMPS_FixBugs
 	moveq	#0,d7
     endif
 	move.b	(a1)+,d7	; Number of tracks (FM + PSG)
@@ -1330,7 +1330,7 @@ StopSFX:
 	move.b	zTrack.VoiceControl(a5),d3	; Get voice control bits
 	bmi.s	.trackpsg			; Branch if PSG
 	bsr.w	FMNoteOff
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 	cmpi.b	#4,d3				; Is this FM4?
 	bne.s	.getfmpointer			; Branch if not
 	tst.b	v_spcsfx_fm4_track.PlaybackControl(a6)	; Is special SFX playing?
@@ -1338,7 +1338,7 @@ StopSFX:
 	; DANGER! there is a missing 'movea.l	a5,a3' here, without which the
 	; code is broken. It is dangerous to do a fade out when a GHZ waterfall
 	; is playing its sound!
-    if Fix_DriverBugs
+    if SMPS_FixBugs
 	movea.l	a5,a3
     endif
 
@@ -1369,7 +1369,7 @@ StopSFX:
 ; loc_7243C:
 .trackpsg:
 	bsr.w	PSGNoteOff
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 	lea	v_spcsfx_psg3_track(a6),a0
 	cmpi.b	#$E0,d3					; Is this a noise channel:
 	beq.s	.gotpsgpointer				; Branch if yes
@@ -1396,7 +1396,7 @@ StopSFX:
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 ; Snd_FadeOut2: Snd_FadeOutSFX2: FadeOutSpecSFX:
 StopSpecSFX:
 	lea	v_spcsfx_fm4_track(a6),a5
@@ -1445,7 +1445,7 @@ FadeOutMusic:
 	; Clownacy | In Sonic 2's driver, StopSFX is split into its own sound command
 	; and StopSpecSFX is bumped out entirely
 ;	bsr.w	StopSFX
-;    if EnableSpecSFX
+;    if SMPS_EnableSpecSFX
 ;	bsr.s	StopSpecSFX
 ;    endif
 	move.b	#3,v_fadeout_delay(a6)		; Set fadeout delay to 3
@@ -1605,7 +1605,7 @@ StopSoundAndMusic:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80
 	SMPS_waitZ80
-	move.b  #$80,(z80_dac_sample).l	; stop DAC playback
+	move.b  #$80,(SMPS_z80_ram+DAC_Number).l	; stop DAC playback
 	SMPS_startZ80
 
 	pea	PSGSilenceAll(pc)
@@ -1648,7 +1648,7 @@ InitMusicPlayback:
 	moveq	#0|((VolumeTbls&$F000)>>8),d0	; Clownacy | Reset DAC volume to maximum
 	bsr.w	WriteDACVolume
 
-    if Fix_DriverBugs
+    if SMPS_FixBugs
 	; InitMusicPlayback, and Sound_PlayBGM for that matter,
 	; don't do a very good job of setting up the music tracks.
 	; Tracks that aren't defined in a music file's header don't have
@@ -1819,7 +1819,7 @@ SetDACVolume:
 WriteDACVolume:
 	SMPS_stopZ80
 	SMPS_waitZ80
-	move.b	d0,(z80_dac_volume).l
+	move.b	d0,(SMPS_z80_ram+DAC_Volume).l
 	SMPS_startZ80
 	rts
 ; End of function SetDACVolume
@@ -1915,7 +1915,7 @@ WriteFMIorII:
 WriteFMI:
 	SMPS_stopZ80
 	SMPS_waitZ80
-	lea	(ym2612_a0).l,a0		; 12(3/0)
+	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
 	SMPS_waitYM					; 24(5/0)
 	move.b	d0,(a0)		; ym2612_a0	; 8(1/1)
 	SMPS_waitYMspec (a0)+			; 8(2/0) + 18(4/0)
@@ -1942,7 +1942,7 @@ WriteFMIIPart:
 WriteFMII:
 	SMPS_stopZ80
 	SMPS_waitZ80
-	lea	(ym2612_a0).l,a0		; 12(3/0)
+	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
 	SMPS_waitYM				; 24(5/0)
 	move.b	d0,2(a0)	; ym2612_a1	; 12(2/1)
 	SMPS_waitYM				; 24(5/0)
@@ -2209,7 +2209,7 @@ SendPSGNoteOff:
 	move.b	zTrack.VoiceControl(a5),d0	; PSG channel to change
 	ori.b	#$1F,d0				; Maximum volume attenuation
 	move.b	d0,(PSG_input).l
-    if Fix_DriverBugs
+    if SMPS_FixBugs
 	; Without InitMusicPlayback forcefully muting all channels, there's the
 	; risk of music accidentally playing noise because it can't detect if
 	; the PSG 4/noise channel needs muting, on track initialisation.
@@ -2265,7 +2265,7 @@ coordflagLookup:
 ; ===========================================================================
 	bra.w	cfChangeFMVolume	; $FF, $06	Clownacy | Was $E6
 ; ===========================================================================
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 	bra.w	cfStopSpecialFM4	; $FF, $07	Clownacy | Was $EE
     else
 	bra.w	cfStopTrack
@@ -2315,14 +2315,14 @@ coordflagLookup:
 ; ===========================================================================
 	bra.w	cfNoteFillS3K		; $FF, $1D	Clownacy | Brand new
 ; ===========================================================================
-    if EnableContSFX
+    if SMPS_EnableContSFX
 	bra.w	cfLoopContinuousSFX	; $FF, $1E	Clownacy | Brand new
     else
 	addq.w	#2,a4			; Skip parameters
 	rts
     endif
 ; ===========================================================================
-    if PushBehaviour
+    if SMPS_PushSFXBehaviour
 	bra.w	cfClearPush		; $FF, $1F	Clownacy | Was $ED
     else
 	rts
@@ -2452,7 +2452,7 @@ cfFadeInToPrevious:
 	bset	#1,zTrack.PlaybackControl(a5)	; Set 'track at rest' bit
 	bsr.w	PSGNoteOff
 	add.b	d6,zTrack.Volume(a5)		; Apply current volume fade-in
-    if Fix_DriverBugs
+    if SMPS_FixBugs
 	; Clownacy | One of Valley Bell's fixes: this restores the noise mode if need be, avoiding a bug where unwanted noise plays
 	cmpi.b	#$E0,zTrack.VoiceControl(a5)		; Is this a noise channel?
 	bne.s	.nextpsg				; Branch if not
@@ -2546,14 +2546,14 @@ cfChangePSGVolume:
 locret_72CAA:
 	rts
 ; ===========================================================================
-    if PushBehaviour
+    if SMPS_PushSFXBehaviour
 ; loc_72BEE:
 cfClearPush:
 	bclr	#f_push_playing,misc_flags2(a6)	; Allow push sound to be played once more
 	rts
     endif
 ; ===========================================================================
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 ; loc_72BF4:
 cfStopSpecialFM4:
 	bclr	#7,zTrack.PlaybackControl(a5)	; Stop track
@@ -2590,7 +2590,7 @@ cfSetVoiceCont:
 	tst.b	f_voice_selector(a6)		; Are we updating a music track?
 	beq.s	SetVoice			; If yes, branch
 	movea.l	zTrack.VoicePtr(a5),a1		; SFX track voice pointer
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 	tst.b	f_voice_selector(a6)		; Are we updating a SFX track?
 	bmi.s	SetVoice			; If yes, branch
 	movea.l	v_special_voice_ptr(a6),a1	; Special SFX voice pointer
@@ -2653,7 +2653,7 @@ SendVoiceTL:
 	tst.b	f_voice_selector(a6)		; Is this music?
 	beq.s	.gotvoiceptr			; If so, branch
 
-    if Fix_DriverBugs
+    if SMPS_FixBugs
 	movea.l	zTrack.VoicePtr(a5),a1
     else
 	; DANGER! This uploads the wrong voice! It should have been
@@ -2661,7 +2661,7 @@ SendVoiceTL:
 	movea.l	zTrack.VoicePtr(a6),a1
     endif
 
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 	tst.b	f_voice_selector(a6)		; Is this an SFX?
 	bmi.s	.gotvoiceptr			; If so, branch
 	movea.l	v_special_voice_ptr(a6),a1	; Otherwise, this must be a Special SFX
@@ -2772,7 +2772,7 @@ cfStopTrack:
 	bmi.s	.getpsgptr			; Branch if PSG
 	lea	SFX_BGMChannelRAM(pc),a0
 	movea.l	a5,a3
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 	cmpi.b	#4,d0				; Is this FM4?
 	bne.s	.getpointer			; Branch if not
 	tst.b	v_spcsfx_fm4_track.PlaybackControl(a6)	; Is special SFX playing?
@@ -2804,7 +2804,7 @@ cfStopTrack:
 ; ===========================================================================
 ; loc_72DCC:
 .getpsgptr:
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 	lea	v_spcsfx_psg3_track(a6),a0
 	tst.b	zTrack.PlaybackControl(a0)	; Is track playing?
 	bpl.s	.getchannelptr			; Branch if not
@@ -2911,8 +2911,8 @@ cfSilenceStopTrack:
 cfPlayDACSample:
 	SMPS_stopZ80
 	SMPS_waitZ80
-	st.b	(z80_dac_type).l	; This is a DAC SFX; ignore music DAC volume
-	move.b	(a4)+,(z80_dac_sample).l
+	st.b	(SMPS_z80_ram+DAC_Type).l	; This is a DAC SFX; ignore music DAC volume
+	move.b	(a4)+,(SMPS_z80_ram+DAC_Number).l
 	SMPS_startZ80
 	rts
 ; ===========================================================================
@@ -2973,7 +2973,7 @@ cfSetVolume:
 ;
 ; Has a 2-byte parameter, the jump target address.
 ;
-    if EnableContSFX
+    if SMPS_EnableContSFX
 cfLoopContinuousSFX:
 	btst	#f_continuous_sfx,misc_flags(a6)	; Is the flag for continuous playback mode set?
 	bne.s	.continuousmode				; If so, branch
@@ -3023,13 +3023,13 @@ cfChanFMCommand:
 ; ---------------------------------------------------------------------------
 ; Special SFX 'include's and pointers
 ; ---------------------------------------------------------------------------
-    if EnableSpecSFX
+    if SMPS_EnableSpecSFX
 	include "sound/Sonic 2 Clone Driver v2 - Special SFX.asm"
     endif
 ; ---------------------------------------------------------------------------
 ; FM Universal Voice Bank
 ; ---------------------------------------------------------------------------
-    if EnableUniversalVoiceBank
+    if SMPS_EnableUniversalVoiceBank
 	include "sound/Sonic 2 Clone Driver v2 - FM Universal Voice Bank.asm"
     endif
 ; ---------------------------------------------------------------------------
