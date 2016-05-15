@@ -52,7 +52,6 @@ Clone_Driver_RAM	= (-(v_snddriver_ram&$80000000)<<1)|v_snddriver_ram
 ;	| Just an equate
 ;
 Graphics_Flags	= v_megadrive
-;PSG_input = psg_input	; needed for case-sensitive builds, but causes an error on case-insensitive builds
 ;	| Just an equate
 ;
 Ctrl_1 = v_jpadhold1
