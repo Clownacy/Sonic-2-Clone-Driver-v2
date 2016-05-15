@@ -59,7 +59,6 @@ fTone_0D =		SMPS_id(ptr_s2psg0D)
 sTone_01 =		SMPS_id(ptr_s3psg01)
 sTone_02 =		SMPS_id(ptr_s3psg02)
 sTone_03 =		SMPS_id(ptr_s3psg03)
-sTone_04 =		SMPS_id(ptr_s3psg04)
 sTone_05 =		SMPS_id(ptr_s3psg05)
 sTone_06 =		SMPS_id(ptr_s3psg06)
 sTone_07 =		SMPS_id(ptr_s3psg07)
@@ -95,11 +94,13 @@ sTone_26a =		SMPS_id(ptr_s3psg26)
 	if SMPS_S3PSGEnvelopes||SMPS_SKPSGEnvelopes
 ; S3/S&K
 sTone_04a =		SMPS_id(ptr_s3psg04)
+sTone_04 =	sTone_04a
 	endif
 
 	if SMPS_SKPSGEnvelopes||SMPS_S3DPSGEnvelopes
 ; S&K/S3D
 sTone_26b =		SMPS_id(ptr_skpsg26)
+sTone_26 =	sTone_26b
 	endif
 
 	if SMPS_S3DPSGEnvelopes
