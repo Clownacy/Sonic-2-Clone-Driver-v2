@@ -642,23 +642,8 @@ Sound_ChkValue:	; For the love of god, don't rearrange the order of the groups, 
 	cmpi.b	#SpecID__End,d7		; Is this spec sfx
 	blo.w	Sound_PlaySpecial	; Branch if yes
     endif
-	cmpi.b	#FlgID__First,d7	; Is this after sfx (spec if above code is present) but before $D0?
-	blo.s	locret_71F4A		; Return if yes
-	; Clownacy | Basic logic: if it can only be 1 or 2, and it isn't 1, it's clearly 2.
-	; These lines are pointless, and have been since I moved the flags all the way to the end of the ID list.
-	; Surprised it took me so long to notice (picked this up from S3K's driver, modified SMPS Z80 Type 2).
-	; The flags slots
-;	cmpi.b	#FlgID__End-1,d7	; Is this $FB-$FF?
-;	bls.s	Sound_FAtoFF		; Branch if yes
-
-; locret_71F8C:
-;.locret:
-;	rts
-
-; ===========================================================================
-; Sound_E0toE4:
-;Sound_FAtoFF:
-	subi.b	#FlgID__First,d7
+	subi.b	#FlgID__First,d7	; Is this after sfx (spec if above code is present) but before $D0?
+	bcs.s	locret_71F4A		; Return if yes
 	add.w	d7,d7
 	add.w	d7,d7
 	jmp	Sound_ExIndex(pc,d7.w)
