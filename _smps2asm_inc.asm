@@ -526,7 +526,7 @@ smpsPSGAlterVol macro vol
 
 ; Clears pushing sound flag in S1
 smpsClearPush macro
-	if PushBehaviour
+	if SMPS_PushSFXBehaviour
 		dc.b	$FF,$1F
 	else
 		fatal "Go set PushBehaviour to 1."
@@ -535,7 +535,7 @@ smpsClearPush macro
 
 ; Stops special SFX (S1 only) and restarts overridden music track
 smpsStopSpecial macro
-	if EnableSpecSFX
+	if SMPS_EnableSpecSFX
 		dc.b	$FF,$07
 	else
 		fatal "Go set EnableSpecSFX to 1."
@@ -628,7 +628,7 @@ smpsSetNote macro val
 
 ; FCxxxx - Jump to xxxx
 smpsContinuousLoop macro loc
-	if EnableContSFX
+	if SMPS_EnableContSFX
 		dc.b	$FF,$1E
 		dc.w	loc-*-1
 	else
