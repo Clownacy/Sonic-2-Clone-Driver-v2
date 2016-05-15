@@ -8,17 +8,17 @@ SMPS_LoadDACDriver:
 
 	; load Mega PCM (Kosinski-compressed)
 	lea	(MegaPCM).l,a0	; source
-	lea	(Z80_RAM).l,a1	; destination
+	lea	(SMPS_z80_ram).l,a1	; destination
 	bsr.w	KosDec
 
 	moveq	#0,d1
-	move.w	d1,(Z80_Reset).l
+	move.w	d1,(SMPS_z80_reset).l
 	nop
 	nop
 	nop
 	nop
 	SMPS_resetZ80
-	move.w	d1,(Z80_Bus_Request).l	; start the Z80
+	move.w	d1,(SMPS_z80_bus_request).l	; start the Z80
 	rts
 ; End of function SMPS_LoadDACDriver
 
