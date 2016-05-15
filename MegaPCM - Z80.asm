@@ -589,7 +589,7 @@ pri	= 1
 ; ---------------------------------------------------------------
 
 DAC_Table:
-	if SMPS_S1DACSamples|SMPS_S2DACSamples
+	if SMPS_S1DACSamples||SMPS_S2DACSamples
 		; Sonic 1 & 2
 ptr_dac81:	DAC_Entry	17h+2, Kick,		dpcm	; $81	- Kick
 ptr_dac82:	DAC_Entry	01h+2, Snare,		dpcm	; $82	- Snare
@@ -614,7 +614,7 @@ ptr_dac90:	DAC_Entry	0Bh+2, Bongo,		dpcm	; $90	- Mid-Bongo
 ptr_dac91:	DAC_Entry	12h+2, Bongo,		dpcm	; $91	- Low-Bongo
 	endif
 
-	if SMPS_S3DACSamples|SMPS_SKDACSamples|SMPS_S3DDACSamples
+	if SMPS_S3DACSamples||SMPS_SKDACSamples||SMPS_S3DDACSamples
 		; Sonic 3 & K & 3D
 ptr_dac92:	DAC_Entry	04h+1, SnareS3,		dpcm	; $92	- Snare (S3)
 ptr_dac93:	DAC_Entry	0Eh+1, TomS3,		dpcm	; $93	- Hi-Tom (S3)
@@ -648,7 +648,7 @@ ptr_dacAE:	DAC_Entry	18h+1, PowerKick,	dpcm	; $AE	- Power Kick
 ptr_dacAF:	DAC_Entry	18h+1, QuickGlassCrash,	dpcm	; $AF	- Quick Glass Crash
 	endif
 
-	if SMPS_S3DACSamples|SMPS_SKDACSamples
+	if SMPS_S3DACSamples||SMPS_SKDACSamples
 		; Sonic 3 & K
 ptr_dacB0:	DAC_Entry	0Ch+1, GlassCrashSnare,	dpcm	; $B0	- Glass Crash Snare
 ptr_dacB1:	DAC_Entry	0Ch+1, GlassCrash,	dpcm	; $B1	- Glass Crash

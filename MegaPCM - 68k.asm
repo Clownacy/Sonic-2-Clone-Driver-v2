@@ -44,7 +44,7 @@ Name_End:	label *
 ; ---------------------------------------------------------------
 
 ;			| Filename	| Extension	| Folder (if any)
-    if SMPS_S1DACSamples|SMPS_S2DACSamples
+    if SMPS_S1DACSamples||SMPS_S2DACSamples
 	IncludeDAC	Kick,		bin,		Sonic 1 & 2
 	IncludeDAC	Snare,		bin,		Sonic 1 & 2
 	IncludeDAC	Timpani,	bin,		Sonic 1 & 2
@@ -57,7 +57,7 @@ Name_End:	label *
 	IncludeDAC	Bongo,		bin,		Sonic 1 & 2
     endif
 
-    if SMPS_S3DACSamples|SMPS_SKDACSamples|SMPS_S3DDACSamples
+    if SMPS_S3DACSamples||SMPS_SKDACSamples||SMPS_S3DDACSamples
 	IncludeDAC	SnareS3,	bin,		Sonic 3 & K & 3D
 	IncludeDAC	TomS3,		bin,		Sonic 3 & K & 3D
 	IncludeDAC	KickS3,		bin,		Sonic 3 & K & 3D
@@ -77,7 +77,7 @@ Name_End:	label *
 	IncludeDAC	QuickGlassCrash,bin,		Sonic 3 & K & 3D
     endif
 
-    if SMPS_S3DACSamples|SMPS_SKDACSamples
+    if SMPS_S3DACSamples||SMPS_SKDACSamples
 	IncludeDAC	GlassCrashSnare,bin,		Sonic 3 & K & 3D
 	IncludeDAC	GlassCrash,	bin,		Sonic 3 & K & 3D
 	IncludeDAC	GlassCrashKick,	bin,		Sonic 3 & K & 3D
