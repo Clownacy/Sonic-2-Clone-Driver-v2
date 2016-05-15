@@ -2,7 +2,7 @@
 ; SFX macros and constants
 ; ---------------------------------------------------------------------------
 SMPS_SFX_METADATA macro address,priority,flags
-	dc.l	(priority<<24)|(address&$FFFFFF)
+	dc.l	((priority)<<24)|(address&$FFFFFF)
 	endm
 
 ; ---------------------------------------------------------------------------
