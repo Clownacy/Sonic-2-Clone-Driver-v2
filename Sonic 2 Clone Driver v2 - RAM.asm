@@ -36,8 +36,7 @@ SMPS_Track STRUCT DOTS
 	PlaybackControlBackup:	;ds.b 1		; Clownacy | New, used by music tracks only (1UP backup)
 	VoicePtr:		ds.l 1		; This used to be FM SFX only (well, technically all SFX tracks), but now music and Special SFX use it too
 
-	LoopCounters:		ds.b 2		; All tracks
-				ds.l 2
+	LoopCounters:		ds.l 3		; All tracks
 	GoSubStack:				; All tracks
 SMPS_Track ENDSTRUCT
 
