@@ -2,7 +2,7 @@
 ; Music	macros and constants
 ; ---------------------------------------------------------------------------
 SMPS_MUSIC_METADATA macro address,fasttempo,flags
-	dc.l	((fasttempo)<<24)|((address|flags)&$FFFFFF)
+	dc.l	((fasttempo)<<24)|(((address)|(flags))&$FFFFFF)
 	endm
 
 SMPS_MUSIC_METADATA_FORCE_PAL_SPEED = $00000001	; Forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)
@@ -11,7 +11,7 @@ SMPS_MUSIC_METADATA_FORCE_PAL_SPEED = $00000001	; Forces song to play at PAL spe
 ; SFX macros and constants
 ; ---------------------------------------------------------------------------
 SMPS_SFX_METADATA macro address,priority,flags
-	dc.l	((priority)<<24)|(address&$FFFFFF)
+	dc.l	((priority)<<24)|((address)&$FFFFFF)
 	endm
 
 ; ---------------------------------------------------------------------------
