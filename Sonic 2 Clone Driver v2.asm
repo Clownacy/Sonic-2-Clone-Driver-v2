@@ -100,7 +100,7 @@ UpdateMusic:
 ; loc_71BD4:
 .dacdone:
 	bclr	#f_updating_dac,SMPS_RAM.misc_flags(a6)
-	moveq	#SMPS_MUSIC_FM_TRACK_COUNT,d7	; 6 FM tracks
+	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7	; 6 FM tracks
 ; loc_71BDA:
 .bgmfmloop:
 	lea	SMPS_Track.len(a5),a5
@@ -111,7 +111,7 @@ UpdateMusic:
 .bgmfmnext:
 	dbf	d7,.bgmfmloop
 
-	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT,d7	; 3 PSG tracks
+	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT-1,d7	; 3 PSG tracks
 ; loc_71BEC:
 .bgmpsgloop:
 	lea	SMPS_Track.len(a5),a5
@@ -127,7 +127,7 @@ UpdateMusic:
 
 ;.updatesfxtracks:
 	move.b	#$80,SMPS_RAM.f_voice_selector(a6)					; Now at SFX tracks
-	moveq	#SMPS_SFX_FM_TRACK_COUNT,d7	; SFX only has access to 3 FM tracks
+	moveq	#SMPS_SFX_FM_TRACK_COUNT-1,d7	; SFX only has access to 3 FM tracks
 ; loc_71C04:
 .sfxfmloop:
 	lea	SMPS_Track.len(a5),a5
@@ -138,7 +138,7 @@ UpdateMusic:
 .sfxfmnext:
 	dbf	d7,.sfxfmloop
 
-	moveq	#SMPS_SFX_PSG_TRACK_COUNT,d7	; SFX only has access to 3 PSG tracks
+	moveq	#SMPS_SFX_PSG_TRACK_COUNT-1,d7	; SFX only has access to 3 PSG tracks
 ; loc_71C16:
 .sfxpsgloop:
 	lea	SMPS_Track.len(a5),a5
@@ -527,18 +527,18 @@ DoUnpauseMusic:
 	clr.b	SMPS_RAM.f_stopmusic(a6)
 
 	lea	SMPS_RAM.v_music_fmdac_tracks(a6),a5
-	moveq	#SMPS_MUSIC_FM_DAC_TRACK_COUNT,d7	; 6 FM + 1 DAC
+	moveq	#SMPS_MUSIC_FM_DAC_TRACK_COUNT-1,d7	; 6 FM + 1 DAC
 	bsr.s	ResumeTrack
 
 	move.b	#$80,SMPS_RAM.f_voice_selector(a6)			; Now at SFX tracks
 	lea	SMPS_RAM.v_sfx_fm_tracks(a6),a5
-	moveq	#SMPS_SFX_FM_TRACK_COUNT,d7	; 3 FM
+	moveq	#SMPS_SFX_FM_TRACK_COUNT-1,d7	; 3 FM
 	bsr.s	ResumeTrack
 
     if SMPS_EnableSpecSFX
 	move.b	#$40,SMPS_RAM.f_voice_selector(a6)			; Now at SFX tracks
 	lea	SMPS_RAM.v_spcsfx_fm_tracks(a6),a5
-	moveq	#SMPS_SPECIAL_SFX_FM_TRACK_COUNT,d7	; 1 FM
+	moveq	#SMPS_SPECIAL_SFX_FM_TRACK_COUNT-1,d7	; 1 FM
 	bsr.s	ResumeTrack
     endif
 
@@ -586,7 +586,7 @@ Sound_Play:
 	bne.s	locret_71F4A		; If yes, branch
 	lea	SMPS_RAM.v_playsnd1(a6),a1	; Load music track number
 	move.b	SMPS_RAM.v_sndprio(a6),d3	; Get priority of currently playing SFX
-	moveq	#SMPS_SOUND_QUEUE_COUNT,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
+	moveq	#SMPS_SOUND_QUEUE_COUNT-1,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
 	moveq	#0,d0
 ; loc_71F12:
 .inputloop:
@@ -748,7 +748,7 @@ Sound_PlayBGM:
 	; Clownacy | Making the music backup share RAM with the SFX tracks makes this code so much more complicated...
 	; First up, we have to meddle with bit 7 PlaybackControl, but, afterwards, we wanna put it back the way it was, so we gotta back all 10 of them up
 	lea	SMPS_RAM.v_music_track_ram(a6),a5
-	moveq	#SMPS_MUSIC_TRACK_COUNT,d0	; 1 DAC + 6 FM + 3 PSG tracks
+	moveq	#SMPS_MUSIC_TRACK_COUNT-1,d0	; 1 DAC + 6 FM + 3 PSG tracks
 ; loc_71FE6:
 .clearsfxloop:
 	bclr	#2,SMPS_Track.PlaybackControl(a5)		; Clear 'SFX is overriding' bit
@@ -929,7 +929,7 @@ Sound_PlayBGM:
 ; loc_72154:
 .bgm_psgdone:
 	lea	SMPS_RAM.v_sfx_track_ram(a6),a1
-	moveq	#SMPS_SFX_TRACK_COUNT,d7	; 6 SFX tracks
+	moveq	#SMPS_SFX_TRACK_COUNT-1,d7	; 6 SFX tracks
 ; loc_7215A:
 .sfxstoploop:
 	tst.b	SMPS_Track.PlaybackControl(a1)	; Is SFX playing?
@@ -968,13 +968,13 @@ Sound_PlayBGM:
 ; loc_7219A:
 .sendfmnoteoff:
 	lea	SMPS_RAM.v_music_fm_tracks(a6),a5
-	moveq	#SMPS_MUSIC_FM_TRACK_COUNT,d4
+	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d4
 ; loc_721A0:
 .fmnoteoffloop:
 	bsr.w	FMNoteOff
 	adda.w	d6,a5
 	dbf	d4,.fmnoteoffloop	; Run all FM tracks
-	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT,d4
+	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT-1,d4
 ; loc_721AC:
 .psgnoteoffloop:
 	bsr.w	PSGNoteOff
@@ -1320,7 +1320,7 @@ Sound_PlaySpecial:
 StopSFX:
 	clr.b	SMPS_RAM.v_sndprio(a6)			; Clear priority
 	lea	SMPS_RAM.v_sfx_track_ram(a6),a5
-	moveq	#SMPS_SFX_TRACK_COUNT,d6	; 3 FM + 3 PSG (SFX)	; Clownacy | Now uses d6 instead of d7 so it doesn't conflict with Sound_PlayBGM
+	moveq	#SMPS_SFX_TRACK_COUNT-1,d6	; 3 FM + 3 PSG (SFX)	; Clownacy | Now uses d6 instead of d7 so it doesn't conflict with Sound_PlayBGM
 ; loc_723EA:
 .trackloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
@@ -1482,7 +1482,7 @@ DoFadeOut:
 
 .fadefm:
 	lea	SMPS_RAM.v_music_track_ram(a6),a5
-	moveq	#SMPS_MUSIC_FM_TRACK_COUNT,d7	; 6 FM tracks
+	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7	; 6 FM tracks
 ; loc_72524:
 .fmloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
@@ -1500,7 +1500,7 @@ DoFadeOut:
 	lea	SMPS_Track.len(a5),a5
 	dbf	d7,.fmloop
 
-	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT,d7	; 3 PSG tracks
+	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT-1,d7	; 3 PSG tracks
 ; loc_72542:
 .psgloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
@@ -1660,7 +1660,7 @@ InitMusicPlayback:
 	; To fix this, we'll just forcefully set all channels, here:
 	lea	SMPS_RAM.v_music_track_ram+SMPS_Track.VoiceControl(a6),a1			; Start at the first music track...
 	lea	ChannelInitBytes(pc),a2
-	moveq	#SMPS_MUSIC_TRACK_COUNT,d1		; ...and continue to the last
+	moveq	#SMPS_MUSIC_TRACK_COUNT-1,d1		; ...and continue to the last
 
 .writeloop:
 	move.b	(a2)+,(a1)		; Write track's channel byte
@@ -1688,7 +1688,7 @@ TempoWait:	; Clownacy | Ported straight from S3K's Z80 driver
 	add.b	d0,SMPS_RAM.v_main_tempo_timeout(a6)
 	bcc.s	.skipdelay					; If the addition did not overflow, return
 	lea	SMPS_RAM.v_music_track_ram+SMPS_Track.DurationTimeout(a6),a0	; Duration timeout of first track
-	moveq	#SMPS_MUSIC_TRACK_COUNT,d1	; Number of tracks (1x DAC + 6x FM + 3x PSG)
+	moveq	#SMPS_MUSIC_TRACK_COUNT-1,d1	; Number of tracks (1x DAC + 6x FM + 3x PSG)
 
 .delayloop:
 	addq.b	#1,(a0)					; Delay notes another frame
@@ -1757,7 +1757,7 @@ DoFadeIn:
 
 .fadefm:
 	lea	SMPS_RAM.v_music_fm_tracks(a6),a5
-	moveq	#SMPS_MUSIC_FM_TRACK_COUNT,d7	; 6 FM tracks
+	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7	; 6 FM tracks
 ; loc_7269E:
 .fmloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
@@ -1768,7 +1768,7 @@ DoFadeIn:
 .nextfm:
 	lea	SMPS_Track.len(a5),a5
 	dbf	d7,.fmloop
-	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT,d7	; 3 PSG tracks
+	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT-1,d7	; 3 PSG tracks
 ; loc_726B4:
 .psgloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
@@ -2403,7 +2403,7 @@ cfFadeInToPrevious:
     endif
 
 	lea	SMPS_RAM.v_music_track_ram(a6),a0
-	moveq	#SMPS_MUSIC_TRACK_COUNT,d0	; 1 DAC + 6 FM + 3 PSG tracks
+	moveq	#SMPS_MUSIC_TRACK_COUNT-1,d0	; 1 DAC + 6 FM + 3 PSG tracks
 ; loc_71FE6:
 .restoreplaybackloop:
 	move.b	SMPS_Track.PlaybackControlBackup(a0),SMPS_Track.PlaybackControl(a0)
@@ -2426,7 +2426,7 @@ cfFadeInToPrevious:
 	bsr.w	SetDACVolume
 
 .fadefm:
-	moveq	#SMPS_MUSIC_FM_TRACK_COUNT,d7 ; 6 FM tracks
+	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7 ; 6 FM tracks
 	lea	SMPS_RAM.v_music_fm_tracks(a6),a5
 ; loc_72B3A:
 .fmloop:
@@ -2445,7 +2445,7 @@ cfFadeInToPrevious:
 	lea	SMPS_Track.len(a5),a5
 	dbf	d7,.fmloop
 
-	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT,d7
+	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT-1,d7
 ; loc_72B66:
 .psgloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
@@ -2530,7 +2530,7 @@ cfSetTempo:
 cfSetTempoMod:
 	lea	SMPS_RAM.v_music_track_ram(a6),a0
 	move.b	(a4)+,d0		; Get new tempo divider
-	moveq	#SMPS_MUSIC_TRACK_COUNT,d2	; 1 DAC + 6 FM + 3 PSG tracks
+	moveq	#SMPS_MUSIC_TRACK_COUNT-1,d2	; 1 DAC + 6 FM + 3 PSG tracks
 ; loc_72BDA:
 .trackloop:
 	move.b	d0,SMPS_Track.TempoDivider(a0)	; Set track's tempo divider
