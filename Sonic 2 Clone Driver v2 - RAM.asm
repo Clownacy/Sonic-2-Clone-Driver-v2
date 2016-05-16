@@ -33,8 +33,8 @@ zTrack STRUCT DOTS
 	Detune:			ds.b 1		; FM/PSG only
 	PSGNoise:		ds.b 1		; PSG only
 
-	PlaybackControlBackup:	;ds.b 1		; Clownacy | New, music tracks only (1UP backup)
-	VoicePtr:		ds.l 1		; FM SFX only
+	PlaybackControlBackup:	;ds.b 1		; Clownacy | New, used by music tracks only (1UP backup)
+	VoicePtr:		ds.l 1		; This used to be FM SFX only (well, technically all SFX tracks), but now music and Special SFX use it too
 
 	LoopCounters:		ds.b 2		; All tracks
 				ds.l 2
@@ -72,12 +72,6 @@ v_playsnd2:			ds.b 1	; sound to play
 v_playsnd3:			ds.b 1	; secondary sound to play
 v_playsnd4:			ds.b 1	; secondary music to play
 SOUND_QUEUES_END:
-
-v_voice_ptr:			ds.l 1	; voice data pointer (4 bytes)
-
-	if SMPS_EnableSpecSFX
-v_special_voice_ptr:		ds.l 1	; voice data pointer for special SFX ($D0-$DF) (4 bytes)
-	endif
 
 f_voice_selector:		ds.b 1	; $00 = use music voice pointer; $80 = use track voice pointer
 

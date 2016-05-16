@@ -809,7 +809,7 @@ Sound_PlayBGM:
 
 .nopalmode:
 	movea.l	d1,a4			; a4 now points to (uncompressed) song data
-	move.l	(a4),v_voice_ptr(a6)	; Load voice pointer	; Clownacy | Made to read a longword to suit the voices' new absolute pointer
+	move.l	(a4),d2			; Load voice pointer	; Clownacy | Made to read a longword to suit the voices' new absolute pointer
 	move.b	5+2(a4),d0		; Load tempo		; Clownacy | +2 to accommodate the voices' new longword pointer
 	move.b	d0,v_tempo_mod(a6)
 	tst.b	f_speedup(a6)
@@ -867,6 +867,7 @@ Sound_PlayBGM:
 	swap	d0
 	move.b	d0,zTrack.DataPointer+1(a1)	; Store track pointer
 	move.w	(a4)+,zTrack.Transpose(a1)	; Load FM channel modifier
+	move.l	d2,zTrack.VoicePtr(a1)	; Load voice pointer	; Clownacy | Made to read a longword to suit the voices' new absolute pointer
 	adda.w	d6,a1
 	dbf	d7,.bmg_fmloadloop
 
@@ -1240,7 +1241,7 @@ Sound_PlaySpecial:
 	movea.l	(a0,d7.w),a3
 	movea.l	a3,a1
 ;	moveq	#0,d0
-	move.l	(a1)+,v_special_voice_ptr(a6)	; Store voice pointer
+	move.l	(a1)+,d1	; Store voice pointer
 	move.b	(a1)+,d5			; Dividing timing
 	; DANGER! there is a missing 'moveq	#0,d7' here, without which Special SFXes whose
 	; index entry is above $3F will cause a crash. Ristar's driver didn't have this
@@ -1287,6 +1288,7 @@ Sound_PlaySpecial:
 	tst.b	d4					; Is this a PSG channel?
 	bmi.s	.sfxpsginitdone				; Branch if yes
 	move.b	#$C0,zTrack.AMSFMSPan(a5)		; AMS/FMS/Panning
+	move.l	d1,zTrack.VoicePtr(a5)			; Store voice pointer
 ; loc_72396:
 .sfxpsginitdone:
 	dbf	d7,.sfxloadloop
@@ -1342,7 +1344,7 @@ StopSFX:
     endif
 
 	lea	v_spcsfx_fm4_track(a6),a5
-	movea.l	v_special_voice_ptr(a6),a1	; Get special voice pointer
+	movea.l	zTrack.VoicePtr(a5),a1	; Get special voice pointer
 	bra.s	.gotfmpointer
     endif
 ; ===========================================================================
@@ -1353,7 +1355,7 @@ StopSFX:
 	lea	SFX_BGMChannelRAM(pc),a0
 	movea.l	a5,a3
 	movea.w	(a0,d3.w),a5
-	movea.l	v_voice_ptr(a6),a1		; Get music voice pointer
+	movea.l	zTrack.VoicePtr(a5),a1		; Get music voice pointer
 ; loc_72428:
 .gotfmpointer:
 	bclr	#2,zTrack.PlaybackControl(a5)	; Clear 'SFX is overriding' bit
@@ -1410,7 +1412,7 @@ StopSpecSFX:
 	bset	#1,zTrack.PlaybackControl(a5)		; Set 'track at rest' bit
 	tst.b	zTrack.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.fadedfm				; Branch if not
-	movea.l	v_voice_ptr(a6),a1			; Voice pointer
+	movea.l	zTrack.VoicePtr(a5),a1			; Voice pointer
 	move.b	zTrack.VoiceIndex(a5),d0		; Current voice
 	bsr.w	SetVoice
 ; loc_724AE:
@@ -2436,7 +2438,7 @@ cfFadeInToPrevious:
 	bne.s	.nextfm				; Branch if yes
 	moveq	#0,d0
 	move.b	zTrack.VoiceIndex(a5),d0	; Get voice
-	movea.l	v_voice_ptr(a6),a1		; Voice pointer
+	movea.l	zTrack.VoicePtr(a5),a1		; Voice pointer
 	bsr.w	SetVoice
 ; loc_72B5C:
 .nextfm:
@@ -2562,7 +2564,7 @@ cfStopSpecialFM4:
 	bmi.s	.locexit			; Branch if yes
 	movea.l	a5,a3
 	lea	v_music_fm4_track(a6),a5
-	movea.l	v_voice_ptr(a6),a1		; Voice pointer
+	movea.l	zTrack.VoicePtr(a5),a1		; Voice pointer
 	bclr	#2,zTrack.PlaybackControl(a5)	; Clear 'SFX is overriding' bit
 	bset	#1,zTrack.PlaybackControl(a5)	; Set 'track at rest' bit
 	move.b	zTrack.VoiceIndex(a5),d0	; Current voice
@@ -2585,15 +2587,7 @@ cfSetVoice:			; Branch if yes
 	bne.s	locret_72CAA			; Return if yes
 
 cfSetVoiceCont:
-	movea.l	v_voice_ptr(a6),a1		; Music voice pointer
-	tst.b	f_voice_selector(a6)		; Are we updating a music track?
-	beq.s	SetVoice			; If yes, branch
 	movea.l	zTrack.VoicePtr(a5),a1		; SFX track voice pointer
-    if SMPS_EnableSpecSFX
-	tst.b	f_voice_selector(a6)		; Are we updating a SFX track?
-	bmi.s	SetVoice			; If yes, branch
-	movea.l	v_special_voice_ptr(a6),a1	; Special SFX voice pointer
-    endif
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 ; sub_72C4E:
@@ -2648,23 +2642,7 @@ SendVoiceTL:
 	bne.s	.locret				; Return if so
 	moveq	#0,d0
 	move.b	zTrack.VoiceIndex(a5),d0	; Current voice
-	movea.l	v_voice_ptr(a6),a1		; Voice pointer
-	tst.b	f_voice_selector(a6)		; Is this music?
-	beq.s	.gotvoiceptr			; If so, branch
-
-    if SMPS_FixBugs
 	movea.l	zTrack.VoicePtr(a5),a1
-    else
-	; DANGER! This uploads the wrong voice! It should have been
-	; a5 instead of a6!
-	movea.l	zTrack.VoicePtr(a6),a1
-    endif
-
-    if SMPS_EnableSpecSFX
-	tst.b	f_voice_selector(a6)		; Is this an SFX?
-	bmi.s	.gotvoiceptr			; If so, branch
-	movea.l	v_special_voice_ptr(a6),a1	; Otherwise, this must be a Special SFX
-    endif
 ; loc_72CD8:
 .gotvoiceptr:
 	subq.w	#1,d0
@@ -2780,7 +2758,7 @@ cfStopTrack:
 	tst.b	v_spcsfx_fm4_track.PlaybackControl(a6)	; Is special SFX playing?
 	bpl.s	.getpointer			; Branch if not
 	lea	v_spcsfx_fm4_track(a6),a5
-	movea.l	v_special_voice_ptr(a6),a1	; Get voice pointer
+	movea.l	zTrack.VoicePtr(a5),a1	; Get voice pointer
 	bra.s	.gotpointer
     endif
 ; ===========================================================================
@@ -2791,7 +2769,7 @@ cfStopTrack:
 	movea.w	(a0,d0.w),a5
 	tst.b	zTrack.PlaybackControl(a5)	; Is track playing?
 	bpl.s	.novoiceupd			; Branch if not
-	movea.l	v_voice_ptr(a6),a1		; Get voice pointer
+	movea.l	zTrack.VoicePtr(a5),a1		; Get voice pointer
 ; loc_72DB8:
 .gotpointer:
 	bclr	#2,zTrack.PlaybackControl(a5)	; Clear 'SFX overriding' bit
