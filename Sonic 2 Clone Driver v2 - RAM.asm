@@ -4,21 +4,27 @@
 zTrack STRUCT DOTS
 	PlaybackControl:	ds.b 1		; All tracks
 	VoiceControl:		ds.b 1		; All tracks
-	VolFlutter:				; PSG only	; Clownacy | Now shared with panning RAM
+
+	VolFlutter:		;ds.b 1		; PSG only	; Clownacy | Now shared with panning RAM
 	AMSFMSPan:		ds.b 1		; FM/DAC only
+
 	TempoDivider:		ds.b 1		; All tracks
 	Transpose:		ds.b 1		; FM/PSG only	; these two need to be together!
 	Volume:			ds.b 1		; All tracks	; these two need to be together!
-	VoiceIndex:				; FM/PSG only
+
+	VoiceIndex:		;ds.b 1		; FM/PSG only
 	DataPointer:		ds.l 1		; All tracks
-	SavedDAC:				; DAC only
+
+	SavedDAC:		;ds.b 1		; DAC only
 	Freq:			ds.w 1		; FM/PSG only
 	StackPointer:		ds.b 1		; All tracks
 	DurationTimeout:	ds.b 1		; All tracks
 	SavedDuration:		ds.b 1		; All tracks
 	NoteFillTimeout:	ds.b 1		; FM/PSG only
-	NoteFillMaster:				; FM/PSG only
+
+	NoteFillMaster:		;ds.b 1		; FM/PSG only
 	ModulationPtr:		ds.l 1		; FM/PSG only
+
 	ModulationWait:		ds.b 1		; FM/PSG only
 	ModulationSpeed:	ds.b 1		; FM/PSG only
 	ModulationDelta:	ds.b 1		; FM/PSG only
@@ -26,8 +32,10 @@ zTrack STRUCT DOTS
 	ModulationVal:		ds.w 1		; FM/PSG only
 	Detune:			ds.b 1		; FM/PSG only
 	PSGNoise:		ds.b 1		; PSG only
-	PlaybackControlBackup:			; Clownacy | New, music tracks only (1UP backup)
+
+	PlaybackControlBackup:	;ds.b 1		; Clownacy | New, music tracks only (1UP backup)
 	VoicePtr:		ds.l 1		; FM SFX only
+
 	LoopCounters:		ds.b 2		; All tracks
 				ds.l 2
 	GoSubStack:				; All tracks
