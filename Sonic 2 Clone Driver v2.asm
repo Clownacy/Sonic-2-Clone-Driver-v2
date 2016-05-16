@@ -586,7 +586,7 @@ Sound_Play:
 	bne.s	locret_71F4A		; If yes, branch
 	lea	SMPS_RAM.v_playsnd1(a6),a1	; Load music track number
 	move.b	SMPS_RAM.v_sndprio(a6),d3	; Get priority of currently playing SFX
-	moveq	#(SMPS_RAM.SOUND_QUEUES_END-SMPS_RAM.SOUND_QUEUES_START)-1,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
+	moveq	#SMPS_SOUND_QUEUE_COUNT,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
 	moveq	#0,d0
 ; loc_71F12:
 .inputloop:
