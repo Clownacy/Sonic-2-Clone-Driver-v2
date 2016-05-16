@@ -161,24 +161,9 @@ UpdateMusic:
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing
 	bpl.s	.locret				; Branch if not
 	bra.w	PSGUpdateTrack
-    endif
-; loc_71C44:
-;DoStartZ80:
-	; From Vladikcomper:
-	; ""Mega PCM" doesn't store YM register 2A before writing to port in playback loop,
-	; this is odd and getting rid of it gives a small speed-up.
-	; Register is stored before playback and driver relies that it won't be changed.
-	; However, SMPS does writes to YM, storing different registers.
-	; So, it must restore register 2A before releasing Z80 bus and continuing Z80 playback program."
-	; "This pulls a little trick required for Mega PCM. We'll need this one, but not here."
-;	move.b	(SMPS_ym2612_a0).l,d2
-;	tst.b	d2
-;	bmi.s	DoStartZ80
-;	move.b	#$2A,(SMPS_ym2612_a0).l
-
-;	SMPS_startZ80
 .locret:
 	rts
+    endif
 ; End of function UpdateMusic
 
 
