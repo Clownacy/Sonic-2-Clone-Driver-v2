@@ -1,7 +1,7 @@
 ; ---------------------------------------------------------------------------
 ; Track variables
 ; ---------------------------------------------------------------------------
-zTrack STRUCT DOTS
+SMPS_Track STRUCT DOTS
 	PlaybackControl:	ds.b 1		; All tracks
 	VoiceControl:		ds.b 1		; All tracks
 
@@ -39,7 +39,7 @@ zTrack STRUCT DOTS
 	LoopCounters:		ds.b 2		; All tracks
 				ds.l 2
 	GoSubStack:				; All tracks
-zTrack ENDSTRUCT
+SMPS_Track ENDSTRUCT
 
 ; ---------------------------------------------------------------------------
 ; Global sound driver variables
@@ -111,57 +111,57 @@ v_endofvariables:
 
 v_music_track_ram:
 v_music_fmdac_tracks:
-v_music_dac_track:	zTrack
+v_music_dac_track:	SMPS_Track
 v_music_fm_tracks:
-v_music_fm1_track:	zTrack
-v_music_fm2_track:	zTrack
-v_music_fm3_track:	zTrack
-v_music_fm4_track:	zTrack
-v_music_fm5_track:	zTrack
-v_music_fm6_track:	zTrack
+v_music_fm1_track:	SMPS_Track
+v_music_fm2_track:	SMPS_Track
+v_music_fm3_track:	SMPS_Track
+v_music_fm4_track:	SMPS_Track
+v_music_fm5_track:	SMPS_Track
+v_music_fm6_track:	SMPS_Track
 v_music_fm_tracks_end:
 v_music_fmdac_tracks_end:
 v_music_psg_tracks:
-v_music_psg1_track:	zTrack
-v_music_psg2_track:	zTrack
-v_music_psg3_track:	zTrack
+v_music_psg1_track:	SMPS_Track
+v_music_psg2_track:	SMPS_Track
+v_music_psg3_track:	SMPS_Track
 v_music_psg_tracks_end:
 v_music_track_ram_end:
 
 v_sfx_track_ram:
 v_sfx_fm_tracks:
-v_sfx_fm3_track:	zTrack
-v_sfx_fm4_track:	zTrack
-v_sfx_fm5_track:	zTrack
+v_sfx_fm3_track:	SMPS_Track
+v_sfx_fm4_track:	SMPS_Track
+v_sfx_fm5_track:	SMPS_Track
 v_sfx_fm_tracks_end:
 v_sfx_psg_tracks:
-v_sfx_psg1_track:	zTrack
-v_sfx_psg2_track:	zTrack
-v_sfx_psg3_track:	zTrack
+v_sfx_psg1_track:	SMPS_Track
+v_sfx_psg2_track:	SMPS_Track
+v_sfx_psg3_track:	SMPS_Track
 v_sfx_psg_tracks_end:
 v_sfx_track_ram_end:
 
 v_spcsfx_track_ram:
 v_spcsfx_fm_tracks:
-v_spcsfx_fm4_track:	zTrack
+v_spcsfx_fm4_track:	SMPS_Track
 v_spcsfx_fm_tracks_end:
 v_spcsfx_psg_tracks:
-v_spcsfx_psg3_track:	zTrack
+v_spcsfx_psg3_track:	SMPS_Track
 v_spcsfx_psg_tracks_end:
 v_spcsfx_track_ram_end:
 
 	phase v_sfx_track_ram
 v_1up_ram_copy:
-v_1up_dac_track:	zTrack
-v_1up_fm1_track:	zTrack
-v_1up_fm2_track:	zTrack
-v_1up_fm3_track:	zTrack
-v_1up_fm4_track:	zTrack
-v_1up_fm5_track:	zTrack
-v_1up_fm6_track:	zTrack
-v_1up_psg1_track:	zTrack
-v_1up_psg2_track:	zTrack
-v_1up_psg3_track:	zTrack
+v_1up_dac_track:	SMPS_Track
+v_1up_fm1_track:	SMPS_Track
+v_1up_fm2_track:	SMPS_Track
+v_1up_fm3_track:	SMPS_Track
+v_1up_fm4_track:	SMPS_Track
+v_1up_fm5_track:	SMPS_Track
+v_1up_fm6_track:	SMPS_Track
+v_1up_psg1_track:	SMPS_Track
+v_1up_psg2_track:	SMPS_Track
+v_1up_psg3_track:	SMPS_Track
 
 v_1up_variables:	ds.b v_endofvariables-v_startofvariables
 
