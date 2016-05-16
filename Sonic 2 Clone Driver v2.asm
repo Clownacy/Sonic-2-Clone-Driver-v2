@@ -215,7 +215,10 @@ UpdateDAC:
 	bsr.w	SetDuration
 ; loc_71C88:
 .gotsampleduration:
-	move.l	a4,zTrack.DataPointer(a5)	; Save pointer
+	move.w	a4,zTrack.DataPointer+2(a5)	; Save pointer
+	move.l	a4,d0
+	swap	d0
+	move.b	d0,zTrack.DataPointer+1(a5)	; Save pointer
 	btst	#2,zTrack.PlaybackControl(a5)	; Is track being overridden?
 	bne.s	locret_71CAA			; Return if yes
 	moveq	#0,d0
@@ -372,7 +375,10 @@ TrackSetRest:
 
 ; sub_71D60:
 FinishTrackUpdate:
-	move.l	a4,zTrack.DataPointer(a5)		; Store new track position
+	move.w	a4,zTrack.DataPointer+2(a5)		; Store new track position
+	move.l	a4,d0
+	swap	d0
+	move.b	d0,zTrack.DataPointer+1(a5)		; Store new track position
 	move.b	zTrack.SavedDuration(a5),zTrack.DurationTimeout(a5) ; Reset note timeout
 	btst	#4,zTrack.PlaybackControl(a5)		; Is track set to not attack note?
 	bne.s	locret_71D9C				; If so, branch
@@ -857,7 +863,9 @@ Sound_PlayBGM:
 	move.w	(a4)+,d0			; Load DAC/FM pointer
 	ext.l	d0				; Clownacy | Fix negative pointers
 	add.l	a3,d0				; Relative pointer
-	move.l	d0,zTrack.DataPointer(a1)	; Store track pointer
+	move.w	d0,zTrack.DataPointer+2(a1)	; Store track pointer
+	swap	d0
+	move.b	d0,zTrack.DataPointer+1(a1)	; Store track pointer
 	move.w	(a4)+,zTrack.Transpose(a1)	; Load FM channel modifier
 	adda.w	d6,a1
 	dbf	d7,.bmg_fmloadloop
@@ -909,7 +917,9 @@ Sound_PlayBGM:
 	move.w	(a4)+,d0			; Load PSG channel pointer
 	ext.l	d0				; Clownacy | Fix negative pointers
 	add.l	a3,d0				; Relative pointer
-	move.l	d0,zTrack.DataPointer(a1)	; Store track pointer
+	move.w	d0,zTrack.DataPointer+2(a1)	; Store track pointer
+	swap	d0
+	move.b	d0,zTrack.DataPointer+1(a1)	; Store track pointer
 	move.w	(a4)+,zTrack.Transpose(a1)	; Load PSG modifier
 	addq.w	#1,a4				; Skip redundant byte (SMPS2ASM calls this 'mod', and SMPS 68k Type 2 actually does use it for modulation ($A(a5)))
 	move.b	(a4)+,zTrack.VoiceIndex(a1)	; Initial PSG tone
@@ -1146,7 +1156,9 @@ Sound_PlaySFX:
 	move.w	(a1)+,d0				; Track data pointer
 	ext.l	d0				; Clownacy | Fix negative pointers
 	add.l	a3,d0					; Relative pointer
-	move.l	d0,zTrack.DataPointer(a5)		; Store track pointer
+	move.w	d0,zTrack.DataPointer+2(a5)		; Store track pointer
+	swap	d0
+	move.b	d0,zTrack.DataPointer+1(a5)		; Store track pointer
 	move.w	(a1)+,zTrack.Transpose(a5)		; load FM/PSG channel modifier
 	move.b	#1,zTrack.DurationTimeout(a5)		; Set duration of first "note"
     if SMPS_EnableSpinDashSFX
@@ -1266,7 +1278,9 @@ Sound_PlaySpecial:
 	moveq	#0,d0
 	move.w	(a1)+,d0				; Track data pointer
 	add.l	a3,d0					; Relative pointer
-	move.l	d0,zTrack.DataPointer(a5)		; Store track pointer
+	move.w	d0,zTrack.DataPointer+2(a5)		; Store track pointer
+	swap	d0
+	move.b	d0,zTrack.DataPointer+1(a5)		; Store track pointer
 	move.w	(a1)+,zTrack.Transpose(a5)		; load FM/PSG channel modifier
 	move.b	#1,zTrack.DurationTimeout(a5)		; Set duration of first "note"
 	move.b	d6,zTrack.StackPointer(a5)		; set "gosub" (coord flag F8h) stack init value
@@ -2718,7 +2732,10 @@ FMInstrumentTLTable_End
 ; loc_72D30:
 cfModulation:
 	bset	#3,zTrack.PlaybackControl(a5)		; Turn on modulation
-	move.l	a4,zTrack.ModulationPtr(a5)		; Save pointer to modulation data
+	move.w	a4,zTrack.ModulationPtr+2(a5)		; Save pointer to modulation data
+	move.l	a4,d0
+	swap	d0
+	move.b	d0,zTrack.ModulationPtr+1(a5)		; Save pointer to modulation data
 	move.b	(a4)+,zTrack.ModulationWait(a5)		; Modulation delay
 	move.b	(a4)+,zTrack.ModulationSpeed(a5)	; Modulation speed
 	move.b	(a4)+,zTrack.ModulationDelta(a5)	; Modulation delta

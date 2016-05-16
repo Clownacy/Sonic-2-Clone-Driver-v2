@@ -9,15 +9,15 @@ zTrack STRUCT DOTS
 	TempoDivider:		ds.b 1		; All tracks
 	Transpose:		ds.b 1		; FM/PSG only	; these two need to be together!
 	Volume:			ds.b 1		; All tracks	; these two need to be together!
+	VoiceIndex:				; FM/PSG only
 	DataPointer:		ds.l 1		; All tracks
-	VoiceIndex:		ds.b 1		; FM/PSG only
+	SavedDAC:				; DAC only
+	Freq:			ds.w 1		; FM/PSG only
 	StackPointer:		ds.b 1		; All tracks
 	DurationTimeout:	ds.b 1		; All tracks
 	SavedDuration:		ds.b 1		; All tracks
-	SavedDAC:				; DAC only
-	Freq:			ds.w 1		; FM/PSG only
 	NoteFillTimeout:	ds.b 1		; FM/PSG only
-	NoteFillMaster:		ds.b 1		; FM/PSG only
+	NoteFillMaster:				; FM/PSG only
 	ModulationPtr:		ds.l 1		; FM/PSG only
 	ModulationWait:		ds.b 1		; FM/PSG only
 	ModulationSpeed:	ds.b 1		; FM/PSG only
