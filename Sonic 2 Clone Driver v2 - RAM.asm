@@ -46,51 +46,49 @@ SMPS_Track ENDSTRUCT
 ; ---------------------------------------------------------------------------
 ireallydontknow:
 
-	phase 0
-v_sounddriverramstart:
+SMPS_RAM STRUCT DOTS
+	v_startofvariables:
+	v_sndprio:			ds.b 1	; sound priority (priority of new music/SFX must be higher or equal to this value or it won't play; bit 7 of priority being set prevents this value from changing)
+	v_main_tempo_timeout:		ds.b 1	; Has v_main_tempo added to it; when it carries, delays song by 1 frame
+	v_main_tempo:			ds.b 1	; Used for music only
+	f_stopmusic:			ds.b 1	; flag set to stop music when paused
 
-v_startofvariables:
-v_sndprio:			ds.b 1	; sound priority (priority of new music/SFX must be higher or equal to this value or it won't play; bit 7 of priority being set prevents this value from changing)
-v_main_tempo_timeout:		ds.b 1	; Has v_main_tempo added to it; when it carries, delays song by 1 frame
-v_main_tempo:			ds.b 1	; Used for music only
-f_stopmusic:			ds.b 1	; flag set to stop music when paused
+	v_fadeout_counter:		ds.b 1
+	v_fadeout_delay:		ds.b 1
 
-v_fadeout_counter:		ds.b 1
-v_fadeout_delay:		ds.b 1
+	v_fadein_counter:		ds.b 1	; Timer for fade in/out
+	v_fadein_delay:			ds.b 1
 
-v_fadein_counter:		ds.b 1	; Timer for fade in/out
-v_fadein_delay:			ds.b 1
+	v_tempo_mod:			ds.b 1	; music - tempo modifier
+	v_speeduptempo:			ds.b 1	; music - tempo modifier with speed shoes
+	f_speedup:			ds.b 1	; flag indicating whether speed shoes tempo is on ($80) or off ($00)
 
-v_tempo_mod:			ds.b 1	; music - tempo modifier
-v_speeduptempo:			ds.b 1	; music - tempo modifier with speed shoes
-f_speedup:			ds.b 1	; flag indicating whether speed shoes tempo is on ($80) or off ($00)
+	v_playsnd0:			ds.b 1	; sound or music copied from below
+	SOUND_QUEUES_START:
+	v_playsnd1:			ds.b 1	; music to play	; Clownacy | Note to all, must be on even address!
+	v_playsnd2:			ds.b 1	; sound to play
+	v_playsnd3:			ds.b 1	; secondary sound to play
+	v_playsnd4:			ds.b 1	; secondary music to play
+	SOUND_QUEUES_END:
 
-v_playsnd0:			ds.b 1	; sound or music copied from below
-SOUND_QUEUES_START:
-v_playsnd1:			ds.b 1	; music to play	; Clownacy | Note to all, must be on even address!
-v_playsnd2:			ds.b 1	; sound to play
-v_playsnd3:			ds.b 1	; secondary sound to play
-v_playsnd4:			ds.b 1	; secondary music to play
-SOUND_QUEUES_END:
+	f_voice_selector:		ds.b 1	; $00 = use music voice pointer; $80 = use track voice pointer
 
-f_voice_selector:		ds.b 1	; $00 = use music voice pointer; $80 = use track voice pointer
+	f_1up_playing:			ds.b 1	; flag indicating 1-up song is playing
 
-f_1up_playing:			ds.b 1	; flag indicating 1-up song is playing
+		if SMPS_EnableSpinDashSFX
+	v_spindash_timer:		ds.b 1
+	v_spindash_pitch:		ds.b 1
+		endif
 
-	if SMPS_EnableSpinDashSFX
-v_spindash_timer:		ds.b 1
-v_spindash_pitch:		ds.b 1
-	endif
+	v_pal_audio_countdown:		ds.b 1
+	v_communication_byte:		ds.b 1
 
-v_pal_audio_countdown:		ds.b 1
-v_communication_byte:		ds.b 1
+		if SMPS_EnableContSFX
+	v_current_contsfx:		ds.b 1
+	v_contsfx_channels:		ds.b 1
+		endif
 
-	if SMPS_EnableContSFX
-v_current_contsfx:		ds.b 1
-v_contsfx_channels:		ds.b 1
-	endif
-
-misc_flags:			ds.b 1
+	misc_flags:			ds.b 1
 v_gloop_toggle			= 0	; if set, prevents further gloop sounds from playing
 f_spindash_lastsound		= 1
 v_ring_speaker			= 2	; which speaker the "ring" sound is played in (0 = right; 1 = left)
@@ -100,77 +98,73 @@ f_force_pal_tempo		= 5	; flag for if the current song must play at PAL speed on 
 f_doubleupdate			= 6
 f_continuous_sfx		= 7
 
-misc_flags2:			ds.b 1
+	misc_flags2:			ds.b 1
 f_push_playing			= 0
 
-v_endofvariables:
+	v_endofvariables:
 
-	if (*)&1	; pretty much an 'even'
-				ds.b 1
-	endif
+		if (*)&1	; pretty much an 'even'
+					ds.b 1
+		endif
 
-v_music_track_ram:
-v_music_fmdac_tracks:
-v_music_dac_track:	SMPS_Track
-v_music_fm_tracks:
-v_music_fm1_track:	SMPS_Track
-v_music_fm2_track:	SMPS_Track
-v_music_fm3_track:	SMPS_Track
-v_music_fm4_track:	SMPS_Track
-v_music_fm5_track:	SMPS_Track
-v_music_fm6_track:	SMPS_Track
-v_music_fm_tracks_end:
-v_music_fmdac_tracks_end:
-v_music_psg_tracks:
-v_music_psg1_track:	SMPS_Track
-v_music_psg2_track:	SMPS_Track
-v_music_psg3_track:	SMPS_Track
-v_music_psg_tracks_end:
-v_music_track_ram_end:
+	v_music_track_ram:
+	v_music_fmdac_tracks:
+	v_music_dac_track:	SMPS_Track
+	v_music_fm_tracks:
+	v_music_fm1_track:	SMPS_Track
+	v_music_fm2_track:	SMPS_Track
+	v_music_fm3_track:	SMPS_Track
+	v_music_fm4_track:	SMPS_Track
+	v_music_fm5_track:	SMPS_Track
+	v_music_fm6_track:	SMPS_Track
+	v_music_fm_tracks_end:
+	v_music_fmdac_tracks_end:
+	v_music_psg_tracks:
+	v_music_psg1_track:	SMPS_Track
+	v_music_psg2_track:	SMPS_Track
+	v_music_psg3_track:	SMPS_Track
+	v_music_psg_tracks_end:
+	v_music_track_ram_end:
 
-v_sfx_track_ram:
-v_sfx_fm_tracks:
-v_sfx_fm3_track:	SMPS_Track
-v_sfx_fm4_track:	SMPS_Track
-v_sfx_fm5_track:	SMPS_Track
-v_sfx_fm_tracks_end:
-v_sfx_psg_tracks:
-v_sfx_psg1_track:	SMPS_Track
-v_sfx_psg2_track:	SMPS_Track
-v_sfx_psg3_track:	SMPS_Track
-v_sfx_psg_tracks_end:
-v_sfx_track_ram_end:
+	v_1up_ram_copy:
+	v_sfx_track_ram:
+	v_sfx_fm_tracks:
+	v_1up_dac_track:
+	v_sfx_fm3_track:	SMPS_Track
+	v_1up_fm1_track:
+	v_sfx_fm4_track:	SMPS_Track
+	v_1up_fm2_track:
+	v_sfx_fm5_track:	SMPS_Track
+	v_sfx_fm_tracks_end:
+	v_sfx_psg_tracks:
+	v_1up_fm3_track:
+	v_sfx_psg1_track:	SMPS_Track
+	v_1up_fm4_track:
+	v_sfx_psg2_track:	SMPS_Track
+	v_1up_fm5_track:
+	v_sfx_psg3_track:	SMPS_Track
+	v_sfx_psg_tracks_end:
+	v_sfx_track_ram_end:
 
-v_spcsfx_track_ram:
-v_spcsfx_fm_tracks:
-v_spcsfx_fm4_track:	SMPS_Track
-v_spcsfx_fm_tracks_end:
-v_spcsfx_psg_tracks:
-v_spcsfx_psg3_track:	SMPS_Track
-v_spcsfx_psg_tracks_end:
-v_spcsfx_track_ram_end:
+	v_spcsfx_track_ram:
+	v_spcsfx_fm_tracks:
+	v_1up_fm6_track:
+	v_spcsfx_fm4_track:	SMPS_Track
+	v_spcsfx_fm_tracks_end:
+	v_spcsfx_psg_tracks:
+	v_1up_psg1_track:
+	v_spcsfx_psg3_track:	SMPS_Track
+	v_spcsfx_psg_tracks_end:
+	v_spcsfx_track_ram_end:
 
-	phase v_sfx_track_ram
-v_1up_ram_copy:
-v_1up_dac_track:	SMPS_Track
-v_1up_fm1_track:	SMPS_Track
-v_1up_fm2_track:	SMPS_Track
-v_1up_fm3_track:	SMPS_Track
-v_1up_fm4_track:	SMPS_Track
-v_1up_fm5_track:	SMPS_Track
-v_1up_fm6_track:	SMPS_Track
-v_1up_psg1_track:	SMPS_Track
-v_1up_psg2_track:	SMPS_Track
-v_1up_psg3_track:	SMPS_Track
+	v_1up_psg2_track:	SMPS_Track
+	v_1up_psg3_track:	SMPS_Track
 
-v_1up_variables:	ds.b v_endofvariables-v_startofvariables
+	v_1up_variables:	ds.b SMPS_RAM.v_endofvariables-SMPS_RAM.v_startofvariables
 
-SMPS_running_flag:		ds.b 1
-
-v_sounddriverramend:
-	dephase
+	SMPS_running_flag:	ds.b 1
+SMPS_RAM ENDSTRUCT
 
     if MOMPASS=1
-	message "Sonic 2 Clone Driver v2 RAM size is $\{v_sounddriverramend-v_sounddriverramstart} bytes!"
+	message "Sonic 2 Clone Driver v2 RAM size is $\{SMPS_RAM.len} bytes!"
     endif
-	!org ireallydontknow
