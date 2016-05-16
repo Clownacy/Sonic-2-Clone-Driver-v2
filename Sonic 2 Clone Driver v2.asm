@@ -47,7 +47,11 @@ UpdateMusic:
 ; ===========================================================================
 ; loc_71B82:
 ;.driverinput:
-	lea	(Clone_Driver_RAM).w,a6		; Clownacy | If you get errors, use (Clone_Driver_RAM).l instead
+    if ((Clone_Driver_RAM)&$8000)==0
+	lea	(Clone_Driver_RAM).l,a6
+    else
+	lea	(Clone_Driver_RAM).w,a6
+    endif
 	clr.b	SMPS_RAM.f_voice_selector(a6)
 	tst.b	SMPS_RAM.f_stopmusic(a6)			; Is music paused?
 	bne.w	DoPauseMusic			; If yes, branch
