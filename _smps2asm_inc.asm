@@ -530,7 +530,7 @@ smpsClearPush macro
 	if SMPS_PushSFXBehaviour
 		dc.b	$FF,$1F
 	else
-		fatal "Go set PushBehaviour to 1."
+		fatal "Go set SMPS_PushSFXBehaviour to 1."
 	endif
 	endm
 
@@ -539,7 +539,7 @@ smpsStopSpecial macro
 	if SMPS_EnableSpecSFX
 		dc.b	$FF,$07
 	else
-		fatal "Go set EnableSpecSFX to 1."
+		fatal "Go set SMPS_EnableSpecSFX to 1."
 	endif
 	endm
 
