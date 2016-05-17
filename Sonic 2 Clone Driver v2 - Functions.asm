@@ -41,9 +41,11 @@ SMPS_PlayMusic:
 ; and optionally only do so if object is on-screen (Sonic engine feature)
 ; ---------------------------------------------------------------------------
 ; sub_137C: PlaySoundLocal:
+    if SMPS_EnablePlaySoundLocal
 SMPS_PlaySoundLocal:
 	tst.b	render_flags(a0)
 	bpl.s	+	; rts
+    endif
 ; sub_1370: PlaySound:
 SMPS_PlaySound:
 	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.v_playsnd2).w

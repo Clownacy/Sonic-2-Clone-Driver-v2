@@ -1,14 +1,5 @@
 ; ========SONIC 2 GIT EQUATES========
 
-; ---DISASM-DEPENDANT VARIABLES AND FUNCTIONS---
-JmpTo_SoundDriverLoad	= SMPS_LoadDACDriver
-SoundDriverLoad		= SMPS_LoadDACDriver
-
-PlayMusic		= SMPS_PlayMusic
-PlaySoundLocal		= SMPS_PlaySoundLocal
-PlaySound		= SMPS_PlaySound
-PlaySoundStereo		= SMPS_PlaySound2
-
 ; ---FLAGS---
 SMPS_GloopSFXBehaviour	= 1
 ;	| If 1, SndID_Gloop only plays on every other call.
@@ -38,6 +29,9 @@ SMPS_EnableUniversalVoiceBank	= 0
 SMPS_SegaPCM_68k	= 0
 ;	| If 0, the Z80 and Mega PCM handle the SEGA sample playback. If 1, the 68k handles it. I recommend Z80, as with the 68k version, if overclocked, the sound plays wrongly.
 ;
+SMPS_EnablePlaySoundLocal	= 1
+;	| If 1, SMPS_PlaySoundLocal in included
+;
 
 SMPS_S1DACSamples	= 0
 SMPS_S2DACSamples	= 1
@@ -51,3 +45,14 @@ SMPS_S2PSGEnvelopes	= 1
 SMPS_S3PSGEnvelopes	= 0
 SMPS_SKPSGEnvelopes	= 0
 SMPS_S3DPSGEnvelopes	= 0
+
+; ---DISASM-DEPENDANT VARIABLES AND FUNCTIONS---
+JmpTo_SoundDriverLoad	= SMPS_LoadDACDriver
+SoundDriverLoad		= SMPS_LoadDACDriver
+
+PlayMusic		= SMPS_PlayMusic
+    if SMPS_EnablePlaySoundLocal
+PlaySoundLocal		= SMPS_PlaySoundLocal
+    endif
+PlaySound		= SMPS_PlaySound
+PlaySoundStereo		= SMPS_PlaySound2
