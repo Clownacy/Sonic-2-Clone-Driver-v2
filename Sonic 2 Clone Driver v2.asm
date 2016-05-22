@@ -76,7 +76,7 @@ UpdateMusic:
 ; loc_71BC8:
 .nonewsound:
     if SMPS_EnableSpinDashSFX
-	tst.b   v_spindash_timer(a6)
+	tst.b   SMPS_RAM.v_spindash_timer(a6)
 	beq.s	.notimer
 	subq.b	#1,SMPS_RAM.v_spindash_timer(a6)
 .notimer:
