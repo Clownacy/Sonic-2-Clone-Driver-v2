@@ -766,12 +766,28 @@ Sound_PlayBGM:
 	move.l	(a0)+,(a1)+
 	dbf	d0,.backuptrackramloop
 
+	; Clownacy | Make sure the last few bytes get cleared
+    if (SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)&2
+	move.w	(a0)+,(a1)+
+    endif
+    if (SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)&1
+	move.b	(a0)+,(a1)+
+    endif
+
 	movea.l	a6,a0
 	move.w	#(SMPS_RAM_Variables.len/4)-1,d0	; Backup variables
 
 .backupvariablesloop:
 	move.l	(a0)+,(a1)+
 	dbf	d0,.backupvariablesloop
+
+	; Clownacy | Make sure the last few bytes get cleared
+    if SMPS_RAM_Variables.len&2
+	move.w	(a0)+,(a1)+
+    endif
+    if SMPS_RAM_Variables.len&1
+	move.b	(a0)+,(a1)+
+    endif
 
 	move.b	#$80,SMPS_RAM.v_variables.f_1up_playing(a6)
 	clr.b	SMPS_RAM.v_variables.v_sndprio(a6)		; Clear priority twice?
@@ -1140,6 +1156,14 @@ Sound_PlaySFX:
 	move.l	d2,(a2)+
 	dbf	d0,.clearsfxtrackram
 
+	; Clownacy | Make sure the last few bytes get cleared
+    if SMPS_Track.len&2
+	move.w	d2,(a2)+
+    endif
+    if SMPS_Track.len&1
+	move.b	d2,(a2)+
+    endif
+
 	move.w	(a1)+,SMPS_Track.PlaybackControl(a5)	; Initial playback control bits
 	move.b	d5,SMPS_Track.TempoDivider(a5)		; Initial voice control bits
 	moveq	#0,d0
@@ -1262,6 +1286,14 @@ Sound_PlaySpecial:
 .clearsfxtrackram:
 	move.l	d2,(a2)+
 	dbf	d0,.clearsfxtrackram
+
+	; Clownacy | Make sure the last few bytes get cleared
+    if SMPS_Track.len&2
+	move.w	d2,(a2)+
+    endif
+    if SMPS_Track.len&1
+	move.b	d2,(a2)+
+    endif
 
 	move.w	(a1)+,SMPS_Track.PlaybackControl(a5)	; Initial playback control bits
 	move.b	d5,SMPS_Track.TempoDivider(a5)		; Initial voice control bits
@@ -1588,6 +1620,14 @@ StopSoundAndMusic:
 .clearramloop:
 	move.l	d2,(a0)+
 	dbf	d0,.clearramloop
+
+	; Clownacy | Make sure the last few bytes get cleared
+    if (SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.v_variables)&2
+	move.w	d2,(a0)+
+    endif
+    if (SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.v_variables)&1
+	move.b	d2,(a0)+
+    endif
 
 	move.b	d2,SMPS_RAM.v_variables.v_playsnd0(a6)	; Set music to $00 (silence)
 	; From Vladikcomper:
@@ -2375,6 +2415,14 @@ cfFadeInToPrevious:
 .restoretrackramloop:
 	move.l	(a1)+,(a0)+
 	dbf	d0,.restoretrackramloop
+
+	; Clownacy | Make sure the last few bytes get cleared
+    if (SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)&2
+	move.w	(a1)+,(a0)+
+    endif
+    if (SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)&1
+	move.b	(a1)+,(a0)+
+    endif
 
 	movea.l	a6,a0
 	move.w	#(SMPS_RAM_Variables.len/4)-1,d0	; restore variables
