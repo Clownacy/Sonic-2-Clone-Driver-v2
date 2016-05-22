@@ -74,22 +74,6 @@ SMPS_PlaySample:
 ; End of function SMPS_PlaySample
 
 ; ---------------------------------------------------------------------------
-; Pause music
-; ---------------------------------------------------------------------------
-SMPS_PauseMusic:
-	move.b	#1,(Clone_Driver_RAM+SMPS_RAM.f_stopmusic).w
-	rts
-; End of function SMPS_PauseMusic
-
-; ---------------------------------------------------------------------------
-; Unpause music
-; ---------------------------------------------------------------------------
-SMPS_UnpauseMusic:
-	move.b	#$80,(Clone_Driver_RAM+SMPS_RAM.f_stopmusic).w
-	rts
-; End of function SMPS_UnpauseMusic
-
-; ---------------------------------------------------------------------------
 ; Update sound driver
 ; ---------------------------------------------------------------------------
 SMPS_UpdateSoundDriver:

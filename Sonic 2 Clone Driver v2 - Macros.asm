@@ -17,14 +17,14 @@ SMPS_SFX_METADATA macro address,priority,flags
 ; ---------------------------------------------------------------------------
 ; stop the Z80
 ; ---------------------------------------------------------------------------
-SMPS_stopZ80	macro
+SMPS_stopZ80 macro
 	move.w	#$100,(SMPS_z80_bus_request).l
 	endm
 
 ; ---------------------------------------------------------------------------
 ; wait for Z80 to stop
 ; ---------------------------------------------------------------------------
-SMPS_waitZ80	macro
+SMPS_waitZ80 macro
 .wait:	btst	#0,(SMPS_z80_bus_request).l
 	bne.s	.wait
 	endm
@@ -32,14 +32,14 @@ SMPS_waitZ80	macro
 ; ---------------------------------------------------------------------------
 ; reset the Z80
 ; ---------------------------------------------------------------------------
-SMPS_resetZ80	macro
+SMPS_resetZ80 macro
 	move.w	#$100,(SMPS_z80_reset).l
 	endm
 
 ; ---------------------------------------------------------------------------
 ; start the Z80
 ; ---------------------------------------------------------------------------
-SMPS_startZ80	macro
+SMPS_startZ80 macro
 	move.w	#0,(SMPS_z80_bus_request).l
 	endm
 
@@ -66,6 +66,20 @@ SMPS_waitYMspec macro target
 	bmi.s	.loop	; 10(2/0) | 8(1/0)
 .skip:
 	endm	; optimal cycle count: 18(4/0) + target test cycles
+
+; ---------------------------------------------------------------------------
+; pause music
+; ---------------------------------------------------------------------------
+SMPS_PauseMusic macro
+	move.b	#1,(Clone_Driver_RAM+SMPS_RAM.f_stopmusic).w
+	endm
+
+; ---------------------------------------------------------------------------
+; unpause music
+; ---------------------------------------------------------------------------
+SMPS_UnpauseMusic macro
+	move.b	#$80,(Clone_Driver_RAM+SMPS_RAM.f_stopmusic).w
+	endm
 
 ; ---------------------------------------------------------------------------
 ; helper for sound IDs
