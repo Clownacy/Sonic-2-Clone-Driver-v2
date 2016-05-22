@@ -43,10 +43,7 @@ SMPS_Track ENDSTRUCT
 ; ---------------------------------------------------------------------------
 ; Global sound driver variables
 ; ---------------------------------------------------------------------------
-ireallydontknow:
-
-SMPS_RAM STRUCT DOTS
-	v_startofvariables:
+SMPS_RAM_Variables STRUCT DOTS
 	v_sndprio:			ds.b 1	; sound priority (priority of new music/SFX must be higher or equal to this value or it won't play; bit 7 of priority being set prevents this value from changing)
 	v_main_tempo_timeout:		ds.b 1	; Has v_main_tempo added to it; when it carries, delays song by 1 frame
 	v_main_tempo:			ds.b 1	; Used for music only
@@ -100,7 +97,13 @@ f_continuous_sfx		= 7
 	misc_flags2:			ds.b 1
 f_push_playing			= 0
 
-	v_endofvariables:
+SMPS_RAM_Variables ENDSTRUCT
+
+; ---------------------------------------------------------------------------
+; Global sound driver variables
+; ---------------------------------------------------------------------------
+SMPS_RAM STRUCT DOTS
+	v_variables:		SMPS_RAM_Variables
 
 		if (*)&1	; pretty much an 'even'
 					ds.b 1
@@ -159,7 +162,7 @@ f_push_playing			= 0
 	v_1up_psg2_track:	SMPS_Track
 	v_1up_psg3_track:	SMPS_Track
 
-	v_1up_variables:	ds.b SMPS_RAM.v_endofvariables-SMPS_RAM.v_startofvariables
+	v_1up_variables:	SMPS_RAM_Variables
 
 	SMPS_running_flag:	ds.b 1
 SMPS_RAM ENDSTRUCT
