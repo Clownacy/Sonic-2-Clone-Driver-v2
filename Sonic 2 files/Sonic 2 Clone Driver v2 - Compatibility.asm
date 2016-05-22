@@ -50,9 +50,9 @@ SMPS_S3DPSGEnvelopes	= 0
 JmpTo_SoundDriverLoad	= SMPS_LoadDACDriver
 SoundDriverLoad		= SMPS_LoadDACDriver
 
-PlayMusic		= SMPS_PlayMusic
+PlayMusic		= SMPS_QueueSound1
     if SMPS_EnablePlaySoundLocal
-PlaySoundLocal		= SMPS_PlaySoundLocal
+PlaySoundLocal		= SMPS_QueueSound2Local
     endif
-PlaySound		= SMPS_PlaySound
-PlaySoundStereo		= SMPS_PlaySound2
+PlaySound		= SMPS_QueueSound2
+PlaySoundStereo		= SMPS_QueueSound3

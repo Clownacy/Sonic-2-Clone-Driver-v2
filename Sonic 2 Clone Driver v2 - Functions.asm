@@ -26,7 +26,7 @@ SMPS_LoadDACDriver:
 ; Queue sound for play (queue 1)
 ; ---------------------------------------------------------------------------
 ; sub_135E: PlayMusic:
-SMPS_PlayMusic:
+SMPS_QueueSound1:
 	tst.b	(Clone_Driver_RAM+SMPS_RAM.v_playsnd1).w
 	bne.s	+
 	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.v_playsnd1).w
@@ -34,7 +34,7 @@ SMPS_PlayMusic:
 +
 	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.v_playsnd4).w
 	rts
-; End of function SMPS_PlayMusic
+; End of function SMPS_QueueSound1
 
 ; ---------------------------------------------------------------------------
 ; Queue sound for play (queue 2)
@@ -42,24 +42,24 @@ SMPS_PlayMusic:
 ; ---------------------------------------------------------------------------
 ; sub_137C: PlaySoundLocal:
     if SMPS_EnablePlaySoundLocal
-SMPS_PlaySoundLocal:
+SMPS_QueueSound2Local:
 	tst.b	render_flags(a0)
 	bpl.s	+	; rts
     endif
 ; sub_1370: PlaySound:
-SMPS_PlaySound:
+SMPS_QueueSound2:
 	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.v_playsnd2).w
 +	rts
-; End of function SMPS_PlaySoundLocal
+; End of function SMPS_QueueSound2
 
 ; ---------------------------------------------------------------------------
 ; Queue sound for play (queue 3)
 ; ---------------------------------------------------------------------------
 ; sub_1376: PlaySoundStereo:
-SMPS_PlaySound2:
+SMPS_QueueSound3:
 	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.v_playsnd3).w
 	rts
-; End of function SMPS_PlaySound2
+; End of function SMPS_QueueSound3
 
 ; ---------------------------------------------------------------------------
 ; Play a DAC sample

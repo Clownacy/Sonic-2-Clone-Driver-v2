@@ -49,8 +49,9 @@ SMPS_S3DPSGEnvelopes	= 0
 ; ---DISASM-DEPENDANT VARIABLES AND FUNCTIONS---
 SoundDriverLoad		= SMPS_LoadDACDriver
 
-PlaySound		= SMPS_PlayMusic
-PlaySound_Special	= SMPS_PlaySound
+PlaySound		= SMPS_QueueSound1
+PlaySound_Special	= SMPS_QueueSound2
+PlaySound_Unused	= SMPS_QueueSound3
 
 Clone_Driver_RAM	= (-(v_snddriver_ram&$80000000)<<1)|v_snddriver_ram
 Graphics_Flags		= v_megadrive
