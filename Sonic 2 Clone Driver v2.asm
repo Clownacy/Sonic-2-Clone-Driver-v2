@@ -741,8 +741,8 @@ Sound_PlayBGM:
 ;    endif
 	cmpi.b	#MusID_ExtraLife,d7	; Is the "extra life" music to be played?
 	bne.s	.bgmnot1up		; If not, branch
-	tst.b	SMPS_RAM.variables.f_1up_playing(a6)	; Is a 1-up music playing?
-	bne.w	.bgm_loadMusic		; If yes, branch	; Clownacy | (From S2)
+	btst	#f_1up_playing,SMPS_RAM.variables.misc_flags2(a6)	; Is a 1-up music playing?
+	bne.s	.bgm_loadMusic		; If yes, branch	; Clownacy | (From S2)
 
 	; Clownacy | Making the music backup share RAM with the SFX tracks makes this code so much more complicated...
 	; First up, we have to meddle with bit 7 PlaybackControl, but, afterwards, we wanna put it back the way it was, so we gotta back all 10 of them up
@@ -798,16 +798,16 @@ Sound_PlayBGM:
 	move.b	(a0)+,(a1)+
     endif
 
-	move.b	#$80,SMPS_RAM.variables.f_1up_playing(a6)
+	bset	#f_1up_playing,SMPS_RAM.variables.misc_flags2(a6)
 	clr.b	SMPS_RAM.variables.v_sndprio(a6)		; Clear priority twice?
 	bra.s	.bgm_loadMusic
 ; ===========================================================================
 ; loc_72024:
 .bgmnot1up:
 	moveq	#0,d0
-	move.b	d0,SMPS_RAM.variables.f_1up_playing(a6)
 	move.b	d0,SMPS_RAM.variables.v_fadein_counter(a6)
 	move.b	d0,SMPS_RAM.variables.v_fadeout_counter(a6)	; Clownacy | (From S2)
+	bclr	#f_1up_playing,SMPS_RAM.variables.misc_flags2(a6)
 ; loc_7202C:
 .bgm_loadMusic:
 	bsr.w	InitMusicPlayback
@@ -1014,7 +1014,7 @@ PSGInitBytes:
 ; ---------------------------------------------------------------------------
 ; Sound_A0toCF:
 Sound_PlaySFX:
-	tst.b	SMPS_RAM.variables.f_1up_playing(a6)		; Is 1-up playing?
+	btst	#f_1up_playing,SMPS_RAM.variables.misc_flags2(a6)		; Is 1-up playing?
 	bne.w	.clear_sndprio			; Exit is it is
 ;	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)		; Is music being faded out?	; Clownacy | S2's driver doesn't bother with this
 ;	bne.w	.clear_sndprio			; Exit if it is
@@ -1250,7 +1250,7 @@ SFX_BGMChannelRAM:
     if SMPS_EnableSpecSFX
 ; Sound_D0toDF:
 Sound_PlaySpecial:
-	tst.b	SMPS_RAM.variables.f_1up_playing(a6)		; Is 1-up playing?
+	btst	#f_1up_playing,SMPS_RAM.variables.misc_flags2(a6)		; Is 1-up playing?
 	bne.w	.locret				; Return if so
 ;	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)		; Is music being faded out?	; Clownacy | S2's driver didn't bother with this in Sound_PlaySFX
 ;	bne.w	.locret				; Exit if it is
@@ -1673,7 +1673,8 @@ InitMusicPlayback:
 
 	; Save several values
 	move.b	SMPS_RAM.variables.v_sndprio(a6),d2
-	move.b	SMPS_RAM.variables.f_1up_playing(a6),d3
+	move.b	SMPS_RAM.variables.misc_flags2(a6),d3
+	andi.b	#1<<f_1up_playing,d3
 	move.b	SMPS_RAM.variables.f_speedup(a6),d4
 	move.b	SMPS_RAM.variables.v_fadein_counter(a6),d5
 	move.l	SMPS_RAM.variables.v_playsnd1(a6),d6
@@ -1713,7 +1714,7 @@ InitMusicPlayback:
 
 	; Restore the values saved above
 	move.b	d2,SMPS_RAM.variables.v_sndprio(a6)
-	move.b	d3,SMPS_RAM.variables.f_1up_playing(a6)
+	move.b	d3,SMPS_RAM.variables.misc_flags2(a6)
 	move.b	d4,SMPS_RAM.variables.f_speedup(a6)
 	move.b	d5,SMPS_RAM.variables.v_fadein_counter(a6)
 	move.l	d6,SMPS_RAM.variables.v_playsnd1(a6)
@@ -1777,7 +1778,7 @@ TempoWait:	; Clownacy | Ported straight from S3K's Z80 driver
 ; ---------------------------------------------------------------------------
 ; Sound_E2:
 SpeedUpMusic:
-	tst.b	SMPS_RAM.variables.f_1up_playing(a6)
+	btst	#f_1up_playing,SMPS_RAM.variables.misc_flags2(a6)
 	bne.s	SpeedUpMusic_1up
 	move.b	SMPS_RAM.variables.v_speeduptempo(a6),SMPS_RAM.variables.v_main_tempo(a6)
 	move.b	#$80,SMPS_RAM.variables.f_speedup(a6)
@@ -1794,7 +1795,7 @@ SpeedUpMusic_1up:
 ; ---------------------------------------------------------------------------
 ; Sound_E3:
 SlowDownMusic:
-	tst.b	SMPS_RAM.variables.f_1up_playing(a6)
+	btst	#f_1up_playing,SMPS_RAM.variables.misc_flags2(a6)
 	bne.s	SlowDownMusic_1up
 	move.b	SMPS_RAM.variables.v_tempo_mod(a6),SMPS_RAM.variables.v_main_tempo(a6)
 	clr.b	SMPS_RAM.variables.f_speedup(a6)
@@ -2550,7 +2551,7 @@ cfFadeInToPrevious:
 
 	bset	#f_fadein_flag,SMPS_RAM.variables.misc_flags(a6)	; Trigger fade-in
 	move.b	#$28,SMPS_RAM.variables.v_fadein_counter(a6)	; Fade-in delay
-	clr.b	SMPS_RAM.variables.f_1up_playing(a6)
+	bclr	#f_1up_playing,SMPS_RAM.variables.misc_flags2(a6)
 	addq.w	#8,sp				; Tamper return value so we don't return to caller
 	rts
 ; ===========================================================================

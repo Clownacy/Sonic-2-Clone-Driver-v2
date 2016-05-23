@@ -69,8 +69,6 @@ SMPS_RAM_Variables STRUCT DOTS
 
 	f_voice_selector:		ds.b 1	; $00 = use music voice pointer; $80 = use track voice pointer
 
-	f_1up_playing:			ds.b 1	; flag indicating 1-up song is playing
-
 		if SMPS_EnableSpinDashSFX
 	v_spindash_timer:		ds.b 1
 	v_spindash_pitch:		ds.b 1
@@ -96,6 +94,7 @@ f_continuous_sfx		= 7
 
 	misc_flags2:			ds.b 1
 f_push_playing			= 0
+f_1up_playing:			= 1	; flag indicating 1-up song is playing
 
 SMPS_RAM_Variables ENDSTRUCT
 
