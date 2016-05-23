@@ -57,7 +57,6 @@ SMPS_RAM_Variables STRUCT DOTS
 
 	v_tempo_mod:			ds.b 1	; music - tempo modifier
 	v_speeduptempo:			ds.b 1	; music - tempo modifier with speed shoes
-	f_speedup:			ds.b 1	; flag indicating whether speed shoes tempo is on ($80) or off ($00)
 
 	v_playsnd0:			ds.b 1	; sound or music copied from below
 	SOUND_QUEUES_START:
@@ -95,6 +94,7 @@ f_continuous_sfx		= 7
 	misc_flags2:			ds.b 1
 f_push_playing			= 0
 f_1up_playing:			= 1	; flag indicating 1-up song is playing
+f_speedup:			= 2	; flag indicating whether speed shoes tempo is on ($80) or off ($00)
 
 SMPS_RAM_Variables ENDSTRUCT
 

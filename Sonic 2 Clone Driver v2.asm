@@ -819,7 +819,7 @@ Sound_PlayBGM:
 	move.l	(a4),d2			; Load voice pointer	; Clownacy | Made to read a longword to suit the voices' new absolute pointer
 	move.b	5+2(a4),d0		; Load tempo		; Clownacy | +2 to accommodate the voices' new longword pointer
 	move.b	d0,SMPS_RAM.variables.v_tempo_mod(a6)
-	tst.b	SMPS_RAM.variables.f_speedup(a6)
+	btst	#f_speedup,SMPS_RAM.variables.misc_flags2(a6)
 	beq.s	.nospeedshoes
 	move.b	SMPS_RAM.variables.v_speeduptempo(a6),d0
 ; loc_72068:
@@ -1474,7 +1474,7 @@ FadeOutMusic:
 ;    endif
 	move.b	#3,SMPS_RAM.variables.v_fadeout_delay(a6)		; Set fadeout delay to 3
 	move.b	#$28,SMPS_RAM.variables.v_fadeout_counter(a6)	; Set fadeout counter
-	clr.b	SMPS_RAM.variables.f_speedup(a6)			; Disable speed shoes tempo
+	bclr	#f_speedup,SMPS_RAM.variables.misc_flags2(a6)			; Disable speed shoes tempo
 	rts
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -1658,10 +1658,9 @@ InitMusicPlayback:
 	; WARNING: Must not use d7
 
 	; Save several values
-	move.b	SMPS_RAM.variables.v_sndprio(a6),d2
-	move.b	SMPS_RAM.variables.misc_flags2(a6),d3
-	andi.b	#1<<f_1up_playing,d3
-	move.b	SMPS_RAM.variables.f_speedup(a6),d4
+	move.b	SMPS_RAM.variables.v_sndprio(a6),d3
+	move.b	SMPS_RAM.variables.misc_flags2(a6),d4
+	andi.b	#(1<<f_1up_playing)|(1<<f_speedup),d4
 	move.b	SMPS_RAM.variables.v_fadein_counter(a6),d5
 	move.l	SMPS_RAM.variables.v_playsnd1(a6),d6
 
@@ -1692,9 +1691,8 @@ InitMusicPlayback:
     endif
 
 	; Restore the values saved above
-	move.b	d2,SMPS_RAM.variables.v_sndprio(a6)
-	move.b	d3,SMPS_RAM.variables.misc_flags2(a6)
-	move.b	d4,SMPS_RAM.variables.f_speedup(a6)
+	move.b	d3,SMPS_RAM.variables.v_sndprio(a6)
+	move.b	d4,SMPS_RAM.variables.misc_flags2(a6)
 	move.b	d5,SMPS_RAM.variables.v_fadein_counter(a6)
 	move.l	d6,SMPS_RAM.variables.v_playsnd1(a6)
 	;move.b	d6,SMPS_RAM.variables.v_playsnd0(a6)	; set music to $00 (silence)
@@ -1760,13 +1758,13 @@ SpeedUpMusic:
 	btst	#f_1up_playing,SMPS_RAM.variables.misc_flags2(a6)
 	bne.s	SpeedUpMusic_1up
 	move.b	SMPS_RAM.variables.v_speeduptempo(a6),SMPS_RAM.variables.v_main_tempo(a6)
-	move.b	#$80,SMPS_RAM.variables.f_speedup(a6)
+	bset	#f_speedup,SMPS_RAM.variables.misc_flags2(a6)
 	rts
 ; ===========================================================================
 ; loc_7263E: .speedup_1up:
 SpeedUpMusic_1up:
 	move.b	SMPS_RAM.variables_backup.v_speeduptempo(a6),SMPS_RAM.variables_backup.v_main_tempo(a6)
-	move.b	#$80,SMPS_RAM.variables_backup.f_speedup(a6)
+	bset	#f_speedup,SMPS_RAM.variables.misc_flags2(a6)
 	rts
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -1777,13 +1775,13 @@ SlowDownMusic:
 	btst	#f_1up_playing,SMPS_RAM.variables.misc_flags2(a6)
 	bne.s	SlowDownMusic_1up
 	move.b	SMPS_RAM.variables.v_tempo_mod(a6),SMPS_RAM.variables.v_main_tempo(a6)
-	clr.b	SMPS_RAM.variables.f_speedup(a6)
+	bclr	#f_speedup,SMPS_RAM.variables.misc_flags2(a6)
 	rts
 ; ===========================================================================
 ; loc_7266A: .slowdown_1up:
 SlowDownMusic_1up:
 	move.b	SMPS_RAM.variables_backup.v_tempo_mod(a6),SMPS_RAM.variables_backup.v_main_tempo(a6)
-	clr.b	SMPS_RAM.variables_backup.f_speedup(a6)
+	bclr	#f_speedup,SMPS_RAM.variables.misc_flags2(a6)
 	rts
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
