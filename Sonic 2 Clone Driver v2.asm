@@ -1022,7 +1022,9 @@ Sound_PlaySFX:
 ;	bne.w	.clear_sndprio			; Exit if it is
 	btst	#f_fadein_flag,SMPS_RAM.variables.bitfield1(a6)	; Is music being faded in?
 	bne.w	.clear_sndprio			; Exit if it is
+    if SMPS_EnableSpinDashSFX
 	bclr	#f_spindash_lastsound,SMPS_RAM.variables.bitfield2(a6)
+    endif
 	cmpi.b	#SndID_Ring,d7			; Is ring sound	effect played?
 	bne.s	.sfx_notRing			; If not, branch
 	btst	#v_ring_speaker,SMPS_RAM.variables.bitfield1(a6)	; Is the ring sound playing on right speaker?
