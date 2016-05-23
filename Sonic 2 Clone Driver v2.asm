@@ -880,7 +880,8 @@ Sound_PlayBGM:
 	move.w	d0,SMPS_Track.DataPointer+2(a1)	; Store track pointer
 	swap	d0
 	move.b	d0,SMPS_Track.DataPointer+1(a1)	; Store track pointer
-	move.w	(a4)+,SMPS_Track.Transpose(a1)	; Load FM channel modifier
+	move.b	(a4)+,SMPS_Track.Transpose(a1)	; Load FM channel modifier
+	move.b	(a4)+,SMPS_Track.Volume(a1)	; Load FM channel modifier
 	move.l	d2,SMPS_Track.VoicePtr(a1)	; Load voice pointer	; Clownacy | Made to read a longword to suit the voices' new absolute pointer
 	adda.w	d6,a1
 	dbf	d7,.bmg_fmloadloop
@@ -935,7 +936,8 @@ Sound_PlayBGM:
 	move.w	d0,SMPS_Track.DataPointer+2(a1)	; Store track pointer
 	swap	d0
 	move.b	d0,SMPS_Track.DataPointer+1(a1)	; Store track pointer
-	move.w	(a4)+,SMPS_Track.Transpose(a1)	; Load PSG modifier
+	move.b	(a4)+,SMPS_Track.Transpose(a1)	; Load PSG modifier
+	move.b	(a4)+,SMPS_Track.Volume(a1)	; Load PSG modifier
 	addq.w	#1,a4				; Skip redundant byte (SMPS2ASM calls this 'mod', and SMPS 68k Type 2 actually does use it for modulation ($A(a5)))
 	move.b	(a4)+,SMPS_Track.VoiceIndex(a1)	; Initial PSG tone
 	adda.w	d6,a1
@@ -1182,7 +1184,8 @@ Sound_PlaySFX:
 	move.w	d0,SMPS_Track.DataPointer+2(a5)		; Store track pointer
 	swap	d0
 	move.b	d0,SMPS_Track.DataPointer+1(a5)		; Store track pointer
-	move.w	(a1)+,SMPS_Track.Transpose(a5)		; load FM/PSG channel modifier
+	move.b	(a1)+,SMPS_Track.Transpose(a5)		; load FM/PSG channel modifier
+	move.b	(a1)+,SMPS_Track.Volume(a5)		; load FM/PSG channel modifier
 	move.b	#1,SMPS_Track.DurationTimeout(a5)		; Set duration of first "note"
     if SMPS_EnableSpinDashSFX
 	btst	#f_spindash_lastsound,SMPS_RAM.variables.bitfield2(a6)	; Is the Spin Dash sound playing?
@@ -1312,7 +1315,8 @@ Sound_PlaySpecial:
 	move.w	d0,SMPS_Track.DataPointer+2(a5)		; Store track pointer
 	swap	d0
 	move.b	d0,SMPS_Track.DataPointer+1(a5)		; Store track pointer
-	move.w	(a1)+,SMPS_Track.Transpose(a5)		; load FM/PSG channel modifier
+	move.b	(a1)+,SMPS_Track.Transpose(a5)		; load FM/PSG channel modifier
+	move.b	(a1)+,SMPS_Track.Volume(a5)		; load FM/PSG channel modifier
 	move.b	#1,SMPS_Track.DurationTimeout(a5)		; Set duration of first "note"
 	move.b	d6,SMPS_Track.StackPointer(a5)		; set "gosub" (coord flag F8h) stack init value
 	tst.b	d4					; Is this a PSG channel?

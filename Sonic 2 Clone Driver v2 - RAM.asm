@@ -9,8 +9,8 @@ SMPS_Track STRUCT DOTS
 	AMSFMSPan:		ds.b 1		; FM/DAC only
 
 	TempoDivider:		ds.b 1		; All tracks
-	Transpose:		ds.b 1		; FM/PSG only	; these two need to be together!
-	Volume:			ds.b 1		; All tracks	; these two need to be together!
+	Transpose:		ds.b 1		; FM/PSG only
+	Volume:			ds.b 1		; All tracks
 
 	VoiceIndex:		;ds.b 1		; FM/PSG only
 	DataPointer:		ds.l 1		; All tracks
