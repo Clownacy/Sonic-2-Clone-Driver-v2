@@ -785,18 +785,11 @@ Sound_PlayBGM:
 
 	lea	SMPS_RAM.variables(a6),a0
 	lea	SMPS_RAM.variables_backup(a6),a1
-	move.w	#(SMPS_RAM_Variables.len/4)-1,d0	; Backup variables
+	move.w	#SMPS_RAM_Variables.len-1,d0	; Backup variables
 
 .backupvariablesloop:
-	move.l	(a0)+,(a1)+
-	dbf	d0,.backupvariablesloop
-
-    if SMPS_RAM_Variables.len&2
-	move.w	(a0)+,(a1)+
-    endif
-    if SMPS_RAM_Variables.len&1
 	move.b	(a0)+,(a1)+
-    endif
+	dbf	d0,.backupvariablesloop
 
 	bset	#f_1up_playing,SMPS_RAM.variables.misc_flags2(a6)
 	clr.b	SMPS_RAM.variables.v_sndprio(a6)		; Clear priority twice?
@@ -1624,19 +1617,12 @@ StopSoundAndMusic:
 
 	; Clear variables
 	lea	SMPS_RAM.variables(a6),a0
-	move.w	#(SMPS_RAM_Variables.len/4)-1,d1
+	move.w	#SMPS_RAM_Variables.len-1,d1
 	moveq	#0,d0
 ; loc_725B6:
 .clearvariablesloop:
-	move.l	d0,(a0)+
-	dbf	d1,.clearvariablesloop
-
-    if SMPS_RAM_Variables.len&2
-	move.w	d0,(a0)+
-    endif
-    if SMPS_RAM_Variables.len&1
 	move.b	d0,(a0)+
-    endif
+	dbf	d1,.clearvariablesloop
 
 	; Clear track RAM
 	lea	SMPS_RAM.v_music_track_ram(a6),a0
@@ -1681,20 +1667,13 @@ InitMusicPlayback:
 
 	; Clear variables
 	lea	SMPS_RAM.variables(a6),a0	; Clear $220 bytes: all variables and music track data
-	move.w	#(SMPS_RAM_Variables.len/4)-1,d1	; Clear $220 bytes: all variables and music track data
+	move.w	#SMPS_RAM_Variables.len-1,d1	; Clear $220 bytes: all variables and music track data
 	moveq	#0,d0
 
 ; loc_725E4:
 .clearvariablesloop:
-	move.l	d0,(a0)+
-	dbf	d1,.clearvariablesloop
-
-    if SMPS_RAM_Variables.len&2
-	move.w	d0,(a0)+
-    endif
-    if SMPS_RAM_Variables.len&1
 	move.b	d0,(a0)+
-    endif
+	dbf	d1,.clearvariablesloop
 
 	; Clear music track RAM
 	lea	SMPS_RAM.v_music_track_ram(a6),a0	; Clear $220 bytes: all variables and music track data
@@ -2470,19 +2449,11 @@ cfFadeInToPrevious:
 
 	lea	SMPS_RAM.variables(a6),a0
 	lea	SMPS_RAM.variables_backup(a6),a1
-	move.w	#(SMPS_RAM_Variables.len/4)-1,d0	; restore variables
+	move.w	#SMPS_RAM_Variables.len-1,d0	; restore variables
 ; loc_72B1E:
 .restorevariablesloop:
-	move.l	(a1)+,(a0)+
-	dbf	d0,.restorevariablesloop
-
-	; Clownacy | Make sure the last few bytes get restored
-    if SMPS_RAM_Variables.len&2
-	move.w	(a1)+,(a0)+
-    endif
-    if SMPS_RAM_Variables.len&1
 	move.b	(a1)+,(a0)+
-    endif
+	dbf	d0,.restorevariablesloop
 
 	lea	SMPS_RAM.v_music_track_ram(a6),a0
 	moveq	#SMPS_MUSIC_TRACK_COUNT-1,d0	; 1 DAC + 6 FM + 3 PSG tracks
