@@ -776,7 +776,6 @@ Sound_PlayBGM:
 	move.l	(a0)+,(a1)+
 	dbf	d0,.backuptrackramloop
 
-	; Clownacy | Make sure the last few bytes get cleared
     if (SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)&2
 	move.w	(a0)+,(a1)+
     endif
@@ -784,14 +783,14 @@ Sound_PlayBGM:
 	move.b	(a0)+,(a1)+
     endif
 
-	movea.l	a6,a0
+	lea	SMPS_RAM.variables(a6),a0
+	lea	SMPS_RAM.variables_backup(a6),a1
 	move.w	#(SMPS_RAM_Variables.len/4)-1,d0	; Backup variables
 
 .backupvariablesloop:
 	move.l	(a0)+,(a1)+
 	dbf	d0,.backupvariablesloop
 
-	; Clownacy | Make sure the last few bytes get cleared
     if SMPS_RAM_Variables.len&2
 	move.w	(a0)+,(a1)+
     endif
@@ -1622,24 +1621,39 @@ StopSoundAndMusic:
 	moveq	#$27,d0		; Timers, FM3/FM6 mode
 	moveq	#0,d1		; FM3/FM6 normal mode, disable timers
 	bsr.w	WriteFMI
-	movea.l	a6,a0
-	move.w	#((SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.variables)/4)-1,d0	; Clear all variables and track data (don't really care about clearing the music track backup)
-.skipclearsfx:
-	moveq	#0,d2
+
+	; Clear variables
+	lea	SMPS_RAM.variables(a6),a0
+	move.w	#(SMPS_RAM_Variables.len/4)-1,d1
+	moveq	#0,d0
 ; loc_725B6:
-.clearramloop:
-	move.l	d2,(a0)+
-	dbf	d0,.clearramloop
+.clearvariablesloop:
+	move.l	d0,(a0)+
+	dbf	d1,.clearvariablesloop
 
-	; Clownacy | Make sure the last few bytes get cleared
-    if (SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.variables)&2
-	move.w	d2,(a0)+
+    if SMPS_RAM_Variables.len&2
+	move.w	d0,(a0)+
     endif
-    if (SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.variables)&1
-	move.b	d2,(a0)+
+    if SMPS_RAM_Variables.len&1
+	move.b	d0,(a0)+
     endif
 
-	move.b	d2,SMPS_RAM.variables.v_playsnd0(a6)	; Set music to $00 (silence)
+	; Clear track RAM
+	lea	SMPS_RAM.v_music_track_ram(a6),a0
+	move.w	#((SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d1	; Clear all variables and track data (don't really care about clearing the music track backup)
+
+.cleartrackRAMloop:
+	move.l	d0,(a0)+
+	dbf	d1,.cleartrackRAMloop
+
+    if (SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.v_music_track_ram)&2
+	move.w	d0,(a0)+
+    endif
+    if (SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.v_music_track_ram)&1
+	move.b	d0,(a0)+
+    endif
+
+	;move.b	d0,SMPS_RAM.variables.v_playsnd0(a6)	; Set music to $00 (silence)
 	; From Vladikcomper:
 	; "Playing sample $80 forces to stop playback."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
@@ -1655,36 +1669,55 @@ StopSoundAndMusic:
 
 ; sub_725CA:
 InitMusicPlayback:
-	movea.l	a6,a0
+	; WARNING: Must not use d7
+
 	; Save several values
-	move.b	SMPS_RAM.variables.v_sndprio(a6),d1
-	move.b	SMPS_RAM.variables.f_1up_playing(a6),d2
-	move.b	SMPS_RAM.variables.f_speedup(a6),d3
-	move.b	SMPS_RAM.variables.v_fadein_counter(a6),d4
-	move.l	SMPS_RAM.variables.v_playsnd1(a6),d5
-	move.w	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.variables)/4)-1,d0	; Clear $220 bytes: all variables and music track data
-	moveq	#0,d6
+	move.b	SMPS_RAM.variables.v_sndprio(a6),d2
+	move.b	SMPS_RAM.variables.f_1up_playing(a6),d3
+	move.b	SMPS_RAM.variables.f_speedup(a6),d4
+	move.b	SMPS_RAM.variables.v_fadein_counter(a6),d5
+	move.l	SMPS_RAM.variables.v_playsnd1(a6),d6
+
+	; Clear variables
+	lea	SMPS_RAM.variables(a6),a0	; Clear $220 bytes: all variables and music track data
+	move.w	#(SMPS_RAM_Variables.len/4)-1,d1	; Clear $220 bytes: all variables and music track data
+	moveq	#0,d0
+
+; loc_725E4:
+.clearvariablesloop:
+	move.l	d0,(a0)+
+	dbf	d1,.clearvariablesloop
+
+    if SMPS_RAM_Variables.len&2
+	move.w	d0,(a0)+
+    endif
+    if SMPS_RAM_Variables.len&1
+	move.b	d0,(a0)+
+    endif
+
+	; Clear music track RAM
+	lea	SMPS_RAM.v_music_track_ram(a6),a0	; Clear $220 bytes: all variables and music track data
+	move.w	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d1	; Clear $220 bytes: all variables and music track data
 
 ; loc_725E4:
 .clearramloop:
-	move.l	d6,(a0)+
-	dbf	d0,.clearramloop
+	move.l	d0,(a0)+
+	dbf	d1,.clearramloop
 
-	; Clownacy | Make sure the last few bytes get cleared
-    if (SMPS_RAM.v_music_track_ram_end-SMPS_RAM.variables)&2
-	move.w	d6,(a0)+
+    if (SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)&2
+	move.w	d0,(a0)+
     endif
-    if (SMPS_RAM.v_music_track_ram_end-SMPS_RAM.variables)&1
-	move.b	d6,(a0)+
+    if (SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)&1
+	move.b	d0,(a0)+
     endif
 
 	; Restore the values saved above
-	move.b	d1,SMPS_RAM.variables.v_sndprio(a6)
-	move.b	d2,SMPS_RAM.variables.f_1up_playing(a6)
-	move.b	d3,SMPS_RAM.variables.f_speedup(a6)
-	move.b	d4,SMPS_RAM.variables.v_fadein_counter(a6)
-	move.l	d5,SMPS_RAM.variables.v_playsnd1(a6)
-	move.b	d6,SMPS_RAM.variables.v_playsnd0(a6)	; set music to $00 (silence)
+	move.b	d2,SMPS_RAM.variables.v_sndprio(a6)
+	move.b	d3,SMPS_RAM.variables.f_1up_playing(a6)
+	move.b	d4,SMPS_RAM.variables.f_speedup(a6)
+	move.b	d5,SMPS_RAM.variables.v_fadein_counter(a6)
+	move.l	d6,SMPS_RAM.variables.v_playsnd1(a6)
+	;move.b	d6,SMPS_RAM.variables.v_playsnd0(a6)	; set music to $00 (silence)
 	moveq	#0|((VolumeTbls&$F000)>>8),d0	; Clownacy | Reset DAC volume to maximum
 	bsr.w	WriteDACVolume
 
@@ -1711,7 +1744,7 @@ InitMusicPlayback:
 	; Clownacy | We don't need this, especially since .sfxstoploop does the
 	; same thing, only better (it only silences the music channels).
 	; This actually causes a bug in S1's driver, where an SFX is interrupted
-	; when a new song starts, causing sound distorition. S2 just stopped all
+	; when a new song starts, causing sound distortion. S2 just stopped all
 	; SFX when a new song plays, which just hides the problem.
 	pea	PSGSilenceAll(pc)
 	bra.w	FMSilenceAll
@@ -2434,7 +2467,8 @@ cfFadeInToPrevious:
 	move.b	(a1)+,(a0)+
     endif
 
-	movea.l	a6,a0
+	lea	SMPS_RAM.variables(a6),a0
+	lea	SMPS_RAM.variables_backup(a6),a1
 	move.w	#(SMPS_RAM_Variables.len/4)-1,d0	; restore variables
 ; loc_72B1E:
 .restorevariablesloop:

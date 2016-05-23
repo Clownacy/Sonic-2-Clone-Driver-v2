@@ -103,12 +103,6 @@ SMPS_RAM_Variables ENDSTRUCT
 ; Global sound driver variables
 ; ---------------------------------------------------------------------------
 SMPS_RAM STRUCT DOTS
-	variables:		SMPS_RAM_Variables
-
-		if (*)&1	; pretty much an 'even'
-					ds.b 1
-		endif
-
 	v_music_track_ram:
 	v_music_fmdac_tracks:
 	v_music_dac_track:	SMPS_Track
@@ -162,6 +156,7 @@ SMPS_RAM STRUCT DOTS
 	v_1up_psg2_track:	SMPS_Track
 	v_1up_psg3_track:	SMPS_Track
 
+	variables:		SMPS_RAM_Variables
 	variables_backup:	SMPS_RAM_Variables
 
 	SMPS_running_flag:	ds.b 1
