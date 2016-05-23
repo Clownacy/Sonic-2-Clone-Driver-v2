@@ -621,15 +621,21 @@ locret_71F4A:
 Sound_ChkValue:	; For the love of god, don't rearrange the order of the groups, it has to be 'music --> SFX --> flags'
 	moveq	#0,d7
 	move.b	SMPS_RAM.v_variables.v_playsnd0(a6),d7
-;	beq.w	StopSoundAndMusic	; Is this $00? Branch if yes				; Clownacy | I'm not even sure what this one was doing, this was here before I made $00==$80
-;	bpl.s	locret_71F4A		; If >= 0, return (not a valid sound, bgm or command)	; Clownacy | Commented out to allow slots $00-$7F
 	clr.b	SMPS_RAM.v_variables.v_playsnd0(a6)		; reset	music flag
+
+	; Music
+	cmpi.b	#MusID__First,d7	; Is this after music but before sfx?
+	blo.s	locret_71F4A		; Return if yes
 	cmpi.b	#MusID__End,d7		; Is this music ($01-$1F)?
 	blo.w	Sound_PlayBGM		; Branch if yes
+
+	; SFX
 	cmpi.b	#SndID__First,d7	; Is this after music but before sfx?
 	blo.s	locret_71F4A		; Return if yes
 	cmpi.b	#SndID__End,d7		; Is this sfx ($80-$D0)?
 	blo.w	Sound_PlaySFX		; Branch if yes
+
+	; Special SFX
     if SMPS_EnableSpecSFX
 	cmpi.b	#SpecID__First,d7	; Is this after sfx but before spec sfx?
 	blo.s	locret_71F4A		; Return if yes
@@ -637,8 +643,12 @@ Sound_ChkValue:	; For the love of god, don't rearrange the order of the groups, 
 	cmpi.b	#SpecID__End,d7		; Is this spec sfx
 	blo.w	Sound_PlaySpecial	; Branch if yes
     endif
+
+	; Comamnds
 	subi.b	#FlgID__First,d7	; Is this after sfx (spec if above code is present) but before $D0?
 	bcs.s	locret_71F4A		; Return if yes
+	cmpi.b	#FlgID__End-FlgID__First,d7
+	bhs.s	locret_71F4A
 	add.w	d7,d7
 	add.w	d7,d7
 	jmp	Sound_ExIndex(pc,d7.w)
