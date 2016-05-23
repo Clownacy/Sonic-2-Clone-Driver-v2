@@ -741,7 +741,7 @@ Sound_PlayBGM:
 ;    endif
 	cmpi.b	#MusID_ExtraLife,d7	; Is the "extra life" music to be played?
 	bne.s	.bgmnot1up		; If not, branch
-	btst	#f_1up_playing,SMPS_RAM.variables.bitfield1(a6)	; Is a 1-up music playing?
+	bset	#f_1up_playing,SMPS_RAM.variables.bitfield1(a6)	; Is a 1-up music playing?
 	bne.s	.bgm_loadMusic		; If yes, branch	; Clownacy | (From S2)
 
 	; Clownacy | Making the music backup share RAM with the SFX tracks makes this code so much more complicated...
@@ -798,7 +798,7 @@ Sound_PlayBGM:
 	move.b	(a0)+,(a1)+
     endif
 
-	bset	#f_1up_playing,SMPS_RAM.variables.bitfield1(a6)
+	;bset	#f_1up_playing,SMPS_RAM.variables.bitfield1(a6)
 	clr.b	SMPS_RAM.variables.v_sndprio(a6)		; Clear priority twice?
 	bra.s	.bgm_loadMusic
 ; ===========================================================================
