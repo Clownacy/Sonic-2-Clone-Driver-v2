@@ -82,19 +82,29 @@ SMPS_RAM_Variables STRUCT DOTS
 		endif
 
 	misc_flags:			ds.b 1
-v_gloop_toggle			= 0	; if set, prevents further gloop sounds from playing
-f_spindash_lastsound		= 1
+f_1up_playing:			= 0	; flag indicating 1-up song is playing
+f_speedup:			= 1	; flag indicating whether speed shoes tempo is on ($80) or off ($00)
 v_ring_speaker			= 2	; which speaker the "ring" sound is played in (0 = right; 1 = left)
 f_updating_dac			= 3	; 1 if updating DAC, 0 otherwise
 f_fadein_flag			= 4	; flag for fade in
 f_force_pal_tempo		= 5	; flag for if the current song must play at PAL speed on PAL consoles
 f_doubleupdate			= 6
-f_continuous_sfx		= 7
 
+	if SMPS_PushSFXBehaviour||SMPS_GloopSFXBehaviour||SMPS_EnableSpinDashSFX||SMPS_EnableContSFX
 	misc_flags2:			ds.b 1
+	endif
+	if SMPS_PushSFXBehaviour
 f_push_playing			= 0
-f_1up_playing:			= 1	; flag indicating 1-up song is playing
-f_speedup:			= 2	; flag indicating whether speed shoes tempo is on ($80) or off ($00)
+	endif
+	if SMPS_GloopSFXBehaviour
+v_gloop_toggle			= 1	; if set, prevents further gloop sounds from playing
+	endif
+	if SMPS_EnableSpinDashSFX
+f_spindash_lastsound		= 2
+	endif
+	if SMPS_EnableContSFX
+f_continuous_sfx		= 3
+	endif
 
 SMPS_RAM_Variables ENDSTRUCT
 
