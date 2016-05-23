@@ -1037,9 +1037,8 @@ Sound_PlaySFX:
 	cmpi.b	#sfx_Push,d7			; Is "pushing" sound played?
 	bne.s	.sfx_notPush			; If not, branch
 
-	btst	#f_push_playing,SMPS_RAM.variables.bitfield2(a6)	; Is pushing sound already playing?
-	bne.w	.locret				; Return if not
-	bset	#f_push_playing,SMPS_RAM.variables.bitfield2(a6)	; Mark it as playing
+	bset	#f_push_playing,SMPS_RAM.variables.bitfield2(a6)	; Mark pushing sound as playing
+	bne.w	.locret				; Return if already playing
     endif
 ; Sound_notA7:
 .sfx_notPush:
