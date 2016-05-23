@@ -17,6 +17,7 @@ SMPS_Track STRUCT DOTS
 
 	SavedDAC:		;ds.b 1		; DAC only
 	Freq:			ds.w 1		; FM/PSG only
+
 	StackPointer:		ds.b 1		; All tracks
 	DurationTimeout:	ds.b 1		; All tracks
 	SavedDuration:		ds.b 1		; All tracks
@@ -68,18 +69,18 @@ SMPS_RAM_Variables STRUCT DOTS
 
 	f_voice_selector:		ds.b 1	; $00 = use music voice pointer; $80 = use track voice pointer
 
-		if SMPS_EnableSpinDashSFX
+    if SMPS_EnableSpinDashSFX
 	v_spindash_timer:		ds.b 1
 	v_spindash_pitch:		ds.b 1
-		endif
+    endif
 
 	v_pal_audio_countdown:		ds.b 1
 	v_communication_byte:		ds.b 1
 
-		if SMPS_EnableContSFX
+    if SMPS_EnableContSFX
 	v_current_contsfx:		ds.b 1
 	v_contsfx_channels:		ds.b 1
-		endif
+    endif
 
 	bitfield1:			ds.b 1
 f_1up_playing:			= 0	; flag indicating 1-up song is playing
@@ -90,21 +91,21 @@ f_fadein_flag			= 4	; flag for fade in
 f_force_pal_tempo		= 5	; flag for if the current song must play at PAL speed on PAL consoles
 f_doubleupdate			= 6
 
-	if SMPS_PushSFXBehaviour||SMPS_GloopSFXBehaviour||SMPS_EnableSpinDashSFX||SMPS_EnableContSFX
+    if SMPS_PushSFXBehaviour||SMPS_GloopSFXBehaviour||SMPS_EnableSpinDashSFX||SMPS_EnableContSFX
 	bitfield2:			ds.b 1
-	endif
-	if SMPS_PushSFXBehaviour
+    endif
+    if SMPS_PushSFXBehaviour
 f_push_playing			= 0
-	endif
-	if SMPS_GloopSFXBehaviour
+    endif
+    if SMPS_GloopSFXBehaviour
 v_gloop_toggle			= 1	; if set, prevents further gloop sounds from playing
-	endif
-	if SMPS_EnableSpinDashSFX
+    endif
+    if SMPS_EnableSpinDashSFX
 f_spindash_lastsound		= 2
-	endif
-	if SMPS_EnableContSFX
+    endif
+    if SMPS_EnableContSFX
 f_continuous_sfx		= 3
-	endif
+    endif
 
 SMPS_RAM_Variables ENDSTRUCT
 
