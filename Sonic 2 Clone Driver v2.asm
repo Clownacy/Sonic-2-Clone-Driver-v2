@@ -166,8 +166,8 @@ UpdateMusic:
 	bpl.s	.locret				; Branch if not
 	bra.w	PSGUpdateTrack
 .locret:
-	rts
     endif
+	rts
 ; End of function UpdateMusic
 
 
