@@ -94,6 +94,15 @@ SMPS_UpdateSoundDriver macro
 	endm
 
 ; ---------------------------------------------------------------------------
+; pad RAM to even address
+; ---------------------------------------------------------------------------
+SMPS_RAM_even macro
+    if (*)&1	; pretty much an 'even'
+	ds.b 1
+    endif
+	endm
+
+; ---------------------------------------------------------------------------
 ; helper for sound IDs
 ; ---------------------------------------------------------------------------
 SMPS_id function ptr,((ptr-offset)/ptrsize+idstart)

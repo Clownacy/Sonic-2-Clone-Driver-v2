@@ -44,6 +44,14 @@ SMPS_Track ENDSTRUCT
 ; Global sound driver variables
 ; ---------------------------------------------------------------------------
 SMPS_RAM_Variables STRUCT DOTS
+	SOUND_QUEUES_START:
+	v_playsnd1:			ds.b 1	; music to play	; Clownacy | Note to all, must be on even address!
+	v_playsnd2:			ds.b 1	; sound to play
+	v_playsnd3:			ds.b 1	; secondary sound to play
+	v_playsnd4:			ds.b 1	; secondary music to play
+	SOUND_QUEUES_END:
+	v_playsnd0:			ds.b 1	; sound or music copied from below
+
 	v_sndprio:			ds.b 1	; sound priority (priority of new music/SFX must be higher or equal to this value or it won't play; bit 7 of priority being set prevents this value from changing)
 	v_main_tempo_timeout:		ds.b 1	; Has v_main_tempo added to it; when it carries, delays song by 1 frame
 	v_main_tempo:			ds.b 1	; Used for music only
@@ -57,14 +65,6 @@ SMPS_RAM_Variables STRUCT DOTS
 
 	v_tempo_mod:			ds.b 1	; music - tempo modifier
 	v_speeduptempo:			ds.b 1	; music - tempo modifier with speed shoes
-
-	v_playsnd0:			ds.b 1	; sound or music copied from below
-	SOUND_QUEUES_START:
-	v_playsnd1:			ds.b 1	; music to play	; Clownacy | Note to all, must be on even address!
-	v_playsnd2:			ds.b 1	; sound to play
-	v_playsnd3:			ds.b 1	; secondary sound to play
-	v_playsnd4:			ds.b 1	; secondary music to play
-	SOUND_QUEUES_END:
 
 	f_voice_selector:		ds.b 1	; $00 = use music voice pointer; $80 = use track voice pointer
 
@@ -155,7 +155,9 @@ SMPS_RAM STRUCT DOTS
 	v_1up_psg2_track:	SMPS_Track
 	v_1up_psg3_track:	SMPS_Track
 
+	SMPS_RAM_even
 	variables:		SMPS_RAM_Variables
+	SMPS_RAM_even
 	variables_backup:	SMPS_RAM_Variables
 
 	SMPS_running_flag:	ds.b 1
