@@ -72,16 +72,3 @@ SMPS_PlaySample:
 	SMPS_startZ80
 	rts
 ; End of function SMPS_PlaySample
-
-; ---------------------------------------------------------------------------
-; Update sound driver
-; ---------------------------------------------------------------------------
-SMPS_UpdateSoundDriver:
-	move	#$2300,sr				; enable interrupts (we can accept horizontal interrupts from now on)
-	bset	#0,(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w	; set "SMPS running flag"
-	bne.s	+					; if it was set already, don't call another instance of SMPS
-	jsr	(UpdateMusic).l 			; update Sonic 2 Clone Driver v2
-	clr.b	(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w	; reset "SMPS running flag"
-+
-	rts
-; End of function SMPS_UpdateSoundDriver
