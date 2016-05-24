@@ -1807,7 +1807,7 @@ SlowDownMusic:
 ; loc_7266A: .slowdown_1up:
 SlowDownMusic_1up:
 	move.b	SMPS_RAM.variables_backup.v_tempo_mod(a6),SMPS_RAM.variables_backup.v_main_tempo(a6)
-	bclr	#f_speedup,SMPS_RAM.variables.bitfield1(a6)
+	bclr	#f_speedup,SMPS_RAM.variables_backup.bitfield1(a6)
 	rts
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
