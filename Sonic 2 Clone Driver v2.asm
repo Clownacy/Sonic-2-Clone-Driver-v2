@@ -3111,7 +3111,7 @@ cfChanFMCommand:
 ; 'Sega chant' PCM
 ; ---------------------------------------------------------------------------
 SegaPCM:
-	BINCLUDE	"sound/PCM/Sega PCM.bin"
+	BINCLUDE	"sound/DAC/Sega PCM.pcm"
 SegaPCM_End
 	even
 
