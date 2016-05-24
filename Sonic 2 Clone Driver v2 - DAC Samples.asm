@@ -3,6 +3,8 @@
 ; ---------------------------------------------------------------
 
 ;			| Filename	| Extension	| Folder (if any)
+	IncludeDAC	SegaPCM,	pcm
+
     if SMPS_S1DACSamples||SMPS_S2DACSamples
 	IncludeDAC	Kick,		bin,		Sonic 1 & 2
 	IncludeDAC	Snare,		bin,		Sonic 1 & 2
