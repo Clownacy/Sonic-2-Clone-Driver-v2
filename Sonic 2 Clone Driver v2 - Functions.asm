@@ -26,74 +26,48 @@ SMPS_LoadDACDriver:
 ; Queue sound for play (queue 1)
 ; ---------------------------------------------------------------------------
 ; sub_135E: PlayMusic:
-SMPS_PlayMusic:
-	tst.b	(Clone_Driver_RAM+v_playsnd1).w
+SMPS_QueueSound1:
+	tst.b	(Clone_Driver_RAM+SMPS_RAM.variables.v_playsnd1).w
 	bne.s	+
-	move.b	d0,(Clone_Driver_RAM+v_playsnd1).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.v_playsnd1).w
 	rts
 +
-	move.b	d0,(Clone_Driver_RAM+v_playsnd4).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.v_playsnd4).w
 	rts
-; End of function SMPS_PlayMusic
+; End of function SMPS_QueueSound1
 
 ; ---------------------------------------------------------------------------
 ; Queue sound for play (queue 2)
 ; and optionally only do so if object is on-screen (Sonic engine feature)
 ; ---------------------------------------------------------------------------
 ; sub_137C: PlaySoundLocal:
-SMPS_PlaySoundLocal:
+    if SMPS_EnablePlaySoundLocal
+SMPS_QueueSound2Local:
 	tst.b	render_flags(a0)
 	bpl.s	+	; rts
+    endif
 ; sub_1370: PlaySound:
-SMPS_PlaySound:
-	move.b	d0,(Clone_Driver_RAM+v_playsnd2).w
+SMPS_QueueSound2:
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.v_playsnd2).w
 +	rts
-; End of function SMPS_PlaySoundLocal
+; End of function SMPS_QueueSound2
 
 ; ---------------------------------------------------------------------------
 ; Queue sound for play (queue 3)
 ; ---------------------------------------------------------------------------
 ; sub_1376: PlaySoundStereo:
-SMPS_PlaySound2:
-	move.b	d0,(Clone_Driver_RAM+v_playsnd3).w
+SMPS_QueueSound3:
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.v_playsnd3).w
 	rts
-; End of function SMPS_PlaySound2
+; End of function SMPS_QueueSound3
 
 ; ---------------------------------------------------------------------------
 ; Play a DAC sample
 ; ---------------------------------------------------------------------------
 SMPS_PlaySample:
 	SMPS_stopZ80
+	SMPS_waitZ80
 	move.b  d0,(SMPS_z80_ram+DAC_Number).l
 	SMPS_startZ80
 	rts
 ; End of function SMPS_PlaySample
-
-; ---------------------------------------------------------------------------
-; Pause music
-; ---------------------------------------------------------------------------
-SMPS_PauseMusic:
-	move.b	#1,(Clone_Driver_RAM+f_stopmusic).w
-	rts
-; End of function SMPS_PauseMusic
-
-; ---------------------------------------------------------------------------
-; Unpause music
-; ---------------------------------------------------------------------------
-SMPS_UnpauseMusic:
-	move.b	#$80,(Clone_Driver_RAM+f_stopmusic).w
-	rts
-; End of function SMPS_UnpauseMusic
-
-; ---------------------------------------------------------------------------
-; Update sound driver
-; ---------------------------------------------------------------------------
-SMPS_UpdateSoundDriver:
-	move	#$2300,sr				; enable interrupts (we can accept horizontal interrupts from now on)
-	bset	#0,(Clone_Driver_RAM+SMPS_running_flag).w	; set "SMPS running flag"
-	bne.s	+					; if it was set already, don't call another instance of SMPS
-	jsr	(UpdateMusic).l 			; update Sonic 2 Clone Driver v2
-	clr.b	(Clone_Driver_RAM+SMPS_running_flag).w	; reset "SMPS running flag"
-+
-	rts
-; End of function SMPS_UpdateSoundDriver

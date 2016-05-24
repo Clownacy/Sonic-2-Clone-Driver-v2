@@ -1,13 +1,4 @@
 ; ---------------------------------------------------------------------------
-; Music	macros and constants
-; ---------------------------------------------------------------------------
-SMPS_MUSIC_METADATA macro address,fasttempo,flags
-	dc.l	(fasttempo<<24)|((address|flags)&$FFFFFF)
-	endm
-
-SMPS_MUSIC_METADATA_FORCE_PAL_SPEED = $00000001	; Forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)
-
-; ---------------------------------------------------------------------------
 ; Music metadata (pointers, flags, speed shoes tempos)
 ; ---------------------------------------------------------------------------
 ; byte_71A94: SpeedUpIndex:
