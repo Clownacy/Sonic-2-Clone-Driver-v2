@@ -1790,7 +1790,7 @@ SpeedUpMusic:
 ; loc_7263E: .speedup_1up:
 SpeedUpMusic_1up:
 	move.b	SMPS_RAM.variables_backup.v_speeduptempo(a6),SMPS_RAM.variables_backup.v_main_tempo(a6)
-	bset	#f_speedup,SMPS_RAM.variables.bitfield1(a6)
+	bset	#f_speedup,SMPS_RAM.variables_backup.bitfield1(a6)
 	rts
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
