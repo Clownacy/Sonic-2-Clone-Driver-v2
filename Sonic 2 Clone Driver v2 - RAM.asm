@@ -86,10 +86,9 @@ SMPS_RAM_Variables STRUCT DOTS
 f_1up_playing:			= 0	; flag indicating 1-up song is playing
 f_speedup:			= 1	; flag indicating whether speed shoes tempo is on ($80) or off ($00)
 v_ring_speaker			= 2	; which speaker the "ring" sound is played in (0 = right; 1 = left)
-f_updating_dac			= 3	; 1 if updating DAC, 0 otherwise
-f_fadein_flag			= 4	; flag for fade in
-f_force_pal_tempo		= 5	; flag for if the current song must play at PAL speed on PAL consoles
-f_doubleupdate			= 6
+f_fadein_flag			= 3	; flag for fade in
+f_force_pal_tempo		= 4	; flag for if the current song must play at PAL speed on PAL consoles
+f_doubleupdate			= 5
 
     if SMPS_PushSFXBehaviour||SMPS_GloopSFXBehaviour||SMPS_EnableSpinDashSFX||SMPS_EnableContSFX
 	bitfield2:			ds.b 1

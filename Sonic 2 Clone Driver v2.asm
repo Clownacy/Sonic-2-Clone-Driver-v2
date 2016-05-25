@@ -103,7 +103,6 @@ UpdateMusic:
 	bsr.s	UpdateDAC
 ; loc_71BD4:
 .dacdone:
-	bclr	#f_updating_dac,SMPS_RAM.variables.bitfield1(a6)
 	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7	; 6 FM tracks
 ; loc_71BDA:
 .bgmfmloop:
@@ -177,7 +176,6 @@ UpdateMusic:
 UpdateDAC:
 	subq.b	#1,SMPS_Track.DurationTimeout(a5)	; Has DAC sample timeout expired?
 	bne.s	locret_71CAA			; Return if not
-	bset	#f_updating_dac,SMPS_RAM.variables.bitfield1(a6)	; Set flag to indicate this is the DAC
 	movea.l	SMPS_Track.DataPointer(a5),a4	; DAC track data pointer
 ; loc_71C5E:
 .sampleloop:
@@ -1004,7 +1002,7 @@ ChannelInitBytes:
 ; byte_721BA:
 FMDACInitBytes:
 	; DAC, FM1, FM2, FM3, FM4, FM5, FM6
-	dc.b 6,	0, 1, 2, 4, 5, 6	; first byte is for DAC; then notice the 0, 1, 2 then 4, 5, 6; this is the gap between parts I and II for YM2612 port writes
+	dc.b $16, 0, 1, 2, 4, 5, 6	; first byte is for DAC; then notice the 0, 1, 2 then 4, 5, 6; this is the gap between parts I and II for YM2612 port writes
 ; byte_721C2:
 PSGInitBytes:
 	; PSG1, PSG2, PSG3
@@ -2449,7 +2447,7 @@ cfJumpReturn:
 ; loc_72B14:
 cfFadeInToPrevious:
 	; Clownacy | This is my fix to allow cfFadeInToPrevious to be used on FM/PSG tracks
-	btst	#f_updating_dac,SMPS_RAM.variables.bitfield1(a6)	; Clownacy | Is this running on the DAC channel
+	btst	#4,SMPS_Track.VoiceControl(a5)	; Is this running on the DAC channel
 	bne.s	.dactrack			; If so, branch
 	addq.w	#4,sp				; Tamper return value so we don't return to caller ; Clownacy | FM/PSG requires three addresses be stripped off
 .dactrack:
@@ -2567,8 +2565,8 @@ cfSetTempoDivider:
 cfChangeFMVolume:
 	move.b	(a4)+,d0		; Get parameter
 	add.b	d0,SMPS_Track.Volume(a5)	; Add to current volume
-	btst	#f_updating_dac,SMPS_RAM.variables.bitfield1(a6)
-	bne.w	SetDACVolume
+	btst	#4,SMPS_Track.VoiceControl(a5)	; Is this the DAC track?
+	bne.w	SetDACVolume			; If so, branch
 	bra.w	SendVoiceTL
 ; ===========================================================================
 ; loc_72BAE:
@@ -2819,7 +2817,7 @@ cfStopTrack:
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
 	tst.b	SMPS_Track.VoiceControl(a5)		; Is this a PSG track?
 	bmi.s	.stoppsg			; Branch if yes
-	btst	#f_updating_dac,SMPS_RAM.variables.bitfield1(a6)	; Is this the DAC we are updating?
+	btst	#4,SMPS_Track.VoiceControl(a5)	; Is this the DAC we are updating?
 	bne.w	.locexit			; Exit if yes
 	pea	.stoppedchannel(pc)
 	bra.w	FMNoteOff
