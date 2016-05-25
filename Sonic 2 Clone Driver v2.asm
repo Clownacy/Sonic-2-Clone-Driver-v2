@@ -622,7 +622,7 @@ Sound_ChkValue:	; For the love of god, don't rearrange the order of the groups, 
 	clr.b	SMPS_RAM.variables.v_playsnd0(a6)		; reset	music flag
 
 	; Music
-	cmpi.b	#MusID__First,d7	; Is this after music but before sfx?
+	cmpi.b	#MusID__First,d7	; Is this before music?
 	blo.s	locret_71F4A		; Return if yes
 	cmpi.b	#MusID__End,d7		; Is this music ($01-$1F)?
 	blo.w	Sound_PlayBGM		; Branch if yes
@@ -643,10 +643,10 @@ Sound_ChkValue:	; For the love of god, don't rearrange the order of the groups, 
     endif
 
 	; Comamnds
-	subi.b	#FlgID__First,d7	; Is this after sfx (spec if above code is present) but before $D0?
+	subi.b	#FlgID__First,d7	; Is this after sfx (spec if above code is assembled) but before commands?
 	bcs.s	locret_71F4A		; Return if yes
-	cmpi.b	#FlgID__End-FlgID__First,d7
-	bhs.s	locret_71F4A
+	cmpi.b	#FlgID__End-FlgID__First,d7	; Is this after commands?
+	bhs.s	locret_71F4A			; Return if yes
 	add.w	d7,d7
 	add.w	d7,d7
 	jmp	Sound_ExIndex(pc,d7.w)
