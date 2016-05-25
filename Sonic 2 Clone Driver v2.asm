@@ -2843,10 +2843,10 @@ cfStopTrack:
 	lea	SMPS_RAM.v_spcsfx_fm4_track(a6),a5
 	movea.l	SMPS_Track.VoicePtr(a5),a1	; Get voice pointer
 	bra.s	.gotpointer
-    endif
 ; ===========================================================================
 ; loc_72DA8:
 .getpointer:
+    endif
 	subq.w	#2,d0			; SFX can only use FM3 and up
 	add.w	d0,d0
 	movea.w	(a0,d0.w),a5
@@ -2875,9 +2875,9 @@ cfStopTrack:
 	beq.s	.gotchannelptr			; Branch if yes
 	cmpi.b	#$C0,d0				; Is it PSG 3?
 	beq.s	.gotchannelptr			; Branch if yes
-    endif
 ; loc_72DE0:
 .getchannelptr:
+    endif
 	lea	SFX_BGMChannelRAM(pc),a0
 	lsr.w	#4,d0
 	movea.w	(a0,d0.w),a0
