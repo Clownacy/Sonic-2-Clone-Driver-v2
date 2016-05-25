@@ -642,7 +642,7 @@ Sound_ChkValue:	; For the love of god, don't rearrange the order of the groups, 
 	blo.w	Sound_PlaySpecial	; Branch if yes
     endif
 
-	; Comamnds
+	; Commands
 	subi.b	#FlgID__First,d7	; Is this after sfx (spec if above code is assembled) but before commands?
 	bcs.s	locret_71F4A		; Return if yes
 	cmpi.b	#FlgID__End-FlgID__First,d7	; Is this after commands?
@@ -1104,7 +1104,7 @@ Sound_PlaySFX:
 	movea.l	(a0,d7.w),a3		; SFX data pointer
 	movea.l	a3,a1
 	moveq	#0,d1
-	move.l	(a1)+,d1	; Voice pointer		; Clownacy | Made to read a longword to suit the voices' new absoute pointer
+	move.l	(a1)+,d1	; Voice pointer		; Clownacy | Made to read a longword to suit the voices' new absolute pointer
 ;	add.l	a3,d1		; Relative pointer	; Clownacy | Voice pointers are now absolute, so this isn't needed
 	move.b	(a1)+,d5	; Dividing timing
 	; DANGER! Ugh, this bug.
@@ -1117,7 +1117,7 @@ Sound_PlaySFX:
 	; The value is then multiplied by 4 (the lsl), to suit the longword indexes of SoundIndex.
 	; The result for $3F is $FC. Now do the same to $40, notice something?
 	; The result is $100. We go beyond a single byte, this is the catalyst.
-	; The second line below (move.b) tries to overwrite the register that holds the modifed value... with a byte.
+	; The second line below (move.b) tries to overwrite the register that holds the modified value... with a byte.
 	; So, we blank the *entire* register.
 	; DANGER! there is a missing 'moveq	#0,d7' here, without which SFXes whose
 	; index entry is above $3F will cause a crash. This is actually the same way that
@@ -1682,8 +1682,8 @@ InitMusicPlayback:
 	move.l	SMPS_RAM.variables.v_playsnd1(a6),d6
 
 	; Clear variables
-	lea	SMPS_RAM.variables(a6),a0	; Clear $220 bytes: all variables and music track data
-	move.w	#(SMPS_RAM_Variables.len/4)-1,d1	; Clear $220 bytes: all variables and music track data
+	lea	SMPS_RAM.variables(a6),a0
+	move.w	#(SMPS_RAM_Variables.len/4)-1,d1
 	moveq	#0,d0
 
 ; loc_725E4:
@@ -1699,8 +1699,8 @@ InitMusicPlayback:
     endif
 
 	; Clear music track RAM
-	lea	SMPS_RAM.v_music_track_ram(a6),a0	; Clear $220 bytes: all variables and music track data
-	move.w	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d1	; Clear $220 bytes: all variables and music track data
+	lea	SMPS_RAM.v_music_track_ram(a6),a0
+	move.w	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d1
 
 ; loc_725E4:
 .clearramloop:
@@ -3005,7 +3005,7 @@ cfSetKey:
 ;
 ; For FM tracks, this is a 7-bit value from 0 (lowest volume) to 127 (highest
 ; volume). The value is XOR'ed with 7Fh before being sent, then stripped of the
-; sign bit. The volume change takes effect immediatelly.
+; sign bit. The volume change takes effect immediately.
 ;
 ; For PSG tracks, this is a 4-bit value ranging from 8 (lowest volume) to 78h
 ; (highest volume). The value is shifted 3 bits to the right, XOR'ed with 0Fh
@@ -3029,7 +3029,7 @@ cfSetVolume:
 	bra.w	SendVoiceTL
 ; ===========================================================================
 ; If a continuous SFX is playing, it will continue playing from target address.
-; A loop conuter is decremented (it is initialized to number of SFX tracks)
+; A loop counter is decremented (it is initialized to number of SFX tracks)
 ; for continuous SFX; if the result is zero, the continuous SFX will be flagged
 ; to stop.
 ; Non-continuous SFX do not loop.
@@ -3046,7 +3046,7 @@ cfLoopContinuousSFX:
 
 .continuousmode:
 	subq.b	#1,SMPS_RAM.variables.v_contsfx_channels(a6)		; Mark one channel as processed
-	bne.w	cfJumpTo				; If that wan't the last channel, branch
+	bne.w	cfJumpTo				; If that wasn't the last channel, branch
 	bclr	#f_continuous_sfx,SMPS_RAM.variables.bitfield2(a6)	; If it was, clear flag for continuous playback mode...
 	bra.w	cfJumpTo				; ...and then branch
     endif
@@ -3058,7 +3058,7 @@ cfLoopContinuousSFX:
 ; Has 2 parameter bytes: a 1-byte register selector and a 1-byte register data.
 ;
 cfSendFMI:
-	move.b	(a4)+,d0				; Get YM2612 regigter selector
+	move.b	(a4)+,d0				; Get YM2612 register selector
 	move.b	(a4)+,d1				; Get YM2612 register data
 	bra.w	WriteFMI				; Send it to YM2612
 ; ===========================================================================
@@ -3069,7 +3069,7 @@ cfSendFMI:
 ; Has 2 parameter bytes: a 1-byte register selector and a 1-byte register data.
 ;
 cfChanFMCommand:
-	move.b	(a4)+,d0				; Get YM2612 regigter selector
+	move.b	(a4)+,d0				; Get YM2612 register selector
 	move.b	(a4)+,d1				; Get YM2612 register data
 	bra.w	WriteFMIorII				; Send it to YM2612
 ; ===========================================================================
