@@ -22,12 +22,12 @@ Ptr_SoundProc	equ	Event_SoundProc+1	; Sound process event pointer
 Ptr_Interrupt	equ	Event_Interrupt+1	; Sound interrupt event pointer
 Ptr_EndPlayback	equ	Event_EndPlayback+1	; End playback event pointer
 DAC_Number	equ	0DFFh			; Number of DAC sample to play ($81-based)
-DAC_Volume	equ	0DFEh			; DAC volume
-DAC_Type	equ	0DFDh			; Type of DAC ($00 - music, $FF - SFX), this is effectively an 'ignore volume' flag
 						; There are special numbers to control playback:
 						;	$80	- Stop Playback
 						;	$7F	- Pause Playback
 						;	$00	- Continue Playback
+DAC_Volume	equ	0DFEh			; DAC volume
+DAC_Type	equ	0DFDh			; Type of DAC ($00 - music, $FF - SFX), this is effectively an 'ignore volume' flag
 
 ; Look-up tables
 
