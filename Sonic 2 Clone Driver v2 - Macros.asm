@@ -18,7 +18,7 @@ SMPS_SFX_METADATA macro address,priority,flags
 ; stop the Z80
 ; ---------------------------------------------------------------------------
 SMPS_stopZ80 macro
-	move.w	#$100,(SMPS_z80_bus_request).l
+	jsr	SMPS_stopZ80
 	endm
 
 ; ---------------------------------------------------------------------------
@@ -40,7 +40,29 @@ SMPS_resetZ80 macro
 ; start the Z80
 ; ---------------------------------------------------------------------------
 SMPS_startZ80 macro
+	jsr	SMPS_startZ80
+	endm
+
+; ---------------------------------------------------------------------------
+; stop the Z80
+; ---------------------------------------------------------------------------
+SMPS_stopZ80_basic macro reg
+    if "reg"<>""
+	move.w	reg,(SMPS_z80_bus_request).l
+    else
+	move.w	#$100,(SMPS_z80_bus_request).l
+    endif
+	endm
+
+; ---------------------------------------------------------------------------
+; start the Z80
+; ---------------------------------------------------------------------------
+SMPS_startZ80_basic macro reg
+    if "reg"<>""
+	move.w	reg,(SMPS_z80_bus_request).l
+    else
 	move.w	#0,(SMPS_z80_bus_request).l
+    endif
 	endm
 
 ; ---------------------------------------------------------------------------
