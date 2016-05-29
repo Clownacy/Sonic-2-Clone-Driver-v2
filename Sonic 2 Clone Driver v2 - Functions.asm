@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 ; SoundDriverLoad: JmpTo_SoundDriverLoad 
 SMPS_LoadDACDriver:
-	SMPS_stopZ80_basic
+	SMPS_stopZ80
 	SMPS_resetZ80
 
 	; load Mega PCM (Kosinski-compressed)
@@ -18,7 +18,7 @@ SMPS_LoadDACDriver:
 	nop
 	nop
 	SMPS_resetZ80
-	SMPS_startZ80_basic d1
+	move.w	d1,(SMPS_z80_bus_request).l	; start the Z80
 	rts
 ; End of function SMPS_LoadDACDriver
 
@@ -66,28 +66,9 @@ SMPS_QueueSound3:
 ; ---------------------------------------------------------------------------
 SMPS_PlaySample:
 	SMPS_stopZ80
+	SMPS_waitZ80
 	st.b	(SMPS_z80_ram+DAC_Type).l	; This is a DAC SFX; ignore music DAC volume
 	move.b  d0,(SMPS_z80_ram+DAC_Number).l
 	SMPS_startZ80
 	rts
 ; End of function SMPS_PlaySample
-
-; ---------------------------------------------------------------------------
-; Stop Z80
-; ---------------------------------------------------------------------------
-SMPS_stopZ80:
-	move.w	sr,(Clone_Driver_RAM+SMPS_RAM.SMPS_Saved_SR).w
-	move.w	#$2700,sr
-	SMPS_stopZ80_basic
-	SMPS_waitZ80
-	rts
-; End of function SMPS_stopZ80
-
-; ---------------------------------------------------------------------------
-; Start Z80
-; ---------------------------------------------------------------------------
-SMPS_startZ80:
-	SMPS_startZ80_basic
-	move.w	(Clone_Driver_RAM+SMPS_RAM.SMPS_Saved_SR).w,sr
-	rts
-; End of function SMPS_startZ80

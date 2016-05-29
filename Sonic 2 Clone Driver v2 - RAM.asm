@@ -170,8 +170,6 @@ SMPS_RAM STRUCT DOTS
 	SMPS_RAM_even
 	variables_backup:	SMPS_RAM_Variables
 
-	SMPS_Saved_SR:		ds.w 1
-
 	SMPS_running_flag:	ds.b 1
 SMPS_RAM ENDSTRUCT
 

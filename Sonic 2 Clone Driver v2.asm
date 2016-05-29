@@ -218,6 +218,7 @@ UpdateDAC:
 	; From Vladikcomper:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80
+	SMPS_waitZ80
 	sf.b	(SMPS_z80_ram+DAC_Type).l	; This is music DAC; change according to volume
 	move.b	d0,(SMPS_z80_ram+DAC_Number).l
 	SMPS_startZ80
@@ -502,6 +503,7 @@ DoPauseMusic:
 	; "Playing sample $7F executes pause command."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80
+	SMPS_waitZ80
 	move.b  #$7F,(SMPS_z80_ram+DAC_Number).l	; pause DAC
 	SMPS_startZ80
 
@@ -532,6 +534,7 @@ DoUnpauseMusic:
 	; "Playing sample $00 cancels pause mode."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80
+	SMPS_waitZ80
 	clr.b  (SMPS_z80_ram+DAC_Number).l	; unpause DAC
 	SMPS_startZ80
 
@@ -665,6 +668,7 @@ PlaySega:
     if SMPS_SegaPCM_68k = 0
 
 	SMPS_stopZ80
+	SMPS_waitZ80
 	st.b	(SMPS_z80_ram+DAC_Type).l	; This is a DAC SFX; ignore music DAC volume
 	move.b	#dSega_S2,(SMPS_z80_ram+DAC_Number).l	; Queue Sega PCM
 	SMPS_startZ80
@@ -693,6 +697,7 @@ PlaySega:
 	move.b	#$80,d1		; Enable DAC
 	bsr.w	WriteFMI
 	SMPS_stopZ80
+	SMPS_waitZ80
 	lea	(SMPS_ym2612_a0).l,a0		; Load $A04000 (YM2612 register A0) into a0 for some temporary use
 	lea	(SegaPCM).l,a2			; Load the SEGA PCM sample into a2. It's important that we use a2 since a0 and a1 are going to be used up ahead when reading the joypad ports
 	lea	(SMPS_ym2612_d0).l,a3		; Load $A04001 (YM2612 register D0) into a3
@@ -1656,6 +1661,7 @@ StopSoundAndMusic:
 	; "Playing sample $80 forces to stop playback."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80
+	SMPS_waitZ80
 	move.b  #$80,(SMPS_z80_ram+DAC_Number).l	; stop DAC playback
 	SMPS_startZ80
 
@@ -1887,6 +1893,7 @@ SetDACVolume:
 
 WriteDACVolume:
 	SMPS_stopZ80
+	SMPS_waitZ80
 	move.b	d0,(SMPS_z80_ram+DAC_Volume).l
 	SMPS_startZ80
 	rts
@@ -1982,6 +1989,7 @@ WriteFMIorII:
 ; sub_7272E:
 WriteFMI:
 	SMPS_stopZ80
+	SMPS_waitZ80
 	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
 	SMPS_waitYM					; 24(5/0)
 	move.b	d0,(a0)		; ym2612_a0	; 8(1/1)
@@ -2008,6 +2016,7 @@ WriteFMIIPart:
 ; sub_72764:
 WriteFMII:
 	SMPS_stopZ80
+	SMPS_waitZ80
 	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
 	SMPS_waitYM				; 24(5/0)
 	move.b	d0,2(a0)	; ym2612_a1	; 12(2/1)
@@ -2964,6 +2973,7 @@ cfSilenceStopTrack:
 ;
 cfPlayDACSample:
 	SMPS_stopZ80
+	SMPS_waitZ80
 	st.b	(SMPS_z80_ram+DAC_Type).l	; This is a DAC SFX; ignore music DAC volume
 	move.b	(a4)+,(SMPS_z80_ram+DAC_Number).l
 	SMPS_startZ80
