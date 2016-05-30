@@ -982,18 +982,21 @@ Sound_PlayBGM:
 ; loc_7219A:
 .sendfmnoteoff:
 	lea	SMPS_RAM.v_music_fm_tracks(a6),a5
-	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d4
+	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d5
 ; loc_721A0:
 .fmnoteoffloop:
-	bsr.w	FMNoteOff
+	btst	#2,SMPS_Track.PlaybackControl(a5)
+	bne.s	.nexttrack
+	bsr.w	FMSilenceChannel
+.nexttrack:
 	adda.w	d6,a5
-	dbf	d4,.fmnoteoffloop	; Run all FM tracks
-	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT-1,d4
+	dbf	d5,.fmnoteoffloop	; Run all FM tracks
+	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT-1,d5
 ; loc_721AC:
 .psgnoteoffloop:
 	bsr.w	PSGNoteOff
 	adda.w	d6,a5
-	dbf	d4,.psgnoteoffloop	; Run all PSG tracks
+	dbf	d5,.psgnoteoffloop	; Run all PSG tracks
 
 	addq.w	#4,sp	; Tamper with return value to not return to caller
 	rts
