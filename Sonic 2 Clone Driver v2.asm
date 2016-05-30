@@ -2967,8 +2967,10 @@ cfJumpToGosub:
 ;	bra.w	WriteFMI
 ; ===========================================================================
 cfSilenceStopTrack:
-	pea	cfStopTrack(pc)
-	bra.w	FMSilenceChannel
+	tst.b	SMPS_Track.VoiceControl(a5)	; Is this a PSG track?
+	bmi.w	cfStopTrack			; If so, don't mess with the YM2612
+	bsr.w	FMSilenceChannel
+	bra.w	cfStopTrack
 ; ===========================================================================
 ; Sets a new DAC sample for play.
 ;
