@@ -1582,7 +1582,7 @@ FMSilenceChannel:
 	addq.b	#4,d3
 	dbf	d4,-
 
-	rts
+	bra.w	FMNoteOff
 ; End of function FMSilenceChannel
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
