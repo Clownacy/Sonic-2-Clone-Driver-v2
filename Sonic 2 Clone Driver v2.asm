@@ -1994,11 +1994,11 @@ WriteFMI:
 	SMPS_stopZ80
 	SMPS_waitZ80
 	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
-	SMPS_waitYM					; 24(5/0)
+	SMPS_waitYM				; 24(5/0)
 	move.b	d0,(a0)		; ym2612_a0	; 8(1/1)
-	SMPS_waitYMspec (a0)+			; 8(2/0) + 18(4/0)
+	SMPS_waitYM (a0)+			; 8(2/0) + 18(4/0)
 	move.b	d1,(a0)		; ym2612_d0	; 8(1/1)
-	SMPS_waitYMspec -(a0)			; 10(2/0) + 18(4/0)
+	SMPS_waitYM -(a0)			; 10(2/0) + 18(4/0)
 	move.b	#$2A,(a0)	; ym2612_a0	; 12(2/1)
 	SMPS_startZ80				; Total: 40(7/3) + 78(17/0)
 

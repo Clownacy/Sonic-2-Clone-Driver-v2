@@ -64,26 +64,19 @@ SMPS_startZ80_safe macro
 ; ---------------------------------------------------------------------------
 ; macros to wait for when the YM2612 isn't busy
 ; ---------------------------------------------------------------------------
-SMPS_waitYM macro
+SMPS_waitYM macro target
 	nop		; 4(1/0) ; Gotta give the YM2612 some time to read
 	nop		; 4(1/0)
 	nop		; 4(1/0)
 	; If you're gonna overclock your 68k, you may need to pad this out with more 'nop's to avoid missed writes
-.loop:
-	tst.b	(a0)	; 8(2/0)
-	bmi.s	.loop	; 10(2/0) | 8(1/0)
-	endm	; optimial cycle count: 24(5/0)
-
-SMPS_waitYMspec macro target
-	nop		; 4(1/0) ; Gotta give the YM2612 some time to read
-	nop		; 4(1/0)
-	nop		; 4(1/0)
+    if "target"<>""
 	tst.b	target
 	bpl.s	.skip	; 10(2/0) | 8(1/0)
+    endif
 .loop:	tst.b	(a0)	; 8(2/0)
 	bmi.s	.loop	; 10(2/0) | 8(1/0)
 .skip:
-	endm	; optimal cycle count: 18(4/0) + target test cycles
+	endm	; optimal cycle count: 24(5/0)
 
 ; ---------------------------------------------------------------------------
 ; pause music
