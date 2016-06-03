@@ -52,15 +52,15 @@ UpdateMusic:
     else
 	lea	(Clone_Driver_RAM).w,a6
     endif
-	clr.b	SMPS_RAM.variables.f_voice_selector(a6)
-	tst.b	SMPS_RAM.variables.f_stopmusic(a6)			; Is music paused?
+	clr.b	SMPS_RAM.f_voice_selector(a6)
+	tst.b	SMPS_RAM.f_stopmusic(a6)			; Is music paused?
 	bne.w	DoPauseMusic			; If yes, branch
 	move.b	SMPS_RAM.variables.v_fadeout_counter(a6),d0
 	beq.s	.skipfadeout
 	bsr.w	DoFadeOut
 ; loc_71BA8:
 .skipfadeout:
-	btst	#f_fadein_flag,SMPS_RAM.variables.bitfield1(a6)
+	btst	#f_fadein_flag,SMPS_RAM.variables.bitfield2(a6)
 	beq.s	.skipfadein
 	bsr.w	DoFadeIn
 ; loc_71BB2:
@@ -76,9 +76,9 @@ UpdateMusic:
 ; loc_71BC8:
 .nonewsound:
     if SMPS_EnableSpinDashSFX
-	tst.b   SMPS_RAM.variables.v_spindash_timer(a6)
+	tst.b   SMPS_RAM.v_spindash_timer(a6)
 	beq.s	.notimer
-	subq.b	#1,SMPS_RAM.variables.v_spindash_timer(a6)
+	subq.b	#1,SMPS_RAM.v_spindash_timer(a6)
 .notimer:
     endif
 	; Clownacy | Pretty large rearrangements have been made here for the
@@ -87,12 +87,12 @@ UpdateMusic:
 	; this code is part of that feature's replication
 	btst	#6,(Graphics_Flags).w			; is this a PAL console?
 	beq.s	.updatemusictracks			; if not, branch
-	btst	#f_force_pal_tempo,SMPS_RAM.variables.bitfield1(a6)	; is this song forced to play slow on PAL consoles?
+	btst	#f_force_pal_tempo,SMPS_RAM.variables.bitfield2(a6)	; is this song forced to play slow on PAL consoles?
 	bne.s	.updatemusictracks			; if so, skip the double-update
 	subq.b	#1,SMPS_RAM.variables.v_pal_audio_countdown(a6)		; subtract 1 from the PAL countdown
 	bne.s	.updatemusictracks			; if the PAL countdown is not 0, we are not ready to double-update, branch
 	move.b	#5,SMPS_RAM.variables.v_pal_audio_countdown(a6)		; if the countdown is now at 0, reset the counter...
-	bset	#f_doubleupdate,SMPS_RAM.variables.bitfield1(a6)		; ...and then set the double-update flag
+	bset	#f_doubleupdate,SMPS_RAM.variables.bitfield2(a6)		; ...and then set the double-update flag
 
 .updatemusictracks:
 	bsr.w	TempoWait
@@ -125,11 +125,11 @@ UpdateMusic:
 .bgmpsgnext:
 	dbf	d7,.bgmpsgloop
 
-	bclr	#f_doubleupdate,SMPS_RAM.variables.bitfield1(a6)	; Clear double-update flag
+	bclr	#f_doubleupdate,SMPS_RAM.variables.bitfield2(a6)	; Clear double-update flag
 	bne.s	.updatemusictracks		; Was the flag set? If so, double-update
 
 ;.updatesfxtracks:
-	move.b	#$80,SMPS_RAM.variables.f_voice_selector(a6)					; Now at SFX tracks
+	move.b	#$80,SMPS_RAM.f_voice_selector(a6)					; Now at SFX tracks
 	moveq	#SMPS_SFX_FM_TRACK_COUNT-1,d7	; SFX only has access to 3 FM tracks
 ; loc_71C04:
 .sfxfmloop:
@@ -153,7 +153,7 @@ UpdateMusic:
 	dbf	d7,.sfxpsgloop
 
     if SMPS_EnableSpecSFX
-	move.b	#$40,SMPS_RAM.variables.f_voice_selector(a6)	; Now at special SFX tracks
+	move.b	#$40,SMPS_RAM.f_voice_selector(a6)	; Now at special SFX tracks
 	lea	SMPS_Track.len(a5),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
 	bpl.s	.specfmdone			; Branch if not
@@ -494,9 +494,9 @@ locret_71E48:
 ; loc_71E50: PauseMusic:
 DoPauseMusic:
 	bmi.s	DoUnpauseMusic		; Branch if music is being unpaused
-	cmpi.b	#2,SMPS_RAM.variables.f_stopmusic(a6)
+	cmpi.b	#2,SMPS_RAM.f_stopmusic(a6)
 	beq.w	locret_71EFE
-	move.b	#2,SMPS_RAM.variables.f_stopmusic(a6)
+	move.b	#2,SMPS_RAM.f_stopmusic(a6)
 	bsr.w	FMSilenceAll
 	bsr.w	PSGSilenceAll
 	; From Vladikcomper:
@@ -511,25 +511,25 @@ DoPauseMusic:
 ; ===========================================================================
 ; loc_71E94: .unpausemusic: UnpauseMusic:
 DoUnpauseMusic:
-	clr.b	SMPS_RAM.variables.f_stopmusic(a6)
+	clr.b	SMPS_RAM.f_stopmusic(a6)
 
 	lea	SMPS_RAM.v_music_fmdac_tracks(a6),a5
 	moveq	#SMPS_MUSIC_FM_DAC_TRACK_COUNT-1,d7	; 6 FM + 1 DAC
 	bsr.s	ResumeTrack
 
-	move.b	#$80,SMPS_RAM.variables.f_voice_selector(a6)			; Now at SFX tracks
+	move.b	#$80,SMPS_RAM.f_voice_selector(a6)			; Now at SFX tracks
 	lea	SMPS_RAM.v_sfx_fm_tracks(a6),a5
 	moveq	#SMPS_SFX_FM_TRACK_COUNT-1,d7	; 3 FM
 	bsr.s	ResumeTrack
 
     if SMPS_EnableSpecSFX
-	move.b	#$40,SMPS_RAM.variables.f_voice_selector(a6)			; Now at SFX tracks
+	move.b	#$40,SMPS_RAM.f_voice_selector(a6)			; Now at SFX tracks
 	lea	SMPS_RAM.v_spcsfx_fm_tracks(a6),a5
 	moveq	#SMPS_SPECIAL_SFX_FM_TRACK_COUNT-1,d7	; 1 FM
 	bsr.s	ResumeTrack
     endif
 
-	clr.b	SMPS_RAM.variables.f_voice_selector(a6)			; Now at SFX tracks
+	clr.b	SMPS_RAM.f_voice_selector(a6)			; Now at SFX tracks
 	; From Vladikcomper:
 	; "Playing sample $00 cancels pause mode."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
@@ -739,7 +739,7 @@ Sound_PlayBGM:
 ;    endif
 	cmpi.b	#MusID_ExtraLife,d7	; Is the "extra life" music to be played?
 	bne.s	.bgmnot1up		; If not, branch
-	bset	#f_1up_playing,SMPS_RAM.variables.bitfield1(a6)	; Is a 1-up music playing?
+	bset	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)	; Is a 1-up music playing?
 	bne.s	.bgm_loadMusic		; If yes, branch	; Clownacy | (From S2)
 
 	; Clownacy | Making the music backup share RAM with the SFX tracks makes this code so much more complicated...
@@ -796,7 +796,7 @@ Sound_PlayBGM:
 	move.b	(a0)+,(a1)+
     endif
 
-	;bset	#f_1up_playing,SMPS_RAM.variables.bitfield1(a6)
+	;bset	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
 	clr.b	SMPS_RAM.variables.v_sndprio(a6)		; Clear priority twice?
 	bra.s	.bgm_loadMusic
 ; ===========================================================================
@@ -805,7 +805,7 @@ Sound_PlayBGM:
 	moveq	#0,d0
 	move.b	d0,SMPS_RAM.variables.v_fadein_counter(a6)
 	move.b	d0,SMPS_RAM.variables.v_fadeout_counter(a6)	; Clownacy | (From S2)
-	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield1(a6)
+	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
 ; loc_7202C:
 .bgm_loadMusic:
 	bsr.w	InitMusicPlayback
@@ -817,14 +817,14 @@ Sound_PlayBGM:
 	move.b	(a4,d7.w),SMPS_RAM.variables.v_speeduptempo(a6)
 	bclr	#0,d1				; Clownacy | Is this a forced-PAL tempo song? (we clear PAL tempo flag so it doesn't interfere later on)
 	beq.s	.nopalmode
-	bset	#f_force_pal_tempo,SMPS_RAM.variables.bitfield1(a6) ; Clownacy | If so, set flag
+	bset	#f_force_pal_tempo,SMPS_RAM.variables.bitfield2(a6) ; Clownacy | If so, set flag
 
 .nopalmode:
 	movea.l	d1,a4			; a4 now points to (uncompressed) song data
 	move.l	(a4),d2			; Load voice pointer	; Clownacy | Made to read a longword to suit the voices' new absolute pointer
 	move.b	5+2(a4),d0		; Load tempo		; Clownacy | +2 to accommodate the voices' new longword pointer
 	move.b	d0,SMPS_RAM.variables.v_tempo_mod(a6)
-	btst	#f_speedup,SMPS_RAM.variables.bitfield1(a6)
+	btst	#f_speedup,SMPS_RAM.variables.bitfield2(a6)
 	beq.s	.nospeedshoes
 	move.b	SMPS_RAM.variables.v_speeduptempo(a6),d0
 ; loc_72068:
@@ -1017,30 +1017,30 @@ PSGInitBytes:
 ; ---------------------------------------------------------------------------
 ; Sound_A0toCF:
 Sound_PlaySFX:
-	btst	#f_1up_playing,SMPS_RAM.variables.bitfield1(a6)		; Is 1-up playing?
+	btst	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)		; Is 1-up playing?
 	bne.w	.clear_sndprio			; Exit is it is
 ;	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)		; Is music being faded out?	; Clownacy | S2's driver doesn't bother with this
 ;	bne.w	.clear_sndprio			; Exit if it is
-	btst	#f_fadein_flag,SMPS_RAM.variables.bitfield1(a6)	; Is music being faded in?
+	btst	#f_fadein_flag,SMPS_RAM.variables.bitfield2(a6)	; Is music being faded in?
 	bne.w	.clear_sndprio			; Exit if it is
     if SMPS_EnableSpinDashSFX
-	bclr	#f_spindash_lastsound,SMPS_RAM.variables.bitfield2(a6)
+	bclr	#f_spindash_lastsound,SMPS_RAM.bitfield1(a6)
     endif
 	cmpi.b	#SndID_Ring,d7			; Is ring sound	effect played?
 	bne.s	.sfx_notRing			; If not, branch
-	btst	#v_ring_speaker,SMPS_RAM.variables.bitfield1(a6)	; Is the ring sound playing on right speaker?
+	btst	#v_ring_speaker,SMPS_RAM.bitfield1(a6)	; Is the ring sound playing on right speaker?
 	bne.s	.gotringspeaker			; Branch if not
 	move.b	#SndID_RingLeft,d7		; Play ring sound in left speaker
 ; loc_721EE:
 .gotringspeaker:
-	bchg	#v_ring_speaker,SMPS_RAM.variables.bitfield1(a6)	; Change speaker
+	bchg	#v_ring_speaker,SMPS_RAM.bitfield1(a6)	; Change speaker
 ; Sound_notB5:
 .sfx_notRing:
     if SMPS_PushSFXBehaviour
 	cmpi.b	#sfx_Push,d7			; Is "pushing" sound played?
 	bne.s	.sfx_notPush			; If not, branch
 
-	bset	#f_push_playing,SMPS_RAM.variables.bitfield2(a6)	; Mark pushing sound as playing
+	bset	#f_push_playing,SMPS_RAM.bitfield1(a6)	; Mark pushing sound as playing
 	bne.w	.locret				; Return if already playing
     endif
 ; Sound_notA7:
@@ -1051,7 +1051,7 @@ Sound_PlaySFX:
 	cmpi.b	#SndID_Gloop,d7			; Is bloop/gloop sound played?
 	bne.s	.sfx_notgloop			; If not, branch
 
-	bchg	#v_gloop_toggle,SMPS_RAM.variables.bitfield2(a6)	; Z80 cpl
+	bchg	#v_gloop_toggle,SMPS_RAM.bitfield1(a6)	; Z80 cpl
 	beq.w	.locret				; Is value set to 0? If so, branch
     endif
 
@@ -1059,8 +1059,8 @@ Sound_PlaySFX:
     if SMPS_EnableSpinDashSFX
 	cmpi.b	#SndID_SpindashRev,d7		; Is this the Spin Dash sound?
 	bne.s	.sfx_notspindashrev		; If not, branch
-	move.b	SMPS_RAM.variables.v_spindash_pitch(a6),d0		; Store extra frequency
-	tst.b	SMPS_RAM.variables.v_spindash_timer(a6)		; Is the Spin Dash timer active?
+	move.b	SMPS_RAM.v_spindash_pitch(a6),d0		; Store extra frequency
+	tst.b	SMPS_RAM.v_spindash_timer(a6)		; Is the Spin Dash timer active?
 	bne.s	.sfx_timeractive		; If it is, branch
 	moveq	#-1,d0				; Otherwise, reset frequency (becomes 0 on next line)
 
@@ -1068,11 +1068,11 @@ Sound_PlaySFX:
 	addq.b	#1,d0
 	cmpi.b	#$C,d0				; Has the limit been reached?
 	bhs.s	.sfx_limitreached		; If it has, branch
-	move.b	d0,SMPS_RAM.variables.v_spindash_pitch(a6)		; Otherwise, set new frequency
+	move.b	d0,SMPS_RAM.v_spindash_pitch(a6)		; Otherwise, set new frequency
 
 .sfx_limitreached:
-	bset	#f_spindash_lastsound,SMPS_RAM.variables.bitfield2(a6)	; Set flag
-	move.b	#60,SMPS_RAM.variables.v_spindash_timer(a6)		; Set timer
+	bset	#f_spindash_lastsound,SMPS_RAM.bitfield1(a6)	; Set flag
+	move.b	#60,SMPS_RAM.v_spindash_timer(a6)		; Set timer
 
 .sfx_notspindashrev:
     endif
@@ -1084,7 +1084,7 @@ Sound_PlaySFX:
 	move.b	SMPS_RAM.variables.v_current_contsfx(a6),d0
 	cmp.b	d7,d0					; Is this the same continuous sound that was playing?
 	bne.s	.sfx_notsame				; If not, branch
-	bset	#f_continuous_sfx,SMPS_RAM.variables.bitfield2(a6)	; Set flag for continuous playback mode
+	bset	#f_continuous_sfx,SMPS_RAM.bitfield1(a6)	; Set flag for continuous playback mode
 	subi.b	#SndID__First,d7
 	add.w	d7,d7				; Convert sfx ID into index
 	add.w	d7,d7
@@ -1094,7 +1094,7 @@ Sound_PlaySFX:
 	rts
 
 .sfx_notsame:
-	bclr	#f_continuous_sfx,SMPS_RAM.variables.bitfield2(a6)	; Clear flag for continuous playback mode
+	bclr	#f_continuous_sfx,SMPS_RAM.bitfield1(a6)	; Clear flag for continuous playback mode
 	move.b	d7,SMPS_RAM.variables.v_current_contsfx(a6)		; Mark this as the current continuous SFX
 
 .sfx_notcont:
@@ -1190,9 +1190,9 @@ Sound_PlaySFX:
 	move.b	(a1)+,SMPS_Track.Volume(a5)		; load FM/PSG channel modifier
 	move.b	#1,SMPS_Track.DurationTimeout(a5)		; Set duration of first "note"
     if SMPS_EnableSpinDashSFX
-	btst	#f_spindash_lastsound,SMPS_RAM.variables.bitfield2(a6)	; Is the Spin Dash sound playing?
+	btst	#f_spindash_lastsound,SMPS_RAM.bitfield1(a6)	; Is the Spin Dash sound playing?
 	beq.s	.notspindash				; If not, branch
-	move.b	SMPS_RAM.variables.v_spindash_pitch(a6),d0
+	move.b	SMPS_RAM.v_spindash_pitch(a6),d0
 	add.b	d0,SMPS_Track.Transpose(a5)
 .notspindash:
     endif
@@ -1255,11 +1255,11 @@ SFX_BGMChannelRAM:
     if SMPS_EnableSpecSFX
 ; Sound_D0toDF:
 Sound_PlaySpecial:
-	btst	#f_1up_playing,SMPS_RAM.variables.bitfield1(a6)		; Is 1-up playing?
+	btst	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)		; Is 1-up playing?
 	bne.w	.locret				; Return if so
 ;	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)		; Is music being faded out?	; Clownacy | S2's driver didn't bother with this in Sound_PlaySFX
 ;	bne.w	.locret				; Exit if it is
-	btst	#f_fadein_flag,SMPS_RAM.variables.bitfield1(a6)	; Is music being faded in?
+	btst	#f_fadein_flag,SMPS_RAM.variables.bitfield2(a6)	; Is music being faded in?
 	bne.w	.locret				; Exit if it is
 	lea	(SpecSoundIndex).l,a0
 	subi.b	#SpecID__First,d7		; Make it 0-based
@@ -1487,7 +1487,7 @@ FadeOutMusic:
 ;    endif
 	move.b	#3,SMPS_RAM.variables.v_fadeout_delay(a6)		; Set fadeout delay to 3
 	move.b	#$28,SMPS_RAM.variables.v_fadeout_counter(a6)	; Set fadeout counter
-	bclr	#f_speedup,SMPS_RAM.variables.bitfield1(a6)			; Disable speed shoes tempo
+	bclr	#f_speedup,SMPS_RAM.variables.bitfield2(a6)			; Disable speed shoes tempo
 	rts
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -1679,7 +1679,7 @@ InitMusicPlayback:
 
 	; Save several values
 	move.b	SMPS_RAM.variables.v_sndprio(a6),d3
-	move.b	SMPS_RAM.variables.bitfield1(a6),d4
+	move.b	SMPS_RAM.variables.bitfield2(a6),d4
 	andi.b	#(1<<f_1up_playing)|(1<<f_speedup),d4
 	move.b	SMPS_RAM.variables.v_fadein_counter(a6),d5
 	move.l	SMPS_RAM.variables.v_playsnd1(a6),d6
@@ -1719,7 +1719,7 @@ InitMusicPlayback:
 
 	; Restore the values saved above
 	move.b	d3,SMPS_RAM.variables.v_sndprio(a6)
-	move.b	d4,SMPS_RAM.variables.bitfield1(a6)
+	move.b	d4,SMPS_RAM.variables.bitfield2(a6)
 	move.b	d5,SMPS_RAM.variables.v_fadein_counter(a6)
 	move.l	d6,SMPS_RAM.variables.v_playsnd1(a6)
 	;move.b	d6,SMPS_RAM.variables.v_playsnd0(a6)	; set music to $00 (silence)
@@ -1782,16 +1782,16 @@ TempoWait:	; Clownacy | Ported straight from S3K's Z80 driver
 ; ---------------------------------------------------------------------------
 ; Sound_E2:
 SpeedUpMusic:
-	btst	#f_1up_playing,SMPS_RAM.variables.bitfield1(a6)
+	btst	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
 	bne.s	SpeedUpMusic_1up
 	move.b	SMPS_RAM.variables.v_speeduptempo(a6),SMPS_RAM.variables.v_main_tempo(a6)
-	bset	#f_speedup,SMPS_RAM.variables.bitfield1(a6)
+	bset	#f_speedup,SMPS_RAM.variables.bitfield2(a6)
 	rts
 ; ===========================================================================
 ; loc_7263E: .speedup_1up:
 SpeedUpMusic_1up:
 	move.b	SMPS_RAM.variables_backup.v_speeduptempo(a6),SMPS_RAM.variables_backup.v_main_tempo(a6)
-	bset	#f_speedup,SMPS_RAM.variables_backup.bitfield1(a6)
+	bset	#f_speedup,SMPS_RAM.variables_backup.bitfield2(a6)
 	rts
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -1799,16 +1799,16 @@ SpeedUpMusic_1up:
 ; ---------------------------------------------------------------------------
 ; Sound_E3:
 SlowDownMusic:
-	btst	#f_1up_playing,SMPS_RAM.variables.bitfield1(a6)
+	btst	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
 	bne.s	SlowDownMusic_1up
 	move.b	SMPS_RAM.variables.v_tempo_mod(a6),SMPS_RAM.variables.v_main_tempo(a6)
-	bclr	#f_speedup,SMPS_RAM.variables.bitfield1(a6)
+	bclr	#f_speedup,SMPS_RAM.variables.bitfield2(a6)
 	rts
 ; ===========================================================================
 ; loc_7266A: .slowdown_1up:
 SlowDownMusic_1up:
 	move.b	SMPS_RAM.variables_backup.v_tempo_mod(a6),SMPS_RAM.variables_backup.v_main_tempo(a6)
-	bclr	#f_speedup,SMPS_RAM.variables_backup.bitfield1(a6)
+	bclr	#f_speedup,SMPS_RAM.variables_backup.bitfield2(a6)
 	rts
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -1867,7 +1867,7 @@ DoFadeIn:
 ; ===========================================================================
 ; loc_726D6:
 .fadedone:	; Modified version of MJ's original DAC fade-in fix
-	bclr	#f_fadein_flag,SMPS_RAM.variables.bitfield1(a6)		; Stop fadein
+	bclr	#f_fadein_flag,SMPS_RAM.variables.bitfield2(a6)		; Stop fadein
 	tst.b	SMPS_RAM.v_music_dac_track.PlaybackControl(a6)		; is the DAC channel running?
 	bpl.s	.locret					; if not, return
 ;.DAC:
@@ -2553,9 +2553,9 @@ cfFadeInToPrevious:
 
 	movea.l	a3,a5
 
-	bset	#f_fadein_flag,SMPS_RAM.variables.bitfield1(a6)	; Trigger fade-in
+	bset	#f_fadein_flag,SMPS_RAM.variables.bitfield2(a6)	; Trigger fade-in
 	move.b	#$28,SMPS_RAM.variables.v_fadein_counter(a6)	; Fade-in delay
-	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield1(a6)
+	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
 	addq.w	#8,sp				; Tamper return value so we don't return to caller
 	rts
 ; ===========================================================================
@@ -2636,7 +2636,7 @@ locret_72CAA:
     if SMPS_PushSFXBehaviour
 ; loc_72BEE:
 cfClearPush:
-	bclr	#f_push_playing,SMPS_RAM.variables.bitfield2(a6)	; Allow push sound to be played once more
+	bclr	#f_push_playing,SMPS_RAM.bitfield1(a6)	; Allow push sound to be played once more
 	rts
     endif
 ; ===========================================================================
@@ -2830,7 +2830,7 @@ cfStopTrack:
 	bsr.w	PSGNoteOff
 ; loc_72D78:
 .stoppedchannel:
-	tst.b	SMPS_RAM.variables.f_voice_selector(a6)		; Are we updating SFX?
+	tst.b	SMPS_RAM.f_voice_selector(a6)		; Are we updating SFX?
 	bpl.w	.locexit			; Exit if not
 	clr.b	SMPS_RAM.variables.v_sndprio(a6)			; Clear priority
 	moveq	#0,d0
@@ -3043,7 +3043,7 @@ cfSetVolume:
 ;
     if SMPS_EnableContSFX
 cfLoopContinuousSFX:
-	btst	#f_continuous_sfx,SMPS_RAM.variables.bitfield2(a6)	; Is the flag for continuous playback mode set?
+	btst	#f_continuous_sfx,SMPS_RAM.bitfield1(a6)	; Is the flag for continuous playback mode set?
 	bne.s	.continuousmode				; If so, branch
 	clr.b	SMPS_RAM.variables.v_current_contsfx(a6)			; Communicate that there is no continuous SFX playing
 	addq.w	#2,a4					; Clownacy | Advance reading counter to skip the address
@@ -3052,7 +3052,7 @@ cfLoopContinuousSFX:
 .continuousmode:
 	subq.b	#1,SMPS_RAM.variables.v_contsfx_channels(a6)		; Mark one channel as processed
 	bne.w	cfJumpTo				; If that wasn't the last channel, branch
-	bclr	#f_continuous_sfx,SMPS_RAM.variables.bitfield2(a6)	; If it was, clear flag for continuous playback mode...
+	bclr	#f_continuous_sfx,SMPS_RAM.bitfield1(a6)	; If it was, clear flag for continuous playback mode...
 	bra.w	cfJumpTo				; ...and then branch
     endif
 ; ===========================================================================

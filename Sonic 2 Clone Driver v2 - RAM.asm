@@ -56,7 +56,6 @@ SMPS_RAM_Variables STRUCT DOTS
 	v_sndprio:			ds.b 1	; sound priority (priority of new music/SFX must be higher or equal to this value or it won't play; bit 7 of priority being set prevents this value from changing)
 	v_main_tempo_timeout:		ds.b 1	; Has v_main_tempo added to it; when it carries, delays song by 1 frame
 	v_main_tempo:			ds.b 1	; Used for music only
-	f_stopmusic:			ds.b 1	; flag set to stop music when paused
 
 	v_fadeout_counter:		ds.b 1
 	v_fadeout_delay:		ds.b 1
@@ -67,13 +66,6 @@ SMPS_RAM_Variables STRUCT DOTS
 	v_tempo_mod:			ds.b 1	; music - tempo modifier
 	v_speeduptempo:			ds.b 1	; music - tempo modifier with speed shoes
 
-	f_voice_selector:		ds.b 1	; $00 = use music voice pointer; $80 = use track voice pointer
-
-    if SMPS_EnableSpinDashSFX
-	v_spindash_timer:		ds.b 1
-	v_spindash_pitch:		ds.b 1
-    endif
-
 	v_pal_audio_countdown:		ds.b 1
 	v_communication_byte:		ds.b 1
 
@@ -82,29 +74,12 @@ SMPS_RAM_Variables STRUCT DOTS
 	v_contsfx_channels:		ds.b 1
     endif
 
-	bitfield1:			ds.b 1
+	bitfield2:			ds.b 1
 f_1up_playing:			= 0	; flag indicating 1-up song is playing
 f_speedup:			= 1	; flag indicating whether speed shoes tempo is on ($80) or off ($00)
-v_ring_speaker			= 2	; which speaker the "ring" sound is played in (0 = right; 1 = left)
-f_fadein_flag			= 3	; flag for fade in
-f_force_pal_tempo		= 4	; flag for if the current song must play at PAL speed on PAL consoles
-f_doubleupdate			= 5
-
-    if SMPS_PushSFXBehaviour||SMPS_GloopSFXBehaviour||SMPS_EnableSpinDashSFX||SMPS_EnableContSFX
-	bitfield2:			ds.b 1
-    endif
-    if SMPS_PushSFXBehaviour
-f_push_playing			= 0
-    endif
-    if SMPS_GloopSFXBehaviour
-v_gloop_toggle			= 1	; if set, prevents further gloop sounds from playing
-    endif
-    if SMPS_EnableSpinDashSFX
-f_spindash_lastsound		= 2
-    endif
-    if SMPS_EnableContSFX
-f_continuous_sfx		= 3
-    endif
+f_fadein_flag			= 2	; flag for fade in
+f_force_pal_tempo		= 3	; flag for if the current song must play at PAL speed on PAL consoles
+f_doubleupdate			= 4
 
 SMPS_RAM_Variables ENDSTRUCT
 
@@ -169,6 +144,30 @@ SMPS_RAM STRUCT DOTS
 	variables:		SMPS_RAM_Variables
 	SMPS_RAM_even
 	variables_backup:	SMPS_RAM_Variables
+
+	f_voice_selector:	ds.b 1	; $00 = use music voice pointer; $80 = use track voice pointer
+
+	f_stopmusic:		ds.b 1	; flag set to stop music when paused
+
+	bitfield1:		ds.b 1
+v_ring_speaker			= 0	; which speaker the "ring" sound is played in (0 = right; 1 = left)
+    if SMPS_GloopSFXBehaviour
+v_gloop_toggle			= 1	; if set, prevents further gloop sounds from playing
+    endif
+    if SMPS_EnableSpinDashSFX
+f_spindash_lastsound		= 2
+    endif
+    if SMPS_PushSFXBehaviour
+f_push_playing			= 3
+    endif
+    if SMPS_EnableContSFX
+f_continuous_sfx		= 4
+    endif
+
+    if SMPS_EnableSpinDashSFX
+	v_spindash_timer:	ds.b 1
+	v_spindash_pitch:	ds.b 1
+    endif
 
 	Saved_SR:		ds.b 2
 
