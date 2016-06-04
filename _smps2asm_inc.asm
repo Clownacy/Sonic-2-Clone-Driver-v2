@@ -440,12 +440,12 @@ panRight set $40
 panLeft set $80
 panCentre set $C0
 panCenter set $C0 ; silly Americans :U
-	dc.b	$E0,direction+amsfms
+	dc.b	$FF,$00,direction+amsfms
 	endm
 
 ; E1xx - Set channel frequency displacement to xx
 smpsDetune macro val
-	dc.b	$E1,val
+	dc.b	$FF,$01,val
 	endm
 
 ; Historical version of smpsDetune
@@ -455,12 +455,12 @@ smpsAlterNote macro val
 
 ; E2xx - Useless
 smpsNop macro val
-	dc.b	$E2,val
+	dc.b	$FF,$02,val
 	endm
 
 ; Return (used after smpsCall)
 smpsReturn macro
-	dc.b	$F9
+	dc.b	$FF,$03
 	endm
 
 ; Fade in previous song (ie. 1-Up)
@@ -468,35 +468,35 @@ smpsFade macro val
 	if (SourceDriver>=3) && ("val"<>"") && ("val"<>"$FF")
 		; This is one of those stupid S3+ "fades" that we don't need
 	else
-		dc.b	$E4
+		dc.b	$FF,$04
 	endif
 	endm
 
 ; E5xx - Set channel tempo divider to xx
 smpsChanTempoDiv macro val
-	dc.b	$FA,val
+	dc.b	$FF,$05,val
 	endm
 
 ; E6xx - Alter Volume by xx
 smpsAlterVol macro val
-	dc.b	$E6,val
+	dc.b	$FF,$06,val
 	endm
 
 ; E7 - Prevent attack of next note
-smpsNoAttack	EQU $E7
+smpsNoAttack	EQU $FE
 
 ; E8xx - Set note fill to xx
 smpsNoteFill macro val
 	if SourceDriver>=3
-		dc.b	$FF,$01,val
+		dc.b	$FF,$1D,val
 	else
-		dc.b	$E8,val
+		dc.b	$FF,$08,val
 	endif
 	endm
 
 ; Add xx to channel pitch
 smpsChangeTransposition macro val
-	dc.b	$FB,val
+	dc.b	$FF,$09,val
 	endm
 
 ; Historical version of smpsChangeTransposition
@@ -506,29 +506,29 @@ smpsAlterPitch macro val
 
 ; Set music tempo modifier to xx
 smpsSetTempoMod macro mod
-	dc.b	$FC
+	dc.b	$FF,$0A
 	convertMainTempoMod mod
 	endm
 
 ; Set music tempo divider to xx
 smpsSetTempoDiv macro val
-	dc.b	$EA,val
+	dc.b	$FF,$0B,val
 	endm
 
 ; ECxx - Set Volume to xx
 smpsSetVol macro val
-	dc.b	$FF,$00,val
+	dc.b	$FF,$1C,val
 	endm
 
 ; Works on all drivers
 smpsPSGAlterVol macro vol
-	dc.b	$EC,vol
+	dc.b	$FF,$0C,vol
 	endm
 
 ; Clears pushing sound flag in S1
 smpsClearPush macro
 	if SMPS_PushSFXBehaviour
-		dc.b	$E5
+		dc.b	$FF,$1F
 	else
 		fatal "Go set SMPS_PushSFXBehaviour to 1."
 	endif
@@ -537,7 +537,7 @@ smpsClearPush macro
 ; Stops special SFX (S1 only) and restarts overridden music track
 smpsStopSpecial macro
 	if SMPS_EnableSpecSFX
-		dc.b	$E9
+		dc.b	$FF,$07
 	else
 		fatal "Go set SMPS_EnableSpecSFX to 1."
 	endif
@@ -545,12 +545,12 @@ smpsStopSpecial macro
 
 ; EFxx[yy] - Set Voice of FM channel to xx; xx < 0 means yy present
 smpsSetvoice macro voice,songID
-	dc.b	$EF,voice
+	dc.b	$FF,$0D,voice
 	endm
 
 ; F0wwxxyyzz - Modulation - ww: wait time - xx: modulation speed - yy: change per step - zz: number of steps
 smpsModSet macro wait,speed,change,step
-	dc.b	$F0
+	dc.b	$FF,$0E
 	if SourceDriver>=3
 		dc.b	wait-1,speed,change,conv0To256(step)/conv0To256(speed)-1
 	else
@@ -560,77 +560,77 @@ smpsModSet macro wait,speed,change,step
 
 ; Turn on Modulation
 smpsModOn macro
-	dc.b	$F1
+	dc.b	$FF,$0F
 	endm
 
 ; F2 - End of channel
 smpsStop macro
-	dc.b	$F2
+	dc.b	$FF,$10
 	endm
 
 ; F3xx - PSG waveform to xx
 smpsPSGform macro form
-	dc.b	$F3,form
+	dc.b	$FF,$11,form
 	endm
 
 ; Turn off Modulation
 smpsModOff macro
-	dc.b	$F4
+	dc.b	$FF,$12
 	endm
 
 ; F5xx - PSG voice to xx
 smpsPSGvoice macro voice
-	dc.b	$F5,voice
+	dc.b	$FF,$13,voice
 	endm
 
 ; F6xxxx - Jump to xxxx
 smpsJump macro loc
-	dc.b	$F6
+	dc.b	$FF,$14
 	dc.w	loc-*-1
 	endm
 
 ; F7xxyyzzzz - Loop back to zzzz yy times, xx being the loop index for loop recursion fixing
 smpsLoop macro index,loops,loc
-	dc.b	$F7
+	dc.b	$FF,$15
 	dc.b	index,loops
 	dc.w	loc-*-1
 	endm
 
 ; F8xxxx - Call pattern at xxxx, saving return point
 smpsCall macro loc
-	dc.b	$F8
+	dc.b	$FF,$16
 	dc.w	loc-*-1
 	endm
 ; ---------------------------------------------------------------------------------------------
 ; Alter Volume
 smpsFMAlterVol macro val1
-	dc.b	$E6,val1
+	dc.b	$FF,$06,val1
 	endm
 
 ; S3/S&K/S3D/Clone Driver v2-only coordination flags
 
 ; Silences FM channel then stops as per smpsStop
 smpsStopFM macro
-	dc.b	$E3
+	dc.b	$FF,$18
 	endm
 
 smpsPlayDACSample macro sample
-	dc.b	$FD,sample
+	dc.b	$FF,$19,sample
 	endm
 
 smpsPlaySound macro index
-	dc.b	$EB,index
+	dc.b	$FF,$1A,index
 	endm
 
 ; Set note values to xx-$40
 smpsSetNote macro val
-	dc.b	$FE,val
+	dc.b	$FF,$1B,val
 	endm
 
 ; FCxxxx - Jump to xxxx
 smpsContinuousLoop macro loc
 	if SMPS_EnableContSFX
-		dc.b	$FF,$02
+		dc.b	$FF,$1E
 		dc.w	loc-*-1
 	else
 		fatal "You're using a Continuous SFX, but don't have EnableContSFX set"
@@ -638,12 +638,12 @@ smpsContinuousLoop macro loc
 	endm
 
 smpsFMICommand macro reg,val
-	dc.b	$EE,reg,val
+	dc.b	$FF,$20,reg,val
 	endm
 
 	; Flags ported from other drivers.
 smpsChanFMCommand macro reg,val
-	dc.b	$ED,reg,val
+	dc.b	$FF,$17,reg,val
 	endm
 ; ---------------------------------------------------------------------------------------------
 ; S1/S2 only coordination flag
