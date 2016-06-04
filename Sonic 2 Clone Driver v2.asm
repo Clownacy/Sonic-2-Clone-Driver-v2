@@ -181,7 +181,7 @@ UpdateDAC:
 .sampleloop:
 	moveq	#0,d5
 	move.b	(a4)+,d5		; Get next SMPS unit
-	cmpi.b	#$FE,d5			; Is it a coord. flag?
+	cmpi.b	#$E0,d5			; Is it a coord. flag?
 	blo.s	.notcoord		; Branch if not
 	bsr.w	CoordFlag
 	bra.s	.sampleloop
@@ -279,7 +279,7 @@ FMDoNext:
 .noteloop:
 	moveq	#0,d5
 	move.b	(a4)+,d5		; Get byte from track
-	cmpi.b	#$FE,d5			; Is this a coord. flag?
+	cmpi.b	#$E0,d5			; Is this a coord. flag?
 	blo.s	.gotnote		; Branch if not
 	bsr.w	CoordFlag
 	bra.s	.noteloop
@@ -2064,7 +2064,7 @@ PSGDoNext:
 .noteloop:
 	moveq	#0,d5
 	move.b	(a4)+,d5	; Get byte from track
-	cmpi.b	#$FE,d5		; Is it a coord. flag?
+	cmpi.b	#$E0,d5		; Is it a coord. flag?
 	blo.s	.gotnote	; Branch if not
 	bsr.w	CoordFlag
 	bra.s	.noteloop
@@ -2318,9 +2318,7 @@ PSGSilenceAll:
 
 ; sub_72A5A:
 CoordFlag:
-	cmpi.b	#$FE,d5		; Clownacy | smpsNoAttack doesn't like being two bytes, so it uses the unique $FE byte
-	beq.w	cfPreventAttack
-	move.b	(a4)+,d5	; Clownacy | The true coord flag value follows the $FF
+	subi.w	#$E0,d5
 	add.w	d5,d5
 	add.w	d5,d5
 	jmp	coordflagLookup(pc,d5.w)
@@ -2329,85 +2327,97 @@ CoordFlag:
 ; ===========================================================================
 ; loc_72A64:
 coordflagLookup:
-	bra.w	cfPanningAMSFMS		; $FF, $00	Clownacy | Was $E0
+	bra.w	cfPanningAMSFMS		; $E0
 ; ===========================================================================
-	bra.w	cfDetune		; $FF, $01	Clownacy | Was $E1
+	bra.w	cfDetune		; $E1
 ; ===========================================================================
-	bra.w	cfSetCommunication	; $FF, $02	Clownacy | Was $E2
+	bra.w	cfSetCommunication	; $E2
 ; ===========================================================================
-	bra.w	cfJumpReturn		; $FF, $03	Clownacy | Was $E3
+	bra.w	cfSilenceStopTrack	; $E3
 ; ===========================================================================
-	bra.w	cfFadeInToPrevious	; $FF, $04	Clownacy | Was $E4
-; ===========================================================================
-	bra.w	cfSetTempoDivider	; $FF, $05	Clownacy | Was $E5
-; ===========================================================================
-	bra.w	cfChangeFMVolume	; $FF, $06	Clownacy | Was $E6
-; ===========================================================================
-    if SMPS_EnableSpecSFX
-	bra.w	cfStopSpecialFM4	; $FF, $07	Clownacy | Was $EE
-    else
-	bra.w	cfStopTrack
-    endif
-; ===========================================================================
-	bra.w	cfNoteFill		; $FF, $08	Clownacy | Was $E8
-; ===========================================================================
-	bra.w	cfChangeTransposition	; $FF, $09	Clownacy | Was $E9
-; ===========================================================================
-	bra.w	cfSetTempo		; $FF, $0A	Clownacy | Was $EA
-; ===========================================================================
-	bra.w	cfSetTempoMod		; $FF, $0B	Clownacy | Was $EB
-; ===========================================================================
-	bra.w	cfChangePSGVolume	; $FF, $0C	Clownacy | Was $EC
-; ===========================================================================
-	bra.w	cfSetVoice		; $FF, $0D	Clownacy | Was $EF
-; ===========================================================================
-	bra.w	cfModulation		; $FF, $0E	Clownacy | Was $F0
-; ===========================================================================
-	bra.w	cfEnableModulation	; $FF, $0F	Clownacy | Was $F1
-; ===========================================================================
-	bra.w	cfStopTrack		; $FF, $10	Clownacy | Was $F2
-; ===========================================================================
-	bra.w	cfSetPSGNoise		; $FF, $11	Clownacy | Was $F3
-; ===========================================================================
-	bra.w	cfDisableModulation	; $FF, $12	Clownacy | Was $F4
-; ===========================================================================
-	bra.w	cfSetPSGTone		; $FF, $13	Clownacy | Was $F5
-; ===========================================================================
-	bra.w	cfJumpTo		; $FF, $14	Clownacy | Was $F6
-; ===========================================================================
-	bra.w	cfRepeatAtPos		; $FF, $15	Clownacy | Was $F7
-; ===========================================================================
-	bra.w	cfJumpToGosub		; $FF, $16	Clownacy | Was $F8
-; ===========================================================================
-	bra.w	cfChanFMCommand		; $FF, $17	Clownacy | Brand new
-; ===========================================================================
-	bra.w	cfSilenceStopTrack	; $FF, $18	Clownacy | Brand new
-; ===========================================================================
-	bra.w	cfPlayDACSample		; $FF, $19	Clownacy | Brand new
-; ===========================================================================
-	bra.w	cfPlaySound		; $FF, $1A	Clownacy | Brand new
-; ===========================================================================
-	bra.w	cfSetKey		; $FF, $1B	Clownacy | Brand new
-; ===========================================================================
-	bra.w	cfSetVolume		; $FF, $1C	Clownacy | Brand new
-; ===========================================================================
-	bra.w	cfNoteFillS3K		; $FF, $1D	Clownacy | Brand new
-; ===========================================================================
-    if SMPS_EnableContSFX
-	bra.w	cfLoopContinuousSFX	; $FF, $1E	Clownacy | Brand new
-    else
-	addq.w	#2,a4			; Skip parameters
-	rts
-    endif
+	bra.w	cfFadeInToPrevious	; $E4	; used to be PanAnim (not in S1 driver)
 ; ===========================================================================
     if SMPS_PushSFXBehaviour
-	bra.w	cfClearPush		; $FF, $1F	Clownacy | Was $ED
+	bra.w	cfClearPush		; $E5	; used to be ChgPFMVol (not in S1 driver)
     else
 	rts
 	nop
     endif
 ; ===========================================================================
-	bra.w	cfSendFMI		; $FF, $20	Clownacy | Brand new
+	bra.w	cfChangeFMVolume	; $E6
+; ===========================================================================
+	bra.w	cfPreventAttack		; $E7
+; ===========================================================================
+	bra.w	cfNoteFill		; $E8
+; ===========================================================================
+    if SMPS_EnableSpecSFX
+	bra.w	cfStopSpecialFM4	; $E9	; used to be SetLFO (not in S1 driver)
+    else
+	bra.w	cfStopTrack
+    endif
+; ===========================================================================
+	bra.w	cfSetTempo		; $EA
+; ===========================================================================
+	bra.w	cfPlaySound		; $EB
+; ===========================================================================
+	bra.w	cfChangePSGVolume	; $EC
+; ===========================================================================
+	bra.w	cfChanFMCommand		; $ED
+; ===========================================================================
+	bra.w	cfSendFMI		; $EE
+; ===========================================================================
+	bra.w	cfSetVoice		; $EF
+; ===========================================================================
+	bra.w	cfModulation		; $F0
+; ===========================================================================
+	bra.w	cfEnableModulation	; $F1
+; ===========================================================================
+	bra.w	cfStopTrack		; $F2
+; ===========================================================================
+	bra.w	cfSetPSGNoise		; $F3
+; ===========================================================================
+	bra.w	cfDisableModulation	; $F4
+; ===========================================================================
+	bra.w	cfSetPSGTone		; $F5
+; ===========================================================================
+	bra.w	cfJumpTo		; $F6
+; ===========================================================================
+	bra.w	cfRepeatAtPos		; $F7
+; ===========================================================================
+	bra.w	cfJumpToGosub		; $F8
+; ===========================================================================
+	bra.w	cfJumpReturn		; $F9
+; ===========================================================================
+	bra.w	cfSetTempoDivider	; $FA
+; ===========================================================================
+	bra.w	cfChangeTransposition	; $FB
+; ===========================================================================
+	bra.w	cfSetTempoMod		; $FC
+; ===========================================================================
+	bra.w	cfPlayDACSample		; $FD	; used to be LoadMod (not in S1 driver)
+; ===========================================================================
+	bra.w	cfSetKey		; $FE	; used to be SpcFM3Mode (not in S1 driver)
+; ===========================================================================
+;MetaCoordFlag:				; $FF
+	moveq	#0,d5
+	move.b	(a4)+,d5	; Clownacy | The true coord flag value follows the $FF
+	add.w	d5,d5
+	add.w	d5,d5
+	jmp	metacoordflagLookup(pc,d5.w)
+; End of function MetaCoordFlag
+
+; ===========================================================================
+metacoordflagLookup:
+	bra.w	cfSetVolume		; $FF, $00	; used to be MusPause (not in S1 driver)
+; ===========================================================================
+	bra.w	cfNoteFillS3K		; $FF, $01	; used to be SSGEG (not in S1 driver)
+; ===========================================================================
+    if SMPS_EnableContSFX
+	bra.w	cfLoopContinuousSFX	; $FF, $02	; used to be nothing (not in S1 driver)
+    else
+	addq.w	#2,a4			; Skip parameters
+	rts
+    endif
 ; ===========================================================================
 ; loc_72ACC:
 cfPanningAMSFMS:
@@ -2699,7 +2709,7 @@ SetVoice:
 	bsr.w	WriteFMIorII
 	dbf	d3,.sendvoiceloop
 
-	moveq	#3,d5
+	moveq	#(FMInstrumentTLTable_End-FMInstrumentTLTable)-1,d5
 	move.b	SMPS_Track.Volume(a5),d3	; Track volume attenuation
 ; loc_72C8C:
 .sendtlloop:
