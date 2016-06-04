@@ -2572,12 +2572,15 @@ cfFadeInToPrevious:
 ; loc_72B9E:
 cfSetTempoDivider:
 	move.b	(a4)+,SMPS_Track.TempoDivider(a5)	; Set tempo divider on current track
+.locret:
 	rts
 ; ===========================================================================
 ; loc_72BA4: cfSetVolume:
 cfChangeFMVolume:
 	move.b	(a4)+,d0		; Get parameter
 	add.b	d0,SMPS_Track.Volume(a5)	; Add to current volume
+	tst.b	SMPS_Track.VoiceControl(a5)	; Is this a PSG track?
+	bmi.s	cfSetTempoDivider.locret	; If so, return
 	btst	#4,SMPS_Track.VoiceControl(a5)	; Is this the DAC track?
 	bne.w	SetDACVolume			; If so, branch
 	bra.w	SendVoiceTL
