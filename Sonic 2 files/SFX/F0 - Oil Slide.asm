@@ -13,6 +13,7 @@ Sound70_OilSlide_PSG3:
 
 Sound70_OilSlide_Loop00:
 	dc.b	smpsNoAttack, $03
-	smpsAlterVol        $01
+	;smpsAlterVol        $01
+	smpsPSGAlterVol     $01
 	smpsLoop            $00, $08, Sound70_OilSlide_Loop00
 	smpsStop

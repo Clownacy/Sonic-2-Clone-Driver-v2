@@ -7,3 +7,4 @@ Note that these are not stock; I (Clownacy) have made modifications to these fil
 - Incorrect track transpose value in 'BC - Spin Dash Release.asm'
 - Incorrect smpsVcTotalLevel values in 'D5 - Sliding Spike.asm'
 - Incorrect smpsVcTotalLevel values in 'DC - Fire.asm'
+- Incorrect smpsAlterVol usage in 'F0 - Oil Slide.asm'
