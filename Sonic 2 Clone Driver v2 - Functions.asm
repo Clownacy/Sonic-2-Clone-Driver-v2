@@ -65,9 +65,8 @@ SMPS_QueueSound3:
 ; Play a DAC sample
 ; ---------------------------------------------------------------------------
 SMPS_PlaySample:
-	SMPS_stopZ80
-	SMPS_waitZ80
+	SMPS_stopZ80_safe
 	move.b  d0,(SMPS_z80_ram+DAC_Number).l
-	SMPS_startZ80
+	SMPS_startZ80_safe
 	rts
 ; End of function SMPS_PlaySample

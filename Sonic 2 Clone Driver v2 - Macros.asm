@@ -44,41 +44,52 @@ SMPS_startZ80 macro
 	endm
 
 ; ---------------------------------------------------------------------------
+; stop the Z80
+; ---------------------------------------------------------------------------
+SMPS_stopZ80_safe macro
+	move.w	sr,(Clone_Driver_RAM+SMPS_RAM.Saved_SR).w
+	move.w	#$2700,sr	; mask off interrupts
+	SMPS_stopZ80
+	SMPS_waitZ80
+	endm
+
+; ---------------------------------------------------------------------------
+; start the Z80
+; ---------------------------------------------------------------------------
+SMPS_startZ80_safe macro
+	SMPS_startZ80
+	move.w	(Clone_Driver_RAM+SMPS_RAM.Saved_SR).w,sr
+	endm
+
+; ---------------------------------------------------------------------------
 ; macros to wait for when the YM2612 isn't busy
 ; ---------------------------------------------------------------------------
-SMPS_waitYM macro
+SMPS_waitYM macro target
 	nop		; 4(1/0) ; Gotta give the YM2612 some time to read
 	nop		; 4(1/0)
 	nop		; 4(1/0)
 	; If you're gonna overclock your 68k, you may need to pad this out with more 'nop's to avoid missed writes
-.loop:
-	tst.b	(a0)	; 8(2/0)
-	bmi.s	.loop	; 10(2/0) | 8(1/0)
-	endm	; optimial cycle count: 24(5/0)
-
-SMPS_waitYMspec macro target
-	nop		; 4(1/0) ; Gotta give the YM2612 some time to read
-	nop		; 4(1/0)
-	nop		; 4(1/0)
+    if "target"<>""
 	tst.b	target
 	bpl.s	.skip	; 10(2/0) | 8(1/0)
+    endif
 .loop:	tst.b	(a0)	; 8(2/0)
 	bmi.s	.loop	; 10(2/0) | 8(1/0)
 .skip:
-	endm	; optimal cycle count: 18(4/0) + target test cycles
+	endm	; optimal cycle count: 24(5/0)
 
 ; ---------------------------------------------------------------------------
 ; pause music
 ; ---------------------------------------------------------------------------
 SMPS_PauseMusic macro
-	move.b	#1,(Clone_Driver_RAM+SMPS_RAM.variables.f_stopmusic).w
+	move.b	#1,(Clone_Driver_RAM+SMPS_RAM.f_stopmusic).w
 	endm
 
 ; ---------------------------------------------------------------------------
 ; unpause music
 ; ---------------------------------------------------------------------------
 SMPS_UnpauseMusic macro
-	move.b	#$80,(Clone_Driver_RAM+SMPS_RAM.variables.f_stopmusic).w
+	move.b	#$80,(Clone_Driver_RAM+SMPS_RAM.f_stopmusic).w
 	endm
 
 ; ---------------------------------------------------------------------------
