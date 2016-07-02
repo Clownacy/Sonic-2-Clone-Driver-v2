@@ -1,4 +1,4 @@
-Clownacy's Sonic 2 Clone Driver v2 (v2.5+)
+Clownacy's Sonic 2 Clone Driver v2 (v2.6)
 
 SMPS2ASM and Mega PCM belong to Flamewing and Vladikcomper, respectively.
 
