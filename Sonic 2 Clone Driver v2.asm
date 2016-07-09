@@ -334,17 +334,10 @@ FM_Notes:
 
 ; sub_71D40:
 SetDuration:
-	move.b	d5,d0
-	move.b	SMPS_Track.TempoDivider(a5),d1	; Get dividing timing
-; loc_71D46:
-.multloop:
-	subq.b	#1,d1
-	beq.s	.donemult
-	add.b	d5,d0
-	bra.s	.multloop
-; ===========================================================================
-; loc_71D4E:
-.donemult:
+	move.w	d5,d0
+	moveq	#0,d1
+	move.b	SMPS_Track.TempoDivider(a5),d1
+	mulu.w	d1,d0
 	move.b	d0,SMPS_Track.SavedDuration(a5)	; Save duration
 	move.b	d0,SMPS_Track.DurationTimeout(a5)	; Save duration timeout
 	rts
@@ -2582,17 +2575,11 @@ cfPreventAttack:
 ; ===========================================================================
 cfNoteFillS3K:	; Ported from S3K
 ; S3K's zComputeNoteDuration
+	moveq	#0,d0
+	moveq	#0,d1
 	move.b	(a4)+,d1			; Get parameter
 	move.b	SMPS_Track.TempoDivider(a5),d0	; Get tempo divider for this track
-	subq.b	#1,d0				; Make it into a loop counter
-	beq.s	.skip				; Skip if it was 1
-	move.b	d1,d2
-
-.loop:
-	add.b	d2,d1
-	dbf	d0,.loop	; Multiply the parameter by tempo divider
-
-.skip:
+	mulu.w	d0,d1				; Multiply the parameter by tempo divider
 	move.b	d1,SMPS_Track.NoteFillTimeout(a5)	; Note fill timeout
 	move.b	d1,SMPS_Track.NoteFillMaster(a5)	; Note fill master
 	rts
