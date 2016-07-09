@@ -1859,8 +1859,14 @@ DoFadeIn:
 ;	cmpi.b	#$10,d6				; Is it is < $10?	; Clownacy | This correction is moved to SetPSGVolume (the S2 way)
 ;	blo.s	.sendpsgvol			; Branch if yes
 ;	moveq	#$F,d6				; Limit to $F (maximum attenuation)
+    if SMPS_FixBugs
+	; While the above check is now pointless, we could do with checking for maximum volume
+	cmpi.b	#-1,d6				; Has value underflowed to <0?
+	bne.s	.sendpsgvol			; Branch if not
+	moveq	#0,d6				; Cap at 0 
 ; loc_726C8:
-;.sendpsgvol:
+.sendpsgvol:
+    endif
 	bsr.w	SetPSGVolume
 ; loc_726CC:
 .nextpsg:
