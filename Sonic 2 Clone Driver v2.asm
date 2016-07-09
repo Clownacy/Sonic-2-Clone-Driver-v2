@@ -1328,8 +1328,19 @@ Sound_PlaySpecial:
 ; loc_723A6:
 .doneoverride:
 	tst.b	SMPS_RAM.v_sfx_psg3_track.PlaybackControl(a6)	; Is track playing?
+    if SMPS_FixBugs
+	bpl.s	.PSG3NotOverrided			; Branch if not
+    else
 	bpl.s	.locret					; Branch if not
+    endif
 	bset	#2,SMPS_RAM.v_spcsfx_psg3_track.PlaybackControl(a6) ; Set 'SFX is overriding' track
+    if SMPS_FixBugs
+	; The original driver made the mistake of silencing PSG3 when the
+	; SFX track is using it, not the Special SFX
+	rts
+
+.PSG3NotOverrided:
+    endif
 	ori.b	#$1F,d4					; Command to silence channel
 	lea	(SMPS_psg_input).l,a1
 	move.b	d4,(a1)
