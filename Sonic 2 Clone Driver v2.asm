@@ -1143,14 +1143,22 @@ Sound_PlaySFX:
 	lea	SFX_BGMChannelRAM(pc),a5
 	movea.w	(a5,d3.w),a5
 	bset	#2,SMPS_Track.PlaybackControl(a5)	; Mark music track as being overridden
+    if ~SMPS_FixBugs
+	; This check is in the wrong place: this should prevent PSG 1&2 from trying
+	; to silence the noise channel, but it also stops PSG 1&2 from being
+	; silenced altogether.
 	cmpi.b	#$C0,d4			; Is this PSG 3?
 	bne.s	.sfxoverridedone	; Branch if not
+    endif
 	move.b	d4,d0
-	ori.b	#$1F,d0			; Command to silence PSG 3
-	lea	(SMPS_psg_input).l,a5
-	move.b	d0,(a5)
+	ori.b	#$1F,d0			; Command to silence PSG
+	move.b	d0,(SMPS_psg_input).l
+    if SMPS_FixBugs
+	cmpi.b	#$C0,d4			; Is this PSG 3?
+	bne.s	.sfxoverridedone	; Branch if not
+    endif
 	bchg	#5,d0			; Command to silence noise channel
-	move.b	d0,(a5)
+	move.b	d0,(SMPS_psg_input).l	; Silence PSG 4 (noise), too
 ; loc_7226E:
 .sfxoverridedone:
 	movea.w	SFX_SFXChannelRAM(pc,d3.w),a5
