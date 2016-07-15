@@ -2836,9 +2836,14 @@ cfStopTrack:
 	tst.b	SMPS_Track.VoiceControl(a5)		; Is this a PSG track?
 	bmi.s	.stoppsg			; Branch if yes
 	btst	#4,SMPS_Track.VoiceControl(a5)	; Is this the DAC we are updating?
-	bne.w	.locexit			; Exit if yes
+	bne.w	.stopdacorpwm			; Exit if yes
 	pea	.stoppedchannel(pc)
 	bra.w	FMNoteOff
+; ===========================================================================
+
+.stopdacorpwm:
+	addq.w	#4,sp		; Tamper with return value so we don't go back to caller
+	rts
 ; ===========================================================================
 ; loc_72D74:
 .stoppsg:
