@@ -563,7 +563,7 @@ zmake68kPtr  function addr,8000h+(addr&7FFFh)
 zmake68kBank function addr,(((addr&3F8000h)/8000h))
 
 DAC_Entry macro vPitch,vOffset,vFlags
-	db	vFlags				; 00h	- Flags
+	db	MegaPCM_vFlags			; 00h	- Flags
 	db	vPitch				; 01h	- Pitch
 	db	zmake68kBank(vOffset)		; 02h	- Start Bank
 	db	zmake68kBank(vOffset_End)	; 03h	- End Bank
@@ -576,13 +576,13 @@ DAC_Entry macro vPitch,vOffset,vFlags
 ; ---------------------------------------------------------------
 
 ; flags
-panLR	= 0C0h
-panL	= 80h
-panR	= 40h
-pcm	= 0
-dpcm	= 4
-loop	= 2
-pri	= 1
+MegaPCM_panLR	= 0C0h
+MegaPCM_panL	= 80h
+MegaPCM_panR	= 40h
+MegaPCM_pcm	= 0
+MegaPCM_dpcm	= 4
+MegaPCM_loop	= 2
+MegaPCM_pri	= 1
 
 ; ---------------------------------------------------------------
 ; DAC Samples Table
