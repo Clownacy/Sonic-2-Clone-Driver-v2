@@ -142,7 +142,7 @@ KCVolEnv_0E =		SMPS_id(ptr_kcpsg0E)
 
 ; ---------------------------------------------------------------------------------------------
 ; DAC Equates
-offset :=	DAC_Table
+offset :=	MegaPCM_DAC_Table
 ptrsize :=	8
 idstart :=	$81
 
