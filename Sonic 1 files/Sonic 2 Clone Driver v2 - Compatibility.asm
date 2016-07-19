@@ -30,7 +30,7 @@ SMPS_SegaPCM_68k	= 0
 ;	| If 0, the Z80 and Mega PCM handle the SEGA sample playback. If 1, the 68k handles it. I recommend Z80, as with the 68k version, if overclocked, the sound plays wrongly.
 ;
 SMPS_EnablePlaySoundLocal	= 0
-;	| If 1, SMPS_PlaySoundLocal in included
+;	| If 1, SMPS_PlaySoundLocal is included
 ;
 SMPS_IsOn32X	= 0
 ;	| If 1, DAC driver is made compatible with the 32X
