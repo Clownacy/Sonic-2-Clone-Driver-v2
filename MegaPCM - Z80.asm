@@ -356,7 +356,11 @@ LoadBank:
 	ld	(de), a	; A21
 	rrca
 	ld	(de), a	; A22
+    if SMPS_IsOn32X
+	ld	a,1
+    else
 	xor	a	; a = 0
+    endif
 	ld	(de), a	; A23
 .volume:	; Clownacy | Modified by SetupVolume
 	ld	d,VolumeTbls>>8		; high byte of volume table pointer

@@ -100,7 +100,7 @@ UpdateMusic:
 	lea	SMPS_RAM.v_music_dac_track(a6),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is DAC track playing?
 	bpl.s	.dacdone				; Branch if not
-	bsr.s	UpdateDAC
+	bsr.w	UpdateDAC
 ; loc_71BD4:
 .dacdone:
 	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7	; 6 FM tracks
@@ -124,6 +124,24 @@ UpdateMusic:
 ; loc_71BF8:
 .bgmpsgnext:
 	dbf	d7,.bgmpsgloop
+
+    if SMPS_EnablePWM
+	moveq	#SMPS_MUSIC_PWM_TRACK_COUNT-1,d7	; 4 PWM tracks
+
+.bgmpwmloop:
+	lea	SMPS_Track.len(a5),a5
+	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
+	bpl.s	.bgmpwmnext			; Branch if not
+	bsr.w	PWMUpdateTrack
+
+.bgmpwmnext:
+	dbf	d7,.bgmpwmloop
+
+	move.l	SMPS_RAM.PWM_command(a6),($A15128).l
+	move.l	SMPS_RAM.PWM_command+4(a6),($A1512C).l
+	clr.l	SMPS_RAM.PWM_command(a6)
+	clr.l	SMPS_RAM.PWM_command+4(a6)
+    endif
 
 	bclr	#f_doubleupdate,SMPS_RAM.variables.bitfield2(a6)	; Clear double-update flag
 	bne.s	.updatemusictracks		; Was the flag set? If so, double-update
@@ -246,6 +264,62 @@ locret_71CAA:
 ; Also, $8C-$8D are so slow you may want to skip them.
 ; byte_71CC4:
 ;DAC_sample_rate: dc.b $12, $15, $1C, $1D, $FF, $FF
+
+    if SMPS_EnablePWM
+PWMUpdateTrack:
+	subq.b	#1,SMPS_Track.DurationTimeout(a5)	; Has PWM sample timeout expired?
+	bne.s	locret_71CAA				; Return if not
+	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
+	movea.l	SMPS_Track.DataPointer(a5),a4		; PWM track data pointer
+
+.sampleloop:
+	moveq	#0,d5
+	move.b	(a4)+,d5		; Get next SMPS unit
+	cmpi.b	#$FE,d5			; Is it a coord. flag?
+	blo.s	.notcoord		; Branch if not
+	bsr.w	CoordFlag
+	bra.s	.sampleloop
+; ===========================================================================
+
+.notcoord:
+	tst.b	d5			; Is it a sample?
+	bpl.s	.gotduration		; Branch if not (duration)
+	move.b	d5,SMPS_Track.SavedPWM(a5)	; Store new sample
+	move.b	(a4)+,d5		; Get another byte
+	bpl.s	.gotduration		; Branch if it is a duration
+	subq.w	#1,a4			; Put byte back
+	move.b	SMPS_Track.SavedDuration(a5),SMPS_Track.DurationTimeout(a5) ; Use last duration
+	bra.s	.gotsampleduration
+; ===========================================================================
+
+.gotduration:
+	bsr.w	SetDuration
+
+.gotsampleduration:
+	move.w	a4,SMPS_Track.DataPointer+2(a5)	; Save pointer
+	move.l	a4,d0
+	swap	d0
+	move.b	d0,SMPS_Track.DataPointer+1(a5)	; Save pointer
+
+	lea	SMPS_RAM.PWM_command-8(a6),a0
+	moveq	#0,d1
+	move.b	SMPS_Track.VoiceControl(a5),d1
+
+	move.b	SMPS_Track.SavedPWM(a5),d0
+	cmpi.b	#$80,d0
+	beq.s	.skipVolumeUpdate
+	move.b	SMPS_Track.Volume(a5),(a0,d1.w)
+
+.skipVolumeUpdate:
+	btst	#4,SMPS_Track.PlaybackControl(a5)
+	bne.s	.skipSampleUpdate
+	subi.b	#$81,d0
+	bmi.s	.skipSampleUpdate
+	move.b	d0,1(a0,d1.w)
+
+.skipSampleUpdate:
+	rts
+   endif
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -815,7 +889,7 @@ Sound_PlayBGM:
 .nopalmode:
 	movea.l	d1,a4			; a4 now points to (uncompressed) song data
 	move.l	(a4),d2			; Load voice pointer	; Clownacy | Made to read a longword to suit the voices' new absolute pointer
-	move.b	5+2(a4),d0		; Load tempo		; Clownacy | +2 to accommodate the voices' new longword pointer
+	move.b	4+4+1(a4),d0		; Load tempo		; Clownacy | +2 to accommodate the voices' new longword pointer
 	move.b	d0,SMPS_RAM.variables.v_tempo_mod(a6)
 	btst	#f_speedup,SMPS_RAM.variables.bitfield2(a6)
 	beq.s	.nospeedshoes
@@ -828,20 +902,20 @@ Sound_PlayBGM:
 	move.b	#5,SMPS_RAM.variables.v_pal_audio_countdown(a6)	; Clownacy | "reset PAL update tick to 5 (update immediately)"
 	movea.l	a4,a3
 
-	addq.w	#6+2,a4			; Point past header			; Clownacy | +2 to accommodate the voices' new longword pointer
+	addi.w	#4+4+2,a4			; Point past header			; Clownacy | +2 to accommodate the voices' new longword pointer
     if SMPS_FixBugs
 	; Clownacy | One of Valley Bell's fixes: this vital code is skipped if FM/DAC channels is 0, so it's been moved to avoid that
-	move.b	4+2(a3),d4		; Load tempo dividing timing		; Clownacy | +2 to accommodate the voices' new longword pointer
+	move.b	4+4+0(a3),d4		; Load tempo dividing timing		; Clownacy | +2 to accommodate the voices' new longword pointer
 	moveq	#SMPS_Track.len,d6
 	moveq	#1,d5			; Note duration for first "note"
     endif
 	moveq	#0,d7			; Clownacy | Hey, look! It's the 'moveq	#0,d7' that the other Play_X's were missing!
-	move.b	2+2(a3),d7		; Load number of FM+DAC tracks	; Clownacy | +2 to accommodate the voices' new longword pointer
+	move.b	4+0(a3),d7		; Load number of FM+DAC tracks	; Clownacy | +2 to accommodate the voices' new longword pointer
 	beq.w	.bgm_fmdone		; Branch if zero
 	subq.b	#1,d7
 	move.b	#$C0,d1			; Default AMS+FMS+Panning
     if ~SMPS_FixBugs
-	move.b	4+2(a3),d4		; Load tempo dividing timing		; Clownacy | +2 to accommodate the voices' new longword pointer
+	move.b	4+4+0(a3),d4		; Load tempo dividing timing		; Clownacy | +2 to accommodate the voices' new longword pointer
 	moveq	#SMPS_Track.len,d6
 	moveq	#1,d5			; Note duration for first "note"
     endif
@@ -864,7 +938,6 @@ Sound_PlayBGM:
 	move.b	d6,SMPS_Track.StackPointer(a1)	; Set "gosub" (coord flag F8h) stack init value
 	move.b	d1,SMPS_Track.AMSFMSPan(a1)		; Set AMS/FMS/Panning
 	move.b	d5,SMPS_Track.DurationTimeout(a1)	; Set duration of first "note"
-	moveq	#0,d0
 	move.w	(a4)+,d0			; Load DAC/FM pointer
 	ext.l	d0				; Clownacy | Fix negative pointers
 	add.l	a3,d0				; Relative pointer
@@ -877,7 +950,7 @@ Sound_PlayBGM:
 	adda.w	d6,a1
 	dbf	d7,.bmg_fmloadloop
 
-	cmpi.b	#7,2+2(a3)	; Are 7 (1 x DAC + 6 x FM) tracks defined?	; Clownacy | +2 to accommodate the voices' new longword pointer
+	cmpi.b	#7,4+0(a3)	; Are 7 (1 x DAC + 6 x FM) tracks defined?	; Clownacy | +2 to accommodate the voices' new longword pointer
 	beq.s	.bgm_fmdone
 ; ===========================================================================
 ; loc_720D8:
@@ -899,7 +972,7 @@ Sound_PlayBGM:
 ; loc_72114:
 .bgm_fmdone:
 	moveq	#0,d7
-	move.b	3+2(a3),d7	; Load number of PSG tracks
+	move.b	4+1(a3),d7	; Load number of PSG tracks
 	beq.s	.bgm_psgdone	; Branch if zero
 	subq.b	#1,d7
 	lea	SMPS_RAM.v_music_psg_tracks(a6),a1
@@ -920,7 +993,6 @@ Sound_PlayBGM:
 	move.b	d4,SMPS_Track.TempoDivider(a1)
 	move.b	d6,SMPS_Track.StackPointer(a1)	; Set "gosub" (coord flag F8h) stack init value
 	move.b	d5,SMPS_Track.DurationTimeout(a1)	; Set duration of first "note"
-	moveq	#0,d0
 	move.w	(a4)+,d0			; Load PSG channel pointer
 	ext.l	d0				; Clownacy | Fix negative pointers
 	add.l	a3,d0				; Relative pointer
@@ -935,6 +1007,33 @@ Sound_PlayBGM:
 	dbf	d7,.bgm_psgloadloop
 ; loc_72154:
 .bgm_psgdone:
+
+    if SMPS_EnablePWM
+	moveq	#0,d7
+	move.b	4+2(a3),d7	; Load number of PWM tracks
+	beq.s	.bgm_pwmdone	; Branch if zero
+	subq.b	#1,d7
+	lea	SMPS_RAM.v_music_pwm_tracks(a6),a1
+
+.bgm_pwmloadloop:
+	move.b	#$82,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
+	move.b	d4,SMPS_Track.TempoDivider(a1)
+	move.b	d6,SMPS_Track.StackPointer(a1)	; Set "gosub" (coord flag F8h) stack init value
+	move.b	d5,SMPS_Track.DurationTimeout(a1)	; Set duration of first "note"
+	move.w	(a4)+,d0			; Load PSG channel pointer
+	ext.l	d0				; Clownacy | Fix negative pointers
+	add.l	a3,d0				; Relative pointer
+	move.w	d0,SMPS_Track.DataPointer+2(a1)	; Store track pointer
+	swap	d0
+	move.b	d0,SMPS_Track.DataPointer+1(a1)	; Store track pointer
+	move.b	(a4)+,SMPS_Track.Transpose(a1)	; Load PSG modifier
+	move.b	(a4)+,SMPS_Track.Volume(a1)	; Load PSG modifier
+	adda.w	d6,a1
+	dbf	d7,.bgm_pwmloadloop
+
+.bgm_pwmdone:
+	endif
+
 	lea	SMPS_RAM.v_sfx_track_ram(a6),a1
 	moveq	#SMPS_SFX_TRACK_COUNT-1,d7	; 6 SFX tracks
 ; loc_7215A:
@@ -998,11 +1097,19 @@ ChannelInitBytes:
 ; byte_721BA:
 FMDACInitBytes:
 	; DAC, FM1, FM2, FM3, FM4, FM5, FM6
-	dc.b $16, 0, 1, 2, 4, 5, 6	; first byte is for DAC; then notice the 0, 1, 2 then 4, 5, 6; this is the gap between parts I and II for YM2612 port writes
+	dc.b 6|%10000, 0, 1, 2, 4, 5, 6	; first byte is for DAC; then notice the 0, 1, 2 then 4, 5, 6; this is the gap between parts I and II for YM2612 port writes
+	; %10000 is to mark the track as DAC
 ; byte_721C2:
 PSGInitBytes:
 	; PSG1, PSG2, PSG3
 	dc.b $80, $A0, $C0
+
+    if SMPS_EnablePWM
+PWMInitBytes:
+	; PWM1, PWM2, PWM3, PWM4
+	dc.b $00|%1000, $02|%1000, $04|%1000, $06|%1000
+	; %1000 is to mark the track as PWM
+    endif
 	even
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -2591,6 +2698,10 @@ cfChangeFMVolume:
 	bmi.s	cfSetTempoDivider.locret	; If so, return
 	btst	#4,SMPS_Track.VoiceControl(a5)	; Is this the DAC track?
 	bne.w	SetDACVolume			; If so, branch
+    if SMPS_EnablePWM
+	btst	#3,SMPS_Track.VoiceControl(a5)	; Is this a PWM track?
+	bne.s	cfSetTempoDivider.locret	; If so, return
+    endif
 	bra.w	SendVoiceTL
 ; ===========================================================================
 ; loc_72BAE:
@@ -2832,6 +2943,10 @@ cfEnableModulation:
 ; loc_72D58:
 cfStopTrack:
 	bclr	#7,SMPS_Track.PlaybackControl(a5)	; Stop track
+    if SMPS_EnablePWM
+	btst	#3,SMPS_Track.VoiceControl(a5)		; Is this a PWM track?
+	bne.s	.stopdacorpwm
+    endif
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
 	tst.b	SMPS_Track.VoiceControl(a5)		; Is this a PSG track?
 	bmi.s	.stoppsg			; Branch if yes

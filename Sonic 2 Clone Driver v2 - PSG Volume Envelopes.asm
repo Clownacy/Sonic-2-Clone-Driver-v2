@@ -76,6 +76,23 @@ ptr_s3dpsg04:	dc.l S3D_PSG04
 ptr_s3dpsg28:	dc.l S3D_PSG28
 	endif
 
+	if SMPS_KCPSGEnvelopes
+ptr_kcpsg01:	dc.l KC_PSG01
+ptr_kcpsg02:	dc.l KC_PSG02
+ptr_kcpsg03:	dc.l KC_PSG03
+ptr_kcpsg04:	dc.l KC_PSG04
+ptr_kcpsg05:	dc.l KC_PSG05
+ptr_kcpsg06:	dc.l KC_PSG06
+ptr_kcpsg07:	dc.l KC_PSG07
+ptr_kcpsg08:	dc.l KC_PSG08
+ptr_kcpsg09:	dc.l KC_PSG09
+ptr_kcpsg0A:	dc.l KC_PSG0A
+ptr_kcpsg0B:	dc.l KC_PSG0B
+ptr_kcpsg0C:	dc.l KC_PSG0C
+ptr_kcpsg0D:	dc.l KC_PSG0D
+ptr_kcpsg0E:	dc.l KC_PSG0E
+	endif
+
 ; ---------------------------------------------------------------------------
 ; PSG instruments used in music
 ; ---------------------------------------------------------------------------
@@ -151,6 +168,23 @@ SK_PSG26:	BINCLUDE	"sound/PSG/Sonic 3 & K & 3D/PSG 26 (SK, S3D).bin"
 ; Envelopes found in S3D only
 S3D_PSG04:	BINCLUDE	"sound/PSG/Sonic 3 & K & 3D/PSG 4 (S3D).bin"
 S3D_PSG28:	BINCLUDE	"sound/PSG/Sonic 3 & K & 3D/PSG 28 (S3D).bin"
+	endif
+
+	if SMPS_KCPSGEnvelopes
+KC_PSG01:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG 1.bin"
+KC_PSG02:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG 2.bin"
+KC_PSG03:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG 3.bin"
+KC_PSG04:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG 4.bin"
+KC_PSG05:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG 5.bin"
+KC_PSG06:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG 6.bin"
+KC_PSG07:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG 7.bin"
+KC_PSG08:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG 8.bin"
+KC_PSG09:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG 9.bin"
+KC_PSG0A:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG A.bin"
+KC_PSG0B:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG B.bin"
+KC_PSG0C:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG C.bin"
+KC_PSG0D:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG D.bin"
+KC_PSG0E:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG E.bin"
 	endif
 
 		even

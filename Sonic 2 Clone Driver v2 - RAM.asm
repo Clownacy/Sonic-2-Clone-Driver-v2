@@ -16,6 +16,9 @@ SMPS_Track STRUCT DOTS
 	DataPointer:		ds.l 1		; All tracks
 
 	SavedDAC:		;ds.b 1		; DAC only
+    if SMPS_EnablePWM
+	SavedPWM:		;ds.b 1		; PWM only
+    endif
 	Freq:			ds.w 1		; FM/PSG only
 
 	StackPointer:		ds.b 1		; All tracks
@@ -104,6 +107,14 @@ SMPS_RAM STRUCT DOTS
 	v_music_psg2_track:	SMPS_Track
 	v_music_psg3_track:	SMPS_Track
 	v_music_psg_tracks_end:
+    if SMPS_EnablePWM
+	v_music_pwm_tracks:
+	v_music_pwm1_track:	SMPS_Track
+	v_music_pwm2_track:	SMPS_Track
+	v_music_pwm3_track:	SMPS_Track
+	v_music_pwm4_track:	SMPS_Track
+	v_music_pwm_tracks_end:
+    endif
 	v_music_track_ram_end:
 
 	v_1up_ram_copy:
@@ -139,6 +150,12 @@ SMPS_RAM STRUCT DOTS
 
 	v_1up_psg2_track:	SMPS_Track
 	v_1up_psg3_track:	SMPS_Track
+    if SMPS_EnablePWM
+	v_1up_pwm1_track:	SMPS_Track
+	v_1up_pwm2_track:	SMPS_Track
+	v_1up_pwm3_track:	SMPS_Track
+	v_1up_pwm4_track:	SMPS_Track
+    endif
 
 	SMPS_RAM_even
 	variables:		SMPS_RAM_Variables
@@ -172,6 +189,10 @@ f_continuous_sfx		= 4
 	Saved_SR:		ds.b 2
 
 	SMPS_running_flag:	ds.b 1
+
+    if SMPS_EnablePWM
+	PWM_command:		ds.b 8
+    endif
 SMPS_RAM ENDSTRUCT
 
     if MOMPASS=1

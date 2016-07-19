@@ -121,6 +121,25 @@ sTone_17 = sTone_0A
 sTone_19 = sTone_0C
 sTone_1B = sTone_0C
 	endif
+
+    if SMPS_KCPSGEnvelopes
+; Knuckles' Chaotix
+KCVolEnv_01 =		SMPS_id(ptr_kcpsg01)
+KCVolEnv_02 =		SMPS_id(ptr_kcpsg02)
+KCVolEnv_03 =		SMPS_id(ptr_kcpsg03)
+KCVolEnv_04 =		SMPS_id(ptr_kcpsg04)
+KCVolEnv_05 =		SMPS_id(ptr_kcpsg05)
+KCVolEnv_06 =		SMPS_id(ptr_kcpsg06)
+KCVolEnv_07 =		SMPS_id(ptr_kcpsg07)
+KCVolEnv_08 =		SMPS_id(ptr_kcpsg08)
+KCVolEnv_09 =		SMPS_id(ptr_kcpsg09)
+KCVolEnv_0A =		SMPS_id(ptr_kcpsg0A)
+KCVolEnv_0B =		SMPS_id(ptr_kcpsg0B)
+KCVolEnv_0C =		SMPS_id(ptr_kcpsg0C)
+KCVolEnv_0D =		SMPS_id(ptr_kcpsg0D)
+KCVolEnv_0E =		SMPS_id(ptr_kcpsg0E)
+	endif
+
 ; ---------------------------------------------------------------------------------------------
 ; DAC Equates
 offset :=	DAC_Table
@@ -348,8 +367,14 @@ smpsHeaderVoiceUVB macro
 
 ; Header macros for music (not for SFX)
 ; Header - Set up Channel Usage
-smpsHeaderChan macro fm,psg
+smpsHeaderChan macro fm,psg,pwm
 	dc.b	fm,psg
+	if ("pwm"<>"")
+		dc.b	pwm
+	else
+		dc.b	$00
+	endif
+	dc.b	$00
 	endm
 
 ; Header - Set up Tempo
@@ -399,6 +424,15 @@ smpsHeaderPSG macro loc,pitch,vol,mod,voice
 	dc.w	loc-songStart
 	PSGPitchConvert pitch
 	dc.b	vol,mod,voice
+	endm
+
+; Header - Set up PWM Channel
+smpsHeaderPWM macro loc,pitch,vol
+    if SMPS_EnablePWM
+	smpsHeaderFM loc,pitch,vol
+    else
+	fatal "Go set SMPS_EnablePWM to 1."
+    endif
 	endm
 
 ; Header macros for SFX (not for music)
