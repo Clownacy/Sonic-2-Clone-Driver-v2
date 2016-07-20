@@ -193,7 +193,17 @@ UpdateMusic:
 ; sub_71C4E:
 UpdateDAC:
 	subq.b	#1,SMPS_Track.DurationTimeout(a5)	; Has DAC sample timeout expired?
-	bne.s	locret_71CAA			; Return if not
+	bne.s	.locret					; Return if not
+	bsr.s	DACDoNext
+	bra.s	DACUpdateSample
+.locret:
+	rts
+; End of function UpdateDAC
+
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+DACDoNext:
 	movea.l	SMPS_Track.DataPointer(a5),a4	; DAC track data pointer
 ; loc_71C5E:
 .sampleloop:
@@ -224,14 +234,19 @@ UpdateDAC:
 	move.l	a4,d0
 	swap	d0
 	move.b	d0,SMPS_Track.DataPointer+1(a5)	; Save pointer
+	rts
+; End of function DACDoNext
+
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+DACUpdateSample:
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
-	bne.s	locret_71CAA			; Return if yes
+	bne.s	locret_71CAA				; Return if yes
 	moveq	#0,d0
-	move.b	SMPS_Track.SavedDAC(a5),d0		; Get sample
+	move.b	SMPS_Track.SavedDAC(a5),d0	; Get sample
 	cmpi.b	#$80,d0				; Is it a rest?
 	beq.s	locret_71CAA			; Return if yes
-;	btst	#3,d0				; Is bit 3 set (samples between $88-$8F)?
-;	bne.s	.timpani			; Various timpani
 
 	; From Vladikcomper:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
@@ -243,21 +258,7 @@ UpdateDAC:
 
 locret_71CAA:
 	rts
-; ===========================================================================
-	; From Vladikcomper:
-	; "This removes hardcoded Timpani tempo modifier for old driver.
-	; Certain sample numbers ($88-$8B) were hardcoded to play sample $83 (timpani) with different tempos.
-	; New driver doesn't need it, as you can set this stuff in the DAC table."
-; loc_71CAC:
-;.timpani:
-;	subi.b	#$88,d0			; Convert into an index
-;	move.b	DAC_sample_rate(pc,d0.w),d0
-	; Warning: this affects the raw pitch of sample $83, meaning it will
-	; use this value from then on.
-;	move.b	d0,(z80_dac3_pitch).l
-;	move.b	#$83,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; Use timpani
-;	rts
-; End of function UpdateDAC
+; End of function DACUpdateSample
 
 ; ===========================================================================
 ; Note: this only defines rates for samples $88-$8D, meaning $8E-$8F are invalid.
@@ -265,11 +266,22 @@ locret_71CAA:
 ; byte_71CC4:
 ;DAC_sample_rate: dc.b $12, $15, $1C, $1D, $FF, $FF
 
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
     if SMPS_EnablePWM
 PWMUpdateTrack:
 	subq.b	#1,SMPS_Track.DurationTimeout(a5)	; Has PWM sample timeout expired?
 	bne.s	locret_71CAA				; Return if not
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
+	bsr.s	PWMDoNext
+	bra.s	PWMUpdateSample
+; End of function PWMUpdateTrack
+
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+PWMDoNext:
 	movea.l	SMPS_Track.DataPointer(a5),a4		; PWM track data pointer
 
 .sampleloop:
@@ -300,7 +312,13 @@ PWMUpdateTrack:
 	move.l	a4,d0
 	swap	d0
 	move.b	d0,SMPS_Track.DataPointer+1(a5)	; Save pointer
+	rts
+; End of function PWMDoNext
 
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+PWMUpdateSample:
 	lea	SMPS_RAM.PWM_command-8(a6),a0
 	moveq	#0,d1
 	move.b	SMPS_Track.VoiceControl(a5),d1
@@ -2574,11 +2592,6 @@ cfJumpReturn:
 ; ===========================================================================
 ; loc_72B14:
 cfFadeInToPrevious:
-	; Clownacy | This is my fix to allow cfFadeInToPrevious to be used on FM/PSG tracks
-	btst	#4,SMPS_Track.VoiceControl(a5)	; Is this running on the DAC channel
-	bne.s	.dactrack			; If so, branch
-	addq.w	#4,sp				; Tamper return value so we don't return to caller ; Clownacy | FM/PSG requires three addresses be stripped off
-.dactrack:
 	; Clownacy | We're restoring the variables and tracks separately, as the backed-up variables are now after the backed-up tracks
 	; this is so the backed-up tracks and SFX tracks start at the same place: at the end of the music tracks
 	lea	SMPS_RAM.v_music_track_ram(a6),a0
@@ -2945,20 +2958,15 @@ cfStopTrack:
 	bclr	#7,SMPS_Track.PlaybackControl(a5)	; Stop track
     if SMPS_EnablePWM
 	btst	#3,SMPS_Track.VoiceControl(a5)		; Is this a PWM track?
-	bne.s	.stopdacorpwm
+	bne.w	.locexit
     endif
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
 	tst.b	SMPS_Track.VoiceControl(a5)		; Is this a PSG track?
 	bmi.s	.stoppsg			; Branch if yes
 	btst	#4,SMPS_Track.VoiceControl(a5)	; Is this the DAC we are updating?
-	bne.w	.stopdacorpwm			; Exit if yes
+	bne.w	.locexit			; Exit if yes
 	pea	.stoppedchannel(pc)
 	bra.w	FMNoteOff
-; ===========================================================================
-
-.stopdacorpwm:
-	addq.w	#4,sp		; Tamper with return value so we don't go back to caller
-	rts
 ; ===========================================================================
 ; loc_72D74:
 .stoppsg:
