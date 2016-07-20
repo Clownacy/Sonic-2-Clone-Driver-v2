@@ -8,7 +8,7 @@
 ; Driver's code (Kosinski-compressed)
 ; ---------------------------------------------------------------
 
-Size_of_Mega_PCM_guess = $846
+Size_of_Mega_PCM_guess = $81C
 
 MegaPCM:
 	save
