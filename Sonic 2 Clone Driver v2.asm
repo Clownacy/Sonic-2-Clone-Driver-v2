@@ -2144,8 +2144,6 @@ WriteFMI:
 	SMPS_waitYM -(a0)			; 10(2/0) + 18(4/0)
 	move.b	#$2A,(a0)	; ym2612_a0	; 12(2/1)
 	SMPS_startZ80				; Total: 40(7/3) + 78(17/0)
-
-locret_72714:
 	rts
 ; End of function WriteFMI
 
