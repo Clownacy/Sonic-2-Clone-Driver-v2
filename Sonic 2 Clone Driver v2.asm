@@ -1108,7 +1108,6 @@ Sound_PlayBGM:
 	adda.w	d6,a5
 	dbf	d5,.psgnoteoffloop	; Run all PSG tracks
 
-	addq.w	#4,sp	; Tamper with return value to not return to caller
 	rts
 ; ===========================================================================
 ChannelInitBytes:
