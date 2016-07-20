@@ -129,6 +129,10 @@ MegaPCM_LoadDAC:
 ; ---------------------------------------------------------------
 
 MegaPCM_SetupDAC:
+	; Wait for YM2612
+-	bit	7,(iy+0)
+	jr	nz,-
+
 	ld	(iy+0),2Bh		;
 	ld	(iy+1),80h		; YM => Enable DAC
 	ld	a,(ix+MegaPCM_flags)		; load flags
