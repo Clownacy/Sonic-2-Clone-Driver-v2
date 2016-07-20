@@ -136,11 +136,6 @@ UpdateMusic:
 
 .bgmpwmnext:
 	dbf	d7,.bgmpwmloop
-
-	move.l	SMPS_RAM.PWM_command(a6),($A15128).l
-	move.l	SMPS_RAM.PWM_command+4(a6),($A1512C).l
-	clr.l	SMPS_RAM.PWM_command(a6)
-	clr.l	SMPS_RAM.PWM_command+4(a6)
     endif
 
 	bclr	#f_doubleupdate,SMPS_RAM.variables.bitfield2(a6)	; Clear double-update flag
@@ -319,21 +314,24 @@ PWMDoNext:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 PWMUpdateSample:
-	lea	SMPS_RAM.PWM_command-8(a6),a0
-	moveq	#0,d1
-	move.b	SMPS_Track.VoiceControl(a5),d1
-
 	move.b	SMPS_Track.SavedPWM(a5),d0
-	cmpi.b	#$80,d0
-	beq.s	.skipVolumeUpdate
-	move.b	SMPS_Track.Volume(a5),(a0,d1.w)
+	cmpi.b	#$80,d0				; Is this a rest?
+	beq.s	.skipVolumeUpdate		; If so, skip obtaining volume
+	move.b	SMPS_Track.Volume(a5),d1
+	lsl.w	#8,d1
 
 .skipVolumeUpdate:
-	btst	#4,SMPS_Track.PlaybackControl(a5)
-	bne.s	.skipSampleUpdate
+	btst	#4,SMPS_Track.PlaybackControl(a5)	; Is 'do not attack' enabled?
+	bne.s	.skipSampleUpdate			; If so, skip obtaining sample ID
 	subi.b	#$81,d0
-	bmi.s	.skipSampleUpdate
-	move.b	d0,1(a0,d1.w)
+	bmi.s	.skipSampleUpdate			; If invalid sample ($80-$FF), skip obtaining sample ID
+	move.b	d0,d1
+
+	; Send command
+	moveq	#0,d2
+	move.b	SMPS_Track.VoiceControl(a5),d2
+	lea	($A15128).l,a0
+	move.w	d1,-8(a0,d2.w)
 
 .skipSampleUpdate:
 	rts

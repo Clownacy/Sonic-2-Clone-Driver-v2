@@ -189,10 +189,6 @@ f_continuous_sfx		= 4
 	Saved_SR:		ds.b 2
 
 	SMPS_running_flag:	ds.b 1
-
-    if SMPS_EnablePWM
-	PWM_command:		ds.b 8
-    endif
 SMPS_RAM ENDSTRUCT
 
     if MOMPASS=1
