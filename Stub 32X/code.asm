@@ -727,9 +727,6 @@ Slave_GoToHere:
 		mov.l	#$C0000000, r14
 		jsr	@r14		; Jump into PWM driver's init routine
 		nop
-
-		nop
-		nop
 @loop:
 		nop
 		nop
