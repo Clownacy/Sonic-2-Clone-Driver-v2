@@ -5,9 +5,9 @@
 PWM_Driver:
 	; According to ValleyBell's docs, the driver Chaotix uses
 	; is straight from the 32X SDK.
-	binclude	"sound/Chaotix_PWMDrv (first half).bin"
+	binclude	"sound/Chaotix PWM Driver (first half).bin"
 	dc.l	$22000000|SH2_PWMTable
-	binclude	"sound/Chaotix_PWMDrv (second half).bin"
+	binclude	"sound/Chaotix PWM Driver (second half).bin"
 
 ; ---------------------------------------------------------------
 ; Macros
