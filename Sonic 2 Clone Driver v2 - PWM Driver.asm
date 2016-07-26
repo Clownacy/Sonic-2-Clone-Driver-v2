@@ -2,6 +2,11 @@
 ; Driver's code
 ; ---------------------------------------------------------------
 
+	; align 4, just in case
+	rept (*)&3
+	dc.b $00
+	endm
+
 PWM_Driver:
 	; According to ValleyBell's docs, the driver Chaotix uses
 	; is straight from the 32X SDK.
