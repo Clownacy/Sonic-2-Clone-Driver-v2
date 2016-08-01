@@ -17,7 +17,6 @@
 ; Master CPU
 ; -----------------------------------------------------------------
 
-		phase MasterStart
 SH2_Master
 		dc.l SH2_Entry			; Cold Start PC
 		dc.l M_STACK			; Cold Start SP
@@ -402,16 +401,14 @@ Master_GoToHere:
 		nop
 	
 ; ====================================================================
-		
-		dephase
+
+		align (SlaveStart-CS3)
 
 ; ====================================================================
 ; ---------------------------------------------------------------
 ; Slave CPU
 ; ---------------------------------------------------------------
 
-		align (SlaveStart-CS3)
-		phase SlaveStart
 SH2_Slave:
 		dc.l s_EntryPoint		; Cold Start PC
 		dc.l S_STACK			; Cold Start SP
@@ -757,10 +754,6 @@ Slave_PWMDriverAddress:
 		; This is just to allow the 68k assembler to fix the pointer for us.
 		;dc.l	$02XXXXXX
 		ds.l	1
-
-; ====================================================================
-
-		dephase
 		
 ; ====================================================================
 ; ---------------------------------------------------------------
