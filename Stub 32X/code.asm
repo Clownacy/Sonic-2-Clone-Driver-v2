@@ -399,6 +399,7 @@ Master_GoToHere:
 		nop
 		nop
 		bra	.loop
+		nop
 	
 ; ====================================================================
 		
@@ -748,6 +749,7 @@ Slave_GoToHere:
 		nop
 		nop
 		bra	.loop
+		nop
 
 	ltorg
 
