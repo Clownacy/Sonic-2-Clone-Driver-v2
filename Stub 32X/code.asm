@@ -410,10 +410,7 @@ Master_GoToHere:
 ; Slave CPU
 ; ---------------------------------------------------------------
 
-		rept (SlaveStart)-(*)
-		;align (SlaveStart-CS3)
-		dc.b	0
-		endm
+		align (SlaveStart-CS3)
 		phase SlaveStart
 SH2_Slave:
 		dc.l s_EntryPoint		; Cold Start PC
