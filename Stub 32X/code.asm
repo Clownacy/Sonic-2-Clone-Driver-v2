@@ -3,6 +3,12 @@
 ; SH2
 ; -----------------------------------------------------------------
 
+		CPU SH7600
+		padding off
+		supmode on
+		listing purecode
+		page 0
+
 		include	"shmap.i"
 		include	"shmap68k.i"
 		org CS3
@@ -11,7 +17,7 @@
 ; Master CPU
 ; -----------------------------------------------------------------
 
-		obj MasterStart
+		phase MasterStart
 SH2_Master
 		dc.l SH2_Entry			; Cold Start PC
 		dc.l M_STACK			; Cold Start SP
@@ -28,18 +34,22 @@ SH2_Master
 		dc.l error0			; NMI vector
 		dc.l error0			; User break vector
 
-		dcb.l 19,0			; reserved
+		rept 19
+		dc.l 0				; reserved
+		endm
 
-		dcb.l 32,error0			; Trap vectors
+		rept 32
+		dc.l error0			; Trap vectors
+		endm
 
- 		dc.l main_irq			; Level 1 IRQ
-		dc.l main_irq			; Level 2 & 3 IRQ's
-		dc.l main_irq			; Level 4 & 5 IRQ's
-		dc.l main_irq			; PWM interupt
-		dc.l main_irq			; Command interupt
-		dc.l main_irq			; H Blank interupt
-		dc.l main_irq			; V Blank interupt
-		dc.l main_irq			; Reset Button
+ 		dc.l m_main_irq			; Level 1 IRQ
+		dc.l m_main_irq			; Level 2 & 3 IRQ's
+		dc.l m_main_irq			; Level 4 & 5 IRQ's
+		dc.l m_main_irq			; PWM interupt
+		dc.l m_main_irq			; Command interupt
+		dc.l m_main_irq			; H Blank interupt
+		dc.l m_main_irq			; V Blank interupt
+		dc.l m_main_irq			; Reset Button
 
 ; ====================================================================
 ; ---------------------------------------------------------------
@@ -85,17 +95,17 @@ SH2_Entry:
 		mov	#$e2,r0
 		mov.b	r0,@(_TOCR,r1)		;
 
-@wait_md:
+.wait_md:
 		mov.l	@(comm0,gbr),r0		; wait fo the genesis to finish booting
 		cmp/eq	#0,r0
-		bf	@wait_md
+		bf	.wait_md
 		nop
 
 		mov.l	#"SLAV",r1
-@wait_slave:
+.wait_slave:
 		mov.l	@(comm8,gbr),r0		; wait for the slave to finish booting
 		cmp/eq	r1,r0
-		bf	@wait_slave
+		bf	.wait_slave
 		nop
 
 ; ====================================================================
@@ -124,13 +134,13 @@ m_hotstart:
  		mov.l	#Master_GoToHere,r0
 		jmp	@r0
  		nop
-		lits
+		ltorg
 
 ;-------------------------------------------------------;
 ;UNIFIED IRQ HANDLER
 ;-------------------------------------------------------;
 
-main_irq
+m_main_irq
 		mov.l	r0,@-r15
 		mov.l	r1,@-r15
 		sts.l	pr,@-r15		;save registers
@@ -138,7 +148,7 @@ main_irq
 		stc	sr,r0			;SR holds IRQ level
 		shlr2	r0
 		and	#$3C,r0
-		mov.l	#inttable,r1
+		mov.l	#m_inttable,r1
 		add	r1,r0			;create index into IRQ table
 		mov.l	@r0,r1			;fetch address
 		jsr	@r1			;call IRQ service routine
@@ -149,34 +159,34 @@ main_irq
 		mov.l	@r15+,r0
 		rte				;return from exception
 		nop
-		lits
+		ltorg
 
 ;-------------------------------------------------------;
 ;IRQ TABLE
 ;-------------------------------------------------------;
 	align	4
-inttable
-		dc.l invalid_irq
-		dc.l invalid_irq
-		dc.l invalid_irq
-		dc.l invalid_irq
-		dc.l invalid_irq
-		dc.l invalid_irq
-		dc.l pwm_irq
-		dc.l pwm_irq
-		dc.l cmd_irq
-		dc.l cmd_irq
-		dc.l h_irq
-		dc.l h_irq
-		dc.l v_irq
-		dc.l v_irq
-		dc.l vres_irq
-		dc.l vres_irq
+m_inttable
+		dc.l m_invalid_irq
+		dc.l m_invalid_irq
+		dc.l m_invalid_irq
+		dc.l m_invalid_irq
+		dc.l m_invalid_irq
+		dc.l m_invalid_irq
+		dc.l m_pwm_irq
+		dc.l m_pwm_irq
+		dc.l m_cmd_irq
+		dc.l m_cmd_irq
+		dc.l m_h_irq
+		dc.l m_h_irq
+		dc.l m_v_irq
+		dc.l m_v_irq
+		dc.l m_vres_irq
+		dc.l m_vres_irq
 
 ;-------------------------------------------------------;
 ;INVALID IRQ
 ;-------------------------------------------------------;
-invalid_irq
+m_invalid_irq
 		rts		;return back to mainline
 		nop
 
@@ -184,7 +194,7 @@ invalid_irq
 ;	VRES Interrupt
 ;---------------------------------------------------------------*
 
-vres_irq:
+m_vres_irq:
 		mov.l	#_sysreg,r0
 		ldc	r0,gbr
 
@@ -194,17 +204,17 @@ vres_irq:
 		mov.b	@(_TOCR,r1),r0		;
 		or	#$01,r0		;
 		mov.b	r0,@(_TOCR,r1)		;
-vresloop:
-		bra	vresloop
+.vresloop:
+		bra	.vresloop
 		nop
 
-		lits
+		ltorg
 
 ;---------------------------------------------------------------*
 ;	V Interrupt
 ;---------------------------------------------------------------*
 
-v_irq:
+m_v_irq:
 	mov.l	r2,@-r15
 	stc.l	gbr,@-r15	;save regs
 
@@ -226,7 +236,7 @@ v_irq:
 	nop		;delay 2 cycles as required
 	nop
 
-	mov.l	#TH+vcounter,r1
+	mov.l	#TH+m_vcounter,r1
 	mov.l	@r1,r0
 	add	#1,r0	;do some work
 	mov.l	r0,@r1
@@ -239,15 +249,15 @@ v_irq:
 
 	align	4
 
-vcounter		dc.l $00000000
+m_vcounter		dc.l $00000000
 
-	lits
+	ltorg
 
 ;---------------------------------------------------------------*
 ;	H Interrupt
 ;---------------------------------------------------------------*
 
-h_irq:
+m_h_irq:
 
 	stc.l	gbr,@-r15	;save regs
 
@@ -270,7 +280,7 @@ h_irq:
 	nop		;delay 2 cycles as required
 	nop
 
-	mov.l	#TH+hcounter,r1
+	mov.l	#TH+m_hcounter,r1
 	mov.l	@r1,r0
 	add	#1,r0	;do some work
 	mov.l	r0,@r1
@@ -281,15 +291,15 @@ h_irq:
 	nop		;RTS!!
 
 	align	4
-hcounter		dc.l $00000000
+m_hcounter		dc.l $00000000
 
-	lits
+	ltorg
 
 ;---------------------------------------------------------------*
 ;	CMD Interrupt
 ;---------------------------------------------------------------*
 
-cmd_irq:
+m_cmd_irq:
 	mov.l	r2,@-r15
 	stc.l	gbr,@-r15	;save regs
 
@@ -312,7 +322,7 @@ cmd_irq:
 	nop		;delay 2 cycles as required
 	nop
 
-	mov.l	#TH+cmdcounter,r1
+	mov.l	#TH+m_cmdcounter,r1
 	mov.l	@r1,r0
 	add	#1,r0	;do some work
 	mov.l	r0,@r1
@@ -324,16 +334,16 @@ cmd_irq:
 	nop		;RTS!!
 
 	align	4
-cmdcounter		dc.l $00000000
+m_cmdcounter		dc.l $00000000
 
-	lits
+	ltorg
 
 
 ;---------------------------------------------------------------*
 ;	PWM Interrupt
 ;---------------------------------------------------------------*
 
-pwm_irq:
+m_pwm_irq:
 	stc.l	gbr,@-r15	;save regs
 
 	mov.l	#_sysreg,r0
@@ -359,7 +369,7 @@ pwm_irq:
 	rts		;return to unified IRQ handler
 	nop		;RTS!!
 
-	lits
+	ltorg
 
 ;---------------------------------------------------------------*
 ;	ERROR
@@ -369,7 +379,7 @@ error0:
 	bra	error0	;bad IRQ HALT
 	nop
 
-	lits
+	ltorg
 
 ; =================================================================
 ; -------------------------------------------
@@ -385,26 +395,29 @@ error0:
 Master_GoToHere:
 		nop
 		nop
-@loop:
+.loop:
 		nop
 		nop
-		bra	@loop
+		bra	.loop
 	
 ; ====================================================================
 		
-		objend
+		dephase
 
 ; ====================================================================
 ; ---------------------------------------------------------------
 ; Slave CPU
 ; ---------------------------------------------------------------
 
-		cnop 0,(SlaveStart-CS3)
-		obj SlaveStart
+		rept (SlaveStart)-(*)
+		;align (SlaveStart-CS3)
+		dc.b	0
+		endm
+		phase SlaveStart
 SH2_Slave:
-		dc.l @EntryPoint		; Cold Start PC
+		dc.l s_EntryPoint		; Cold Start PC
 		dc.l S_STACK			; Cold Start SP
-		dc.l @EntryPoint		; Manual Reset PC
+		dc.l s_EntryPoint		; Manual Reset PC
 		dc.l S_STACK			; Manual Reset SP
 
 		dc.l error0			; Illegal instruction
@@ -417,25 +430,29 @@ SH2_Slave:
 		dc.l error0			; NMI vector
 		dc.l error0			; User break vector
 
-		dcb.l 19,0			; reserved
+		rept 19
+		dc.l 0				; reserved
+		endm
 
-		dcb.l 32,error0			; Trap vectors
+		rept 32
+		dc.l error0			; Trap vectors
+		endm
 
-		dc.l main_irq_s			; Level 1 IRQ
-		dc.l main_irq_s			; Level 2 & 3 IRQ's
-		dc.l main_irq_s			; Level 4 & 5 IRQ's
-		dc.l main_irq_s			; PWM interupt
-		dc.l main_irq_s			; Command interupt
-		dc.l main_irq_s			; H Blank interupt
-		dc.l main_irq_s			; V Blank interupt
-		dc.l main_irq_s			; Reset Button
+		dc.l s_main_irq			; Level 1 IRQ
+		dc.l s_main_irq			; Level 2 & 3 IRQ's
+		dc.l s_main_irq			; Level 4 & 5 IRQ's
+		dc.l s_main_irq			; PWM interupt
+		dc.l s_main_irq			; Command interupt
+		dc.l s_main_irq			; H Blank interupt
+		dc.l s_main_irq			; V Blank interupt
+		dc.l s_main_irq			; Reset Button
 
 ; ====================================================================
 ; ---------------------------------------------------------------
 ; Entry point
 ; ---------------------------------------------------------------
 
-@EntryPoint:
+s_EntryPoint:
 		mov.l	#_sysreg,r14
 		ldc	r14,gbr
 
@@ -455,10 +472,10 @@ SH2_Slave:
 		mov	#$00,r0
 		mov.b	r0,@(_FRC_L,r1)		;
 		mov.b	r0,@(_FRC_H,r1)		;
-wait_md:
+.wait_md:
 		mov.l	@(comm0,gbr),r0
 		cmp/eq	#0,r0
-		bf	wait_md
+		bf	.wait_md
 	
 		mov.l	#"SLAV",r0
 		mov.l	r0,@(comm8,gbr)
@@ -496,14 +513,14 @@ s_hotstart:
  		mov.l	#Slave_GoToHere,r0
 		jmp	@r0
  		nop
-		lits
+		ltorg
 		
 ; =====================================================================
 ;-------------------------------------------------------;
 ;UNIFIED IRQ HANDLER
 ;-------------------------------------------------------;
 
-main_irq_s:
+s_main_irq:
 		mov.l	r0,@-r15
 		mov.l	r1,@-r15
 		mov.l	r2,@-r15
@@ -519,7 +536,7 @@ main_irq_s:
 		mov.l	r1,r0
 		shlr2	r0
 		and	#$3C,r0
-		mov.l	#@inttable,r1
+		mov.l	#s_inttable,r1
 		mov.l	@(r0,r1),r0
 		jsr	@r0		;call IRQ service routine
 		nop
@@ -531,35 +548,35 @@ main_irq_s:
 	
 		rte			;return from exception
 		nop
-		lits
+		ltorg
 
 ;-------------------------------------------------------;
 ;IRQ TABLE
 ;-------------------------------------------------------;
 		.align	4
-@inttable
-		dc.l @invalid_irq
-		dc.l @invalid_irq
-		dc.l @invalid_irq
-		dc.l @invalid_irq
-		dc.l @invalid_irq
-		dc.l @invalid_irq
+s_inttable
+		dc.l s_invalid_irq
+		dc.l s_invalid_irq
+		dc.l s_invalid_irq
+		dc.l s_invalid_irq
+		dc.l s_invalid_irq
+		dc.l s_invalid_irq
 		dc.l $C0000004	; PWM driver's update routine
 		dc.l $C0000004	; PWM driver's update routine
-		dc.l @cmd_irq
-		dc.l @cmd_irq
-		dc.l @h_irq
-		dc.l @h_irq
-		dc.l @v_irq
-		dc.l @v_irq
-		dc.l @vres_irq
-		dc.l @vres_irq
+		dc.l s_cmd_irq
+		dc.l s_cmd_irq
+		dc.l s_h_irq
+		dc.l s_h_irq
+		dc.l s_v_irq
+		dc.l s_v_irq
+		dc.l s_vres_irq
+		dc.l s_vres_irq
 
 ;-------------------------------------------------------;
 ;INVALID IRQ
 ;-------------------------------------------------------;
 
-@invalid_irq
+s_invalid_irq
 		rts
 		nop
 
@@ -567,7 +584,7 @@ main_irq_s:
 ;	VRES Interrupt
 ;---------------------------------------------------------------*
 
-@vres_irq:
+s_vres_irq:
 		mov.l	#_sysreg,r0
 		ldc	r0,gbr
 
@@ -575,7 +592,7 @@ main_irq_s:
 
 		mov.b	@(dreqctl,gbr),r0
 		tst	#1,r0
-		bf	@vresloop
+		bf	.vresloop
 
 		mov.l	#S_STACK-8,r15		; reset the stack
 		mov.l	#s_hotstart,r0
@@ -596,16 +613,16 @@ main_irq_s:
 		rte
 		nop
 
-@vresloop:
-		bra	@vresloop
+.vresloop:
+		bra	.vresloop
 		nop
-		lits
+		ltorg
 
 ;---------------------------------------------------------------*
 ;	V Interrupt
 ;---------------------------------------------------------------*
 
-@v_irq:
+s_v_irq:
 		mov.l	r2,@-r15
 		stc.l	gbr,@-r15	;save regs
 
@@ -619,7 +636,7 @@ main_irq_s:
 		mov.w	@(vintclr,gbr),r0	; V interrupt clear
 		mov.b	@(_TOCR,r1),r0	;as required
 
-		mov.l	#TH+@vcounter,r1
+		mov.l	#TH+s_vcounter,r1
 		mov.l	@r1,r0
 		add	#1,r0	;do some work
 		mov.l	r0,@r1
@@ -631,14 +648,14 @@ main_irq_s:
 		nop		;RTS!
 
 		.align	4
-@vcounter	dc.l	$00000000
-		lits
+s_vcounter	dc.l	$00000000
+		ltorg
 
 ;---------------------------------------------------------------*
 ;	H Interrupt
 ;---------------------------------------------------------------*
 
-@h_irq:
+s_h_irq:
 		stc.l	gbr,@-r15	;save regs
 
 		mov.l	#_sysreg,r0
@@ -652,7 +669,7 @@ main_irq_s:
 		mov.b	@(_TOCR,r1),r0	;as required
 
 
-		mov.l	#TH+@hcounter,r1
+		mov.l	#TH+s_hcounter,r1
 		mov.l	@r1,r0
 		add	#1,r0	;do some work
 		mov.l	r0,@r1
@@ -663,15 +680,15 @@ main_irq_s:
 		nop                                    ;RTS!
 
 		.align	4
-@hcounter	dc.l	$00000000
+s_hcounter	dc.l	$00000000
 
-		lits
+		ltorg
 
 ;---------------------------------------------------------------*
 ;	CMD Interrupt
 ;---------------------------------------------------------------*
 
-@cmd_irq:
+s_cmd_irq:
 		mov.l	r2,@-r15
 		stc.l	gbr,@-r15	;save regs
 
@@ -685,7 +702,7 @@ main_irq_s:
 		mov.w	@(cmdintclr,gbr),r0	; V interrupt clear
 		mov.b	@(_TOCR,r1),r0	;as required
 
-		mov.l	#TH+@cmdcounter,r1
+		mov.l	#TH+s_cmdcounter,r1
 		mov.l	@r1,r0
 		add	#1,r0	;do some work
 		mov.l	r0,@r1
@@ -697,8 +714,8 @@ main_irq_s:
 		nop		;RTS!
 
 		.align	4
-@cmdcounter	dc.l	$00000000
-		lits
+s_cmdcounter	dc.l	$00000000
+		ltorg
 
 ; =================================================================
 ; -------------------------------------------
@@ -718,21 +735,21 @@ Slave_GoToHere:
 		mov.l	#$C0000000, r2	; Destination in cache of PWM driver
 		mov.w	#$400/4, r3	; Length of PWM driver
 
-@writeloop:
+.writeloop:
 		mov.l	@r1+, r0
 		dt	r3
 		mov.l	r0, @r2
-		bf/s	@writeloop
+		bf/s	.writeloop
 		add	#4, r2
 		mov.l	#$C0000000, r14
 		jsr	@r14		; Jump into PWM driver's init routine
 		nop
-@loop:
+.loop:
 		nop
 		nop
-		bra	@loop
+		bra	.loop
 
-	lits
+	ltorg
 
 		; This label MUST come at the end of the binary
 Slave_PWMDriverAddress:
@@ -740,10 +757,11 @@ Slave_PWMDriverAddress:
 		; where the SH2 binary is binclude'd.
 		; This is just to allow the 68k assembler to fix the pointer for us.
 		;dc.l	$02XXXXXX
+		ds.l	1
 
 ; ====================================================================
 
-		objend
+		dephase
 		
 ; ====================================================================
 ; ---------------------------------------------------------------
