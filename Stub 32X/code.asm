@@ -235,7 +235,7 @@ m_v_irq:
 	nop		;delay 2 cycles as required
 	nop
 
-	mov.l	#TH+m_vcounter,r1
+	mov.l	#TH+.vcounter,r1
 	mov.l	@r1,r0
 	add	#1,r0	;do some work
 	mov.l	r0,@r1
@@ -248,7 +248,7 @@ m_v_irq:
 
 	align	4
 
-m_vcounter		dc.l $00000000
+.vcounter		dc.l $00000000
 
 	ltorg
 
@@ -279,7 +279,7 @@ m_h_irq:
 	nop		;delay 2 cycles as required
 	nop
 
-	mov.l	#TH+m_hcounter,r1
+	mov.l	#TH+.hcounter,r1
 	mov.l	@r1,r0
 	add	#1,r0	;do some work
 	mov.l	r0,@r1
@@ -290,7 +290,7 @@ m_h_irq:
 	nop		;RTS!!
 
 	align	4
-m_hcounter		dc.l $00000000
+.hcounter		dc.l $00000000
 
 	ltorg
 
@@ -321,7 +321,7 @@ m_cmd_irq:
 	nop		;delay 2 cycles as required
 	nop
 
-	mov.l	#TH+m_cmdcounter,r1
+	mov.l	#TH+.cmdcounter,r1
 	mov.l	@r1,r0
 	add	#1,r0	;do some work
 	mov.l	r0,@r1
@@ -333,7 +333,7 @@ m_cmd_irq:
 	nop		;RTS!!
 
 	align	4
-m_cmdcounter		dc.l $00000000
+.cmdcounter		dc.l $00000000
 
 	ltorg
 
@@ -631,7 +631,7 @@ s_v_irq:
 		mov.w	@(vintclr,gbr),r0	; V interrupt clear
 		mov.b	@(_TOCR,r1),r0	;as required
 
-		mov.l	#TH+s_vcounter,r1
+		mov.l	#TH+.vcounter,r1
 		mov.l	@r1,r0
 		add	#1,r0	;do some work
 		mov.l	r0,@r1
@@ -643,7 +643,7 @@ s_v_irq:
 		nop		;RTS!
 
 		.align	4
-s_vcounter	dc.l	$00000000
+.vcounter	dc.l	$00000000
 		ltorg
 
 ;---------------------------------------------------------------*
@@ -664,7 +664,7 @@ s_h_irq:
 		mov.b	@(_TOCR,r1),r0	;as required
 
 
-		mov.l	#TH+s_hcounter,r1
+		mov.l	#TH+.hcounter,r1
 		mov.l	@r1,r0
 		add	#1,r0	;do some work
 		mov.l	r0,@r1
@@ -675,7 +675,7 @@ s_h_irq:
 		nop                                    ;RTS!
 
 		.align	4
-s_hcounter	dc.l	$00000000
+.hcounter	dc.l	$00000000
 
 		ltorg
 
@@ -697,7 +697,7 @@ s_cmd_irq:
 		mov.w	@(cmdintclr,gbr),r0	; V interrupt clear
 		mov.b	@(_TOCR,r1),r0	;as required
 
-		mov.l	#TH+s_cmdcounter,r1
+		mov.l	#TH+.cmdcounter,r1
 		mov.l	@r1,r0
 		add	#1,r0	;do some work
 		mov.l	r0,@r1
@@ -709,7 +709,7 @@ s_cmd_irq:
 		nop		;RTS!
 
 		.align	4
-s_cmdcounter	dc.l	$00000000
+.cmdcounter	dc.l	$00000000
 		ltorg
 
 ; =================================================================
