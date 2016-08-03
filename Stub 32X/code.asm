@@ -4,14 +4,10 @@
 ; -----------------------------------------------------------------
 
 		CPU SH7600
-		padding off
-		supmode on
 		listing purecode
-		page 0
 
-		include	"shmap.i"
-		include	"shmap68k.i"
-		org sh.CS3
+		include	"sound/Stub 32X/shmap.i"
+		phase sh.CS3
 		
 ; -----------------------------------------------------------------
 ; Master CPU
@@ -401,10 +397,7 @@ Master_GoToHere:
 		nop
 	
 ; ====================================================================
-
-		org SlaveStart
-
-; ====================================================================
+	align	4
 ; ---------------------------------------------------------------
 ; Slave CPU
 ; ---------------------------------------------------------------
@@ -725,8 +718,7 @@ s_cmd_irq:
 
 Slave_GoToHere:
 		; Load PWM driver
-		mov.l	#Slave_PWMDriverAddress, r1	; Get pointer to address of PWM driver
-		mov.l	@r1, r1		; Get address of PWM driver
+		mov.l	#$02000000|PWM_Driver, r1	; Get address of PWM driver
 		mov.l	#$C0000000, r2	; Destination in cache of PWM driver
 		mov.w	#$400/4, r3	; Length of PWM driver
 
@@ -746,18 +738,12 @@ Slave_GoToHere:
 		nop
 
 	ltorg
-
-		; This label MUST come at the end of the binary
-Slave_PWMDriverAddress:
-		; This line is assembled seperately, and can be found after
-		; where the SH2 binary is binclude'd.
-		; This is just to allow the 68k assembler to fix the pointer for us.
-		;dc.l	$02XXXXXX
-		ds.l	1
 		
 ; ====================================================================
 ; ---------------------------------------------------------------
 ; RAM
 ; ---------------------------------------------------------------
 
-		include	"ram.asm"
+		include	"sound/Stub 32X/ram.asm"
+
+	dephase

@@ -4,8 +4,10 @@
 	endm
 
 SH2_Start:
-		binclude	"sound/Stub 32X/code.bin"
-		dc.l	$02000000|PWM_Driver
+		save
+		include	"sound/Stub 32X/code.asm"
+		restore
+		padding off ; unfortunately our flags got reset so we have to set them again...
 SH2_End:
 
 SH2_Length = SH2_End-SH2_Start
