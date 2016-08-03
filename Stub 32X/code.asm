@@ -11,7 +11,7 @@
 
 		include	"shmap.i"
 		include	"shmap68k.i"
-		org CS3
+		org sh.CS3
 		
 ; -----------------------------------------------------------------
 ; Master CPU
@@ -19,9 +19,9 @@
 
 SH2_Master
 		dc.l SH2_Entry			; Cold Start PC
-		dc.l M_STACK			; Cold Start SP
+		dc.l sh.M_STACK			; Cold Start SP
 		dc.l SH2_Entry			; Manual Reset PC
-		dc.l M_STACK			; Manual Reset SP
+		dc.l sh.M_STACK			; Manual Reset SP
 
 		dc.l error0			; Illegal instruction
 		dc.l $00000000			; reserved
@@ -56,53 +56,53 @@ SH2_Master
 ; ---------------------------------------------------------------
 
 SH2_Entry:
-		mov.l	#_sysreg,r14
+		mov.l	#sh._sysreg,r14
 		ldc	r14,gbr
 
-		mov.w	r0,@(vintclr,gbr)
-		mov.w	r0,@(vintclr,gbr)
-		mov.w	r0,@(hintclr,gbr)	;clear IRQ ACK regs
-		mov.w	r0,@(hintclr,gbr)
-		mov.w	r0,@(cmdintclr,gbr)
-		mov.w	r0,@(cmdintclr,gbr)
-		mov.w	r0,@(pwmintclr,gbr)
-		mov.w	r0,@(pwmintclr,gbr)
+		mov.w	r0,@(sh.vintclr,gbr)
+		mov.w	r0,@(sh.vintclr,gbr)
+		mov.w	r0,@(sh.hintclr,gbr)	;clear IRQ ACK regs
+		mov.w	r0,@(sh.hintclr,gbr)
+		mov.w	r0,@(sh.cmdintclr,gbr)
+		mov.w	r0,@(sh.cmdintclr,gbr)
+		mov.w	r0,@(sh.pwmintclr,gbr)
+		mov.w	r0,@(sh.pwmintclr,gbr)
 
-		mov.l	#_FRT,r1		; Set Free Run Timer
+		mov.l	#sh._FRT,r1		; Set Free Run Timer
 		mov	#$00,r0
-		mov.b	r0,@(_TIER,r1)		;
+		mov.b	r0,@(sh._TIER,r1)		;
 		mov	#$e2,r0
-		mov.b	r0,@(_TOCR,r1)		;
+		mov.b	r0,@(sh._TOCR,r1)		;
 		mov	#$00,r0
-		mov.b	r0,@(_OCR_H,r1)		;
+		mov.b	r0,@(sh._OCR_H,r1)		;
 		mov	#$01,r0
-		mov.b	r0,@(_OCR_L,r1)		;
+		mov.b	r0,@(sh._OCR_L,r1)		;
 		mov	#0,r0
-		mov.b	r0,@(_TCR,r1)		;
+		mov.b	r0,@(sh._TCR,r1)		;
 		mov	#1,r0
-		mov.b	r0,@(_TCSR,r1)		;
+		mov.b	r0,@(sh._TCSR,r1)		;
 		mov	#$00,r0
-		mov.b	r0,@(_FRC_L,r1)		;
-		mov.b	r0,@(_FRC_H,r1)		;
+		mov.b	r0,@(sh._FRC_L,r1)		;
+		mov.b	r0,@(sh._FRC_H,r1)		;
 
 		mov	#$f2,r0			; reset setup
-		mov.b	r0,@(_TOCR,r1)		;
+		mov.b	r0,@(sh._TOCR,r1)		;
 		mov	#$00,r0
-		mov.b	r0,@(_OCR_H,r1)		;
+		mov.b	r0,@(sh._OCR_H,r1)		;
 		mov	#$01,r0
-		mov.b	r0,@(_OCR_L,r1)		;
+		mov.b	r0,@(sh._OCR_L,r1)		;
 		mov	#$e2,r0
-		mov.b	r0,@(_TOCR,r1)		;
+		mov.b	r0,@(sh._TOCR,r1)		;
 
 .wait_md:
-		mov.l	@(comm0,gbr),r0		; wait fo the genesis to finish booting
+		mov.l	@(sh.comm0,gbr),r0		; wait fo the genesis to finish booting
 		cmp/eq	#0,r0
 		bf	.wait_md
 		nop
 
 		mov.l	#"SLAV",r1
 .wait_slave:
-		mov.l	@(comm8,gbr),r0		; wait for the slave to finish booting
+		mov.l	@(sh.comm8,gbr),r0		; wait for the slave to finish booting
 		cmp/eq	r1,r0
 		bf	.wait_slave
 		nop
@@ -113,16 +113,16 @@ SH2_Entry:
 ; ---------------------------------------------------------------
 
 m_hotstart:
-		mov.l	#_sysreg,r14
+		mov.l	#sh._sysreg,r14
 		ldc	r14,gbr
 
- 		mov	#FM,r0
- 		mov.b	r0,@(adapter,gbr)
+ 		mov	#sh.FM,r0
+ 		mov.b	r0,@(sh.adapter,gbr)
 
-		mov.l	#_sysreg,r14
+		mov.l	#sh._sysreg,r14
 		ldc	r14,gbr
 
-		mov.l	#VIRQ_ON+CMDIRQ_ON+HIRQ_ON,r0
+		mov.l	#sh.VIRQ_ON+sh.CMDIRQ_ON+sh.HIRQ_ON,r0
  		mov.b	r0,@(1,gbr)
 
 		mov.l	#$20,r0
@@ -194,15 +194,15 @@ m_invalid_irq
 ;---------------------------------------------------------------*
 
 m_vres_irq:
-		mov.l	#_sysreg,r0
+		mov.l	#sh._sysreg,r0
 		ldc	r0,gbr
 
-		mov.w	r0,@(vresintclr,gbr)
+		mov.w	r0,@(sh.vresintclr,gbr)
 
-		mov.l	#_FRT,r1		; System Reset
-		mov.b	@(_TOCR,r1),r0		;
+		mov.l	#sh._FRT,r1		; System Reset
+		mov.b	@(sh._TOCR,r1),r0		;
 		or	#$01,r0		;
-		mov.b	r0,@(_TOCR,r1)		;
+		mov.b	r0,@(sh._TOCR,r1)		;
 .vresloop:
 		bra	.vresloop
 		nop
@@ -217,25 +217,25 @@ m_v_irq:
 	mov.l	r2,@-r15
 	stc.l	gbr,@-r15	;save regs
 
-	mov.l	#_sysreg,r0
+	mov.l	#sh._sysreg,r0
 	ldc	r0,gbr	;GBR = addr of sys regs
 
 	mov.l	#$f0,r0
 	ldc	r0,sr	;mask off all IRQS
 
-	mov.l	#_FRT,r1
-	mov.b	@(_TOCR,r1),r0
+	mov.l	#sh._FRT,r1
+	mov.b	@(sh._TOCR,r1),r0
 	xor	#$02,r0	;toggle FRT bit as required
-	mov.b	r0,@(_TOCR,r1)
+	mov.b	r0,@(sh._TOCR,r1)
 
 
-	mov.w	r0,@(vintclr,gbr)	; V interrupt clear
+	mov.w	r0,@(sh.vintclr,gbr)	; V interrupt clear
 	nop
 	nop
 	nop		;delay 2 cycles as required
 	nop
 
-	mov.l	#TH+.vcounter,r1
+	mov.l	#sh.TH+.vcounter,r1
 	mov.l	@r1,r0
 	add	#1,r0	;do some work
 	mov.l	r0,@r1
@@ -260,26 +260,26 @@ m_h_irq:
 
 	stc.l	gbr,@-r15	;save regs
 
-	mov.l	#_sysreg,r0
+	mov.l	#sh._sysreg,r0
 	ldc	r0,gbr	;GBR = addr of sys regs
 
 	mov.l	#$f0,r0
 	ldc	r0,sr	;mask off all IRQS
 
-	mov.l	#_FRT,r1
-	mov.b	@(_TOCR,r1),r0
+	mov.l	#sh._FRT,r1
+	mov.b	@(sh._TOCR,r1),r0
 	xor	#$02,r0	;toggle FRT bit as required
-	mov.b	r0,@(_TOCR,r1)
+	mov.b	r0,@(sh._TOCR,r1)
 
 
-	mov.w	r0,@(hintclr,gbr)	; H interrupt clear
+	mov.w	r0,@(sh.hintclr,gbr)	; H interrupt clear
 
 	nop
 	nop
 	nop		;delay 2 cycles as required
 	nop
 
-	mov.l	#TH+.hcounter,r1
+	mov.l	#sh.TH+.hcounter,r1
 	mov.l	@r1,r0
 	add	#1,r0	;do some work
 	mov.l	r0,@r1
@@ -302,26 +302,26 @@ m_cmd_irq:
 	mov.l	r2,@-r15
 	stc.l	gbr,@-r15	;save regs
 
-	mov.l	#_sysreg,r0
+	mov.l	#sh._sysreg,r0
 	ldc	r0,gbr	;GBR = addr of sys regs
 
 	mov.l	#$f0,r0
 	ldc	r0,sr	;mask off all IRQS
 
-	mov.l	#_FRT,r1
-	mov.b	@(_TOCR,r1),r0
+	mov.l	#sh._FRT,r1
+	mov.b	@(sh._TOCR,r1),r0
 	xor	#$02,r0	;toggle FRT bit as required
-	mov.b	r0,@(_TOCR,r1)
+	mov.b	r0,@(sh._TOCR,r1)
 
 
-	mov.w	r0,@(cmdintclr,gbr)	; CMD interrupt clear
+	mov.w	r0,@(sh.cmdintclr,gbr)	; CMD interrupt clear
 
 	nop
 	nop
 	nop		;delay 2 cycles as required
 	nop
 
-	mov.l	#TH+.cmdcounter,r1
+	mov.l	#sh.TH+.cmdcounter,r1
 	mov.l	@r1,r0
 	add	#1,r0	;do some work
 	mov.l	r0,@r1
@@ -345,18 +345,18 @@ m_cmd_irq:
 m_pwm_irq:
 	stc.l	gbr,@-r15	;save regs
 
-	mov.l	#_sysreg,r0
+	mov.l	#sh._sysreg,r0
 	ldc	r0,gbr	;GBR = addr of sys regs
 
 	mov.l	#$f0,r0
 	ldc	r0,sr	;mask off all IRQS
 
-	mov.l	#_FRT,r1
-	mov.b	@(_TOCR,r1),r0
+	mov.l	#sh._FRT,r1
+	mov.b	@(sh._TOCR,r1),r0
 	xor	#$02,r0	;toggle FRT bit as required
-	mov.b	r0,@(_TOCR,r1)
+	mov.b	r0,@(sh._TOCR,r1)
 
-	mov.w	r0,@(pwmintclr,gbr)	; PWM interrupt clear
+	mov.w	r0,@(sh.pwmintclr,gbr)	; PWM interrupt clear
 
 	nop
 	nop		;delay 2 cycles as required
@@ -411,9 +411,9 @@ Master_GoToHere:
 
 SH2_Slave:
 		dc.l s_EntryPoint		; Cold Start PC
-		dc.l S_STACK			; Cold Start SP
+		dc.l sh.S_STACK			; Cold Start SP
 		dc.l s_EntryPoint		; Manual Reset PC
-		dc.l S_STACK			; Manual Reset SP
+		dc.l sh.S_STACK			; Manual Reset SP
 
 		dc.l error0			; Illegal instruction
 		dc.l $00000000			; reserved
@@ -448,34 +448,34 @@ SH2_Slave:
 ; ---------------------------------------------------------------
 
 s_EntryPoint:
-		mov.l	#_sysreg,r14
+		mov.l	#sh._sysreg,r14
 		ldc	r14,gbr
 
-		mov.l	#_FRT,r1		; Set Free Run Timer
+		mov.l	#sh._FRT,r1		; Set Free Run Timer
 		mov	#$00,r0
-		mov.b	r0,@(_TIER,r1)		;
+		mov.b	r0,@(sh._TIER,r1)		;
 		mov	#$e2,r0
-		mov.b	r0,@(_TOCR,r1)		;
+		mov.b	r0,@(sh._TOCR,r1)		;
 		mov	#$00,r0
-		mov.b	r0,@(_OCR_H,r1)		;
+		mov.b	r0,@(sh._OCR_H,r1)		;
 		mov	#$01,r0
-		mov.b	r0,@(_OCR_L,r1)		;
+		mov.b	r0,@(sh._OCR_L,r1)		;
 		mov	#0,r0
-		mov.b	r0,@(_TCR,r1)		;
+		mov.b	r0,@(sh._TCR,r1)		;
 		mov	#1,r0
-		mov.b	r0,@(_TCSR,r1)		;
+		mov.b	r0,@(sh._TCSR,r1)		;
 		mov	#$00,r0
-		mov.b	r0,@(_FRC_L,r1)		;
-		mov.b	r0,@(_FRC_H,r1)		;
+		mov.b	r0,@(sh._FRC_L,r1)		;
+		mov.b	r0,@(sh._FRC_H,r1)		;
 .wait_md:
-		mov.l	@(comm0,gbr),r0
+		mov.l	@(sh.comm0,gbr),r0
 		cmp/eq	#0,r0
 		bf	.wait_md
 	
 		mov.l	#"SLAV",r0
-		mov.l	r0,@(comm8,gbr)
+		mov.l	r0,@(sh.comm8,gbr)
 	
-		mov.l	#_vdpreg,r14
+		mov.l	#sh._vdpreg,r14
 
 ; ====================================================================
 ; ---------------------------------------------------------------
@@ -483,25 +483,25 @@ s_EntryPoint:
 ; ---------------------------------------------------------------
 
 s_hotstart:
-		mov.l	#S_STACK,r15
+		mov.l	#sh.S_STACK,r15
 
-		mov.l	#_sysreg,r14
+		mov.l	#sh._sysreg,r14
 		ldc	r14,gbr
 	
-		mov.l	#PWMIRQ_ON,r0
+		mov.l	#sh.PWMIRQ_ON,r0
 		mov.b	r0,@(1,gbr)		;enable IRQS
 
 		mov.l	#$20,r0
 		ldc	r0,sr
 
-		mov.w	r0,@(pwmintclr,gbr)
-		mov.w	r0,@(pwmintclr,gbr)
-		mov.w	r0,@(vintclr,gbr)
-		mov.w	r0,@(vintclr,gbr)
-		mov.w	r0,@(hintclr,gbr)	;clear IRQ ACK regs
-		mov.w	r0,@(hintclr,gbr)
-		mov.w	r0,@(cmdintclr,gbr)
-		mov.w	r0,@(cmdintclr,gbr)
+		mov.w	r0,@(sh.pwmintclr,gbr)
+		mov.w	r0,@(sh.pwmintclr,gbr)
+		mov.w	r0,@(sh.vintclr,gbr)
+		mov.w	r0,@(sh.vintclr,gbr)
+		mov.w	r0,@(sh.hintclr,gbr)	;clear IRQ ACK regs
+		mov.w	r0,@(sh.hintclr,gbr)
+		mov.w	r0,@(sh.cmdintclr,gbr)
+		mov.w	r0,@(sh.cmdintclr,gbr)
 
 ; =================================================================
  		
@@ -525,7 +525,7 @@ s_main_irq:
 		ldc	r2,sr
 		mov.l	#$FFFFFE10,r2
 		xor	r0,r0
-		mov.b	r0,@(_TOCR,r2)
+		mov.b	r0,@(sh._TOCR,r2)
 
 		sts.l	pr,@-r15	;save registers
 		mov.l	r1,r0
@@ -580,26 +580,26 @@ s_invalid_irq
 ;---------------------------------------------------------------*
 
 s_vres_irq:
-		mov.l	#_sysreg,r0
+		mov.l	#sh._sysreg,r0
 		ldc	r0,gbr
 
-		mov.w	r0,@(vresintclr,gbr)	; V interrupt clear
+		mov.w	r0,@(sh.vresintclr,gbr)	; V interrupt clear
 
-		mov.b	@(dreqctl,gbr),r0
+		mov.b	@(sh.dreqctl,gbr),r0
 		tst	#1,r0
 		bf	.vresloop
 
-		mov.l	#S_STACK-8,r15		; reset the stack
+		mov.l	#sh.S_STACK-8,r15		; reset the stack
 		mov.l	#s_hotstart,r0
 		mov	r0,@r15
 		mov.w	#$f0,r0
 		mov	r0,@(4,r15)
 
-		mov.l	#_DMAOPERATION,r1
+		mov.l	#sh._DMAOPERATION,r1
 		mov	#0,r0
 		mov.l	r0,@r1
 
-		mov.l	#_DMACHANNEL0,r1
+		mov.l	#sh._DMACHANNEL0,r1
 		mov	#0,r0
 		mov.l	r0,@r1
 		mov.l	#%0100010011100000,r1
@@ -621,17 +621,17 @@ s_v_irq:
 		mov.l	r2,@-r15
 		stc.l	gbr,@-r15	;save regs
 
-		mov.l	#_sysreg,r0
+		mov.l	#sh._sysreg,r0
 		ldc	r0,gbr	;GBR = addr of sys regs
 
-		mov.w	r0,@(vintclr,gbr)	; V interrupt clear
-		mov.l	#_FRT,r1
+		mov.w	r0,@(sh.vintclr,gbr)	; V interrupt clear
+		mov.l	#sh._FRT,r1
 		mov.l	#$02,r0		;toggle FRT bit for future IRQs
-		mov.b	r0,@(_TOCR,r1)	;as required
-		mov.w	@(vintclr,gbr),r0	; V interrupt clear
-		mov.b	@(_TOCR,r1),r0	;as required
+		mov.b	r0,@(sh._TOCR,r1)	;as required
+		mov.w	@(sh.vintclr,gbr),r0	; V interrupt clear
+		mov.b	@(sh._TOCR,r1),r0	;as required
 
-		mov.l	#TH+.vcounter,r1
+		mov.l	#sh.TH+.vcounter,r1
 		mov.l	@r1,r0
 		add	#1,r0	;do some work
 		mov.l	r0,@r1
@@ -653,18 +653,18 @@ s_v_irq:
 s_h_irq:
 		stc.l	gbr,@-r15	;save regs
 
-		mov.l	#_sysreg,r0
+		mov.l	#sh._sysreg,r0
 		ldc	r0,gbr	;GBR = addr of sys regs
 
-		mov.w	r0,@(hintclr,gbr)	; V interrupt clear
-		mov.l	#_FRT,r1
+		mov.w	r0,@(sh.hintclr,gbr)	; V interrupt clear
+		mov.l	#sh._FRT,r1
 		mov.l	#$02,r0	;toggle FRT bit for future IRQs
-		mov.b	r0,@(_TOCR,r1)	;as required
-		mov.w	@(hintclr,gbr),r0	; V interrupt clear
-		mov.b	@(_TOCR,r1),r0	;as required
+		mov.b	r0,@(sh._TOCR,r1)	;as required
+		mov.w	@(sh.hintclr,gbr),r0	; V interrupt clear
+		mov.b	@(sh._TOCR,r1),r0	;as required
 
 
-		mov.l	#TH+.hcounter,r1
+		mov.l	#sh.TH+.hcounter,r1
 		mov.l	@r1,r0
 		add	#1,r0	;do some work
 		mov.l	r0,@r1
@@ -687,17 +687,17 @@ s_cmd_irq:
 		mov.l	r2,@-r15
 		stc.l	gbr,@-r15	;save regs
 
-		mov.l	#_sysreg,r0
+		mov.l	#sh._sysreg,r0
 		ldc	r0,gbr	;GBR = addr of sys regs
 
-		mov.w	r0,@(cmdintclr,gbr)	; V interrupt clear
-		mov.l	#_FRT,r1
+		mov.w	r0,@(sh.cmdintclr,gbr)	; V interrupt clear
+		mov.l	#sh._FRT,r1
 		mov.l	#$02,r0	;toggle FRT bit for future IRQs
-		mov.b	r0,@(_TOCR,r1)	;as required
-		mov.w	@(cmdintclr,gbr),r0	; V interrupt clear
-		mov.b	@(_TOCR,r1),r0	;as required
+		mov.b	r0,@(sh._TOCR,r1)	;as required
+		mov.w	@(sh.cmdintclr,gbr),r0	; V interrupt clear
+		mov.b	@(sh._TOCR,r1),r0	;as required
 
-		mov.l	#TH+.cmdcounter,r1
+		mov.l	#sh.TH+.cmdcounter,r1
 		mov.l	@r1,r0
 		add	#1,r0	;do some work
 		mov.l	r0,@r1
