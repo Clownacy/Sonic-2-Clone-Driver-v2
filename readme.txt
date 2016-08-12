@@ -1,4 +1,4 @@
-Clownacy's Sonic 2 Clone Driver v2 (v2.6)
+Clownacy's Sonic 2 Clone Driver v2 (v2.7)
 
 SMPS2ASM and Mega PCM belong to Flamewing and Vladikcomper, respectively.
 
@@ -22,10 +22,11 @@ Contributors to the sound driver disassemblies
 Valley Bell - General help, fixes for some bugs, SMPS Research Pack, inspiration
 Shobiz - Ported Spin Dash rev code
 Puto - Original 68k Sega chant playback code
-MarkeyJester - DAC fade-in fix
+MarkeyJester - DAC fade-in fix, along with pointing several other bugs in S1's driver
 Cinossu - S1SMPS2ASM, the basis of SMPS2ASM
 Flamewing - SMPS2ASM core; pointing out S3K's additional PSG frequencies; his perfect-compression koscmp, used to compress Mega PCM
 Vladikcomper - Mega PCM, a fix involving interupts
+Gardeguey - SH2 code used as the basis of the 'Stub SH2' program
 Clownacy - Go read the changelog =P
 
 More information at

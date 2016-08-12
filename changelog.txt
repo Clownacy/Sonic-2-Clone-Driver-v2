@@ -372,3 +372,16 @@ Changelog
 - Fixed OOZ oil slide SFX (was updating FM volume on a PSG channel)
 - Added check to prevent above bug from having any negative effects, just like S2's driver
 - A branch is available that uses the stock v1.1 MegaPCM
+
+12/08/2016
+= v2.7 =
+- Support for the 32X
+- Support for four PWM tracks
+- Fixed bug where Special SFX incorrectly mute PSG3 while it's being used by SFX (thanks, Markey)
+- Added proper volume cap check to DoFadeIn (thanks again, Markey)
+- Fixed bug where PSG 1&2 are not muted during SFX initialisation (Markey, stop, please)
+- Added a bugfix from S2's driver that stops cfStopTrack from altering the stack too much on DAC channels
+- Tried to reduce name collision with MegaPCM by adding a prefix to most labels
+- UpdateDAC has been restructured, so its stack usage is identical to FM and PSG (kind of undoing that last bugfix :( )
+- Made MegaPCM check that YM2612 isn't busy before enabling DAC (fixes muted drums at start of some songs)
+- SFX now properly update on the frame that a new song is played
