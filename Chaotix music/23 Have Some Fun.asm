@@ -184,7 +184,8 @@ HaveSomeFun_Loop01:
 	dc.b	(nMaxPSG2-$23)&$FF, $0C, (nMaxPSG2-$23)&$FF
 	smpsPSGvoice        KCVolEnv_05
 	dc.b	(nMaxPSG2-$23)&$FF, $06
-	smpsPSGvoice        KCVolEnv_48
+	;smpsPSGvoice        KCVolEnv_48	; WTF
+	smpsPSGvoice        $00
 	dc.b	(nMaxPSG2-$23)&$FF, $0C, nRst, $30
 	smpsStop
 
