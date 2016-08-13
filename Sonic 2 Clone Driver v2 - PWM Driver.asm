@@ -13,6 +13,7 @@ PWM_Driver:
 	binclude	"sound/Chaotix PWM Driver.bin",0,$1F0	; Include first half of driver
 	dc.l	$22000000|SH2_PWMTable
 	binclude	"sound/Chaotix PWM Driver.bin",$1F4,$20C	; Include second half of driver
+PWM_Driver_End
 
 ; ---------------------------------------------------------------
 ; Macros

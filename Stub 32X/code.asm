@@ -720,7 +720,7 @@ Slave_GoToHere:
 		; Load PWM driver
 		mov.l	#$02000000|PWM_Driver, r1	; Get address of PWM driver
 		mov.l	#$C0000000, r2	; Destination in cache of PWM driver
-		mov.w	#$400/4, r3	; Length of PWM driver
+		mov.w	#(PWM_Driver_End-PWM_Driver)/4, r3	; Length of PWM driver
 
 .writeloop:
 		mov.l	@r1+, r0
