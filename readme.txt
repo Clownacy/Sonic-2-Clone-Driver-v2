@@ -1,19 +1,18 @@
 Clownacy's Sonic 2 Clone Driver v2 (v2.7)
 
-SMPS2ASM and Mega PCM belong to Flamewing and Vladikcomper, respectively.
+This is a heavily-modified version of Sonic 1's SMPS sound driver (which itself is a modified early SMPS 68k Type 1b), designed to work as a replacement for Sonic 2's SMPS sound driver (improved Z80 port of Sonic 1's driver). This driver retains the SMPS 68k Type 1b base, and so it operates on the 68k.
+It is outfitted with many of the features found in Sonic 2's driver, along with some features from other drivers, including Sonic 3's, Sonic & Knuckles', Sonic 3D Blast's, and Knuckles' Chaotix's sound driver (all modified SMPS Z80 Type 2). While designed for Sonic 2, this driver can be installed in a Sonic 1 disassembly. Files and instructions for this are provided in the driver's threads on Sonic Retro and SSRG (Sonic Stuff Research Group). Links are available at the bottom of the README.
 
-This is a heavily modified version of Sonic 1's SMPS sound driver (modified SMPS 68k Type 1b), designed to work as a replacement for Sonic 2's SMPS sound driver (improved Z80 port of Sonic 1's driver). This driver retains the SMPS 68k Type 1b base, and so it operates on the 68k.
-It is outfitted with many of the features found in Sonic 2's driver, along with some features from Sonic 3 & Knuckles' sound driver (modified SMPS Z80 Type 2).  While designed for Sonic 2, this driver can be installed in a Sonic 1 disassembly. Files and instructions for this are provided in the driver's topic.
+The following games and disassemblies are officially supported:
+- Sonic 1 Git disassembly
+- Sonic 2 Xenowhirl 2007 disassembly (users must update their copy of AS to that of the Git disasm)
+- Sonic 2 Git disassembly
 
-The following games and disassemblies are supported:
-    Sonic 2 (Git and Xenowhirl's 2007 disassemblies)
-    Sonic 1 (Git disassembly)
+This driver is intended to have its sound/music files in SMPS2ASM v0.2 (.asm) format: assembled (.bin) files are not supported.
 
-This driver is intended to have its sound files in SMPS2ASM v0.2 (.asm) format; assembled (.bin) files are unsupported
+This driver is designed for use with 'The Macroassembler AS', found here:
+http://john.ccac.rwth-aachen.de:8000/as/
 
-This driver is designed for use with the Macro Assembler AS
-
-Users of Xenowhirl's 2007 S2 disassembly will need to update their copy of AS to get the driver to build properly. Just use the copy in the Git disasm. Anything newer is broken beyond belief.
 
 
 
@@ -29,5 +28,6 @@ Vladikcomper - Mega PCM, a fix involving interupts
 Gardeguey - SH2 code used as the basis of the 'Stub SH2' program
 Clownacy - Go read the changelog =P
 
-More information at
+More information at:
 http://forums.sonicretro.org/index.php?showtopic=32801
+http://sonicresearch.org/community/index.php?threads/sonic-2-clone-driver-v2.4621/
