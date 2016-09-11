@@ -2821,30 +2821,51 @@ SetVoice:
 	dbf	d0,.voicemultiply
 ; loc_72C5C:
 .havevoiceptr:
-	move.b	(a1)+,d1			; feedback/algorithm
+	move.b	(a1)+,d1		; feedback/algorithm
 	move.b	#$B0,d0			; Command to write feedback/algorithm
 	bsr.w	WriteFMIorII
-	lea	FMInstrumentOperatorTable(pc),a2
-	moveq	#(FMInstrumentOperatorTable_End-FMInstrumentOperatorTable)-1,d3			; Don't want to send TL yet
-; loc_72C72:
-.sendvoiceloop:
-	move.b	(a2)+,d0
-	move.b	(a1)+,d1
-	bsr.w	WriteFMIorII
-	dbf	d3,.sendvoiceloop
 
-	moveq	#3,d5
-	move.b	SMPS_Track.Volume(a5),d3	; Track volume attenuation
-; loc_72C8C:
-.sendtlloop:
-	move.b	(a2)+,d0
+	; Send voice data.
+	; Like S2's driver, and unlike S1's original driver, we calculate
+	; the operator value, and have a different voice format as a result.
+	; Unlike S2's driver, out custom format also has TL data start at 5
+	; bytes into the data, instead of 21.
+
+	; Send detune/multiple
+	moveq	#$30,d3			; Detune/multiple operator 1
+	moveq	#(1*4)-1,d4		; Four operators
+
+-	move.b	d3,d0
 	move.b	(a1)+,d1
-	bpl.s	.sendtl
-	add.b	d3,d1			; Include additional attenuation
-; loc_72C96:
-.sendtl:
 	bsr.w	WriteFMIorII
-	dbf	d5,.sendtlloop
+	addq.b	#4,d3			; Next operator
+	dbf	d4,-
+
+	; Send total level
+	move.b	SMPS_Track.Volume(a5),d5	; Track volume attenuation
+	moveq	#(1*4)-1,d4		; Four operators
+
+-	move.b	d3,d0
+	move.b	(a1)+,d1
+	bpl.s	+
+	add.b	d5,d1			; Include additional attenuation
++
+	bsr.w	WriteFMIorII
+	addq.b	#4,d3			; Next operator
+	dbf	d4,-
+
+	; Send...
+	;  Rate scalling/attack rate
+	;  Amplitude modulation/first decay rate
+	;  Secondary decay rate
+	;  Secondary amplitude/release rate
+	moveq	#(4*4)-1,d4		; Four sets of four operators
+
+-	move.b	d3,d0
+	move.b	(a1)+,d1
+	bsr.w	WriteFMIorII
+	addq.b	#4,d3			; Next operator
+	dbf	d4,-
 
 	move.b	#$B4,d0			; Register for AMS/FMS/Panning
 	move.b	SMPS_Track.AMSFMSPan(a5),d1	; Value to send
@@ -2874,14 +2895,15 @@ SendVoiceTL:
 	dbf	d0,.voicemultiply
 ; loc_72CE6:
 .gotvoice:
-	lea	21(a1),a1			; Want TL
-	lea	FMInstrumentTLTable(pc),a2
-	move.b	SMPS_Track.Volume(a5),d3		; Get track volume attenuation
+	lea	5(a1),a1			; Want TL (was '21(a0)' in original driver)
+	move.b	SMPS_Track.Volume(a5),d3	; Get track volume attenuation
 	bmi.s	.locret				; If negative, stop
-	moveq	#(FMInstrumentTLTable_End-FMInstrumentTLTable)-1,d5
+
+	moveq	#$40,d4				; Total level operator 1
+	moveq	#4-1,d5				; Four operators
 ; loc_72D02:
 .sendtlloop:
-	move.b	(a2)+,d0
+	move.b	d4,d0
 	move.b	(a1)+,d1
 	bpl.s	.senttl
 	add.b	d3,d1			; Include additional attenuation
@@ -2889,43 +2911,13 @@ SendVoiceTL:
 	bsr.w	WriteFMIorII
 ; loc_72D12:
 .senttl:
+	addq.b	#4,d4			; Go to operator 2, then 3, then 4
 	dbf	d5,.sendtlloop
 ; locret_72D16:
 .locret:
 	rts
 ; End of function SendVoiceTL
 
-; ===========================================================================
-; byte_72D18:
-FMInstrumentOperatorTable:
-	dc.b  $30	; Detune/multiple operator 1
-	dc.b  $38	; Detune/multiple operator 3
-	dc.b  $34	; Detune/multiple operator 2
-	dc.b  $3C	; Detune/multiple operator 4
-	dc.b  $50	; Rate scalling/attack rate operator 1
-	dc.b  $58	; Rate scalling/attack rate operator 3
-	dc.b  $54	; Rate scalling/attack rate operator 2
-	dc.b  $5C	; Rate scalling/attack rate operator 4
-	dc.b  $60	; Amplitude modulation/first decay rate operator 1
-	dc.b  $68	; Amplitude modulation/first decay rate operator 3
-	dc.b  $64	; Amplitude modulation/first decay rate operator 2
-	dc.b  $6C	; Amplitude modulation/first decay rate operator 4
-	dc.b  $70	; Secondary decay rate operator 1
-	dc.b  $78	; Secondary decay rate operator 3
-	dc.b  $74	; Secondary decay rate operator 2
-	dc.b  $7C	; Secondary decay rate operator 4
-	dc.b  $80	; Secondary amplitude/release rate operator 1
-	dc.b  $88	; Secondary amplitude/release rate operator 3
-	dc.b  $84	; Secondary amplitude/release rate operator 2
-	dc.b  $8C	; Secondary amplitude/release rate operator 4
-FMInstrumentOperatorTable_End
-; byte_72D2C:
-FMInstrumentTLTable:
-	dc.b  $40	; Total level operator 1
-	dc.b  $48	; Total level operator 3
-	dc.b  $44	; Total level operator 2
-	dc.b  $4C	; Total level operator 4
-FMInstrumentTLTable_End
 ; ===========================================================================
 ; loc_72D30:
 cfModulation:
