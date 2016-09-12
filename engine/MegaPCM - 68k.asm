@@ -13,7 +13,7 @@ Size_of_Mega_PCM_guess = $81C
 MegaPCM:
 	save
 	dephase
-	include	"sound/MegaPCM - Z80.asm"
+	include	"sound/engine/MegaPCM - Z80.asm"
 	restore
 	padding off
 	!org ((MegaPCM-marsipl)+Size_of_Mega_PCM_guess)
