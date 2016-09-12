@@ -669,72 +669,72 @@ Combination_Call03:
 
 ; PWM1 Data
 Combination_PWM1:
-	dc.b	$96, $30
+	dc.b	pwmSilence, $30
 
 Combination_Loop04:
-	dc.b	$81, $18, $80, $0C, $81, $80, $81, $80, $18
+	dc.b	pwmElectricKick, $18, nRst, $0C, pwmElectricKick, nRst, pwmElectricKick, nRst, $18
 	smpsLoop            $00, $10, Combination_Loop04
 	smpsJump            Combination_Loop04
 
 ; PWM2 Data
 Combination_PWM2:
-	dc.b	$82, $0C, $0C, $08, $04
+	dc.b	pwmElectricSnare, $0C, $0C, $08, $04
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
 
 Combination_Loop03:
 	smpsCall            Combination_Call00
-	dc.b	$80, $14, $82, $04, $80, $30, $82, $08, $04
+	dc.b	nRst, $14, pwmElectricSnare, $04, nRst, $30, pwmElectricSnare, $08, $04
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
 	smpsCall            Combination_Call00
-	dc.b	$80, $14, $82, $04, $80, $18, $82, $0C, $0C, $08, $04
+	dc.b	nRst, $14, pwmElectricSnare, $04, nRst, $18, pwmElectricSnare, $0C, $0C, $08, $04
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
 	smpsLoop            $00, $02, Combination_Loop03
 	smpsJump            Combination_Loop03
 
 Combination_Call00:
-	dc.b	$80, $14, $82, $04, $80, $30, $82, $18, $80, $14, $82, $04
-	dc.b	$80, $30, $82, $14, $04, $80, $14, $82, $04, $80, $30, $82
+	dc.b	nRst, $14, pwmElectricSnare, $04, nRst, $30, pwmElectricSnare, $18, nRst, $14, pwmElectricSnare, $04
+	dc.b	nRst, $30, pwmElectricSnare, $14, $04, nRst, $14, pwmElectricSnare, $04, nRst, $30, pwmElectricSnare
 	dc.b	$18
 	smpsReturn
 
 ; PWM3 Data
 Combination_PWM3:
 	smpsFMAlterVol      $FC
-	dc.b	$83, $30
+	dc.b	pwmSplashCymbal, $30
 	smpsFMAlterVol      $04
 
 Combination_Loop02:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsLoop            $00, $02, Combination_Loop02
 	smpsLoop            $00, $02, Combination_Loop02
 	smpsJump            Combination_Loop02
 
 ; PWM4 Data
 Combination_PWM4:
-	dc.b	$96, $30
+	dc.b	pwmSilence, $30
 
 Combination_Loop00:
-	dc.b	$80, $0C, $88
+	dc.b	nRst, $0C, pwmElectricHiHat
 	smpsLoop            $00, $07, Combination_Loop00
-	dc.b	smpsNoAttack, $0C, $88, $08, $04
+	dc.b	smpsNoAttack, $0C, pwmElectricHiHat, $08, $04
 
 Combination_Loop01:
-	dc.b	$80, $0C, $88
+	dc.b	nRst, $0C, pwmElectricHiHat
 	smpsLoop            $00, $07, Combination_Loop01
-	dc.b	$80, $0C, $88, $04, $04, $04
+	dc.b	nRst, $0C, pwmElectricHiHat, $04, $04, $04
 	smpsLoop            $01, $04, Combination_Loop00
 	smpsJump            Combination_Loop00
 

@@ -115,12 +115,12 @@ HighFive_PSG3:
 
 ; PWM1 Data
 HighFive_PWM1:
-	dc.b	$8B, $06, $0C, $06, $18
+	dc.b	pwmAcousticKick, $06, $0C, $06, $18
 	smpsStop
 
 ; PWM2 Data
 HighFive_PWM2:
-	dc.b	$96, $24, $89, $18
+	dc.b	pwmSilence, $24, pwmCrashCymbal, $18
 	smpsStop
 
 ; PWM3 Data

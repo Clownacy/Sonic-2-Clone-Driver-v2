@@ -500,54 +500,54 @@ SurgingPower_Call07:
 
 ; PWM1 Data
 SurgingPower_PWM1:
-	dc.b	$81, $15, $87, $03
+	dc.b	pwmElectricKick, $15, pwmLowTom, $03
 
 SurgingPower_Jump02:
-	dc.b	$81, $0C, $0C, $06, $0C, $06, $0C, $0C, $06, $0C, $06, $0C
-	dc.b	$0C, $06, $0C, $06, $0C, $0C, $0C, $06, $06, $81, $0C, $0C
+	dc.b	pwmElectricKick, $0C, $0C, $06, $0C, $06, $0C, $0C, $06, $0C, $06, $0C
+	dc.b	$0C, $06, $0C, $06, $0C, $0C, $0C, $06, $06, pwmElectricKick, $0C, $0C
 	dc.b	$06, $0C, $06, $0C, $0C, $06, $0C, $06, $0C, $0C, $06, $0C
 	dc.b	$03, $03, $0C, $0C, $06, $0C, $06
 	smpsJump            SurgingPower_Jump02
 
 ; PWM2 Data
 SurgingPower_PWM2:
-	dc.b	$96, $03
+	dc.b	pwmSilence, $03
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86, $86
+	dc.b	pwmMidTom, pwmMidTom
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
 	smpsFMAlterVol      $90
-	dc.b	$87, $87
+	dc.b	pwmLowTom, pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$86
+	dc.b	pwmMidTom
 
 SurgingPower_Jump01:
-	dc.b	$80, $0C, $8C, $80, $8C, $80, $8C, $80, $8C, $09, $03, $80
-	dc.b	$0C, $8C, $80, $8C, $80, $8C, $80, $15, $8C, $03, $80, $0C
-	dc.b	$8C, $80, $8C, $80, $8C, $80, $8C, $09, $03, $80, $0C, $8C
-	dc.b	$80, $8C, $80, $8C, $80, $8C, $09, $03
+	dc.b	nRst, $0C, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, $09, $03, nRst
+	dc.b	$0C, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, $15, pwmAcousticSnare, $03, nRst, $0C
+	dc.b	pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, $09, $03, nRst, $0C, pwmAcousticSnare
+	dc.b	nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, $09, $03
 	smpsJump            SurgingPower_Jump01
 
 ; PWM3 Data
 SurgingPower_PWM3:
 	smpsFMAlterVol      $FC
-	dc.b	$83, $18
+	dc.b	pwmSplashCymbal, $18
 	smpsFMAlterVol      $04
 
 SurgingPower_Jump00:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $30
+	dc.b	pwmCrashCymbal, $30
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $30
+	dc.b	pwmCrashCymbal, $30
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80, $2A
+	dc.b	nRst, nRst, nRst, $2A
 	smpsFMAlterVol      $FC
-	dc.b	$83, $06
+	dc.b	pwmSplashCymbal, $06
 	smpsFMAlterVol      $04
 	smpsJump            SurgingPower_Jump00
 
@@ -558,9 +558,9 @@ SurgingPower_PWM4:
 SurgingPower_Loop00:
 	smpsCall            SurgingPower_Call00
 	smpsLoop            $00, $07, SurgingPower_Loop00
-	dc.b	$96, $0C, $80, $06
+	dc.b	pwmSilence, $0C, nRst, $06
 	smpsFMAlterVol      $90
-	dc.b	$88, $03, $03
+	dc.b	pwmElectricHiHat, $03, $03
 	smpsFMAlterVol      $70
 
 SurgingPower_Loop01:
@@ -569,13 +569,13 @@ SurgingPower_Loop01:
 	smpsJump            SurgingPower_Loop00
 
 SurgingPower_Call00:
-	dc.b	$80, $06
+	dc.b	nRst, $06
 	smpsFMAlterVol      $F9
-	dc.b	$88, $03, $03
+	dc.b	pwmElectricHiHat, $03, $03
 	smpsFMAlterVol      $07
-	dc.b	$80, $06
+	dc.b	nRst, $06
 	smpsFMAlterVol      $90
-	dc.b	$88, $03, $03
+	dc.b	pwmElectricHiHat, $03, $03
 	smpsFMAlterVol      $70
 	smpsReturn
 

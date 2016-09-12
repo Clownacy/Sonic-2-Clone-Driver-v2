@@ -342,60 +342,60 @@ MechanicalDance_Call02:
 
 ; PWM1 Data
 MechanicalDance_PWM1:
-	dc.b	$81, $18, $80, $12, $81, $06, $80, $81, $81, $0C, $80, $18
-	dc.b	$81, $18, $80, $12, $81, $06, $80, $81, $81, $0C, $80, $18
+	dc.b	pwmElectricKick, $18, nRst, $12, pwmElectricKick, $06, nRst, pwmElectricKick, pwmElectricKick, $0C, nRst, $18
+	dc.b	pwmElectricKick, $18, nRst, $12, pwmElectricKick, $06, nRst, pwmElectricKick, pwmElectricKick, $0C, nRst, $18
 
 MechanicalDance_Loop03:
-	dc.b	$81, $18, $80, $12, $81, $06, $80, $81, $81, $0C, $80, $18
+	dc.b	pwmElectricKick, $18, nRst, $12, pwmElectricKick, $06, nRst, pwmElectricKick, pwmElectricKick, $0C, nRst, $18
 	smpsLoop            $00, $08, MechanicalDance_Loop03
 	smpsJump            MechanicalDance_Loop03
 
 ; PWM2 Data
 MechanicalDance_PWM2:
-	dc.b	$96, $18, $82, $80, $82, $12
+	dc.b	pwmSilence, $18, pwmElectricSnare, nRst, pwmElectricSnare, $12
 	smpsFMAlterVol      $BC
 	dc.b	$03
 	smpsFMAlterVol      $22
 	dc.b	$03
 	smpsFMAlterVol      $22
-	dc.b	$80, $18, $82, $80, $82
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare
 
 MechanicalDance_Loop02:
-	dc.b	$80, $18, $82, $80, $82, $12
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, $12
 	smpsFMAlterVol      $BC
 	dc.b	$03
 	smpsFMAlterVol      $22
 	dc.b	$03
 	smpsFMAlterVol      $22
-	dc.b	$80, $18, $82, $80, $82
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare
 	smpsLoop            $00, $04, MechanicalDance_Loop02
 	smpsJump            MechanicalDance_Loop02
 
 ; PWM3 Data
 MechanicalDance_PWM3:
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
-	dc.b	$80
+	dc.b	nRst
 
 MechanicalDance_Loop01:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsLoop            $00, $02, MechanicalDance_Loop01
 	smpsJump            MechanicalDance_Loop01
 
 ; PWM4 Data
 MechanicalDance_PWM4:
-	dc.b	$88, $06
+	dc.b	pwmElectricHiHat, $06
 	smpsFMAlterVol      $CD
 	dc.b	$06, $06, $06
 	smpsFMAlterVol      $33
 	smpsLoop            $00, $08, MechanicalDance_PWM4
 
 MechanicalDance_Loop00:
-	dc.b	$88, $06
+	dc.b	pwmElectricHiHat, $06
 	smpsFMAlterVol      $CD
 	dc.b	$06, $06, $06
 	smpsFMAlterVol      $33

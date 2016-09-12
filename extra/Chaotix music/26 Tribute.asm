@@ -704,138 +704,138 @@ Tribute_Call08:
 
 ; PWM1 Data
 Tribute_PWM1:
-	dc.b	$8B, $5A, $06, $80, $5A, $8B, $06, $80, $5A, $8B, $06, $80
-	dc.b	$2A, $8B, $36, $8B, $5A, $06, $80, $5A, $8B, $06, $80, $5A
-	dc.b	$8B, $06, $80, $60, $80, $3C, $8B, $06, $06, $80, $18
+	dc.b	pwmAcousticKick, $5A, $06, nRst, $5A, pwmAcousticKick, $06, nRst, $5A, pwmAcousticKick, $06, nRst
+	dc.b	$2A, pwmAcousticKick, $36, pwmAcousticKick, $5A, $06, nRst, $5A, pwmAcousticKick, $06, nRst, $5A
+	dc.b	pwmAcousticKick, $06, nRst, $60, nRst, $3C, pwmAcousticKick, $06, $06, nRst, $18
 
 Tribute_Loop04:
-	dc.b	$8B, $18, $18, $12, $06, $80, $8B, $80, $8B, $80, $18, $8B
-	dc.b	$18, $12, $12, $0C, $8B, $18, $18, $12, $06, $80, $8B, $80
-	dc.b	$8B, $80, $18, $8B, $8B, $8B
+	dc.b	pwmAcousticKick, $18, $18, $12, $06, nRst, pwmAcousticKick, nRst, pwmAcousticKick, nRst, $18, pwmAcousticKick
+	dc.b	$18, $12, $12, $0C, pwmAcousticKick, $18, $18, $12, $06, nRst, pwmAcousticKick, nRst
+	dc.b	pwmAcousticKick, nRst, $18, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 	smpsLoop            $00, $04, Tribute_Loop04
-	dc.b	$8B, $24, $30, $0C, $80, $24, $8B, $30, $0C, $80, $54, $8B
-	dc.b	$0C, $80, $60, $80, $2A, $8B, $06, $80, $2A, $8B, $06, $80
-	dc.b	$2A, $8B, $06
+	dc.b	pwmAcousticKick, $24, $30, $0C, nRst, $24, pwmAcousticKick, $30, $0C, nRst, $54, pwmAcousticKick
+	dc.b	$0C, nRst, $60, nRst, $2A, pwmAcousticKick, $06, nRst, $2A, pwmAcousticKick, $06, nRst
+	dc.b	$2A, pwmAcousticKick, $06
 	smpsStop
 
 ; PWM2 Data
 Tribute_PWM2:
-	dc.b	$96, $48, $82, $18, $80, $48, $82, $06, $86, $06
+	dc.b	pwmSilence, $48, pwmElectricSnare, $18, nRst, $48, pwmElectricSnare, $06, pwmMidTom, $06
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
-	dc.b	$80, $48, $82, $18, $80, $30, $82, $06
+	dc.b	nRst, $48, pwmElectricSnare, $18, nRst, $30, pwmElectricSnare, $06
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86, $82
+	dc.b	pwmMidTom, pwmElectricSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82, $82, $82, $96, $48, $82, $18, $80, $48, $82, $06, $86
+	dc.b	pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, pwmSilence, $48, pwmElectricSnare, $18, nRst, $48, pwmElectricSnare, $06, pwmMidTom
 	dc.b	$06
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
-	dc.b	$80, $48, $82, $18, $80, $60, $80, $48, $82, $18
+	dc.b	nRst, $48, pwmElectricSnare, $18, nRst, $60, nRst, $48, pwmElectricSnare, $18
 
 Tribute_Loop03:
-	dc.b	$80, $18, $82, $80, $82, $80, $82, $80, $82, $80, $82, $80
-	dc.b	$82, $80, $82, $80, $82, $06
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst
+	dc.b	pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, $06
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86, $82, $80, $18, $82, $80, $82, $80, $82, $80, $82, $80
-	dc.b	$82, $80, $82, $80, $82, $80, $06
+	dc.b	pwmMidTom, pwmElectricSnare, nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst
+	dc.b	pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, $06
 	smpsFMAlterVol      $07
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $F9
-	dc.b	$86, $82, $80, $82, $82, $82
+	dc.b	pwmMidTom, pwmElectricSnare, nRst, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare
 	smpsLoop            $00, $02, Tribute_Loop03
-	dc.b	$80, $3C, $82, $0C
+	dc.b	nRst, $3C, pwmElectricSnare, $0C
 	smpsFMAlterVol      $F9
-	dc.b	$85, $04
+	dc.b	pwmHighTom, $04
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$80, $0C, $80, $3C, $82, $06, $82, $82, $82, $80, $0C, $80
-	dc.b	$60, $80, $36
+	dc.b	nRst, $0C, nRst, $3C, pwmElectricSnare, $06, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, nRst, $0C, nRst
+	dc.b	$60, nRst, $36
 	smpsFMAlterVol      $F9
-	dc.b	$85, $06
+	dc.b	pwmHighTom, $06
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82, $82, $82, $82, $80, $82, $82, $82, $82, $82, $82, $80
-	dc.b	$80, $82
+	dc.b	pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, nRst, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, nRst
+	dc.b	nRst, pwmElectricSnare
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86, $82
+	dc.b	pwmMidTom, pwmElectricSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82, $80, $80, $82, $82, $86, $82
+	dc.b	pwmElectricSnare, nRst, nRst, pwmElectricSnare, pwmElectricSnare, pwmMidTom, pwmElectricSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82, $80
+	dc.b	pwmElectricSnare, nRst
 	smpsStop
 
 ; PWM3 Data
 Tribute_PWM3:
 	smpsFMAlterVol      $80
-	dc.b	$89, $60, $80, $60, $80, $5A, $89, $06, $80, $2A
+	dc.b	pwmCrashCymbal, $60, nRst, $60, nRst, $5A, pwmCrashCymbal, $06, nRst, $2A
 	smpsFMAlterVol      $80
 	smpsFMAlterVol      $F8
-	dc.b	$83, $36
+	dc.b	pwmSplashCymbal, $36
 	smpsFMAlterVol      $08
 	smpsFMAlterVol      $80
-	dc.b	$89, $60, $80, $60, $80, $5A, $89, $06, $80, $60
+	dc.b	pwmCrashCymbal, $60, nRst, $60, nRst, $5A, pwmCrashCymbal, $06, nRst, $60
 	smpsFMAlterVol      $80
-	dc.b	$80, $48
+	dc.b	nRst, $48
 	smpsFMAlterVol      $F8
-	dc.b	$83, $18
+	dc.b	pwmSplashCymbal, $18
 	smpsFMAlterVol      $08
 
 Tribute_Loop02:
 	smpsFMAlterVol      $80
-	dc.b	$89, $60, $80, $80, $80, $89, $80, $80
+	dc.b	pwmCrashCymbal, $60, nRst, nRst, nRst, pwmCrashCymbal, nRst, nRst
 	smpsFMAlterVol      $80
-	dc.b	$80, $30
+	dc.b	nRst, $30
 	smpsFMAlterVol      $F8
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $08
 	smpsLoop            $00, $02, Tribute_Loop02
 	smpsFMAlterVol      $80
-	dc.b	$89, $24
+	dc.b	pwmCrashCymbal, $24
 	smpsFMAlterVol      $80
 	smpsFMAlterVol      $F8
-	dc.b	$83, $30
+	dc.b	pwmSplashCymbal, $30
 	smpsFMAlterVol      $08
 	smpsFMAlterVol      $80
-	dc.b	$89, $0C, $80, $24
+	dc.b	pwmCrashCymbal, $0C, nRst, $24
 	smpsFMAlterVol      $80
 	smpsFMAlterVol      $F8
-	dc.b	$83, $30
+	dc.b	pwmSplashCymbal, $30
 	smpsFMAlterVol      $08
 	smpsFMAlterVol      $80
-	dc.b	$89, $0C, $80, $54
+	dc.b	pwmCrashCymbal, $0C, nRst, $54
 	smpsFMAlterVol      $80
 	smpsFMAlterVol      $F8
-	dc.b	$83, $0C, $80, $60
+	dc.b	pwmSplashCymbal, $0C, nRst, $60
 	smpsFMAlterVol      $08
-	dc.b	$80, $2A
+	dc.b	nRst, $2A
 	smpsFMAlterVol      $80
-	dc.b	$89, $06, $80, $2A
+	dc.b	pwmCrashCymbal, $06, nRst, $2A
 	smpsFMAlterVol      $80
 	smpsFMAlterVol      $F8
-	dc.b	$83, $06, $80, $2A
+	dc.b	pwmSplashCymbal, $06, nRst, $2A
 	smpsFMAlterVol      $80
-	dc.b	$89, $06, $80, $60
+	dc.b	pwmCrashCymbal, $06, nRst, $60
 	smpsFMAlterVol      $80
 	smpsStop
 
@@ -858,7 +858,7 @@ Tribute_Loop01:
 	smpsStop
 
 Tribute_Call00:
-	dc.b	$88, $06, $06
+	dc.b	pwmElectricHiHat, $06, $06
 	smpsFMAlterVol      $44
 	dc.b	$06
 	smpsFMAlterVol      $BC
@@ -867,11 +867,11 @@ Tribute_Call00:
 	smpsReturn
 
 Tribute_Call01:
-	dc.b	$88, $04
+	dc.b	pwmElectricHiHat, $04
 	smpsLoop            $00, $0C, Tribute_Call01
 	smpsFMAlterVol      $EF
 	smpsLoop            $01, $02, Tribute_Call01
-	dc.b	$88, $60
+	dc.b	pwmElectricHiHat, $60
 	smpsFMAlterVol      $22
 	smpsReturn
 

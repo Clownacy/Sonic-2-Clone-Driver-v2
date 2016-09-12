@@ -406,28 +406,28 @@ TachyTouch_Loop0E:
 
 ; PWM1 Data
 TachyTouch_PWM1:
-	dc.b	$96, $40, $40, $40, $40
+	dc.b	pwmSilence, $40, $40, $40, $40
 
 TachyTouch_Loop03:
-	dc.b	$8B, $10, $8B, $8B, $8B, $8B, $8B, $8B, $8B, $0C, $8B, $04
+	dc.b	pwmAcousticKick, $10, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick, $0C, pwmAcousticKick, $04
 	smpsLoop            $00, $04, TachyTouch_Loop03
 
 TachyTouch_Loop04:
-	dc.b	$8B, $10, $8B, $8B, $8B
+	dc.b	pwmAcousticKick, $10, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 	smpsLoop            $00, $08, TachyTouch_Loop04
 	smpsJump            TachyTouch_Loop03
 
 ; PWM2 Data
 TachyTouch_PWM2:
-	dc.b	$96, $40, $96, $40, $96, $40, $96, $20, $82, $04, $08, $04
+	dc.b	pwmSilence, $40, pwmSilence, $40, pwmSilence, $40, pwmSilence, $20, pwmElectricSnare, $04, $08, $04
 	dc.b	$08, $08
 
 TachyTouch_Jump00:
 	smpsCall            TachyTouch_Call00
-	dc.b	$80, $10, $82, $0C, $04, $80, $04, $82, $04, $08, $10, $80
-	dc.b	$10, $82, $0C, $04, $80, $04, $82, $04, $08, $82, $08, $04
-	dc.b	$04, $80, $10, $82, $0C, $04, $80, $04, $82, $04, $08, $10
-	dc.b	$80, $10, $82, $0C, $04, $82, $04, $08, $04, $82, $08, $08
+	dc.b	nRst, $10, pwmElectricSnare, $0C, $04, nRst, $04, pwmElectricSnare, $04, $08, $10, nRst
+	dc.b	$10, pwmElectricSnare, $0C, $04, nRst, $04, pwmElectricSnare, $04, $08, pwmElectricSnare, $08, $04
+	dc.b	$04, nRst, $10, pwmElectricSnare, $0C, $04, nRst, $04, pwmElectricSnare, $04, $08, $10
+	dc.b	nRst, $10, pwmElectricSnare, $0C, $04, pwmElectricSnare, $04, $08, $04, pwmElectricSnare, $08, $08
 
 TachyTouch_Loop02:
 	smpsCall            TachyTouch_Call00
@@ -435,29 +435,29 @@ TachyTouch_Loop02:
 	smpsJump            TachyTouch_Jump00
 
 TachyTouch_Call00:
-	dc.b	$80, $10, $82, $0C, $04, $80, $04, $82, $04, $08, $10, $80
-	dc.b	$10, $82, $0C, $04, $80, $04, $82, $04, $08, $08, $04, $04
-	dc.b	$80, $10, $82, $0C, $04, $80, $04, $82, $04, $08, $10, $80
-	dc.b	$10, $82, $0C, $04, $80, $04, $82, $82, $82, $82, $08, $04
+	dc.b	nRst, $10, pwmElectricSnare, $0C, $04, nRst, $04, pwmElectricSnare, $04, $08, $10, nRst
+	dc.b	$10, pwmElectricSnare, $0C, $04, nRst, $04, pwmElectricSnare, $04, $08, $08, $04, $04
+	dc.b	nRst, $10, pwmElectricSnare, $0C, $04, nRst, $04, pwmElectricSnare, $04, $08, $10, nRst
+	dc.b	$10, pwmElectricSnare, $0C, $04, nRst, $04, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, $08, $04
 	dc.b	$04
 	smpsReturn
 
 ; PWM3 Data
 TachyTouch_PWM3:
-	dc.b	$80, $40, $80, $40, $80, $40, $80, $40
+	dc.b	nRst, $40, nRst, $40, nRst, $40, nRst, $40
 
 TachyTouch_Loop00:
-	dc.b	$80, $40
+	dc.b	nRst, $40
 	smpsLoop            $00, $08, TachyTouch_Loop00
 
 TachyTouch_Loop01:
-	dc.b	$84, $08, $96, $84, $96, $84, $08, $96, $04, $84, $04, smpsNoAttack
-	dc.b	$04, $96, $84, $08, $96, $08, $84, $04, $96, $84, $08, $96
-	dc.b	$84, $08, $96, $04, $84, $04, smpsNoAttack, $04, $96, $84, $04, $96
+	dc.b	pwmRideBell, $08, pwmSilence, pwmRideBell, pwmSilence, pwmRideBell, $08, pwmSilence, $04, pwmRideBell, $04, smpsNoAttack
+	dc.b	$04, pwmSilence, pwmRideBell, $08, pwmSilence, $08, pwmRideBell, $04, pwmSilence, pwmRideBell, $08, pwmSilence
+	dc.b	pwmRideBell, $08, pwmSilence, $04, pwmRideBell, $04, smpsNoAttack, $04, pwmSilence, pwmRideBell, $04, pwmSilence
 	smpsLoop            $00, $03, TachyTouch_Loop01
-	dc.b	$84, $08, $96, $84, $96, $84, $08, $96, $04, $84, $04, smpsNoAttack
-	dc.b	$04, $96, $84, $08, $96, $08, $84, $04, $96, $84, $08, $96
-	dc.b	$84, $08, $96, $04, $84, $04, smpsNoAttack, $04, $96, $80, $08
+	dc.b	pwmRideBell, $08, pwmSilence, pwmRideBell, pwmSilence, pwmRideBell, $08, pwmSilence, $04, pwmRideBell, $04, smpsNoAttack
+	dc.b	$04, pwmSilence, pwmRideBell, $08, pwmSilence, $08, pwmRideBell, $04, pwmSilence, pwmRideBell, $08, pwmSilence
+	dc.b	pwmRideBell, $08, pwmSilence, $04, pwmRideBell, $04, smpsNoAttack, $04, pwmSilence, nRst, $08
 	smpsJump            TachyTouch_Loop00
 
 ; PWM4 Data

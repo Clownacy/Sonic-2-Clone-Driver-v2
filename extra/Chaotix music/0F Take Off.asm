@@ -230,77 +230,77 @@ TakeOff_Loop03:
 
 ; PWM1 Data
 TakeOff_PWM1:
-	dc.b	$81, $06, $81, $06, $80, $18
+	dc.b	pwmElectricKick, $06, pwmElectricKick, $06, nRst, $18
 
 TakeOff_Jump01:
-	dc.b	$81, $30, $81, $81, $81, $24, $0C, $80, $30, $81, $81, $81
-	dc.b	$24, $0C, $80, $30, $81, $81, $81, $24, $0C, $80, $30, $81
-	dc.b	$81, $30, $81
+	dc.b	pwmElectricKick, $30, pwmElectricKick, pwmElectricKick, pwmElectricKick, $24, $0C, nRst, $30, pwmElectricKick, pwmElectricKick, pwmElectricKick
+	dc.b	$24, $0C, nRst, $30, pwmElectricKick, pwmElectricKick, pwmElectricKick, $24, $0C, nRst, $30, pwmElectricKick
+	dc.b	pwmElectricKick, $30, pwmElectricKick
 	smpsJump            TakeOff_Jump01
 
 ; PWM2 Data
 TakeOff_PWM2:
-	dc.b	$96, $0C, $8C, $18
+	dc.b	pwmSilence, $0C, pwmAcousticSnare, $18
 
 TakeOff_Loop01:
-	dc.b	$80, $18, $86, $80, $86
+	dc.b	nRst, $18, pwmMidTom, nRst, pwmMidTom
 	smpsLoop            $00, $07, TakeOff_Loop01
-	dc.b	$80, $0C, $8C, $8C, $86, $8C, $06, $8C, $86, $80, $86, $8C
-	dc.b	$8C, $8C
+	dc.b	nRst, $0C, pwmAcousticSnare, pwmAcousticSnare, pwmMidTom, pwmAcousticSnare, $06, pwmAcousticSnare, pwmMidTom, nRst, pwmMidTom, pwmAcousticSnare
+	dc.b	pwmAcousticSnare, pwmAcousticSnare
 	smpsJump            TakeOff_Loop01
 
 ; PWM3 Data
 TakeOff_PWM3:
-	dc.b	$96, $0C
+	dc.b	pwmSilence, $0C
 	smpsFMAlterVol      $FC
-	dc.b	$83, $18
+	dc.b	pwmSplashCymbal, $18
 	smpsFMAlterVol      $04
 
 TakeOff_Jump00:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $18
+	dc.b	pwmCrashCymbal, $18
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $90
-	dc.b	$87, $80, $87, $80, $87, $80, $87, $0C
+	dc.b	pwmLowTom, nRst, pwmLowTom, nRst, pwmLowTom, nRst, pwmLowTom, $0C
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $FC
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $90
-	dc.b	$80, $18, $87, $80, $87, $80, $87, $80, $87, $0C
+	dc.b	nRst, $18, pwmLowTom, nRst, pwmLowTom, nRst, pwmLowTom, nRst, pwmLowTom, $0C
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $C0
-	dc.b	$89
+	dc.b	pwmCrashCymbal
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $90
-	dc.b	$80, $18, $87, $80, $87, $80, $87, $80, $87, $0C
+	dc.b	nRst, $18, pwmLowTom, nRst, pwmLowTom, nRst, pwmLowTom, nRst, pwmLowTom, $0C
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $FC
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $90
-	dc.b	$80, $18, $87, $80, $87
+	dc.b	nRst, $18, pwmLowTom, nRst, pwmLowTom
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $C0
-	dc.b	$89, $48
+	dc.b	pwmCrashCymbal, $48
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $90
-	dc.b	$87, $18
+	dc.b	pwmLowTom, $18
 	smpsFMAlterVol      $70
 	smpsJump            TakeOff_Jump00
 
 ; PWM4 Data
 TakeOff_PWM4:
-	dc.b	$96, $24
+	dc.b	pwmSilence, $24
 
 TakeOff_Loop00:
-	dc.b	$80, $0C
+	dc.b	nRst, $0C
 	smpsFMAlterVol      $F9
-	dc.b	$88, $06, $06, $06, $12
+	dc.b	pwmElectricHiHat, $06, $06, $06, $12
 	smpsFMAlterVol      $07
-	dc.b	$80, $0C
+	dc.b	nRst, $0C
 	smpsFMAlterVol      $90
-	dc.b	$8A, $06, $06, $06, $12
+	dc.b	pwmClap, $06, $06, $06, $12
 	smpsFMAlterVol      $70
 	smpsLoop            $00, $08, TakeOff_Loop00
 	smpsJump            TakeOff_Loop00

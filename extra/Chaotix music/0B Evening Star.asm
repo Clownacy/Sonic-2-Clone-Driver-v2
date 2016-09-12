@@ -521,43 +521,43 @@ EveningStar_Call11:
 
 ; PWM1 Data
 EveningStar_PWM1:
-	dc.b	$96, $18, $8B, $80, $8B, $80, $8B, $80, $8B, $80, $8B, $80
-	dc.b	$8B, $80, $8B, $8B, $0C, $0C, $80, $08, $8B, $04, $80, $08
-	dc.b	$8B, $04
+	dc.b	pwmSilence, $18, pwmAcousticKick, nRst, pwmAcousticKick, nRst, pwmAcousticKick, nRst, pwmAcousticKick, nRst, pwmAcousticKick, nRst
+	dc.b	pwmAcousticKick, nRst, pwmAcousticKick, pwmAcousticKick, $0C, $0C, nRst, $08, pwmAcousticKick, $04, nRst, $08
+	dc.b	pwmAcousticKick, $04
 
 EveningStar_Loop07:
-	dc.b	$8B, $0C, $0C, $80, $24, $8B, $0C, $80, $08, $8B, $04, $80
-	dc.b	$08, $8B, $04
+	dc.b	pwmAcousticKick, $0C, $0C, nRst, $24, pwmAcousticKick, $0C, nRst, $08, pwmAcousticKick, $04, nRst
+	dc.b	$08, pwmAcousticKick, $04
 	smpsLoop            $00, $0B, EveningStar_Loop07
-	dc.b	$8B, $0C, $8B, $80, $38, $8B, $04, $80, $08, $8B, $04
+	dc.b	pwmAcousticKick, $0C, pwmAcousticKick, nRst, $38, pwmAcousticKick, $04, nRst, $08, pwmAcousticKick, $04
 
 EveningStar_Loop08:
-	dc.b	$8B, $0C, $0C, $80, $24, $8B, $0C, $80, $08, $8B, $04, $80
-	dc.b	$08, $8B, $04
+	dc.b	pwmAcousticKick, $0C, $0C, nRst, $24, pwmAcousticKick, $0C, nRst, $08, pwmAcousticKick, $04, nRst
+	dc.b	$08, pwmAcousticKick, $04
 	smpsLoop            $00, $04, EveningStar_Loop08
 	smpsJump            EveningStar_Loop07
 
 ; PWM2 Data
 EveningStar_PWM2:
 	smpsFMAlterVol      $03
-	dc.b	$96, $18, $8A, $80, $8A, $80, $8A, $80, $8A, $80, $8A, $80
-	dc.b	$8A, $80, $8A, $80, $0C
+	dc.b	pwmSilence, $18, pwmClap, nRst, pwmClap, nRst, pwmClap, nRst, pwmClap, nRst, pwmClap, nRst
+	dc.b	pwmClap, nRst, pwmClap, nRst, $0C
 	smpsFMAlterVol      $FD
-	dc.b	$82, $08, $04
+	dc.b	pwmElectricSnare, $08, $04
 	smpsFMAlterVol      $90
-	dc.b	$87, $08, $04, $08, $04
+	dc.b	pwmLowTom, $08, $04, $08, $04
 	smpsFMAlterVol      $70
 
 EveningStar_Loop05:
 	smpsCall            EveningStar_Call02
 	smpsLoop            $00, $0B, EveningStar_Loop05
-	dc.b	$80, $18, $82, $80, $20
+	dc.b	nRst, $18, pwmElectricSnare, nRst, $20
 	smpsFMAlterVol      $F9
-	dc.b	$85, $04
+	dc.b	pwmHighTom, $04
 	smpsFMAlterVol      $07
-	dc.b	$86, $08
+	dc.b	pwmMidTom, $08
 	smpsFMAlterVol      $90
-	dc.b	$87, $04
+	dc.b	pwmLowTom, $04
 	smpsFMAlterVol      $70
 
 EveningStar_Loop06:
@@ -566,50 +566,50 @@ EveningStar_Loop06:
 	smpsJump            EveningStar_Loop05
 
 EveningStar_Call02:
-	dc.b	$80, $18, $82, $80, $82, $08
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, $08
 	smpsFMAlterVol      $F9
-	dc.b	$85, $04
+	dc.b	pwmHighTom, $04
 	smpsFMAlterVol      $07
-	dc.b	$86, $08
+	dc.b	pwmMidTom, $08
 	smpsFMAlterVol      $90
-	dc.b	$87, $04
+	dc.b	pwmLowTom, $04
 	smpsFMAlterVol      $70
 	smpsReturn
 
 ; PWM3 Data
 EveningStar_PWM3:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60, $80, $89, $60, $80, $30
+	dc.b	pwmCrashCymbal, $60, nRst, pwmCrashCymbal, $60, nRst, $30
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $30
+	dc.b	pwmSplashCymbal, $30
 	smpsFMAlterVol      $04
 
 EveningStar_Jump00:
 	smpsCall            EveningStar_Call01
 
 EveningStar_Loop03:
-	dc.b	$80, $8A, $80, $8A
+	dc.b	nRst, pwmClap, nRst, pwmClap
 	smpsLoop            $00, $07, EveningStar_Loop03
 	smpsCall            EveningStar_Call01
-	dc.b	$80, $8A, $80, $8A, $80, $8A, $80, $8A, $80, $8A, $14, $04
-	dc.b	$80, $30
+	dc.b	nRst, pwmClap, nRst, pwmClap, nRst, pwmClap, nRst, pwmClap, nRst, pwmClap, $14, $04
+	dc.b	nRst, $30
 
 EveningStar_Loop04:
-	dc.b	$80, $18, $8A, $80, $8A
+	dc.b	nRst, $18, pwmClap, nRst, pwmClap
 	smpsLoop            $00, $04, EveningStar_Loop04
 	smpsJump            EveningStar_Jump00
 
 EveningStar_Call01:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $18
+	dc.b	pwmCrashCymbal, $18
 	smpsFMAlterVol      $40
-	dc.b	$8A, $80, $8A
+	dc.b	pwmClap, nRst, pwmClap
 	smpsReturn
 
 ; PWM4 Data
 EveningStar_PWM4:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 	smpsLoop            $00, $04, EveningStar_PWM4
 
 EveningStar_Loop00:
@@ -617,7 +617,7 @@ EveningStar_Loop00:
 	smpsLoop            $01, $0B, EveningStar_Loop00
 
 EveningStar_Loop01:
-	dc.b	$88, $08
+	dc.b	pwmElectricHiHat, $08
 	smpsFMAlterVol      $CD
 	dc.b	$04
 	smpsFMAlterVol      $22
@@ -626,7 +626,7 @@ EveningStar_Loop01:
 	dc.b	$04
 	smpsFMAlterVol      $33
 	smpsLoop            $00, $02, EveningStar_Loop01
-	dc.b	$80, $30
+	dc.b	nRst, $30
 
 EveningStar_Loop02:
 	smpsCall            EveningStar_Call00
@@ -634,7 +634,7 @@ EveningStar_Loop02:
 	smpsJump            EveningStar_Loop00
 
 EveningStar_Call00:
-	dc.b	$88, $08
+	dc.b	pwmElectricHiHat, $08
 	smpsFMAlterVol      $CD
 	dc.b	$04
 	smpsFMAlterVol      $22

@@ -1082,119 +1082,119 @@ DoorIntoSummer_Call0F:
 ; PWM1 Data
 DoorIntoSummer_PWM1:
 	smpsCall            DoorIntoSummer_Call02
-	dc.b	$81, $18, $80, $06, $81, $80, $81, $80, $18, $81
+	dc.b	pwmElectricKick, $18, nRst, $06, pwmElectricKick, nRst, pwmElectricKick, nRst, $18, pwmElectricKick
 
 DoorIntoSummer_Jump02:
 	smpsCall            DoorIntoSummer_Call02
-	dc.b	$81, $18, $80, $12, $81, $06, $80, $81, $81, $80, $80, $18
+	dc.b	pwmElectricKick, $18, nRst, $12, pwmElectricKick, $06, nRst, pwmElectricKick, pwmElectricKick, nRst, nRst, $18
 	smpsCall            DoorIntoSummer_Call02
-	dc.b	$81, $18, $80, $06, $81, $80, $81, $80, $30
+	dc.b	pwmElectricKick, $18, nRst, $06, pwmElectricKick, nRst, pwmElectricKick, nRst, $30
 
 DoorIntoSummer_Loop08:
-	dc.b	$80, $0C, $81, $80, $06, $81, $80, $81, $80, $30, $81, $18
-	dc.b	$80, $0C, $81, $80, $81, $80, $06, $81, $80, $81
+	dc.b	nRst, $0C, pwmElectricKick, nRst, $06, pwmElectricKick, nRst, pwmElectricKick, nRst, $30, pwmElectricKick, $18
+	dc.b	nRst, $0C, pwmElectricKick, nRst, pwmElectricKick, nRst, $06, pwmElectricKick, nRst, pwmElectricKick
 	smpsLoop            $00, $03, DoorIntoSummer_Loop08
-	dc.b	$80, $0C, $81, $80, $06, $81, $80, $81, $80, $18, $87, $0C
-	dc.b	$87, $81, $18, $80, $0C, $81, $80, $81, $81, $18
+	dc.b	nRst, $0C, pwmElectricKick, nRst, $06, pwmElectricKick, nRst, pwmElectricKick, nRst, $18, pwmLowTom, $0C
+	dc.b	pwmLowTom, pwmElectricKick, $18, nRst, $0C, pwmElectricKick, nRst, pwmElectricKick, pwmElectricKick, $18
 
 DoorIntoSummer_Loop09:
 	smpsCall            DoorIntoSummer_Call02
-	dc.b	$81, $18, $80, $12, $81, $06, $80, $81, $81, $80, $80, $18
+	dc.b	pwmElectricKick, $18, nRst, $12, pwmElectricKick, $06, nRst, pwmElectricKick, pwmElectricKick, nRst, nRst, $18
 	smpsLoop            $00, $04, DoorIntoSummer_Loop09
 	smpsCall            DoorIntoSummer_Call02
-	dc.b	$81, $18, $80, $06, $81, $80, $81, $80, $18, $81
+	dc.b	pwmElectricKick, $18, nRst, $06, pwmElectricKick, nRst, pwmElectricKick, nRst, $18, pwmElectricKick
 	smpsJump            DoorIntoSummer_Jump02
 
 DoorIntoSummer_Call02:
-	dc.b	$81, $18, $80, $12, $81, $06, $80, $81, $81, $80, $80, $0C
-	dc.b	$81, $81, $18, $80, $12, $81, $06, $80, $81, $81, $80, $80
-	dc.b	$18, $81, $18, $80, $12, $81, $06, $80, $81, $81, $80, $80
-	dc.b	$0C, $81
+	dc.b	pwmElectricKick, $18, nRst, $12, pwmElectricKick, $06, nRst, pwmElectricKick, pwmElectricKick, nRst, nRst, $0C
+	dc.b	pwmElectricKick, pwmElectricKick, $18, nRst, $12, pwmElectricKick, $06, nRst, pwmElectricKick, pwmElectricKick, nRst, nRst
+	dc.b	$18, pwmElectricKick, $18, nRst, $12, pwmElectricKick, $06, nRst, pwmElectricKick, pwmElectricKick, nRst, nRst
+	dc.b	$0C, pwmElectricKick
 	smpsReturn
 
 ; PWM2 Data
 DoorIntoSummer_PWM2:
-	dc.b	$96, $18, $82, $80, $82, $80, $82, $80, $82, $80, $82, $80
-	dc.b	$82, $80, $82, $80, $82
+	dc.b	pwmSilence, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst
+	dc.b	pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare
 
 DoorIntoSummer_Jump01:
 	smpsCall            DoorIntoSummer_Call01
 	smpsCall            DoorIntoSummer_Call01
-	dc.b	$80, $48, $82, $18, $80, $82, $80, $82, $80, $48, $82, $18
-	dc.b	$80, $82, $80, $82, $06
+	dc.b	nRst, $48, pwmElectricSnare, $18, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, $48, pwmElectricSnare, $18
+	dc.b	nRst, pwmElectricSnare, nRst, pwmElectricSnare, $06
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$80, $48, $82, $18, $80, $0C, $82, $82, $18, $80, $82, $80
+	dc.b	nRst, $48, pwmElectricSnare, $18, nRst, $0C, pwmElectricSnare, pwmElectricSnare, $18, nRst, pwmElectricSnare, nRst
 	dc.b	$3C
 	smpsFMAlterVol      $90
-	dc.b	$87, $04, $87, $87
+	dc.b	pwmLowTom, $04, pwmLowTom, pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82, $0C, $82, $80, $48, $82, $06, $82, $82, $82
+	dc.b	pwmElectricSnare, $0C, pwmElectricSnare, nRst, $48, pwmElectricSnare, $06, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare
 
 DoorIntoSummer_Loop06:
 	smpsCall            DoorIntoSummer_Call01
 	smpsLoop            $01, $04, DoorIntoSummer_Loop06
 
 DoorIntoSummer_Loop07:
-	dc.b	$80, $18, $82
+	dc.b	nRst, $18, pwmElectricSnare
 	smpsLoop            $00, $08, DoorIntoSummer_Loop07
 	smpsJump            DoorIntoSummer_Jump01
 
 DoorIntoSummer_Call01:
-	dc.b	$80, $18, $82
+	dc.b	nRst, $18, pwmElectricSnare
 	smpsLoop            $00, $07, DoorIntoSummer_Call01
-	dc.b	$80, $0C, $82, $82, $06, $82, $86, $0C
+	dc.b	nRst, $0C, pwmElectricSnare, pwmElectricSnare, $06, pwmElectricSnare, pwmMidTom, $0C
 	smpsReturn
 
 ; PWM3 Data
 DoorIntoSummer_PWM3:
-	dc.b	$96, $60, $80, $80, $80
+	dc.b	pwmSilence, $60, nRst, nRst, nRst
 
 DoorIntoSummer_Jump00:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80, $80, $80, $80, $80
+	dc.b	nRst, nRst, nRst, nRst, nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$80, $0C, $89, $54
+	dc.b	nRst, $0C, pwmCrashCymbal, $54
 	smpsFMAlterVol      $40
-	dc.b	$80, $60, $80, $80, $80, $80, $80
+	dc.b	nRst, $60, nRst, nRst, nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $12
+	dc.b	pwmCrashCymbal, $12
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $06, $80, $0C
+	dc.b	pwmSplashCymbal, $06, nRst, $0C
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $80, $06
+	dc.b	pwmCrashCymbal, nRst, $06
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $12, $80, $18
+	dc.b	pwmSplashCymbal, $12, nRst, $18
 	smpsFMAlterVol      $04
 
 DoorIntoSummer_Loop05:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsLoop            $00, $03, DoorIntoSummer_Loop05
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $04
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsJump            DoorIntoSummer_Jump00
 
 ; PWM4 Data
@@ -1202,7 +1202,7 @@ DoorIntoSummer_PWM4:
 	smpsFMAlterVol      $F9
 
 DoorIntoSummer_Loop00:
-	dc.b	$96, $48, $8A, $18
+	dc.b	pwmSilence, $48, pwmClap, $18
 	smpsLoop            $00, $04, DoorIntoSummer_Loop00
 	smpsFMAlterVol      $07
 	smpsFMAlterVol      $BC
@@ -1212,37 +1212,37 @@ DoorIntoSummer_Loop01:
 	smpsLoop            $01, $03, DoorIntoSummer_Loop01
 
 DoorIntoSummer_Loop02:
-	dc.b	$80, $0C, $88
+	dc.b	nRst, $0C, pwmElectricHiHat
 	smpsLoop            $00, $05, DoorIntoSummer_Loop02
-	dc.b	$80, $0C, $88, $06, $06, $80, $30
+	dc.b	nRst, $0C, pwmElectricHiHat, $06, $06, nRst, $30
 	smpsFMAlterVol      $44
 
 DoorIntoSummer_Loop03:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 	smpsLoop            $00, $08, DoorIntoSummer_Loop03
 	smpsFMAlterVol      $D0
 
 DoorIntoSummer_Loop04:
-	dc.b	$80, $06, $84, $80, $84, $80, $84, $84, $80, $84, $80, $84
-	dc.b	$80, $84, $80, $84, $80, $84, $80, $84, $84, $80, $84, $84
-	dc.b	$80, $84, $80, $84, $80, $84, $80, $84, $84, $80, $84, $80
-	dc.b	$84, $84, $80, $84, $84, $80, $84, $84, $80, $84, $84, $80
-	dc.b	$84, $80, $84, $80, $84, $84, $80, $84, $84, $80, $84, $84
-	dc.b	$80, $84, $84, $84, $84
+	dc.b	nRst, $06, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell
+	dc.b	nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell
+	dc.b	nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, nRst
+	dc.b	pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst
+	dc.b	pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell
+	dc.b	nRst, pwmRideBell, pwmRideBell, pwmRideBell, pwmRideBell
 	smpsLoop            $00, $04, DoorIntoSummer_Loop04
-	dc.b	$80, $06, $84, $80, $84, $80, $84, $84, $80, $84, $80, $84
-	dc.b	$80, $84, $80, $84, $80, $84, $80, $84, $84, $80, $84, $84
-	dc.b	$80, $84, $80, $84, $80, $84, $80, $84, $84, $80, $84, $80
-	dc.b	$84, $84, $80, $84, $84, $80, $84, $84, $80, $84, $84, $80
-	dc.b	$84, $80, $84, $80, $84, $84, $80, $84, $84, $80, $30
+	dc.b	nRst, $06, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell
+	dc.b	nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell
+	dc.b	nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, nRst
+	dc.b	pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst
+	dc.b	pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, $30
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $BC
 	smpsJump            DoorIntoSummer_Loop01
 
 DoorIntoSummer_Call00:
-	dc.b	$80, $0C, $88
+	dc.b	nRst, $0C, pwmElectricHiHat
 	smpsLoop            $00, $07, DoorIntoSummer_Call00
-	dc.b	smpsNoAttack, $0C, $88, $06, $06
+	dc.b	smpsNoAttack, $0C, pwmElectricHiHat, $06, $06
 	smpsReturn
 
 DoorIntoSummer_Voices:

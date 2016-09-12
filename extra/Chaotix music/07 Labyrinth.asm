@@ -153,33 +153,33 @@ Labyrinth_Loop04:
 
 ; PWM1 Data
 Labyrinth_PWM1:
-	dc.b	$96, $54, $8B, $0C
+	dc.b	pwmSilence, $54, pwmAcousticKick, $0C
 
 Labyrinth_Jump02:
-	dc.b	$8B, $24, $8B, $8B, $30, $8B, $24, $8B, $8B, $30, $8B, $24
-	dc.b	$8B, $8B, $30, $8B, $24, $8B, $8B, $8B
+	dc.b	pwmAcousticKick, $24, pwmAcousticKick, pwmAcousticKick, $30, pwmAcousticKick, $24, pwmAcousticKick, pwmAcousticKick, $30, pwmAcousticKick, $24
+	dc.b	pwmAcousticKick, pwmAcousticKick, $30, pwmAcousticKick, $24, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 	smpsJump            Labyrinth_Jump02
 
 ; PWM2 Data
 Labyrinth_PWM2:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 
 Labyrinth_Jump01:
-	dc.b	$80, $24, $88, $30
+	dc.b	nRst, $24, pwmElectricHiHat, $30
 	smpsFMAlterVol      $FD
-	dc.b	$24, $80, $0C
+	dc.b	$24, nRst, $0C
 	smpsFMAlterVol      $FD
-	dc.b	$88, $30
+	dc.b	pwmElectricHiHat, $30
 	smpsFMAlterVol      $FD
 	dc.b	$30
 	smpsFMAlterVol      $03
-	dc.b	$0C, $80, $24
+	dc.b	$0C, nRst, $24
 	smpsFMAlterVol      $03
-	dc.b	$88, $30
+	dc.b	pwmElectricHiHat, $30
 	smpsFMAlterVol      $03
 	dc.b	$24, smpsNoAttack, $0C
 	smpsFMAlterVol      $C0
-	dc.b	$88, $30
+	dc.b	pwmElectricHiHat, $30
 	smpsFMAlterVol      $C0
 	dc.b	$30
 	smpsFMAlterVol      $40
@@ -191,55 +191,55 @@ Labyrinth_Jump01:
 
 ; PWM3 Data
 Labyrinth_PWM3:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 
 Labyrinth_Loop00:
-	dc.b	$8E, $0C, $8E, $8D
+	dc.b	pwmFingersSnapping, $0C, pwmFingersSnapping, pwmBell
 	smpsLoop            $00, $03, Labyrinth_Loop00
-	dc.b	$8E
+	dc.b	pwmFingersSnapping
 	smpsLoop            $01, $03, Labyrinth_Loop00
 
 Labyrinth_Loop01:
-	dc.b	$8E, $0C, $8E, $8D
+	dc.b	pwmFingersSnapping, $0C, pwmFingersSnapping, pwmBell
 	smpsLoop            $00, $04, Labyrinth_Loop01
 	smpsJump            Labyrinth_Loop00
 
 ; PWM4 Data
 Labyrinth_PWM4:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 
 Labyrinth_Jump00:
-	dc.b	$92, $0C, $93, $93
+	dc.b	pwmHighBongo, $0C, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $E0
-	dc.b	$92, $0C, $93, $93
+	dc.b	pwmHighBongo, $0C, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $E0
-	dc.b	$92, $0C, $93, $93
+	dc.b	pwmHighBongo, $0C, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $E0
-	dc.b	$92
+	dc.b	pwmHighBongo
 	smpsFMAlterVol      $E0
-	dc.b	$92, $0C, $93, $93
+	dc.b	pwmHighBongo, $0C, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $20
-	dc.b	$92, $0C, $93, $93
+	dc.b	pwmHighBongo, $0C, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $20
-	dc.b	$92, $0C, $93, $93
+	dc.b	pwmHighBongo, $0C, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $20
-	dc.b	$92
+	dc.b	pwmHighBongo
 	smpsFMAlterVol      $20
-	dc.b	$92, $0C, $93, $93
+	dc.b	pwmHighBongo, $0C, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $FE
-	dc.b	$92, $0C, $93, $93
+	dc.b	pwmHighBongo, $0C, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $FE
-	dc.b	$92, $0C, $93, $93
+	dc.b	pwmHighBongo, $0C, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $FE
-	dc.b	$92
+	dc.b	pwmHighBongo
 	smpsFMAlterVol      $FE
-	dc.b	$92, $0C, $93, $93
+	dc.b	pwmHighBongo, $0C, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $02
-	dc.b	$92, $0C, $93, $93
+	dc.b	pwmHighBongo, $0C, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $02
-	dc.b	$92, $0C, $93, $93
+	dc.b	pwmHighBongo, $0C, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $02
-	dc.b	$92, $0C, $93, $93
+	dc.b	pwmHighBongo, $0C, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $02
 	smpsJump            Labyrinth_Jump00
 

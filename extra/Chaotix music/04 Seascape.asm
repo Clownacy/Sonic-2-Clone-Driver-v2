@@ -904,111 +904,111 @@ Seascape_Call0D:
 
 ; PWM1 Data
 Seascape_PWM1:
-	dc.b	$96, $18, $8B, $0C
+	dc.b	pwmSilence, $18, pwmAcousticKick, $0C
 
 Seascape_Loop05:
-	dc.b	$8B, $12, $06, $80, $12, $8B, $06, $18, $80
+	dc.b	pwmAcousticKick, $12, $06, nRst, $12, pwmAcousticKick, $06, $18, nRst
 	smpsLoop            $00, $07, Seascape_Loop05
-	dc.b	$8B, $18, $8B, $8B, $8B
+	dc.b	pwmAcousticKick, $18, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 	smpsLoop            $01, $02, Seascape_Loop05
 
 Seascape_Loop06:
-	dc.b	$8B, $18, $80, $12, $8B, $06, $18, $80
+	dc.b	pwmAcousticKick, $18, nRst, $12, pwmAcousticKick, $06, $18, nRst
 	smpsLoop            $00, $10, Seascape_Loop06
-	dc.b	$80, $18, $8B, $80, $8B, $80, $8B, $80, $8B, $80, $8B, $80
-	dc.b	$8B, $80, $2A, $8B, $06, $80, $18, $8B, $18
+	dc.b	nRst, $18, pwmAcousticKick, nRst, pwmAcousticKick, nRst, pwmAcousticKick, nRst, pwmAcousticKick, nRst, pwmAcousticKick, nRst
+	dc.b	pwmAcousticKick, nRst, $2A, pwmAcousticKick, $06, nRst, $18, pwmAcousticKick, $18
 	smpsJump            Seascape_Loop05
 
 ; PWM2 Data
 Seascape_PWM2:
-	dc.b	$8C, $0C, $06, $06, $80, $0C
+	dc.b	pwmAcousticSnare, $0C, $06, $06, nRst, $0C
 
 Seascape_Loop04:
-	dc.b	$80, $1E, $8C, $12, $80, $18, $8C
+	dc.b	nRst, $1E, pwmAcousticSnare, $12, nRst, $18, pwmAcousticSnare
 	smpsLoop            $00, $07, Seascape_Loop04
-	dc.b	$80, $18, $8C, $80, $0C, $8C, $06, $8C, $8C, $8C
+	dc.b	nRst, $18, pwmAcousticSnare, nRst, $0C, pwmAcousticSnare, $06, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
 	smpsLoop            $01, $02, Seascape_Loop04
 	smpsCall            Seascape_Call00
-	dc.b	$80, $18, $8C, $8C, $12, $86, $06, $0C
+	dc.b	nRst, $18, pwmAcousticSnare, pwmAcousticSnare, $12, pwmMidTom, $06, $0C
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
 	smpsCall            Seascape_Call00
-	dc.b	$80, $18, $8C, $8C, $12, $86, $06, $8C, $8C
+	dc.b	nRst, $18, pwmAcousticSnare, pwmAcousticSnare, $12, pwmMidTom, $06, pwmAcousticSnare, pwmAcousticSnare
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
-	dc.b	$80, $60, $80, $80, $5A
+	dc.b	nRst, $60, nRst, nRst, $5A
 	smpsFMAlterVol      $F9
-	dc.b	$85, $06
+	dc.b	pwmHighTom, $06
 	smpsFMAlterVol      $07
-	dc.b	$80, $06, $86, $80
+	dc.b	nRst, $06, pwmMidTom, nRst
 	smpsFMAlterVol      $90
-	dc.b	$87, $80, $87
+	dc.b	pwmLowTom, nRst, pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$80, $8C, $18, $86, $06, $0C, $8C
+	dc.b	nRst, pwmAcousticSnare, $18, pwmMidTom, $06, $0C, pwmAcousticSnare
 	smpsJump            Seascape_Loop04
 
 Seascape_Call00:
-	dc.b	$80, $18, $8C, $80, $8C, $80, $18, $8C, $80, $8C, $80, $18
-	dc.b	$8C, $80, $8C, $80, $18, $8C, $80, $8C, $80, $18, $8C, $80
-	dc.b	$8C, $80, $18, $8C, $80, $8C, $80, $18, $8C, $80, $8C
+	dc.b	nRst, $18, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, $18, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, $18
+	dc.b	pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, $18, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, $18, pwmAcousticSnare, nRst
+	dc.b	pwmAcousticSnare, nRst, $18, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, $18, pwmAcousticSnare, nRst, pwmAcousticSnare
 	smpsReturn
 
 ; PWM3 Data
 Seascape_PWM3:
-	dc.b	$96, $18
+	dc.b	pwmSilence, $18
 	smpsFMAlterVol      $FB
-	dc.b	$83, $0C
+	dc.b	pwmSplashCymbal, $0C
 	smpsFMAlterVol      $05
 
 Seascape_Loop02:
 	smpsFMAlterVol      $B0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $50
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsLoop            $00, $04, Seascape_Loop02
 
 Seascape_Loop03:
 	smpsFMAlterVol      $B0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $50
-	dc.b	$80, $80
+	dc.b	nRst, nRst
 	smpsFMAlterVol      $B0
-	dc.b	$80, $30, $89, $18
+	dc.b	nRst, $30, pwmCrashCymbal, $18
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $50
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsLoop            $00, $02, Seascape_Loop03
 	smpsFMAlterVol      $B0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $50
-	dc.b	$80, $60, $80, $5A
+	dc.b	nRst, $60, nRst, $5A
 	smpsFMAlterVol      $FB
-	dc.b	$83, $06, $80, $54, $83, $0C
+	dc.b	pwmSplashCymbal, $06, nRst, $54, pwmSplashCymbal, $0C
 	smpsFMAlterVol      $05
 	smpsJump            Seascape_Loop02
 
 ; PWM4 Data
 Seascape_PWM4:
-	dc.b	$96, $24
+	dc.b	pwmSilence, $24
 
 Seascape_Loop00:
-	dc.b	$80, $0C, $88
+	dc.b	nRst, $0C, pwmElectricHiHat
 	smpsLoop            $00, $80, Seascape_Loop00
 
 Seascape_Loop01:
-	dc.b	$80, $0C, $88
+	dc.b	nRst, $0C, pwmElectricHiHat
 	smpsLoop            $00, $0C, Seascape_Loop01
-	dc.b	$80, $06, $88, $80, $88, $80, $88, $80, $88, $80, $30
+	dc.b	nRst, $06, pwmElectricHiHat, nRst, pwmElectricHiHat, nRst, pwmElectricHiHat, nRst, pwmElectricHiHat, nRst, $30
 	smpsJump            Seascape_Loop00
 
 Seascape_Voices:

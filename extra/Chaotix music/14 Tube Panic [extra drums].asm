@@ -1115,198 +1115,198 @@ TubePanic_Call11:
 ; PWM1 Data
 TubePanic_PWM1:
 	smpsFMAlterVol      $33
-	dc.b	$82, $06, $82
+	dc.b	pwmElectricSnare, $06, pwmElectricSnare
 	smpsFMAlterVol      $CD
-	dc.b	$81, $0C
+	dc.b	pwmElectricKick, $0C
 
 TubePanic_Loop03:
 	smpsCall            TubePanic_Call00
 	smpsCall            TubePanic_Call01
 	smpsLoop            $00, $02, TubePanic_Loop03
 	smpsCall            TubePanic_Call00
-	dc.b	$81, $06
+	dc.b	pwmElectricKick, $06
 	smpsFMAlterVol      $F8
-	dc.b	$91, $80
+	dc.b	pwmLowClick, nRst
 	smpsFMAlterVol      $08
 	smpsFMAlterVol      $33
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $CD
-	dc.b	$81, $80
+	dc.b	pwmElectricKick, nRst
 	smpsFMAlterVol      $80
-	dc.b	$90, $80
+	dc.b	pwmHighClick, nRst
 	smpsFMAlterVol      $80
-	dc.b	$81
+	dc.b	pwmElectricKick
 	smpsFMAlterVol      $F8
-	dc.b	$91, $91, $91
+	dc.b	pwmLowClick, pwmLowClick, pwmLowClick
 	smpsFMAlterVol      $08
-	dc.b	$81, $80
+	dc.b	pwmElectricKick, nRst
 	smpsFMAlterVol      $F8
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $08
 	smpsFMAlterVol      $33
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $CD
 	smpsCall            TubePanic_Call00
-	dc.b	$81, $06
+	dc.b	pwmElectricKick, $06
 	smpsFMAlterVol      $F8
-	dc.b	$91, $80
+	dc.b	pwmLowClick, nRst
 	smpsFMAlterVol      $08
 	smpsFMAlterVol      $33
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $CD
-	dc.b	$81, $80
+	dc.b	pwmElectricKick, nRst
 	smpsFMAlterVol      $33
-	dc.b	$82, $80
+	dc.b	pwmElectricSnare, nRst
 	smpsFMAlterVol      $CD
-	dc.b	$81
+	dc.b	pwmElectricKick
 	smpsFMAlterVol      $33
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $CD
 	smpsFMAlterVol      $F8
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $08
-	dc.b	$81
+	dc.b	pwmElectricKick
 	smpsFMAlterVol      $33
-	dc.b	$82, $80, $82, $82
+	dc.b	pwmElectricSnare, nRst, pwmElectricSnare, pwmElectricSnare
 	smpsFMAlterVol      $CD
 	smpsLoop            $01, $03, TubePanic_Loop03
 	smpsJump            TubePanic_Loop03
 
 TubePanic_Call00:
-	dc.b	$81, $06
+	dc.b	pwmElectricKick, $06
 	smpsFMAlterVol      $F8
-	dc.b	$91, $80
+	dc.b	pwmLowClick, nRst
 	smpsFMAlterVol      $08
 	smpsFMAlterVol      $33
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $CD
-	dc.b	$81, $80
+	dc.b	pwmElectricKick, nRst
 	smpsFMAlterVol      $80
-	dc.b	$90, $80
+	dc.b	pwmHighClick, nRst
 	smpsFMAlterVol      $80
-	dc.b	$81
+	dc.b	pwmElectricKick
 	smpsFMAlterVol      $80
-	dc.b	$90, $80, $90
+	dc.b	pwmHighClick, nRst, pwmHighClick
 	smpsFMAlterVol      $80
-	dc.b	$81
+	dc.b	pwmElectricKick
 	smpsFMAlterVol      $F8
-	dc.b	$91, $80
+	dc.b	pwmLowClick, nRst
 	smpsFMAlterVol      $08
 	smpsFMAlterVol      $80
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $80
 	smpsReturn
 
 TubePanic_Call01:
-	dc.b	$81, $06
+	dc.b	pwmElectricKick, $06
 	smpsFMAlterVol      $F8
-	dc.b	$91, $80
+	dc.b	pwmLowClick, nRst
 	smpsFMAlterVol      $08
 	smpsFMAlterVol      $33
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $CD
-	dc.b	$81, $80
+	dc.b	pwmElectricKick, nRst
 	smpsFMAlterVol      $80
-	dc.b	$90, $80
+	dc.b	pwmHighClick, nRst
 	smpsFMAlterVol      $80
-	dc.b	$81
+	dc.b	pwmElectricKick
 	smpsFMAlterVol      $F8
-	dc.b	$91, $91, $91
+	dc.b	pwmLowClick, pwmLowClick, pwmLowClick
 	smpsFMAlterVol      $08
-	dc.b	$81, $80
+	dc.b	pwmElectricKick, nRst
 	smpsFMAlterVol      $F8
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $08
 	smpsFMAlterVol      $80
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $80
 	smpsReturn
 
 ; PWM2 Data
 TubePanic_PWM2:
-	dc.b	$82, $06, $06, $80, $0C
+	dc.b	pwmElectricSnare, $06, $06, nRst, $0C
 
 TubePanic_Loop02:
-	dc.b	$80, $12, $82, $06, $80, $30, $82, $18, $80, $12, $82, $06
-	dc.b	$80, $2A, $82, $06, $18, $80, $12, $82, $06, $80, $30, $82
-	dc.b	$18, $80, $12, $82, $06, $80, $2A, $82, $06, $18, $80, $12
-	dc.b	$82, $06, $80, $30, $82, $18, $80, $12, $82, $06, $80, $2A
-	dc.b	$82, $06, $12, $06, $80, $12, $82, $06, $80, $30, $82, $18
-	dc.b	$80, $12, $82, $06, $80, $0C, $82, $0C, $06, $0C, $06, $0C
+	dc.b	nRst, $12, pwmElectricSnare, $06, nRst, $30, pwmElectricSnare, $18, nRst, $12, pwmElectricSnare, $06
+	dc.b	nRst, $2A, pwmElectricSnare, $06, $18, nRst, $12, pwmElectricSnare, $06, nRst, $30, pwmElectricSnare
+	dc.b	$18, nRst, $12, pwmElectricSnare, $06, nRst, $2A, pwmElectricSnare, $06, $18, nRst, $12
+	dc.b	pwmElectricSnare, $06, nRst, $30, pwmElectricSnare, $18, nRst, $12, pwmElectricSnare, $06, nRst, $2A
+	dc.b	pwmElectricSnare, $06, $12, $06, nRst, $12, pwmElectricSnare, $06, nRst, $30, pwmElectricSnare, $18
+	dc.b	nRst, $12, pwmElectricSnare, $06, nRst, $0C, pwmElectricSnare, $0C, $06, $0C, $06, $0C
 	dc.b	$06, $06
 	smpsLoop            $00, $03, TubePanic_Loop02
 	smpsJump            TubePanic_Loop02
 
 ; PWM3 Data
 TubePanic_PWM3:
-	dc.b	$96, $18
+	dc.b	pwmSilence, $18
 
 TubePanic_Loop01:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsLoop            $00, $02, TubePanic_Loop01
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
-	dc.b	$80, $80
+	dc.b	nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $30
+	dc.b	pwmCrashCymbal, $30
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $30
+	dc.b	pwmSplashCymbal, $30
 	smpsFMAlterVol      $04
 	smpsJump            TubePanic_Loop01
 
 ; PWM4 Data
 TubePanic_PWM4:
-	dc.b	$80, $18
+	dc.b	nRst, $18
 
 TubePanic_Loop00:
 	smpsFMAlterVol      $FA
-	dc.b	$91, $12, $12
+	dc.b	pwmLowClick, $12, $12
 	smpsFMAlterVol      $06
 	smpsFMAlterVol      $A0
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $60
 	smpsFMAlterVol      $FA
-	dc.b	$91, $06
+	dc.b	pwmLowClick, $06
 	smpsFMAlterVol      $06
 	smpsFMAlterVol      $A0
-	dc.b	$90, $12
+	dc.b	pwmHighClick, $12
 	smpsFMAlterVol      $60
 	smpsFMAlterVol      $FA
-	dc.b	$91, $06, $06
+	dc.b	pwmLowClick, $06, $06
 	smpsFMAlterVol      $06
 	smpsFMAlterVol      $A0
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $60
 	smpsFMAlterVol      $FA
-	dc.b	$91, $12, $12
+	dc.b	pwmLowClick, $12, $12
 	smpsFMAlterVol      $06
 	smpsFMAlterVol      $A0
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $60
 	smpsFMAlterVol      $FA
-	dc.b	$91, $06, $06, $06, $06
+	dc.b	pwmLowClick, $06, $06, $06, $06
 	smpsFMAlterVol      $06
 	smpsFMAlterVol      $A0
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $60
 	smpsFMAlterVol      $FA
-	dc.b	$91, $06
+	dc.b	pwmLowClick, $06
 	smpsFMAlterVol      $06
 	smpsFMAlterVol      $A0
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $60
 	smpsLoop            $00, $0C, TubePanic_Loop00
 	smpsJump            TubePanic_Loop00

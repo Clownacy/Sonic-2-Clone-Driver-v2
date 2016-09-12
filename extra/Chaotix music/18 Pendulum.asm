@@ -378,66 +378,66 @@ Pendulum_Jump00:
 
 ; PWM1 Data
 Pendulum_PWM1:
-	dc.b	$8B, $18, $82, $18, $82, $06, $82, $82, $82, $82, $0C, $82
-	dc.b	$06, $82
+	dc.b	pwmAcousticKick, $18, pwmElectricSnare, $18, pwmElectricSnare, $06, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, $0C, pwmElectricSnare
+	dc.b	$06, pwmElectricSnare
 
 Pendulum_Loop06:
-	dc.b	$8B, $18, $82, $18, $80, $18, $82, $18
+	dc.b	pwmAcousticKick, $18, pwmElectricSnare, $18, nRst, $18, pwmElectricSnare, $18
 	smpsLoop            $00, $07, Pendulum_Loop06
 	smpsLoop            $01, $02, Pendulum_PWM1
-	dc.b	$8B, $18, $82, $18, $82, $06, $82, $82, $82, $82, $0C, $82
-	dc.b	$06, $82
+	dc.b	pwmAcousticKick, $18, pwmElectricSnare, $18, pwmElectricSnare, $06, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, $0C, pwmElectricSnare
+	dc.b	$06, pwmElectricSnare
 
 Pendulum_Loop07:
-	dc.b	$8B, $18, $8B, $8B, $8B
+	dc.b	pwmAcousticKick, $18, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 	smpsLoop            $00, $07, Pendulum_Loop07
-	dc.b	$8B, $18, $8B, $18, $82, $06, $82, $82, $82, $82, $82, $82
-	dc.b	$82
+	dc.b	pwmAcousticKick, $18, pwmAcousticKick, $18, pwmElectricSnare, $06, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare
+	dc.b	pwmElectricSnare
 	smpsJump            Pendulum_Loop06
 
 ; PWM2 Data
 Pendulum_PWM2:
-	dc.b	$96, $0C, $87, $0C, $80, $0C, $87, $0C, $80, $30
+	dc.b	pwmSilence, $0C, pwmLowTom, $0C, nRst, $0C, pwmLowTom, $0C, nRst, $30
 
 Pendulum_Loop04:
-	dc.b	$80, $0C, $87, $80, $87, $80, $87, $80, $87
+	dc.b	nRst, $0C, pwmLowTom, nRst, pwmLowTom, nRst, pwmLowTom, nRst, pwmLowTom
 	smpsLoop            $00, $07, Pendulum_Loop04
-	dc.b	$80, $0C, $87, $80, $87, $80, $30
+	dc.b	nRst, $0C, pwmLowTom, nRst, pwmLowTom, nRst, $30
 	smpsLoop            $01, $02, Pendulum_Loop04
 
 Pendulum_Loop05:
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsLoop            $00, $08, Pendulum_Loop05
 	smpsJump            Pendulum_Loop04
 
 ; PWM3 Data
 Pendulum_PWM3:
-	dc.b	$96, $12, $86, $06, $80, $12, $86, $06, $80, $30
+	dc.b	pwmSilence, $12, pwmMidTom, $06, nRst, $12, pwmMidTom, $06, nRst, $30
 
 Pendulum_Loop02:
-	dc.b	$80, $12, $86, $06, $80, $12, $86, $06, $80, $12, $86, $06
-	dc.b	$80, $18
+	dc.b	nRst, $12, pwmMidTom, $06, nRst, $12, pwmMidTom, $06, nRst, $12, pwmMidTom, $06
+	dc.b	nRst, $18
 	smpsLoop            $00, $07, Pendulum_Loop02
-	dc.b	$80, $12, $86, $06, $80, $12, $86, $06, $80, $30
+	dc.b	nRst, $12, pwmMidTom, $06, nRst, $12, pwmMidTom, $06, nRst, $30
 	smpsLoop            $01, $02, Pendulum_Loop02
 
 Pendulum_Loop03:
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsLoop            $00, $08, Pendulum_Loop03
 	smpsJump            Pendulum_Loop02
 
 ; PWM4 Data
 Pendulum_PWM4:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 
 Pendulum_Loop00:
-	dc.b	$96, $30, $87, $18, $80, $18
+	dc.b	pwmSilence, $30, pwmLowTom, $18, nRst, $18
 	smpsLoop            $00, $07, Pendulum_Loop00
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsLoop            $01, $02, Pendulum_Loop00
 
 Pendulum_Loop01:
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsLoop            $00, $08, Pendulum_Loop01
 	smpsJump            Pendulum_Loop00
 

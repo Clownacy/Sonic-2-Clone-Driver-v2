@@ -942,13 +942,13 @@ TrialAndError_Loop0E:
 
 ; PWM1 Data
 TrialAndError_PWM1:
-	dc.b	$81, $0C, $18
+	dc.b	pwmElectricKick, $0C, $18
 
 TrialAndError_Loop05:
 	smpsCall            TrialAndError_Call01
 	smpsLoop            $00, $03, TrialAndError_Loop05
-	dc.b	$81, $06, $06, $80, $0C, $81, $81, $0C, $18, $81, $06, $06
-	dc.b	$80, $0C, $81, $80, $24
+	dc.b	pwmElectricKick, $06, $06, nRst, $0C, pwmElectricKick, pwmElectricKick, $0C, $18, pwmElectricKick, $06, $06
+	dc.b	nRst, $0C, pwmElectricKick, nRst, $24
 
 TrialAndError_Loop06:
 	smpsCall            TrialAndError_Call01
@@ -956,47 +956,47 @@ TrialAndError_Loop06:
 	smpsJump            TrialAndError_Loop05
 
 TrialAndError_Call01:
-	dc.b	$81, $06, $06, $80, $0C, $81, $81, $0C, $18, $81, $06, $06
-	dc.b	$80, $0C, $81, $80, $06, $81, $80, $0C, $81, $0C
+	dc.b	pwmElectricKick, $06, $06, nRst, $0C, pwmElectricKick, pwmElectricKick, $0C, $18, pwmElectricKick, $06, $06
+	dc.b	nRst, $0C, pwmElectricKick, nRst, $06, pwmElectricKick, nRst, $0C, pwmElectricKick, $0C
 	smpsReturn
 
 ; PWM2 Data
 TrialAndError_PWM2:
-	dc.b	$80, $0C, $82, $06, $82, $82, $82
+	dc.b	nRst, $0C, pwmElectricSnare, $06, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare
 
 TrialAndError_Loop02:
 	smpsCall            TrialAndError_Call00
 	smpsLoop            $00, $03, TrialAndError_Loop02
-	dc.b	$80, $06
+	dc.b	nRst, $06
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86, $82, $80, $0C, $80, $18, $82, $0C
+	dc.b	pwmMidTom, pwmElectricSnare, nRst, $0C, nRst, $18, pwmElectricSnare, $0C
 	smpsFMAlterVol      $F9
-	dc.b	$85, $06
+	dc.b	pwmHighTom, $06
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82, $80, $0C, $80, $24
+	dc.b	pwmElectricSnare, nRst, $0C, nRst, $24
 
 TrialAndError_Loop03:
 	smpsCall            TrialAndError_Call00
 	smpsLoop            $00, $03, TrialAndError_Loop03
-	dc.b	$82, $06
+	dc.b	pwmElectricSnare, $06
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
-	dc.b	$82, $06, $80, $0C, $80, $18, $82, $0C
+	dc.b	pwmElectricSnare, $06, nRst, $0C, nRst, $18, pwmElectricSnare, $0C
 	smpsFMAlterVol      $F9
-	dc.b	$85, $06
+	dc.b	pwmHighTom, $06
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82, $80, $0C, $80, $12, $82
+	dc.b	pwmElectricSnare, nRst, $0C, nRst, $12, pwmElectricSnare
 
 TrialAndError_Loop04:
 	smpsCall            TrialAndError_Call00
@@ -1004,116 +1004,116 @@ TrialAndError_Loop04:
 	smpsJump            TrialAndError_Loop02
 
 TrialAndError_Call00:
-	dc.b	$80, $06
+	dc.b	nRst, $06
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86, $82, $80, $0C, $80, $18, $82, $0C
+	dc.b	pwmMidTom, pwmElectricSnare, nRst, $0C, nRst, $18, pwmElectricSnare, $0C
 	smpsFMAlterVol      $F9
-	dc.b	$85, $06
+	dc.b	pwmHighTom, $06
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82, $80, $0C, $80, $12, $82
+	dc.b	pwmElectricSnare, nRst, $0C, nRst, $12, pwmElectricSnare
 	smpsReturn
 
 ; PWM3 Data
 TrialAndError_PWM3:
 	smpsFMAlterVol      $90
-	dc.b	$89, $0C
+	dc.b	pwmCrashCymbal, $0C
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $F9
-	dc.b	$83, $18
+	dc.b	pwmSplashCymbal, $18
 	smpsFMAlterVol      $07
 
 TrialAndError_Jump00:
 	smpsFMAlterVol      $90
-	dc.b	$89, $24
+	dc.b	pwmCrashCymbal, $24
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $D0
-	dc.b	$84, $18, $18, $18, $18, $0C
+	dc.b	pwmRideBell, $18, $18, $18, $18, $0C
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $F9
-	dc.b	$83, $24
+	dc.b	pwmSplashCymbal, $24
 	smpsFMAlterVol      $07
 	smpsFMAlterVol      $D0
-	dc.b	$84, $18, $18, $18, $18, $0C
+	dc.b	pwmRideBell, $18, $18, $18, $18, $0C
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $90
-	dc.b	$89, $24
+	dc.b	pwmCrashCymbal, $24
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $D0
-	dc.b	$84, $18, $18, $18, $18, $0C
+	dc.b	pwmRideBell, $18, $18, $18, $18, $0C
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $F9
-	dc.b	$83, $12
+	dc.b	pwmSplashCymbal, $12
 	smpsFMAlterVol      $07
 	smpsFMAlterVol      $90
-	dc.b	$89
+	dc.b	pwmCrashCymbal
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $F9
-	dc.b	$83, $18
+	dc.b	pwmSplashCymbal, $18
 	smpsFMAlterVol      $07
 	smpsFMAlterVol      $D0
-	dc.b	$84, $84, $80, $24
+	dc.b	pwmRideBell, pwmRideBell, nRst, $24
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $90
-	dc.b	$89, $24
+	dc.b	pwmCrashCymbal, $24
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $D0
-	dc.b	$84, $18, $18, $18, $18, $0C
+	dc.b	pwmRideBell, $18, $18, $18, $18, $0C
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $F9
-	dc.b	$83, $24
+	dc.b	pwmSplashCymbal, $24
 	smpsFMAlterVol      $07
 	smpsFMAlterVol      $D0
-	dc.b	$84, $18, $18, $18, $18, $0C
+	dc.b	pwmRideBell, $18, $18, $18, $18, $0C
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $90
-	dc.b	$89, $24
+	dc.b	pwmCrashCymbal, $24
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $D0
-	dc.b	$84, $18, $18, $18, $18, $0C
+	dc.b	pwmRideBell, $18, $18, $18, $18, $0C
 	smpsFMAlterVol      $30
-	dc.b	$80, $12
+	dc.b	nRst, $12
 	smpsFMAlterVol      $F9
-	dc.b	$83, $12
+	dc.b	pwmSplashCymbal, $12
 	smpsFMAlterVol      $07
 	smpsFMAlterVol      $D0
-	dc.b	$84, $18, $18, $18, $18, $0C
+	dc.b	pwmRideBell, $18, $18, $18, $18, $0C
 	smpsFMAlterVol      $30
 
 TrialAndError_Loop01:
 	smpsFMAlterVol      $90
-	dc.b	$89, $24
+	dc.b	pwmCrashCymbal, $24
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $D0
-	dc.b	$84, $18, $18, $18, $18, $0C
+	dc.b	pwmRideBell, $18, $18, $18, $18, $0C
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $F9
-	dc.b	$83, $24
+	dc.b	pwmSplashCymbal, $24
 	smpsFMAlterVol      $07
 	smpsFMAlterVol      $D0
-	dc.b	$84, $18, $18, $18, $18, $0C
+	dc.b	pwmRideBell, $18, $18, $18, $18, $0C
 	smpsFMAlterVol      $30
 	smpsLoop            $00, $02, TrialAndError_Loop01
 	smpsJump            TrialAndError_Jump00
 
 ; PWM4 Data
 TrialAndError_PWM4:
-	dc.b	$80, $0C
+	dc.b	nRst, $0C
 	smpsFMAlterVol      $FA
-	dc.b	$8A, $06, $06, $06, $06
+	dc.b	pwmClap, $06, $06, $06, $06
 	smpsFMAlterVol      $06
 
 TrialAndError_Loop00:
 	smpsFMAlterVol      $9E
-	dc.b	$8F, $18, $18, $18, $18, $18
+	dc.b	pwmCowbell, $18, $18, $18, $18, $18
 	smpsFMAlterVol      $62
 	smpsFMAlterVol      $FA
-	dc.b	$8A, $06, $06, $06, $06
+	dc.b	pwmClap, $06, $06, $06, $06
 	smpsFMAlterVol      $06
 	smpsLoop            $00, $0C, TrialAndError_Loop00
 	smpsJump            TrialAndError_Loop00

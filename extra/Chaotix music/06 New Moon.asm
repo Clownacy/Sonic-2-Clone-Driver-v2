@@ -1159,10 +1159,10 @@ NewMoon_Call0E:
 
 ; PWM1 Data
 NewMoon_PWM1:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 
 NewMoon_Loop05:
-	dc.b	$8B, $0C, $0C, $80, $8B, $8B, $12, $12, $0C
+	dc.b	pwmAcousticKick, $0C, $0C, nRst, pwmAcousticKick, pwmAcousticKick, $12, $12, $0C
 	smpsLoop            $00, $04, NewMoon_Loop05
 
 NewMoon_Jump02:
@@ -1170,33 +1170,33 @@ NewMoon_Jump02:
 	smpsCall            NewMoon_Call05
 	smpsCall            NewMoon_Call05
 	smpsCall            NewMoon_Call06
-	dc.b	$80, $30
+	dc.b	nRst, $30
 
 NewMoon_Loop06:
 	smpsCall            NewMoon_Call05
 	smpsLoop            $00, $04, NewMoon_Loop06
 
 NewMoon_Loop07:
-	dc.b	$8B, $0C, $0C, $80, $8B, $8B, $12, $12, $0C
+	dc.b	pwmAcousticKick, $0C, $0C, nRst, pwmAcousticKick, pwmAcousticKick, $12, $12, $0C
 	smpsLoop            $00, $08, NewMoon_Loop07
 	smpsJump            NewMoon_Jump02
 
 NewMoon_Call05:
 	smpsCall            NewMoon_Call06
-	dc.b	$80, $0C, $8B, $80, $18
+	dc.b	nRst, $0C, pwmAcousticKick, nRst, $18
 	smpsReturn
 
 NewMoon_Call06:
-	dc.b	$8B, $06, $06, $06, $06, $80, $18, $8B, $0C, $0C, $80, $18
-	dc.b	$8B, $06, $06, $06, $06, $80, $12, $8B, $06, $80, $0C, $8B
-	dc.b	$80, $18, $8B, $06, $06, $06, $06, $80, $12, $8B, $06, $80
-	dc.b	$0C, $8B, $80, $18, $8B, $06, $06, $06, $06, $80, $8B, $80
-	dc.b	$8B
+	dc.b	pwmAcousticKick, $06, $06, $06, $06, nRst, $18, pwmAcousticKick, $0C, $0C, nRst, $18
+	dc.b	pwmAcousticKick, $06, $06, $06, $06, nRst, $12, pwmAcousticKick, $06, nRst, $0C, pwmAcousticKick
+	dc.b	nRst, $18, pwmAcousticKick, $06, $06, $06, $06, nRst, $12, pwmAcousticKick, $06, nRst
+	dc.b	$0C, pwmAcousticKick, nRst, $18, pwmAcousticKick, $06, $06, $06, $06, nRst, pwmAcousticKick, nRst
+	dc.b	pwmAcousticKick
 	smpsReturn
 
 ; PWM2 Data
 NewMoon_PWM2:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 	smpsFMAlterVol      $DE
 	smpsCall            NewMoon_Call01
 
@@ -1205,13 +1205,13 @@ NewMoon_Jump01:
 	smpsCall            NewMoon_Call02
 	smpsCall            NewMoon_Call02
 	smpsCall            NewMoon_Call03
-	dc.b	$80, $06
+	dc.b	nRst, $06
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
 
 NewMoon_Loop04:
@@ -1220,174 +1220,174 @@ NewMoon_Loop04:
 	smpsFMAlterVol      $DE
 	smpsCall            NewMoon_Call04
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$8C, $8C, $86
+	dc.b	pwmAcousticSnare, pwmAcousticSnare, pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$8C, $8C
+	dc.b	pwmAcousticSnare, pwmAcousticSnare
 	smpsFMAlterVol      $90
-	dc.b	$87, $87
+	dc.b	pwmLowTom, pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$8C
+	dc.b	pwmAcousticSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$86, $8C, $8C, $8C, $8C
+	dc.b	pwmMidTom, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare
 	smpsCall            NewMoon_Call01
 	smpsJump            NewMoon_Jump01
 
 NewMoon_Call01:
 	smpsCall            NewMoon_Call04
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$8C, $8C, $86
+	dc.b	pwmAcousticSnare, pwmAcousticSnare, pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$8C, $8C
+	dc.b	pwmAcousticSnare, pwmAcousticSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $22
-	dc.b	$8C, $8C, $8C, $8C, $8C, $8C, $8C, $8C
+	dc.b	pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare
 	smpsReturn
 
 NewMoon_Call02:
 	smpsCall            NewMoon_Call03
-	dc.b	$8C, $06
+	dc.b	pwmAcousticSnare, $06
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
 	smpsReturn
 
 NewMoon_Call03:
-	dc.b	$80, $18, $8C, $80, $8C, $80, $8C, $80, $8C, $0C, $06, $06
-	dc.b	$80, $18, $8C, $80, $8C, $80, $8C, $80
+	dc.b	nRst, $18, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, $0C, $06, $06
+	dc.b	nRst, $18, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst
 	smpsReturn
 
 NewMoon_Call04:
 	smpsFMAlterVol      $F9
-	dc.b	$85, $06
+	dc.b	pwmHighTom, $06
 	smpsFMAlterVol      $07
-	dc.b	$8C
+	dc.b	pwmAcousticSnare
 	smpsFMAlterVol      $F9
-	dc.b	$85, $85
+	dc.b	pwmHighTom, pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86, $8C
+	dc.b	pwmMidTom, pwmAcousticSnare
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86, $8C
+	dc.b	pwmMidTom, pwmAcousticSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$8C, $8C, $86, $8C, $8C, $8C
+	dc.b	pwmAcousticSnare, pwmAcousticSnare, pwmMidTom, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$8C
+	dc.b	pwmAcousticSnare
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$8C, $8C
+	dc.b	pwmAcousticSnare, pwmAcousticSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$8C
+	dc.b	pwmAcousticSnare
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87, $87
+	dc.b	pwmLowTom, pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$8C, $8C
+	dc.b	pwmAcousticSnare, pwmAcousticSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
-	smpsFMAlterVol      $70
-	smpsFMAlterVol      $F9
-	dc.b	$85
-	smpsFMAlterVol      $07
-	dc.b	$8C, $86
-	smpsFMAlterVol      $90
-	dc.b	$87
-	smpsFMAlterVol      $70
-	dc.b	$8C
-	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$8C, $8C, $86
+	dc.b	pwmAcousticSnare, pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$8C
+	dc.b	pwmAcousticSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$8C, $8C, $8C
+	smpsFMAlterVol      $F9
+	dc.b	pwmHighTom
+	smpsFMAlterVol      $07
+	dc.b	pwmAcousticSnare, pwmAcousticSnare, pwmMidTom
+	smpsFMAlterVol      $90
+	dc.b	pwmLowTom
+	smpsFMAlterVol      $70
+	dc.b	pwmAcousticSnare
+	smpsFMAlterVol      $90
+	dc.b	pwmLowTom
+	smpsFMAlterVol      $70
+	dc.b	pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare
 	smpsReturn
 
 ; PWM3 Data
 NewMoon_PWM3:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 
 NewMoon_Jump00:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
 
 NewMoon_Loop03:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsLoop            $00, $04, NewMoon_Loop03
 	smpsJump            NewMoon_Jump00
 
 ; PWM4 Data
 NewMoon_PWM4:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 
 NewMoon_Loop00:
 	smpsCall            NewMoon_Call00
@@ -1397,12 +1397,12 @@ NewMoon_Loop01:
 	smpsCall            NewMoon_Call00
 	smpsLoop            $01, $0F, NewMoon_Loop01
 	smpsFMAlterVol      $FD
-	dc.b	$80, $0C, $88, $06, $06
+	dc.b	nRst, $0C, pwmElectricHiHat, $06, $06
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$80, $0C, $88, $06, $06
+	dc.b	nRst, $0C, pwmElectricHiHat, $06, $06
 	smpsFMAlterVol      $30
-	dc.b	$96, $30
+	dc.b	pwmSilence, $30
 
 NewMoon_Loop02:
 	smpsCall            NewMoon_Call00
@@ -1411,10 +1411,10 @@ NewMoon_Loop02:
 
 NewMoon_Call00:
 	smpsFMAlterVol      $FD
-	dc.b	$80, $0C, $88, $06, $06
+	dc.b	nRst, $0C, pwmElectricHiHat, $06, $06
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$80, $0C, $88, $06, $06
+	dc.b	nRst, $0C, pwmElectricHiHat, $06, $06
 	smpsFMAlterVol      $30
 	smpsLoop            $00, $02, NewMoon_Call00
 	smpsReturn

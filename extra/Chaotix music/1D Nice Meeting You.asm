@@ -174,26 +174,26 @@ NiceMeetingYou_Loop08:
 
 ; PWM1 Data
 NiceMeetingYou_PWM1:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 
 NiceMeetingYou_Loop02:
-	dc.b	$81, $18, $81, $81, $81
+	dc.b	pwmElectricKick, $18, pwmElectricKick, pwmElectricKick, pwmElectricKick
 	smpsLoop            $00, $05, NiceMeetingYou_Loop02
-	dc.b	$81, $18, $81, $80, $30, $81, $18, $81, $81, $81, $81, $0C
-	dc.b	$81, $81, $81, $80, $30
+	dc.b	pwmElectricKick, $18, pwmElectricKick, nRst, $30, pwmElectricKick, $18, pwmElectricKick, pwmElectricKick, pwmElectricKick, pwmElectricKick, $0C
+	dc.b	pwmElectricKick, pwmElectricKick, pwmElectricKick, nRst, $30
 	smpsJump            NiceMeetingYou_Loop02
 
 ; PWM2 Data
 NiceMeetingYou_PWM2:
-	dc.b	$82, $18, $12, $06, $0C, $0C, $0C, $0C
+	dc.b	pwmElectricSnare, $18, $12, $06, $0C, $0C, $0C, $0C
 
 NiceMeetingYou_Loop01:
-	dc.b	$80, $0C, $82
+	dc.b	nRst, $0C, pwmElectricSnare
 	smpsLoop            $00, $10, NiceMeetingYou_Loop01
-	dc.b	$80, $0C, $82, $80, $0C, $82, $80, $0C, $82, $80, $06, $82
-	dc.b	$82, $82, $80, $3C, $82, $0C, $82, $82, $80, $0C, $82, $80
-	dc.b	$0C, $82, $80, $0C, $82, $80, $0C, $82, $80, $30, $82, $0C
-	dc.b	$82, $82, $82
+	dc.b	nRst, $0C, pwmElectricSnare, nRst, $0C, pwmElectricSnare, nRst, $0C, pwmElectricSnare, nRst, $06, pwmElectricSnare
+	dc.b	pwmElectricSnare, pwmElectricSnare, nRst, $3C, pwmElectricSnare, $0C, pwmElectricSnare, pwmElectricSnare, nRst, $0C, pwmElectricSnare, nRst
+	dc.b	$0C, pwmElectricSnare, nRst, $0C, pwmElectricSnare, nRst, $0C, pwmElectricSnare, nRst, $30, pwmElectricSnare, $0C
+	dc.b	pwmElectricSnare, pwmElectricSnare, pwmElectricSnare
 	smpsJump            NiceMeetingYou_Loop01
 
 ; PWM3 Data
@@ -202,103 +202,103 @@ NiceMeetingYou_PWM3:
 
 ; PWM4 Data
 NiceMeetingYou_PWM4:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 
 NiceMeetingYou_Loop00:
 	smpsFMAlterVol      $FD
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$90, $06
+	dc.b	pwmHighClick, $06
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$91, $91, $0C, $12
+	dc.b	pwmLowClick, pwmLowClick, $0C, $12
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$90, $06, $0C
+	dc.b	pwmHighClick, $06, $0C
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$91, $0C
+	dc.b	pwmLowClick, $0C
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$90, $06
+	dc.b	pwmHighClick, $06
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$91, $91, $0C, $06, $06
+	dc.b	pwmLowClick, pwmLowClick, $0C, $06, $06
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$91, $06, $80, $06, $91, $06
+	dc.b	pwmLowClick, $06, nRst, $06, pwmLowClick, $06
 	smpsFMAlterVol      $30
 	smpsLoop            $00, $02, NiceMeetingYou_Loop00
 	smpsFMAlterVol      $FD
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$90, $06
+	dc.b	pwmHighClick, $06
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$91, $91, $0C, $12
+	dc.b	pwmLowClick, pwmLowClick, $0C, $12
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$90, $06, $0C
+	dc.b	pwmHighClick, $06, $0C
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$91, $0C
+	dc.b	pwmLowClick, $0C
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $D0
-	dc.b	$91, $18
+	dc.b	pwmLowClick, $18
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $03
-	dc.b	$80, $0C
+	dc.b	nRst, $0C
 	smpsFMAlterVol      $D0
-	dc.b	$91, $0C, $0C, $0C
+	dc.b	pwmLowClick, $0C, $0C, $0C
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$90, $0C
-	smpsFMAlterVol      $03
-	smpsFMAlterVol      $D0
-	dc.b	$91
-	smpsFMAlterVol      $30
-	smpsFMAlterVol      $FD
-	dc.b	$90, $06
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$91, $91, $0C, $12
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$90, $06, $0C
+	dc.b	pwmHighClick, $06
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$91, $0C
-	smpsFMAlterVol      $30
-	smpsFMAlterVol      $D0
-	dc.b	$91, $0C, $0C, $0C, $0C
+	dc.b	pwmLowClick, pwmLowClick, $0C, $12
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$90, $0C, $0C, $0C, $0C
+	dc.b	pwmHighClick, $06, $0C
+	smpsFMAlterVol      $03
+	smpsFMAlterVol      $D0
+	dc.b	pwmLowClick, $0C
+	smpsFMAlterVol      $30
+	smpsFMAlterVol      $D0
+	dc.b	pwmLowClick, $0C, $0C, $0C, $0C
+	smpsFMAlterVol      $30
+	smpsFMAlterVol      $FD
+	dc.b	pwmHighClick, $0C, $0C, $0C, $0C
 	smpsFMAlterVol      $03
 	smpsJump            NiceMeetingYou_Loop00
 

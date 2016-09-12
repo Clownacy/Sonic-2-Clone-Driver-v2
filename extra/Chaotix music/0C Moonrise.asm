@@ -432,53 +432,53 @@ Moonrise_Call09:
 
 ; PWM1 Data
 Moonrise_PWM1:
-	dc.b	$8B, $30, $30, $30, $06, $0C, $06, $80, $18
+	dc.b	pwmAcousticKick, $30, $30, $30, $06, $0C, $06, nRst, $18
 	smpsLoop            $00, $02, Moonrise_PWM1
 
 Moonrise_Loop01:
-	dc.b	$8B, $12, $06, $80, $18
+	dc.b	pwmAcousticKick, $12, $06, nRst, $18
 	smpsLoop            $00, $03, Moonrise_Loop01
-	dc.b	$8B, $06, $0C, $06, $80, $18
+	dc.b	pwmAcousticKick, $06, $0C, $06, nRst, $18
 	smpsLoop            $01, $04, Moonrise_Loop01
 	smpsJump            Moonrise_Loop01
 
 ; PWM2 Data
 Moonrise_PWM2:
-	dc.b	$96, $60, $80, $3C, $8C, $0C
+	dc.b	pwmSilence, $60, nRst, $3C, pwmAcousticSnare, $0C
 	smpsFMAlterVol      $F9
-	dc.b	$85, $06
+	dc.b	pwmHighTom, $06
 	smpsFMAlterVol      $07
-	dc.b	$86, $0C
+	dc.b	pwmMidTom, $0C
 	smpsFMAlterVol      $90
-	dc.b	$87, $06
+	dc.b	pwmLowTom, $06
 	smpsFMAlterVol      $70
-	dc.b	$80, $60, smpsNoAttack, $3C, $8C, $04, $04, $04, $06, $06, $06, $06
+	dc.b	nRst, $60, smpsNoAttack, $3C, pwmAcousticSnare, $04, $04, $04, $06, $06, $06, $06
 
 Moonrise_Jump01:
-	dc.b	$80, $18, $8C, $80, $8C, $80, $8C, $80, $8C, $80, $8C, $80
-	dc.b	$8C, $80, $8C, $80, $8C, $12, $06, $80, $18, $8C, $80, $8C
-	dc.b	$80, $8C, $80, $8C, $80, $8C, $80, $8C, $80, $8C, $80, $0C
-	dc.b	$8C, $04, $04, $04, $06, $06, $06, $06
+	dc.b	nRst, $18, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst
+	dc.b	pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, $12, $06, nRst, $18, pwmAcousticSnare, nRst, pwmAcousticSnare
+	dc.b	nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, $0C
+	dc.b	pwmAcousticSnare, $04, $04, $04, $06, $06, $06, $06
 	smpsJump            Moonrise_Jump01
 
 ; PWM3 Data
 Moonrise_PWM3:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60, $80, $89
+	dc.b	pwmCrashCymbal, $60, nRst, pwmCrashCymbal
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $04
 
 Moonrise_Jump00:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60, $80, $80, $80, $89
+	dc.b	pwmCrashCymbal, $60, nRst, nRst, nRst, pwmCrashCymbal
 	smpsFMAlterVol      $40
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $04
-	dc.b	$80
+	dc.b	nRst
 	smpsJump            Moonrise_Jump00
 
 ; PWM4 Data
@@ -492,7 +492,7 @@ Moonrise_Loop00:
 	smpsJump            Moonrise_Loop00
 
 Moonrise_Call00:
-	dc.b	$88, $06
+	dc.b	pwmElectricHiHat, $06
 	smpsFMAlterVol      $AB
 	dc.b	$06
 	smpsFMAlterVol      $22

@@ -3897,579 +3897,579 @@ JustAnotherDay_Call30:
 
 ; PWM1 Data
 JustAnotherDay_PWM1:
-	dc.b	$96, $3C, $81, $24
+	dc.b	pwmSilence, $3C, pwmElectricKick, $24
 	smpsCall            JustAnotherDay_Call05
-	dc.b	$81, $18, $80, $12, $81, $06, $80, $81, $81, $80, $80, $18
+	dc.b	pwmElectricKick, $18, nRst, $12, pwmElectricKick, $06, nRst, pwmElectricKick, pwmElectricKick, nRst, nRst, $18
 	smpsCall            JustAnotherDay_Call05
-	dc.b	$81, $18, $80, $0C, $81, $80, $81, $81, $18
+	dc.b	pwmElectricKick, $18, nRst, $0C, pwmElectricKick, nRst, pwmElectricKick, pwmElectricKick, $18
 
 JustAnotherDay_Loop17:
 	smpsCall            JustAnotherDay_Call05
-	dc.b	$81, $18, $80, $12, $81, $06, $80, $81, $81, $80, $80, $18
+	dc.b	pwmElectricKick, $18, nRst, $12, pwmElectricKick, $06, nRst, pwmElectricKick, pwmElectricKick, nRst, nRst, $18
 	smpsLoop            $00, $02, JustAnotherDay_Loop17
-	dc.b	$81, $0C, $81, $80, $06, $81, $80, $81, $80, $0C, $81, $80
-	dc.b	$06, $81, $12, $80, $06, $81, $12, $80, $06, $81, $80, $81
-	dc.b	$12, $81, $81, $80, $06, $81, $12, $81, $81, $81, $81, $81
-	dc.b	$0C, $81, $81, $81, $81, $81, $81, $81, $81, $18, $80, $14
-	dc.b	$81, $04, $80, $30, $81, $18, $80, $14, $81, $04, $80, $2C
-	dc.b	$81, $04
+	dc.b	pwmElectricKick, $0C, pwmElectricKick, nRst, $06, pwmElectricKick, nRst, pwmElectricKick, nRst, $0C, pwmElectricKick, nRst
+	dc.b	$06, pwmElectricKick, $12, nRst, $06, pwmElectricKick, $12, nRst, $06, pwmElectricKick, nRst, pwmElectricKick
+	dc.b	$12, pwmElectricKick, pwmElectricKick, nRst, $06, pwmElectricKick, $12, pwmElectricKick, pwmElectricKick, pwmElectricKick, pwmElectricKick, pwmElectricKick
+	dc.b	$0C, pwmElectricKick, pwmElectricKick, pwmElectricKick, pwmElectricKick, pwmElectricKick, pwmElectricKick, pwmElectricKick, pwmElectricKick, $18, nRst, $14
+	dc.b	pwmElectricKick, $04, nRst, $30, pwmElectricKick, $18, nRst, $14, pwmElectricKick, $04, nRst, $2C
+	dc.b	pwmElectricKick, $04
 
 JustAnotherDay_Loop18:
-	dc.b	$80, $08, $81, $04, $80, $08, $81, $04, $80, $0C, $81, $0C
-	dc.b	$30, $80, $08, $81, $04, $80, $08, $81, $04, $80, $0C, $81
-	dc.b	$0C, $14, $04, $80, $18
+	dc.b	nRst, $08, pwmElectricKick, $04, nRst, $08, pwmElectricKick, $04, nRst, $0C, pwmElectricKick, $0C
+	dc.b	$30, nRst, $08, pwmElectricKick, $04, nRst, $08, pwmElectricKick, $04, nRst, $0C, pwmElectricKick
+	dc.b	$0C, $14, $04, nRst, $18
 	smpsLoop            $00, $02, JustAnotherDay_Loop18
-	dc.b	$80, $30
+	dc.b	nRst, $30
 
 JustAnotherDay_Loop19:
-	dc.b	$81, $18, $80, $0C, $81, $80, $81, $80, $18
+	dc.b	pwmElectricKick, $18, nRst, $0C, pwmElectricKick, nRst, pwmElectricKick, nRst, $18
 	smpsLoop            $00, $04, JustAnotherDay_Loop19
 
 JustAnotherDay_Loop1A:
-	dc.b	$8B, $0C, $0C, $80, $24, $8B, $0C, $80, $08, $8B, $04, $80
-	dc.b	$08, $8B, $04
+	dc.b	pwmAcousticKick, $0C, $0C, nRst, $24, pwmAcousticKick, $0C, nRst, $08, pwmAcousticKick, $04, nRst
+	dc.b	$08, pwmAcousticKick, $04
 	smpsLoop            $00, $07, JustAnotherDay_Loop1A
-	dc.b	$8B, $08, $04, $80, $24, $8B, $30
+	dc.b	pwmAcousticKick, $08, $04, nRst, $24, pwmAcousticKick, $30
 
 JustAnotherDay_Loop1B:
-	dc.b	$8B, $12, $06, $80, $8B, $12, $80, $06, $8B, $12, $80, $18
+	dc.b	pwmAcousticKick, $12, $06, nRst, pwmAcousticKick, $12, nRst, $06, pwmAcousticKick, $12, nRst, $18
 	smpsLoop            $00, $03, JustAnotherDay_Loop1B
-	dc.b	$8B, $12, $06, $80, $8B, $12, $80, $06, $8B, $12, $18
+	dc.b	pwmAcousticKick, $12, $06, nRst, pwmAcousticKick, $12, nRst, $06, pwmAcousticKick, $12, $18
 
 JustAnotherDay_Loop1C:
-	dc.b	$8B, $12, $06, $80, $12, $8B, $06, $18, $80
+	dc.b	pwmAcousticKick, $12, $06, nRst, $12, pwmAcousticKick, $06, $18, nRst
 	smpsLoop            $00, $07, JustAnotherDay_Loop1C
-	dc.b	$8B, $18, $8B, $8B, $8B
+	dc.b	pwmAcousticKick, $18, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 
 JustAnotherDay_Loop1D:
-	dc.b	$8B, $12, $06, $80, $18
+	dc.b	pwmAcousticKick, $12, $06, nRst, $18
 	smpsLoop            $00, $03, JustAnotherDay_Loop1D
-	dc.b	$8B, $06, $0C, $06, $80, $18
+	dc.b	pwmAcousticKick, $06, $0C, $06, nRst, $18
 	smpsLoop            $01, $02, JustAnotherDay_Loop1D
-	dc.b	$8B, $12, $06, $80, $18, $80, $60
+	dc.b	pwmAcousticKick, $12, $06, nRst, $18, nRst, $60
 
 JustAnotherDay_Loop1E:
-	dc.b	$8B, $06, $06, $06, $06, $80, $18, $8B, $0C, $0C, $80, $18
-	dc.b	$8B, $06, $06, $06, $06, $80, $12, $8B, $06, $80, $0C, $8B
-	dc.b	$80, $18, $8B, $06, $06, $06, $06, $80, $12, $8B, $06, $80
-	dc.b	$0C, $8B, $80, $18, $8B, $06, $06, $06, $06, $80, $8B, $80
-	dc.b	$8B, $80, $0C, $8B, $80, $18
+	dc.b	pwmAcousticKick, $06, $06, $06, $06, nRst, $18, pwmAcousticKick, $0C, $0C, nRst, $18
+	dc.b	pwmAcousticKick, $06, $06, $06, $06, nRst, $12, pwmAcousticKick, $06, nRst, $0C, pwmAcousticKick
+	dc.b	nRst, $18, pwmAcousticKick, $06, $06, $06, $06, nRst, $12, pwmAcousticKick, $06, nRst
+	dc.b	$0C, pwmAcousticKick, nRst, $18, pwmAcousticKick, $06, $06, $06, $06, nRst, pwmAcousticKick, nRst
+	dc.b	pwmAcousticKick, nRst, $0C, pwmAcousticKick, nRst, $18
 	smpsLoop            $00, $02, JustAnotherDay_Loop1E
 
 JustAnotherDay_Loop1F:
-	dc.b	$81, $12, $12, $0C, $80, $81, $80, $06, $81, $12, $81, $12
-	dc.b	$12, $0C, $80, $0C, $81, $06, $06, $80, $81, $12
+	dc.b	pwmElectricKick, $12, $12, $0C, nRst, pwmElectricKick, nRst, $06, pwmElectricKick, $12, pwmElectricKick, $12
+	dc.b	$12, $0C, nRst, $0C, pwmElectricKick, $06, $06, nRst, pwmElectricKick, $12
 	smpsLoop            $00, $02, JustAnotherDay_Loop1F
 
 JustAnotherDay_Loop20:
-	dc.b	$8B, $0C
+	dc.b	pwmAcousticKick, $0C
 	smpsLoop            $00, $0B, JustAnotherDay_Loop20
-	dc.b	$8B, $06, $8B, $8B, $0C, $0C, $0C, $0C, $81, $0C, $0C, $06
+	dc.b	pwmAcousticKick, $06, pwmAcousticKick, pwmAcousticKick, $0C, $0C, $0C, $0C, pwmElectricKick, $0C, $0C, $06
 	dc.b	$0C, $06, $0C, $0C, $06, $0C, $06, $0C, $0C, $06, $0C, $06
-	dc.b	$0C, $0C, $0C, $06, $06, $81, $0C, $0C, $06, $0C, $06, $0C
+	dc.b	$0C, $0C, $0C, $06, $06, pwmElectricKick, $0C, $0C, $06, $0C, $06, $0C
 	dc.b	$0C, $06, $0C, $06, $0C, $0C, $06, $0C, $03, $03, $0C, $0C
-	dc.b	$06, $0C, $06, $80, $3C, $81, $24
+	dc.b	$06, $0C, $06, nRst, $3C, pwmElectricKick, $24
 
 JustAnotherDay_Loop21:
-	dc.b	$81, $24, $0C, $24, $0C, $24, $0C, $12, $12, $0C
+	dc.b	pwmElectricKick, $24, $0C, $24, $0C, $24, $0C, $12, $12, $0C
 	smpsLoop            $00, $07, JustAnotherDay_Loop21
-	dc.b	$81, $24, $0C, $24, $0C, $24, $0C, $18, $12, $06, $80, $60
-	dc.b	$81, $18
+	dc.b	pwmElectricKick, $24, $0C, $24, $0C, $24, $0C, $18, $12, $06, nRst, $60
+	dc.b	pwmElectricKick, $18
 	smpsStop
 
 JustAnotherDay_Call05:
-	dc.b	$81, $18, $80, $12, $81, $06, $80, $81, $81, $80, $80, $0C
-	dc.b	$81, $81, $18, $80, $12, $81, $06, $80, $81, $81, $80, $80
-	dc.b	$18, $81, $18, $80, $12, $81, $06, $80, $81, $81, $80, $80
-	dc.b	$0C, $81
+	dc.b	pwmElectricKick, $18, nRst, $12, pwmElectricKick, $06, nRst, pwmElectricKick, pwmElectricKick, nRst, nRst, $0C
+	dc.b	pwmElectricKick, pwmElectricKick, $18, nRst, $12, pwmElectricKick, $06, nRst, pwmElectricKick, pwmElectricKick, nRst, nRst
+	dc.b	$18, pwmElectricKick, $18, nRst, $12, pwmElectricKick, $06, nRst, pwmElectricKick, pwmElectricKick, nRst, nRst
+	dc.b	$0C, pwmElectricKick
 	smpsReturn
 
 ; PWM2 Data
 JustAnotherDay_PWM2:
 	smpsFMAlterVol      $F0
-	dc.b	$84, $18, $84, $84
+	dc.b	pwmRideBell, $18, pwmRideBell, pwmRideBell
 	smpsFMAlterVol      $10
-	dc.b	$82, $18
+	dc.b	pwmElectricSnare, $18
 	smpsCall            JustAnotherDay_Call03
-	dc.b	$80, $18, $82, $80, $82, $80, $18, $82, $80, $82, $80, $18
-	dc.b	$82, $80, $82, $80, $48, $82, $06, $82, $82, $82
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, $18
+	dc.b	pwmElectricSnare, nRst, pwmElectricSnare, nRst, $48, pwmElectricSnare, $06, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare
 
 JustAnotherDay_Loop11:
 	smpsCall            JustAnotherDay_Call03
 	smpsLoop            $01, $02, JustAnotherDay_Loop11
-	dc.b	$80, $42, $82, $12, $0C, $80, $06, $82, $82, $0C, $06, $0C
+	dc.b	nRst, $42, pwmElectricSnare, $12, $0C, nRst, $06, pwmElectricSnare, pwmElectricSnare, $0C, $06, $0C
 	smpsFMAlterVol      $F9
-	dc.b	$85, $06, $80
+	dc.b	pwmHighTom, $06, nRst
 	smpsFMAlterVol      $07
-	dc.b	$86, $80, $86, $80
+	dc.b	pwmMidTom, nRst, pwmMidTom, nRst
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82, $82, $80, $06, $82, $06, $80, $0C, $82
+	dc.b	pwmElectricSnare, pwmElectricSnare, nRst, $06, pwmElectricSnare, $06, nRst, $0C, pwmElectricSnare
 	smpsFMAlterVol      $90
-	dc.b	$87, $04
+	dc.b	pwmLowTom, $04
 	smpsFMAlterVol      $70
-	dc.b	$85, $85, $86, $86
+	dc.b	pwmHighTom, pwmHighTom, pwmMidTom, pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87, $87, $0C
-	smpsFMAlterVol      $70
-	smpsFMAlterVol      $F9
-	dc.b	$85, $03, $85
-	smpsFMAlterVol      $07
-	dc.b	$86, $86
-	smpsFMAlterVol      $90
-	dc.b	$87, $87
-	smpsFMAlterVol      $70
-	dc.b	$82, $82, $80, $0C
-	smpsFMAlterVol      $F9
-	dc.b	$85, $04, $85
-	smpsFMAlterVol      $07
-	dc.b	$86, $86
-	smpsFMAlterVol      $90
-	dc.b	$87, $87
+	dc.b	pwmLowTom, pwmLowTom, $0C
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom, $03, pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom, pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom, pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82, $0C
+	dc.b	pwmElectricSnare, pwmElectricSnare, nRst, $0C
+	smpsFMAlterVol      $F9
+	dc.b	pwmHighTom, $04, pwmHighTom
+	smpsFMAlterVol      $07
+	dc.b	pwmMidTom, pwmMidTom
+	smpsFMAlterVol      $90
+	dc.b	pwmLowTom, pwmLowTom
+	smpsFMAlterVol      $70
+	smpsFMAlterVol      $F9
+	dc.b	pwmHighTom
+	smpsFMAlterVol      $07
+	dc.b	pwmMidTom
+	smpsFMAlterVol      $90
+	dc.b	pwmLowTom
+	smpsFMAlterVol      $70
+	dc.b	pwmElectricSnare, $0C
 	smpsFMAlterVol      $AB
 
 JustAnotherDay_Loop12:
-	dc.b	$82, $04
+	dc.b	pwmElectricSnare, $04
 	smpsFMAlterVol      $11
 	smpsLoop            $00, $09, JustAnotherDay_Loop12
 	smpsFMAlterVol      $BC
-	dc.b	$96, $60, $80, $08, $82, $04, $08, $80, $04, $82, $08, $0C
-	dc.b	$04, $80, $08, $82, $04, $08, $04, $80, $08, $82, $04
+	dc.b	pwmSilence, $60, nRst, $08, pwmElectricSnare, $04, $08, nRst, $04, pwmElectricSnare, $08, $0C
+	dc.b	$04, nRst, $08, pwmElectricSnare, $04, $08, $04, nRst, $08, pwmElectricSnare, $04
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$80, $18, $82, $80, $82, $80, $82, $80, $82, $14, $04, $80
-	dc.b	$18, $82, $80, $82, $80, $82, $80, $82, $08, $04
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, $14, $04, nRst
+	dc.b	$18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, $08, $04
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $22
-	dc.b	$82, $0C, $0C, $08, $04
+	dc.b	pwmElectricSnare, $0C, $0C, $08, $04
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
-	dc.b	$80, $14, $82, $04, $80, $30, $82, $18, $80, $14, $82, $04
-	dc.b	$80, $30, $82, $14, $04, $80, $14, $82, $04, $80, $30, $82
-	dc.b	$18, $80, $14, $82, $04, $80, $30, $82, $08, $04
+	dc.b	nRst, $14, pwmElectricSnare, $04, nRst, $30, pwmElectricSnare, $18, nRst, $14, pwmElectricSnare, $04
+	dc.b	nRst, $30, pwmElectricSnare, $14, $04, nRst, $14, pwmElectricSnare, $04, nRst, $30, pwmElectricSnare
+	dc.b	$18, nRst, $14, pwmElectricSnare, $04, nRst, $30, pwmElectricSnare, $08, $04
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
 	smpsFMAlterVol      $DE
 	smpsFMAlterVol      $22
 
 JustAnotherDay_Loop13:
-	dc.b	$80, $18, $82, $80, $82, $08
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, $08
 	smpsFMAlterVol      $F9
-	dc.b	$85, $04
+	dc.b	pwmHighTom, $04
 	smpsFMAlterVol      $07
-	dc.b	$86, $08
+	dc.b	pwmMidTom, $08
 	smpsFMAlterVol      $90
-	dc.b	$87, $04
+	dc.b	pwmLowTom, $04
 	smpsFMAlterVol      $70
 	smpsLoop            $00, $07, JustAnotherDay_Loop13
-	dc.b	$82, $08, $04, $80, $24, $80, $30
+	dc.b	pwmElectricSnare, $08, $04, nRst, $24, nRst, $30
 	smpsFMAlterVol      $22
-	dc.b	$80, $0C
+	dc.b	nRst, $0C
 	smpsFMAlterVol      $F9
-	dc.b	$85, $80, $06
+	dc.b	pwmHighTom, nRst, $06
 	smpsFMAlterVol      $07
-	dc.b	$86, $80
+	dc.b	pwmMidTom, nRst
 	smpsFMAlterVol      $90
-	dc.b	$87, $80, $18
+	dc.b	pwmLowTom, nRst, $18
 	smpsFMAlterVol      $70
-	dc.b	$8C, $80, $0C
+	dc.b	pwmAcousticSnare, nRst, $0C
 	smpsFMAlterVol      $F9
-	dc.b	$85, $80, $06
+	dc.b	pwmHighTom, nRst, $06
 	smpsFMAlterVol      $07
-	dc.b	$86, $80
+	dc.b	pwmMidTom, nRst
 	smpsFMAlterVol      $90
-	dc.b	$87, $80, $18
+	dc.b	pwmLowTom, nRst, $18
 	smpsFMAlterVol      $70
-	dc.b	$8C, $0C, $06, $06, $80, $0C
+	dc.b	pwmAcousticSnare, $0C, $06, $06, nRst, $0C
 	smpsFMAlterVol      $F9
-	dc.b	$85, $80, $06
+	dc.b	pwmHighTom, nRst, $06
 	smpsFMAlterVol      $07
-	dc.b	$86, $80
+	dc.b	pwmMidTom, nRst
 	smpsFMAlterVol      $90
-	dc.b	$87, $80, $18
+	dc.b	pwmLowTom, nRst, $18
 	smpsFMAlterVol      $70
-	dc.b	$8C, $80, $0C
+	dc.b	pwmAcousticSnare, nRst, $0C
 	smpsFMAlterVol      $F9
-	dc.b	$85, $80, $06
+	dc.b	pwmHighTom, nRst, $06
 	smpsFMAlterVol      $07
-	dc.b	$86, $80
+	dc.b	pwmMidTom, nRst
 	smpsFMAlterVol      $90
-	dc.b	$87, $80, $0C
+	dc.b	pwmLowTom, nRst, $0C
 	smpsFMAlterVol      $70
-	dc.b	$8C, $06, $8C, $8C, $8C
+	dc.b	pwmAcousticSnare, $06, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
 
 JustAnotherDay_Loop14:
-	dc.b	$80, $1E, $8C, $12, $80, $18, $8C
+	dc.b	nRst, $1E, pwmAcousticSnare, $12, nRst, $18, pwmAcousticSnare
 	smpsLoop            $00, $07, JustAnotherDay_Loop14
-	dc.b	$80, $18, $8C, $80, $0C, $8C, $06, $8C, $8C, $8C
+	dc.b	nRst, $18, pwmAcousticSnare, nRst, $0C, pwmAcousticSnare, $06, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
-	dc.b	$80, $18, $8C, $80, $8C, $80, $8C, $80, $8C, $80, $8C, $80
-	dc.b	$8C, $80, $8C, $80, $8C, $12, $06, $80, $30, $80, $60
+	dc.b	nRst, $18, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst
+	dc.b	pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, $12, $06, nRst, $30, nRst, $60
 
 JustAnotherDay_Loop15:
-	dc.b	$80, $18, $8C, $80, $8C, $80, $8C, $80, $8C, $0C, $06, $06
-	dc.b	$80, $18, $8C, $80, $8C, $80, $8C, $80, $8C, $06
+	dc.b	nRst, $18, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, $0C, $06, $06
+	dc.b	nRst, $18, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, $06
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
 	smpsLoop            $00, $02, JustAnotherDay_Loop15
 	smpsFMAlterVol      $DE
 
 JustAnotherDay_Loop16:
-	dc.b	$80, $18, $82, $80, $82, $80, $82, $80, $82, $12, $06
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, $12, $06
 	smpsLoop            $00, $02, JustAnotherDay_Loop16
-	dc.b	$80, $30, $80, $80, $24
+	dc.b	nRst, $30, nRst, nRst, $24
 	smpsFMAlterVol      $F9
-	dc.b	$85, $03
+	dc.b	pwmHighTom, $03
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87, $06
+	dc.b	pwmLowTom, $06
 	smpsFMAlterVol      $70
-	dc.b	$8C, $03, $8C, $8C, $80, $8C, $80, $80, $8C, $8C, $8C, $8C
-	dc.b	$80, $8C, $8C, $8C, $8C, $80, $0C, $8C, $80, $8C, $80, $8C
-	dc.b	$80, $8C, $09, $03, $80, $0C, $8C, $80, $8C, $80, $8C, $80
-	dc.b	$15, $8C, $03, $80, $0C, $8C, $80, $8C, $80, $8C, $80, $8C
-	dc.b	$09, $03, $80, $0C, $8C, $80, $8C, $80, $8C, $80, $8C, $09
-	dc.b	$03, $80, $3C
+	dc.b	pwmAcousticSnare, $03, pwmAcousticSnare, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, nRst, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare
+	dc.b	nRst, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, nRst, $0C, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare
+	dc.b	nRst, pwmAcousticSnare, $09, $03, nRst, $0C, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst
+	dc.b	$15, pwmAcousticSnare, $03, nRst, $0C, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare
+	dc.b	$09, $03, nRst, $0C, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, $09
+	dc.b	$03, nRst, $3C
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
-	dc.b	$82, $06, $82
+	dc.b	pwmElectricSnare, $06, pwmElectricSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsCall            JustAnotherDay_Call04
 	smpsCall            JustAnotherDay_Call04
-	dc.b	$80, $18, $82, $80, $82, $80, $82, $80, $82, $80, $82, $80
-	dc.b	$82, $80, $0C
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst
+	dc.b	pwmElectricSnare, nRst, $0C
 	smpsFMAlterVol      $F9
-	dc.b	$85, $06, $85, $80, $85
+	dc.b	pwmHighTom, $06, pwmHighTom, nRst, pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86, $80, $86, $86, $80, $86
+	dc.b	pwmMidTom, nRst, pwmMidTom, pwmMidTom, nRst, pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsCall            JustAnotherDay_Call04
-	dc.b	$80, $57
+	dc.b	nRst, $57
 	smpsFMAlterVol      $F9
-	dc.b	$85, $03
+	dc.b	pwmHighTom, $03
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
 	smpsStop
 
 JustAnotherDay_Call03:
-	dc.b	$80, $18, $82
+	dc.b	nRst, $18, pwmElectricSnare
 	smpsLoop            $00, $07, JustAnotherDay_Call03
-	dc.b	$80, $0C, $82, $82, $06, $82, $86, $0C
+	dc.b	nRst, $0C, pwmElectricSnare, pwmElectricSnare, $06, pwmElectricSnare, pwmMidTom, $0C
 	smpsReturn
 
 JustAnotherDay_Call04:
-	dc.b	$80, $18, $82
+	dc.b	nRst, $18, pwmElectricSnare
 	smpsLoop            $00, $06, JustAnotherDay_Call04
-	dc.b	$80, $0C, $82, $82, $82, $06, $82, $80, $82, $80, $80, $82
-	dc.b	$82
+	dc.b	nRst, $0C, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, $06, pwmElectricSnare, nRst, pwmElectricSnare, nRst, nRst, pwmElectricSnare
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$80
+	dc.b	nRst
 	smpsReturn
 
 ; PWM3 Data
 JustAnotherDay_PWM3:
-	dc.b	$96, $48
+	dc.b	pwmSilence, $48
 	smpsFMAlterVol      $FC
-	dc.b	$83, $18
+	dc.b	pwmSplashCymbal, $18
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $12
+	dc.b	pwmCrashCymbal, $12
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $06, $80, $0C
+	dc.b	pwmSplashCymbal, $06, nRst, $0C
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $80, $06
+	dc.b	pwmCrashCymbal, nRst, $06
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $12, $80, $18
+	dc.b	pwmSplashCymbal, $12, nRst, $18
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $04
-	dc.b	$80, $80, $0C
+	dc.b	nRst, nRst, $0C
 	smpsFMAlterVol      $C0
-	dc.b	$89, $80, $06
+	dc.b	pwmCrashCymbal, nRst, $06
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $12, $80, $30
+	dc.b	pwmSplashCymbal, $12, nRst, $30
 	smpsFMAlterVol      $04
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsFMAlterVol      $C0
-	dc.b	$89, $0C
+	dc.b	pwmCrashCymbal, $0C
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $12
-	smpsFMAlterVol      $04
-	smpsFMAlterVol      $C0
-	dc.b	$89, $80, $30
-	smpsFMAlterVol      $40
-	smpsFMAlterVol      $FC
-	dc.b	$83, $30
+	dc.b	pwmSplashCymbal, $12
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $0C
+	dc.b	pwmCrashCymbal, nRst, $30
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $24
+	dc.b	pwmSplashCymbal, $30
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60, $89, $18, $80, $14
+	dc.b	pwmCrashCymbal, $0C
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $04, $80, $30
+	dc.b	pwmSplashCymbal, $24
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60, pwmCrashCymbal, $18, nRst, $14
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
 	smpsFMAlterVol      $FC
-	dc.b	$83, $30
+	dc.b	pwmSplashCymbal, $04, nRst, $30
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
-	smpsFMAlterVol      $C0
-	dc.b	$89, $18
-	smpsFMAlterVol      $40
-	dc.b	$8A, $80, $8A, $80, $8A, $80, $8A, $80, $8A, $80, $8A, $80
-	dc.b	$8A, $14, $04, $80, $30, $80, $18, $8A, $80, $8A, $80, $18
-	dc.b	$8A, $80, $8A, $80, $18, $8A, $80, $8A, $80, $08
-	smpsFMAlterVol      $C0
-	dc.b	$89, $04, $80, $24
-	smpsFMAlterVol      $40
-	dc.b	$80, $18
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $18
+	dc.b	pwmSplashCymbal, $30
+	smpsFMAlterVol      $04
+	smpsFMAlterVol      $C0
+	dc.b	pwmCrashCymbal, $60
+	smpsFMAlterVol      $40
+	dc.b	nRst, nRst, nRst
+	smpsFMAlterVol      $C0
+	dc.b	pwmCrashCymbal, $18
+	smpsFMAlterVol      $40
+	dc.b	pwmClap, nRst, pwmClap, nRst, pwmClap, nRst, pwmClap, nRst, pwmClap, nRst, pwmClap, nRst
+	dc.b	pwmClap, $14, $04, nRst, $30, nRst, $18, pwmClap, nRst, pwmClap, nRst, $18
+	dc.b	pwmClap, nRst, pwmClap, nRst, $18, pwmClap, nRst, pwmClap, nRst, $08
+	smpsFMAlterVol      $C0
+	dc.b	pwmCrashCymbal, $04, nRst, $24
+	smpsFMAlterVol      $40
+	dc.b	nRst, $18
+	smpsFMAlterVol      $FC
+	dc.b	pwmSplashCymbal, $18
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $80
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $80
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $80
-	dc.b	$89
+	dc.b	pwmCrashCymbal
 	smpsFMAlterVol      $80
 	smpsFMAlterVol      $F8
-	dc.b	$83, $30
+	dc.b	pwmSplashCymbal, $30
 	smpsFMAlterVol      $08
 	smpsFMAlterVol      $80
-	dc.b	$89, $18
+	dc.b	pwmCrashCymbal, $18
 	smpsFMAlterVol      $80
 	smpsFMAlterVol      $F8
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $08
 
 JustAnotherDay_Loop0F:
 	smpsFMAlterVol      $B0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $50
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsLoop            $00, $02, JustAnotherDay_Loop0F
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60, $80, $80, $80, $89, $12
+	dc.b	pwmCrashCymbal, $60, nRst, nRst, nRst, pwmCrashCymbal, $12
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $1E
+	dc.b	pwmSplashCymbal, $1E
 	smpsFMAlterVol      $04
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $30, $80, $89
+	dc.b	pwmCrashCymbal, $30, nRst, pwmCrashCymbal
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $30
+	dc.b	pwmCrashCymbal, $30
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $30
+	dc.b	pwmCrashCymbal, $30
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80, $2A
+	dc.b	nRst, nRst, nRst, $2A
 	smpsFMAlterVol      $FC
-	dc.b	$83, $06
+	dc.b	pwmSplashCymbal, $06
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
 
 JustAnotherDay_Loop10:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80
+	dc.b	nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
 	smpsLoop            $00, $02, JustAnotherDay_Loop10
 	smpsFMAlterVol      $C0
-	dc.b	$89
+	dc.b	pwmCrashCymbal
 	smpsFMAlterVol      $40
-	dc.b	$80, $80
+	dc.b	nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $54
+	dc.b	pwmCrashCymbal, $54
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $0C
+	dc.b	pwmSplashCymbal, $0C
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80
+	dc.b	nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $5A
+	dc.b	pwmSplashCymbal, $5A
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $06, $80, $60
+	dc.b	pwmCrashCymbal, $06, nRst, $60
 	smpsFMAlterVol      $40
 	smpsStop
 
 ; PWM4 Data
 JustAnotherDay_PWM4:
 	smpsFMAlterVol      $D0
-	dc.b	$84, $18, $84, $84, $30, $80, $06, $84, $80, $84, $80, $84
-	dc.b	$84, $80, $84, $80, $84, $80, $84, $80, $84, $80, $84, $80
-	dc.b	$84, $84, $80, $84, $84, $80, $84, $80, $84, $80, $84, $80
-	dc.b	$84, $84, $80, $84, $80, $84, $84, $80, $84, $84, $80, $84
-	dc.b	$84, $80, $84, $84, $80, $84, $80, $84, $80, $84, $84, $80
-	dc.b	$84, $84, $80, $84, $84, $80, $84, $84, $84, $84, $80, $06
-	dc.b	$84, $80, $84, $80, $84, $84, $80, $84, $80, $84, $80, $84
-	dc.b	$80, $84, $80, $84, $80, $84, $84, $80, $84, $84, $80, $84
-	dc.b	$80, $84, $80, $84, $80, $84, $84, $80, $84, $80, $84, $84
-	dc.b	$80, $84, $84, $80, $84, $84, $80, $84, $84, $80, $84, $80
+	dc.b	pwmRideBell, $18, pwmRideBell, pwmRideBell, $30, nRst, $06, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell
+	dc.b	pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst
+	dc.b	pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst
+	dc.b	pwmRideBell, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell
+	dc.b	pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst
+	dc.b	pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, pwmRideBell, pwmRideBell, nRst, $06
+	dc.b	pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell
+	dc.b	nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell
+	dc.b	nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell
+	dc.b	nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, nRst
 	dc.b	$60
 
 JustAnotherDay_Loop00:
-	dc.b	$80, $06, $84, $80, $84, $80, $84, $84, $80, $84, $80, $84
-	dc.b	$80, $84, $80, $84, $80, $84, $80, $84, $84, $80, $84, $84
-	dc.b	$80, $84, $80, $84, $80, $84, $80, $84, $84, $80, $84, $80
-	dc.b	$84, $84, $80, $84, $84, $80, $84, $84, $80, $84, $84, $80
-	dc.b	$84, $80, $84, $80, $84, $84, $80, $84, $84, $80, $84, $84
-	dc.b	$80, $84, $84, $84, $84
+	dc.b	nRst, $06, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell
+	dc.b	nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell
+	dc.b	nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, nRst
+	dc.b	pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst
+	dc.b	pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell
+	dc.b	nRst, pwmRideBell, pwmRideBell, pwmRideBell, pwmRideBell
 	smpsLoop            $00, $02, JustAnotherDay_Loop00
-	dc.b	$84, $06, $80, $80, $84, $80, $80, $84, $80, $80, $84, $80
-	dc.b	$80, $84, $80, $84, $84, $80, $84, $84, $80, $84, $84, $84
-	dc.b	$84, $80, $84, $80, $84, $84, $80, $84, $84, $80, $60, $80
+	dc.b	pwmRideBell, $06, nRst, nRst, pwmRideBell, nRst, nRst, pwmRideBell, nRst, nRst, pwmRideBell, nRst
+	dc.b	nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, pwmRideBell
+	dc.b	pwmRideBell, nRst, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, pwmRideBell, pwmRideBell, nRst, $60, nRst
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $CD
-	dc.b	$80, $60, $80, $0C, $88, $80, $88, $80, $88, $80, $88, $04
+	dc.b	nRst, $60, nRst, $0C, pwmElectricHiHat, nRst, pwmElectricHiHat, nRst, pwmElectricHiHat, nRst, pwmElectricHiHat, $04
 	dc.b	$04, $04
 
 JustAnotherDay_Loop01:
-	dc.b	$80, $0C, $88, $80, $88
+	dc.b	nRst, $0C, pwmElectricHiHat, nRst, pwmElectricHiHat
 	smpsFMAlterVol      $FC
-	dc.b	$80, $0C, $90, $08, $04, $08
+	dc.b	nRst, $0C, pwmHighClick, $08, $04, $08
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$91, $04, $80, $08
+	dc.b	pwmLowClick, $04, nRst, $08
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$90, $04
+	dc.b	pwmHighClick, $04
 	smpsFMAlterVol      $04
-	dc.b	$80, $0C, $88, $80, $88, $80, $08
+	dc.b	nRst, $0C, pwmElectricHiHat, nRst, pwmElectricHiHat, nRst, $08
 	smpsFMAlterVol      $C0
-	dc.b	$91, $04, $0C
+	dc.b	pwmLowClick, $04, $0C
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$91, $08
+	dc.b	pwmLowClick, $08
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$90, $04
+	dc.b	pwmHighClick, $04
 	smpsFMAlterVol      $04
 	smpsLoop            $00, $02, JustAnotherDay_Loop01
 	smpsFMAlterVol      $33
-	dc.b	$80, $30
+	dc.b	nRst, $30
 	smpsFMAlterVol      $AD
 
 JustAnotherDay_Loop02:
-	dc.b	$80, $0C, $88
+	dc.b	nRst, $0C, pwmElectricHiHat
 	smpsLoop            $00, $07, JustAnotherDay_Loop02
-	dc.b	smpsNoAttack, $0C, $88, $08, $04
+	dc.b	smpsNoAttack, $0C, pwmElectricHiHat, $08, $04
 
 JustAnotherDay_Loop03:
-	dc.b	$80, $0C, $88
+	dc.b	nRst, $0C, pwmElectricHiHat
 	smpsLoop            $00, $07, JustAnotherDay_Loop03
-	dc.b	$80, $0C, $88, $04, $04, $04
+	dc.b	nRst, $0C, pwmElectricHiHat, $04, $04, $04
 
 JustAnotherDay_Loop04:
-	dc.b	$88, $08
+	dc.b	pwmElectricHiHat, $08
 	smpsFMAlterVol      $CD
 	dc.b	$04
 	smpsFMAlterVol      $22
@@ -4478,24 +4478,24 @@ JustAnotherDay_Loop04:
 	dc.b	$04
 	smpsFMAlterVol      $33
 	smpsLoop            $00, $1C, JustAnotherDay_Loop04
-	dc.b	$88, $08
+	dc.b	pwmElectricHiHat, $08
 	smpsFMAlterVol      $CD
 	dc.b	$04
 	smpsFMAlterVol      $33
-	dc.b	$80, $24, $80, $30
+	dc.b	nRst, $24, nRst, $30
 
 JustAnotherDay_Loop05:
-	dc.b	$80, $0C, $88
+	dc.b	nRst, $0C, pwmElectricHiHat
 	smpsLoop            $00, $10, JustAnotherDay_Loop05
 
 JustAnotherDay_Loop06:
-	dc.b	$80, $0C, $88
+	dc.b	nRst, $0C, pwmElectricHiHat
 	smpsLoop            $00, $1E, JustAnotherDay_Loop06
-	dc.b	$80, $30
+	dc.b	nRst, $30
 	smpsFMAlterVol      $53
 
 JustAnotherDay_Loop07:
-	dc.b	$88, $06
+	dc.b	pwmElectricHiHat, $06
 	smpsFMAlterVol      $AB
 	dc.b	$06
 	smpsFMAlterVol      $22
@@ -4504,7 +4504,7 @@ JustAnotherDay_Loop07:
 	dc.b	$06
 	smpsFMAlterVol      $55
 	smpsLoop            $00, $10, JustAnotherDay_Loop07
-	dc.b	$88, $06
+	dc.b	pwmElectricHiHat, $06
 	smpsFMAlterVol      $AB
 	dc.b	$06
 	smpsFMAlterVol      $22
@@ -4512,20 +4512,20 @@ JustAnotherDay_Loop07:
 	smpsFMAlterVol      $DE
 	dc.b	$06
 	smpsFMAlterVol      $55
-	dc.b	$80, $18, $80, $60
+	dc.b	nRst, $18, nRst, $60
 	smpsFMAlterVol      $CD
 
 JustAnotherDay_Loop08:
 	smpsFMAlterVol      $FD
-	dc.b	$80, $0C, $88, $06, $06
+	dc.b	nRst, $0C, pwmElectricHiHat, $06, $06
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$80, $0C, $88, $06, $06
+	dc.b	nRst, $0C, pwmElectricHiHat, $06, $06
 	smpsFMAlterVol      $30
 	smpsLoop            $00, $10, JustAnotherDay_Loop08
 
 JustAnotherDay_Loop09:
-	dc.b	$88, $06
+	dc.b	pwmElectricHiHat, $06
 	smpsFMAlterVol      $CD
 	dc.b	$06
 	smpsFMAlterVol      $22
@@ -4537,25 +4537,25 @@ JustAnotherDay_Loop09:
 
 JustAnotherDay_Loop0A:
 	smpsFMAlterVol      $FD
-	dc.b	$80, $06, $88, $03, $03
+	dc.b	nRst, $06, pwmElectricHiHat, $03, $03
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$80, $06, $88, $03, $03
+	dc.b	nRst, $06, pwmElectricHiHat, $03, $03
 	smpsFMAlterVol      $30
 	smpsLoop            $00, $08, JustAnotherDay_Loop0A
 
 JustAnotherDay_Loop0B:
 	smpsCall            JustAnotherDay_Call00
 	smpsLoop            $00, $07, JustAnotherDay_Loop0B
-	dc.b	$96, $0C, $80, $06
+	dc.b	pwmSilence, $0C, nRst, $06
 	smpsFMAlterVol      $D0
-	dc.b	$88, $03, $03
+	dc.b	pwmElectricHiHat, $03, $03
 	smpsFMAlterVol      $30
 
 JustAnotherDay_Loop0C:
 	smpsCall            JustAnotherDay_Call00
 	smpsLoop            $00, $08, JustAnotherDay_Loop0C
-	dc.b	$80, $60
+	dc.b	nRst, $60
 
 JustAnotherDay_Loop0D:
 	smpsCall            JustAnotherDay_Call01
@@ -4564,91 +4564,91 @@ JustAnotherDay_Loop0D:
 
 JustAnotherDay_Loop0E:
 	smpsFMAlterVol      $FB
-	dc.b	$91, $06
+	dc.b	pwmLowClick, $06
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $50
 	smpsLoop            $00, $04, JustAnotherDay_Loop0E
 	smpsFMAlterVol      $FB
-	dc.b	$91, $0C
+	dc.b	pwmLowClick, $0C
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $50
 	smpsCall            JustAnotherDay_Call01
 	smpsCall            JustAnotherDay_Call01
 	smpsStop
 
 JustAnotherDay_Call00:
-	dc.b	$80, $06
+	dc.b	nRst, $06
 	smpsFMAlterVol      $FD
-	dc.b	$88, $03, $03
+	dc.b	pwmElectricHiHat, $03, $03
 	smpsFMAlterVol      $03
-	dc.b	$80, $06
+	dc.b	nRst, $06
 	smpsFMAlterVol      $D0
-	dc.b	$88, $03, $03
+	dc.b	pwmElectricHiHat, $03, $03
 	smpsFMAlterVol      $30
 	smpsReturn
 
 JustAnotherDay_Call01:
 	smpsCall            JustAnotherDay_Call02
 	smpsFMAlterVol      $FB
-	dc.b	$91, $06
+	dc.b	pwmLowClick, $06
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91, $06
+	dc.b	pwmLowClick, $06
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90, $06, $06
+	dc.b	pwmHighClick, $06, $06
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90, $90
+	dc.b	pwmHighClick, pwmHighClick
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90, $90
+	dc.b	pwmHighClick, pwmHighClick
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91, $0C
+	dc.b	pwmLowClick, $0C
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $50
 	smpsReturn
 
 JustAnotherDay_Call02:
 	smpsFMAlterVol      $FB
-	dc.b	$91, $0C, $0C
+	dc.b	pwmLowClick, $0C, $0C
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91, $06
+	dc.b	pwmLowClick, $06
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91, $0C
+	dc.b	pwmLowClick, $0C
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90, $0C, $0C
+	dc.b	pwmHighClick, $0C, $0C
 	smpsFMAlterVol      $50
 	smpsReturn
 

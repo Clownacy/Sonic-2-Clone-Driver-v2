@@ -887,66 +887,66 @@ MidnightGreenhouse_Call0B:
 
 ; PWM1 Data
 MidnightGreenhouse_PWM1:
-	dc.b	$81, $18, $80, $14, $81, $04, $80, $30, $81, $18, $80, $14
-	dc.b	$81, $04, $80, $2C, $81, $04
+	dc.b	pwmElectricKick, $18, nRst, $14, pwmElectricKick, $04, nRst, $30, pwmElectricKick, $18, nRst, $14
+	dc.b	pwmElectricKick, $04, nRst, $2C, pwmElectricKick, $04
 
 MidnightGreenhouse_Jump02:
 	smpsCall            MidnightGreenhouse_Call03
 	smpsCall            MidnightGreenhouse_Call03
 
 MidnightGreenhouse_Loop05:
-	dc.b	$81, $14, $04, $80, $0C, $81, $80, $08, $81, $04, $08, $80
+	dc.b	pwmElectricKick, $14, $04, nRst, $0C, pwmElectricKick, nRst, $08, pwmElectricKick, $04, $08, nRst
 	dc.b	$1C
 	smpsLoop            $00, $07, MidnightGreenhouse_Loop05
-	dc.b	$81, $14, $04, $80, $0C, $81, $80, $30
+	dc.b	pwmElectricKick, $14, $04, nRst, $0C, pwmElectricKick, nRst, $30
 
 MidnightGreenhouse_Loop06:
 	smpsCall            MidnightGreenhouse_Call03
 	smpsLoop            $01, $04, MidnightGreenhouse_Loop06
 
 MidnightGreenhouse_Loop07:
-	dc.b	$80, $08, $81, $04, $80, $08, $81, $04, $80, $0C, $81, $0C
+	dc.b	nRst, $08, pwmElectricKick, $04, nRst, $08, pwmElectricKick, $04, nRst, $0C, pwmElectricKick, $0C
 	dc.b	$30
 	smpsLoop            $00, $04, MidnightGreenhouse_Loop07
 	smpsJump            MidnightGreenhouse_Jump02
 
 MidnightGreenhouse_Call03:
-	dc.b	$80, $08, $81, $04, $80, $08, $81, $04, $80, $0C, $81, $0C
-	dc.b	$30, $80, $08, $81, $04, $80, $08, $81, $04, $80, $0C, $81
-	dc.b	$0C, $14, $04, $80, $18
+	dc.b	nRst, $08, pwmElectricKick, $04, nRst, $08, pwmElectricKick, $04, nRst, $0C, pwmElectricKick, $0C
+	dc.b	$30, nRst, $08, pwmElectricKick, $04, nRst, $08, pwmElectricKick, $04, nRst, $0C, pwmElectricKick
+	dc.b	$0C, $14, $04, nRst, $18
 	smpsLoop            $00, $02, MidnightGreenhouse_Call03
 	smpsReturn
 
 ; PWM2 Data
 MidnightGreenhouse_PWM2:
-	dc.b	$96, $60, $80, $08, $82, $04, $08, $80, $04, $82, $08, $0C
-	dc.b	$04, $80, $08, $82, $04, $08, $04, $80, $08, $82, $04
+	dc.b	pwmSilence, $60, nRst, $08, pwmElectricSnare, $04, $08, nRst, $04, pwmElectricSnare, $08, $0C
+	dc.b	$04, nRst, $08, pwmElectricSnare, $04, $08, $04, nRst, $08, pwmElectricSnare, $04
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
 
 MidnightGreenhouse_Jump01:
 	smpsCall            MidnightGreenhouse_Call02
 	smpsCall            MidnightGreenhouse_Call02
-	dc.b	$80, $18, $82, $80, $82, $80, $82, $80, $82, $80, $82, $80
-	dc.b	$82, $80, $82, $80, $08
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst
+	dc.b	pwmElectricSnare, nRst, pwmElectricSnare, nRst, $08
 	smpsFMAlterVol      $F9
-	dc.b	$85, $04
+	dc.b	pwmHighTom, $04
 	smpsFMAlterVol      $07
-	dc.b	$86, $08, $80, $04, $82, $18, $80, $18, $82, $80, $82, $80
-	dc.b	$82, $80, $82, $80, $82, $80, $82, $80, $82, $80, $08
+	dc.b	pwmMidTom, $08, nRst, $04, pwmElectricSnare, $18, nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst
+	dc.b	pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, $08
 	smpsFMAlterVol      $F9
-	dc.b	$85, $04, $80, $08, $85, $04
+	dc.b	pwmHighTom, $04, nRst, $08, pwmHighTom, $04
 	smpsFMAlterVol      $07
-	dc.b	$86, $08
+	dc.b	pwmMidTom, $08
 	smpsFMAlterVol      $90
-	dc.b	$87, $04
+	dc.b	pwmLowTom, $04
 	smpsFMAlterVol      $70
-	dc.b	$82, $82, $82
+	dc.b	pwmElectricSnare, pwmElectricSnare, pwmElectricSnare
 
 MidnightGreenhouse_Loop04:
 	smpsCall            MidnightGreenhouse_Call02
@@ -954,74 +954,74 @@ MidnightGreenhouse_Loop04:
 	smpsJump            MidnightGreenhouse_Jump01
 
 MidnightGreenhouse_Call02:
-	dc.b	$80, $18, $82, $80, $82, $80, $82, $80, $82, $14, $04, $80
-	dc.b	$18, $82, $80, $82, $80, $82, $80, $82, $08, $04
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, $14, $04, nRst
+	dc.b	$18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, $08, $04
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
 	smpsReturn
 
 ; PWM3 Data
 MidnightGreenhouse_PWM3:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 	smpsFMAlterVol      $C0
-	dc.b	$89, $18, $80, $14
+	dc.b	pwmCrashCymbal, $18, nRst, $14
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $04, $80, $30
+	dc.b	pwmSplashCymbal, $04, nRst, $30
 	smpsFMAlterVol      $04
 
 MidnightGreenhouse_Jump00:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80, $80, $80, $80, $80
+	dc.b	nRst, nRst, nRst, nRst, nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80, $50
+	dc.b	nRst, nRst, nRst, $50
 	smpsFMAlterVol      $FC
-	dc.b	$83, $10
+	dc.b	pwmSplashCymbal, $10
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $14
+	dc.b	pwmCrashCymbal, $14
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $04, $80, $48
+	dc.b	pwmSplashCymbal, $04, nRst, $48
 	smpsFMAlterVol      $04
 
 MidnightGreenhouse_Loop03:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89
+	dc.b	pwmCrashCymbal
 	smpsFMAlterVol      $40
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89
+	dc.b	pwmCrashCymbal
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $04
 	smpsLoop            $00, $02, MidnightGreenhouse_Loop03
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsJump            MidnightGreenhouse_Jump00
 
 ; PWM4 Data
 MidnightGreenhouse_PWM4:
-	dc.b	$96, $60, $80, $0C, $88, $80, $88, $80, $88, $80, $88, $04
+	dc.b	pwmSilence, $60, nRst, $0C, pwmElectricHiHat, nRst, pwmElectricHiHat, nRst, pwmElectricHiHat, nRst, pwmElectricHiHat, $04
 	dc.b	$04, $04
 
 MidnightGreenhouse_Loop00:
@@ -1036,48 +1036,48 @@ MidnightGreenhouse_Loop02:
 	smpsCall            MidnightGreenhouse_Call01
 	smpsLoop            $00, $08, MidnightGreenhouse_Loop02
 	smpsCall            MidnightGreenhouse_Call01
-	dc.b	$80, $0C, $88, $80, $88
+	dc.b	nRst, $0C, pwmElectricHiHat, nRst, pwmElectricHiHat
 	smpsFMAlterVol      $FC
-	dc.b	$80, $0C, $90, $08, $04, $08
+	dc.b	nRst, $0C, pwmHighClick, $08, $04, $08
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$91, $04, $80, $08
+	dc.b	pwmLowClick, $04, nRst, $08
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$90, $04
+	dc.b	pwmHighClick, $04
 	smpsFMAlterVol      $04
-	dc.b	$80, $0C, $88, $80, $88, $88, $30
+	dc.b	nRst, $0C, pwmElectricHiHat, nRst, pwmElectricHiHat, pwmElectricHiHat, $30
 	smpsJump            MidnightGreenhouse_Loop00
 
 MidnightGreenhouse_Call00:
-	dc.b	$80, $0C, $88
+	dc.b	nRst, $0C, pwmElectricHiHat
 	smpsLoop            $00, $07, MidnightGreenhouse_Call00
-	dc.b	$80, $0C, $88, $04, $04, $04
+	dc.b	nRst, $0C, pwmElectricHiHat, $04, $04, $04
 	smpsReturn
 
 MidnightGreenhouse_Call01:
-	dc.b	$80, $0C, $88, $80, $88
+	dc.b	nRst, $0C, pwmElectricHiHat, nRst, pwmElectricHiHat
 	smpsFMAlterVol      $FC
-	dc.b	$80, $0C, $90, $08, $04, $08
+	dc.b	nRst, $0C, pwmHighClick, $08, $04, $08
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$91, $04, $80, $08
+	dc.b	pwmLowClick, $04, nRst, $08
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$90, $04
+	dc.b	pwmHighClick, $04
 	smpsFMAlterVol      $04
-	dc.b	$80, $0C, $88, $80, $88, $80, $08
+	dc.b	nRst, $0C, pwmElectricHiHat, nRst, pwmElectricHiHat, nRst, $08
 	smpsFMAlterVol      $C0
-	dc.b	$91, $04, $0C
+	dc.b	pwmLowClick, $04, $0C
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$91, $08
+	dc.b	pwmLowClick, $08
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$90, $04
+	dc.b	pwmHighClick, $04
 	smpsFMAlterVol      $04
 	smpsReturn
 

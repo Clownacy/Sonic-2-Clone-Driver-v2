@@ -189,12 +189,12 @@ Decision_Jump06:
 
 ; PWM1 Data
 Decision_PWM1:
-	dc.b	$96, $08, $8B
+	dc.b	pwmSilence, $08, pwmAcousticKick
 	smpsJump            Decision_PWM1
 
 ; PWM2 Data
 Decision_PWM2:
-	dc.b	$8C, $10
+	dc.b	pwmAcousticSnare, $10
 	smpsJump            Decision_PWM2
 
 ; PWM3 Data

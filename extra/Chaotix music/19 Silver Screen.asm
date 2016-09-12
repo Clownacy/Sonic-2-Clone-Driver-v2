@@ -321,117 +321,117 @@ SilverScreen_Loop14:
 
 ; PWM1 Data
 SilverScreen_PWM1:
-	dc.b	$96, $14
+	dc.b	pwmSilence, $14
 
 SilverScreen_Jump00:
-	dc.b	$8B, $04, $87, $8B, $8B, $87, $8B, $8B, $87, $8B, $04, $8B
-	dc.b	$87, $8B, $87, $8B, $87, $8B
+	dc.b	pwmAcousticKick, $04, pwmLowTom, pwmAcousticKick, pwmAcousticKick, pwmLowTom, pwmAcousticKick, pwmAcousticKick, pwmLowTom, pwmAcousticKick, $04, pwmAcousticKick
+	dc.b	pwmLowTom, pwmAcousticKick, pwmLowTom, pwmAcousticKick, pwmLowTom, pwmAcousticKick
 	smpsJump            SilverScreen_Jump00
 
 ; PWM2 Data
 SilverScreen_PWM2:
 	smpsFMAlterVol      $C0
-	dc.b	$82, $02, $82
+	dc.b	pwmElectricSnare, $02, pwmElectricSnare
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $11
-	dc.b	$82, $04
+	dc.b	pwmElectricSnare, $04
 	smpsFMAlterVol      $AB
-	dc.b	$82, $02, $82
+	dc.b	pwmElectricSnare, $02, pwmElectricSnare
 	smpsFMAlterVol      $11
-	dc.b	$82, $02
+	dc.b	pwmElectricSnare, $02
 	smpsFMAlterVol      $11
-	dc.b	$82, $02
+	dc.b	pwmElectricSnare, $02
 	smpsFMAlterVol      $11
-	dc.b	$82, $02
+	dc.b	pwmElectricSnare, $02
 	smpsFMAlterVol      $11
-	dc.b	$82, $02
+	dc.b	pwmElectricSnare, $02
 	smpsFMAlterVol      $11
-	dc.b	$82, $08, $80, $18
+	dc.b	pwmElectricSnare, $08, nRst, $18
 	smpsFMAlterVol      $EF
 
 SilverScreen_Loop06:
-	dc.b	$80, $20
+	dc.b	nRst, $20
 	smpsLoop            $00, $06, SilverScreen_Loop06
-	dc.b	$80, $0C
+	dc.b	nRst, $0C
 	smpsLoop            $01, $02, SilverScreen_PWM2
-	dc.b	$82, $02, $82
+	dc.b	pwmElectricSnare, $02, pwmElectricSnare
 	smpsFMAlterVol      $11
-	dc.b	$82, $04
+	dc.b	pwmElectricSnare, $04
 	smpsFMAlterVol      $AB
-	dc.b	$82, $02, $82
+	dc.b	pwmElectricSnare, $02, pwmElectricSnare
 	smpsFMAlterVol      $11
-	dc.b	$82, $02
+	dc.b	pwmElectricSnare, $02
 	smpsFMAlterVol      $11
-	dc.b	$82, $02
+	dc.b	pwmElectricSnare, $02
 	smpsFMAlterVol      $11
-	dc.b	$82, $02
+	dc.b	pwmElectricSnare, $02
 	smpsFMAlterVol      $11
-	dc.b	$82, $02
+	dc.b	pwmElectricSnare, $02
 
 SilverScreen_Loop07:
 	smpsFMAlterVol      $11
-	dc.b	$82, $08, $80, $18
+	dc.b	pwmElectricSnare, $08, nRst, $18
 	smpsFMAlterVol      $EF
-	dc.b	$80, $20
+	dc.b	nRst, $20
 	smpsLoop            $00, $05, SilverScreen_Loop07
 	smpsFMAlterVol      $11
-	dc.b	$82, $08, $80, $18
+	dc.b	pwmElectricSnare, $08, nRst, $18
 	smpsFMAlterVol      $EF
-	dc.b	$80, $0C
+	dc.b	nRst, $0C
 	smpsJump            SilverScreen_PWM2
 
 ; PWM3 Data
 SilverScreen_PWM3:
-	dc.b	$96, $04
+	dc.b	pwmSilence, $04
 	smpsFMAlterVol      $9A
-	dc.b	$89, $08
+	dc.b	pwmCrashCymbal, $08
 	smpsFMAlterVol      $33
-	dc.b	$89, $08
+	dc.b	pwmCrashCymbal, $08
 	smpsFMAlterVol      $33
 
 SilverScreen_Loop04:
-	dc.b	$89, $20
+	dc.b	pwmCrashCymbal, $20
 
 SilverScreen_Loop03:
-	dc.b	$80, $20
+	dc.b	nRst, $20
 	smpsLoop            $00, $03, SilverScreen_Loop03
 	smpsLoop            $01, $04, SilverScreen_Loop04
 
 SilverScreen_Loop05:
-	dc.b	$80, $20
+	dc.b	nRst, $20
 	smpsLoop            $00, $0B, SilverScreen_Loop05
 	smpsFMAlterVol      $9A
-	dc.b	$89, $08
+	dc.b	pwmCrashCymbal, $08
 	smpsFMAlterVol      $11
-	dc.b	$89, $08
+	dc.b	pwmCrashCymbal, $08
 	smpsFMAlterVol      $22
-	dc.b	$89, $08
+	dc.b	pwmCrashCymbal, $08
 	smpsFMAlterVol      $11
-	dc.b	$89, $08
+	dc.b	pwmCrashCymbal, $08
 	smpsFMAlterVol      $22
 	smpsJump            SilverScreen_Loop04
 
 ; PWM4 Data
 SilverScreen_PWM4:
-	dc.b	$80, $14
+	dc.b	nRst, $14
 
 SilverScreen_Loop01:
-	dc.b	$83, $20
+	dc.b	pwmSplashCymbal, $20
 
 SilverScreen_Loop00:
-	dc.b	$80, $20
+	dc.b	nRst, $20
 	smpsLoop            $00, $03, SilverScreen_Loop00
 	smpsLoop            $01, $04, SilverScreen_Loop01
 
 SilverScreen_Loop02:
 	smpsFMAlterVol      $22
-	dc.b	$8A, $04
+	dc.b	pwmClap, $04
 	smpsFMAlterVol      $DE
-	dc.b	$04, $80, $08, $8A, $08
+	dc.b	$04, nRst, $08, pwmClap, $08
 	smpsFMAlterVol      $22
 	dc.b	$04
 	smpsFMAlterVol      $DE
-	dc.b	$04, $80, $08, $8A, $80, $04, $8A, $80, $8A
+	dc.b	$04, nRst, $08, pwmClap, nRst, $04, pwmClap, nRst, pwmClap
 	smpsLoop            $00, $06, SilverScreen_Loop02
 	smpsJump            SilverScreen_Loop01
 

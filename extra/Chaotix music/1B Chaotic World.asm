@@ -232,97 +232,97 @@ ChaoticWorld_Jump04:
 
 ; PWM1 Data
 ChaoticWorld_PWM1:
-	dc.b	$81, $18
+	dc.b	pwmElectricKick, $18
 	smpsLoop            $00, $0F, ChaoticWorld_PWM1
-	dc.b	$80, $18
+	dc.b	nRst, $18
 	smpsLoop            $01, $02, ChaoticWorld_PWM1
 
 ChaoticWorld_Loop04:
-	dc.b	$81, $18
+	dc.b	pwmElectricKick, $18
 	smpsLoop            $00, $10, ChaoticWorld_Loop04
 	smpsJump            ChaoticWorld_PWM1
 
 ; PWM2 Data
 ChaoticWorld_PWM2:
-	dc.b	$96, $0C, $82
+	dc.b	pwmSilence, $0C, pwmElectricSnare
 	smpsLoop            $00, $0F, ChaoticWorld_PWM2
-	dc.b	$82, $0C, $82
+	dc.b	pwmElectricSnare, $0C, pwmElectricSnare
 
 ChaoticWorld_Loop02:
-	dc.b	$80, $0C, $82
+	dc.b	nRst, $0C, pwmElectricSnare
 	smpsLoop            $00, $0F, ChaoticWorld_Loop02
-	dc.b	$82, $06, $82, $82, $82
+	dc.b	pwmElectricSnare, $06, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare
 
 ChaoticWorld_Loop03:
-	dc.b	$80, $0C, $82
+	dc.b	nRst, $0C, pwmElectricSnare
 	smpsLoop            $00, $10, ChaoticWorld_Loop03
 	smpsJump            ChaoticWorld_PWM2
 
 ; PWM3 Data
 ChaoticWorld_PWM3:
 	smpsCall            ChaoticWorld_Call00
-	dc.b	$89, $09, $8A, $03, $8A, $0C, $8A, $06, $06, $0C
+	dc.b	pwmCrashCymbal, $09, pwmClap, $03, pwmClap, $0C, pwmClap, $06, $06, $0C
 	smpsCall            ChaoticWorld_Call00
-	dc.b	$89, $30
+	dc.b	pwmCrashCymbal, $30
 
 ChaoticWorld_Loop01:
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsLoop            $00, $04, ChaoticWorld_Loop01
 	smpsJump            ChaoticWorld_PWM3
 
 ChaoticWorld_Call00:
-	dc.b	$89, $18
+	dc.b	pwmCrashCymbal, $18
 
 ChaoticWorld_Loop06:
-	dc.b	$84
+	dc.b	pwmRideBell
 	smpsLoop            $00, $0D, ChaoticWorld_Loop06
 	smpsReturn
 
 ; PWM4 Data
 ChaoticWorld_PWM4:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 	smpsLoop            $00, $07, ChaoticWorld_PWM4
-	dc.b	$96, $3C
+	dc.b	pwmSilence, $3C
 	smpsFMAlterVol      $D0
-	dc.b	$92, $0C
+	dc.b	pwmHighBongo, $0C
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$93, $06, $93, $93, $93
+	dc.b	pwmLowBongo, $06, pwmLowBongo, pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $03
 
 ChaoticWorld_Loop00:
 	smpsFMAlterVol      $FD
-	dc.b	$93, $0C
+	dc.b	pwmLowBongo, $0C
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$92, $0C
+	dc.b	pwmHighBongo, $0C
 	smpsFMAlterVol      $30
-	dc.b	$80, $0C
+	dc.b	nRst, $0C
 	smpsFMAlterVol      $FD
-	dc.b	$93, $06, $93, $93, $0C
+	dc.b	pwmLowBongo, $06, pwmLowBongo, pwmLowBongo, $0C
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$92, $0C
+	dc.b	pwmHighBongo, $0C
 	smpsFMAlterVol      $30
-	dc.b	$80, $0C
+	dc.b	nRst, $0C
 	smpsFMAlterVol      $FD
-	dc.b	$93, $06, $93
+	dc.b	pwmLowBongo, $06, pwmLowBongo
 	smpsFMAlterVol      $03
 	smpsLoop            $00, $03, ChaoticWorld_Loop00
 	smpsFMAlterVol      $FD
-	dc.b	$93, $0C
+	dc.b	pwmLowBongo, $0C
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$92, $0C
+	dc.b	pwmHighBongo, $0C
 	smpsFMAlterVol      $30
-	dc.b	$80, $0C
+	dc.b	nRst, $0C
 	smpsFMAlterVol      $FD
-	dc.b	$93, $06, $93
+	dc.b	pwmLowBongo, $06, pwmLowBongo
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $33
 	smpsFMAlterVol      $E0
-	dc.b	$91, $04, $91, $91, $91, $06, $91, $91, $91, $91, $04, $91
-	dc.b	$91
+	dc.b	pwmLowClick, $04, pwmLowClick, pwmLowClick, pwmLowClick, $06, pwmLowClick, pwmLowClick, pwmLowClick, pwmLowClick, $04, pwmLowClick
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $20
 	smpsFMAlterVol      $CD
 	smpsJump            ChaoticWorld_PWM4

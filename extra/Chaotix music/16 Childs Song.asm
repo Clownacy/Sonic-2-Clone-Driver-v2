@@ -292,55 +292,55 @@ ChildsSong_Loop14:
 
 ; PWM1 Data
 ChildsSong_PWM1:
-	dc.b	$96, $60, $8B, $18, $8B, $8B, $8B
+	dc.b	pwmSilence, $60, pwmAcousticKick, $18, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 
 ChildsSong_Loop05:
-	dc.b	$8B, $18, $8B, $8B, $8B
+	dc.b	pwmAcousticKick, $18, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 	smpsLoop            $00, $04, ChildsSong_Loop05
-	dc.b	$8B, $18, $80, $8B, $80, $8B, $18, $8B, $8B, $8B
+	dc.b	pwmAcousticKick, $18, nRst, pwmAcousticKick, nRst, pwmAcousticKick, $18, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 	smpsLoop            $00, $02, ChildsSong_Loop05
 
 ChildsSong_Loop06:
-	dc.b	$8B, $18, $8B, $8B, $8B
+	dc.b	pwmAcousticKick, $18, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 	smpsLoop            $00, $06, ChildsSong_Loop06
 	smpsJump            ChildsSong_Loop05
 
 ; PWM2 Data
 ChildsSong_PWM2:
-	dc.b	$96, $60, $96, $0C, $8C, $80, $8C, $80, $8C, $80, $8C
+	dc.b	pwmSilence, $60, pwmSilence, $0C, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare
 
 ChildsSong_Loop03:
-	dc.b	$80, $0C, $8C, $80, $8C, $80, $8C, $80, $8C, $80, $0C, $8C
-	dc.b	$80, $8C, $80, $8C, $06, $8C, $80, $0C, $8C
+	dc.b	nRst, $0C, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, $0C, pwmAcousticSnare
+	dc.b	nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, $06, pwmAcousticSnare, nRst, $0C, pwmAcousticSnare
 	smpsLoop            $00, $02, ChildsSong_Loop03
-	dc.b	$8C, $18, $8C, $8C, $8C, $80, $0C, $8C, $80, $8C, $80, $8C
-	dc.b	$8C, $8C
+	dc.b	pwmAcousticSnare, $18, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, nRst, $0C, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare
+	dc.b	pwmAcousticSnare, pwmAcousticSnare
 	smpsLoop            $01, $02, ChildsSong_Loop03
-	dc.b	$80, $0C, $8C, $80, $8C, $80, $8C, $80, $8C, $80, $0C, $8C
-	dc.b	$80, $8C, $8C, $8C, $8C, $06, $8C, $8C, $0C
+	dc.b	nRst, $0C, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, $0C, pwmAcousticSnare
+	dc.b	nRst, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, $06, pwmAcousticSnare, pwmAcousticSnare, $0C
 
 ChildsSong_Loop04:
-	dc.b	$80, $0C, $8C, $80, $8C, $80, $8C, $80, $8C, $80, $0C, $8C
-	dc.b	$80, $8C, $80, $8C, $06, $8C, $80, $0C, $8C
+	dc.b	nRst, $0C, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, $0C, pwmAcousticSnare
+	dc.b	nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, $06, pwmAcousticSnare, nRst, $0C, pwmAcousticSnare
 	smpsLoop            $00, $02, ChildsSong_Loop04
 	smpsJump            ChildsSong_Loop03
 
 ; PWM3 Data
 ChildsSong_PWM3:
-	dc.b	$80, $60, $80, $60
+	dc.b	nRst, $60, nRst, $60
 
 ChildsSong_Loop00:
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsLoop            $00, $04, ChildsSong_Loop00
-	dc.b	$89, $30, $30
+	dc.b	pwmCrashCymbal, $30, $30
 
 ChildsSong_Loop01:
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsLoop            $00, $05, ChildsSong_Loop01
-	dc.b	$89, $30, $30
+	dc.b	pwmCrashCymbal, $30, $30
 
 ChildsSong_Loop02:
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsLoop            $00, $07, ChildsSong_Loop02
 	smpsJump            ChildsSong_Loop00
 

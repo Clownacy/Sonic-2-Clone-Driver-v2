@@ -401,54 +401,54 @@ SteelHeart_PSG3:
 
 ; PWM1 Data
 SteelHeart_PWM1:
-	dc.b	$8B, $18, $80, $06, $8B, $12, $8B, $18, $80, $12, $8B, $06
-	dc.b	$8B, $12, $06, $80, $12, $8B, $06, $80, $08, $8B, $08, $8B
-	dc.b	$80, $12, $8B, $06, $80, $60
+	dc.b	pwmAcousticKick, $18, nRst, $06, pwmAcousticKick, $12, pwmAcousticKick, $18, nRst, $12, pwmAcousticKick, $06
+	dc.b	pwmAcousticKick, $12, $06, nRst, $12, pwmAcousticKick, $06, nRst, $08, pwmAcousticKick, $08, pwmAcousticKick
+	dc.b	nRst, $12, pwmAcousticKick, $06, nRst, $60
 
 SteelHeart_Jump02:
-	dc.b	$8B, $18, $80, $06, $8B, $12, $8B, $18, $80, $12, $8B, $06
-	dc.b	$8B, $12, $06, $80, $12, $8B, $06, $80, $08, $8B, $08, $8B
-	dc.b	$80, $12, $8B, $06
+	dc.b	pwmAcousticKick, $18, nRst, $06, pwmAcousticKick, $12, pwmAcousticKick, $18, nRst, $12, pwmAcousticKick, $06
+	dc.b	pwmAcousticKick, $12, $06, nRst, $12, pwmAcousticKick, $06, nRst, $08, pwmAcousticKick, $08, pwmAcousticKick
+	dc.b	nRst, $12, pwmAcousticKick, $06
 	smpsJump            SteelHeart_Jump02
 
 ; PWM2 Data
 SteelHeart_PWM2:
-	dc.b	$96, $60, $96, $18
+	dc.b	pwmSilence, $60, pwmSilence, $18
 	smpsFMAlterVol      $78
-	dc.b	$8C
+	dc.b	pwmAcousticSnare
 	smpsFMAlterVol      $44
-	dc.b	$8C
+	dc.b	pwmAcousticSnare
 	smpsFMAlterVol      $44
-	dc.b	$8C, $80, $60
+	dc.b	pwmAcousticSnare, nRst, $60
 
 SteelHeart_Jump01:
-	dc.b	$80, $60, $80, $48, $8C, $18
+	dc.b	nRst, $60, nRst, $48, pwmAcousticSnare, $18
 	smpsJump            SteelHeart_Jump01
 
 ; PWM3 Data
 SteelHeart_PWM3:
-	dc.b	$96, $60, $96, $60, $89, $18, $80
+	dc.b	pwmSilence, $60, pwmSilence, $60, pwmCrashCymbal, $18, nRst
 	smpsFMAlterVol      $22
-	dc.b	$89
+	dc.b	pwmCrashCymbal
 	smpsStop
 
 ; PWM4 Data
 SteelHeart_PWM4:
 	smpsFMAlterVol      $D0
-	dc.b	$93, $08
+	dc.b	pwmLowBongo, $08
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$92, $92
+	dc.b	pwmHighBongo, pwmHighBongo
 	smpsFMAlterVol      $03
 	smpsLoop            $00, $08, SteelHeart_PWM4
-	dc.b	$80, $60
+	dc.b	nRst, $60
 
 SteelHeart_Jump00:
 	smpsFMAlterVol      $D0
-	dc.b	$93, $08
+	dc.b	pwmLowBongo, $08
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$92, $92
+	dc.b	pwmHighBongo, pwmHighBongo
 	smpsFMAlterVol      $03
 	smpsJump            SteelHeart_Jump00
 

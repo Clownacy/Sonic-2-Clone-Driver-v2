@@ -317,57 +317,57 @@ SodaPop_Loop11:
 
 ; PWM1 Data
 SodaPop_PWM1:
-	dc.b	$8B, $18, $80, $12, $8B, $06, $8B, $18, $80, $18, $8B, $18
-	dc.b	$80, $12, $8B, $06, $8B, $18, $80, $0C, $8B, $0C
+	dc.b	pwmAcousticKick, $18, nRst, $12, pwmAcousticKick, $06, pwmAcousticKick, $18, nRst, $18, pwmAcousticKick, $18
+	dc.b	nRst, $12, pwmAcousticKick, $06, pwmAcousticKick, $18, nRst, $0C, pwmAcousticKick, $0C
 	smpsLoop            $00, $03, SodaPop_PWM1
-	dc.b	$8B, $18, $80, $12, $8B, $06, $8B, $18, $80, $0C, $8B, $0C
-	dc.b	$8B, $18, $80, $12, $8B, $06, $8B, $0C, $8B, $8B, $8B
+	dc.b	pwmAcousticKick, $18, nRst, $12, pwmAcousticKick, $06, pwmAcousticKick, $18, nRst, $0C, pwmAcousticKick, $0C
+	dc.b	pwmAcousticKick, $18, nRst, $12, pwmAcousticKick, $06, pwmAcousticKick, $0C, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 	smpsLoop            $01, $04, SodaPop_PWM1
 
 SodaPop_Loop01:
-	dc.b	$8B, $18, $8B, $8B, $8B
+	dc.b	pwmAcousticKick, $18, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 	smpsLoop            $00, $0C, SodaPop_Loop01
 	smpsJump            SodaPop_PWM1
 
 ; PWM2 Data
 SodaPop_PWM2:
-	dc.b	$96, $18, $82, $12, $82, $06, $80, $06, $82, $06, $82, $0C
-	dc.b	$82, $18
+	dc.b	pwmSilence, $18, pwmElectricSnare, $12, pwmElectricSnare, $06, nRst, $06, pwmElectricSnare, $06, pwmElectricSnare, $0C
+	dc.b	pwmElectricSnare, $18
 	smpsLoop            $00, $07, SodaPop_PWM2
-	dc.b	$80, $18, $82, $12, $82, $06, $80, $06
+	dc.b	nRst, $18, pwmElectricSnare, $12, pwmElectricSnare, $06, nRst, $06
 	smpsFMAlterVol      $67
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $33
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $33
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $33
-	dc.b	$82, $0C, $82, $06, $82
+	dc.b	pwmElectricSnare, $0C, pwmElectricSnare, $06, pwmElectricSnare
 	smpsLoop            $01, $04, SodaPop_PWM2
 
 SodaPop_Loop00:
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsLoop            $00, $0B, SodaPop_Loop00
-	dc.b	$80, $30, $82, $06
+	dc.b	nRst, $30, pwmElectricSnare, $06
 	smpsFMAlterVol      $34
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $22
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $22
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $22
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $22
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $22
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $22
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsJump            SodaPop_PWM2
 
 ; PWM3 Data
 SodaPop_PWM3:
-	dc.b	$89, $60, $80, $60, $80, $60, $80, $60
+	dc.b	pwmCrashCymbal, $60, nRst, $60, nRst, $60, nRst, $60
 	smpsJump            SodaPop_PWM3
 
 ; PWM4 Data

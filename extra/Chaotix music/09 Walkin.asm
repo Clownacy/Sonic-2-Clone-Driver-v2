@@ -220,47 +220,47 @@ Walkin_Loop05:
 
 ; PWM1 Data
 Walkin_PWM1:
-	dc.b	$81, $18, $0C, $0C
+	dc.b	pwmElectricKick, $18, $0C, $0C
 
 Walkin_Loop02:
-	dc.b	$81, $18, $18, $18, $18, $18, $18, $18, $0C, $0C
+	dc.b	pwmElectricKick, $18, $18, $18, $18, $18, $18, $18, $0C, $0C
 	smpsLoop            $00, $04, Walkin_Loop02
 	smpsJump            Walkin_Loop02
 
 ; PWM2 Data
 Walkin_PWM2:
-	dc.b	$96, $0C, $82, $0C, $0C, $08, $04
+	dc.b	pwmSilence, $0C, pwmElectricSnare, $0C, $0C, $08, $04
 
 Walkin_Loop01:
-	dc.b	$80, $18, $82, $80, $82, $14, $04, $80, $18, $82, $80, $82
-	dc.b	$08, $04, $0C, $80, $18, $82, $80, $82, $14, $04, $80, $18
-	dc.b	$82, $80, $82, $08, $04, $08, $04
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, $14, $04, nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare
+	dc.b	$08, $04, $0C, nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, $14, $04, nRst, $18
+	dc.b	pwmElectricSnare, nRst, pwmElectricSnare, $08, $04, $08, $04
 	smpsLoop            $00, $02, Walkin_Loop01
 	smpsJump            Walkin_Loop01
 
 ; PWM3 Data
 Walkin_PWM3:
 	smpsFMAlterVol      $FC
-	dc.b	$83, $30
+	dc.b	pwmSplashCymbal, $30
 	smpsFMAlterVol      $04
 
 Walkin_Jump00:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsJump            Walkin_Jump00
 
 ; PWM4 Data
 Walkin_PWM4:
-	dc.b	$96, $30
+	dc.b	pwmSilence, $30
 
 Walkin_Loop00:
-	dc.b	$88, $08
+	dc.b	pwmElectricHiHat, $08
 	smpsFMAlterVol      $DE
 	dc.b	$04, $08, $04
 	smpsFMAlterVol      $22

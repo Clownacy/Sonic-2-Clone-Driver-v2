@@ -171,31 +171,31 @@ FromPartyToParty_Jump04:
 
 ; PWM1 Data
 FromPartyToParty_PWM1:
-	dc.b	$8B, $12, $06
+	dc.b	pwmAcousticKick, $12, $06
 	smpsJump            FromPartyToParty_PWM1
 
 ; PWM2 Data
 FromPartyToParty_PWM2:
-	dc.b	$96, $0C, $82
+	dc.b	pwmSilence, $0C, pwmElectricSnare
 	smpsJump            FromPartyToParty_PWM2
 
 ; PWM3 Data
 FromPartyToParty_PWM3:
-	dc.b	$8E, $0C
+	dc.b	pwmFingersSnapping, $0C
 	smpsFMAlterVol      $AB
-	dc.b	$8D, $09, $80, $03
+	dc.b	pwmBell, $09, nRst, $03
 	smpsFMAlterVol      $55
 	smpsJump            FromPartyToParty_PWM3
 
 ; PWM4 Data
 FromPartyToParty_PWM4:
-	dc.b	$96, $0C
+	dc.b	pwmSilence, $0C
 	smpsFMAlterVol      $A0
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $60
-	dc.b	$80, $0C
+	dc.b	nRst, $0C
 	smpsFMAlterVol      $FA
-	dc.b	$91, $06, $91
+	dc.b	pwmLowClick, $06, pwmLowClick
 	smpsFMAlterVol      $06
 	smpsJump            FromPartyToParty_PWM4
 

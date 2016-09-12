@@ -200,25 +200,25 @@ DestructivePower_Loop02:
 
 ; PWM1 Data
 DestructivePower_PWM1:
-	dc.b	$8B, $06, $80, $0C, $8B, $06, $80, $18, $8B, $06, $8B, $80
-	dc.b	$8B, $80, $18
+	dc.b	pwmAcousticKick, $06, nRst, $0C, pwmAcousticKick, $06, nRst, $18, pwmAcousticKick, $06, pwmAcousticKick, nRst
+	dc.b	pwmAcousticKick, nRst, $18
 	smpsJump            DestructivePower_PWM1
 
 ; PWM2 Data
 DestructivePower_PWM2:
-	dc.b	$96, $24, $8C, $0C, $80, $24, $8C, $0C
+	dc.b	pwmSilence, $24, pwmAcousticSnare, $0C, nRst, $24, pwmAcousticSnare, $0C
 	smpsJump            DestructivePower_PWM2
 
 ; PWM3 Data
 DestructivePower_PWM3:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 	smpsLoop            $00, $07, DestructivePower_PWM3
-	dc.b	$30, $12, $85, $06, $86, $87, $80, $0C
+	dc.b	$30, $12, pwmHighTom, $06, pwmMidTom, pwmLowTom, nRst, $0C
 	smpsJump            DestructivePower_PWM3
 
 ; PWM4 Data
 DestructivePower_PWM4:
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsJump            DestructivePower_PWM4
 
 DestructivePower_Voices:

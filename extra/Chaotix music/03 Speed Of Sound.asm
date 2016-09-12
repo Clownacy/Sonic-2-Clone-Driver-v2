@@ -1200,34 +1200,34 @@ SpeedOfSound_Call15:
 
 ; PWM1 Data
 SpeedOfSound_PWM1:
-	dc.b	$8B, $10
+	dc.b	pwmAcousticKick, $10
 	smpsLoop            $00, $0B, SpeedOfSound_PWM1
-	dc.b	$8B, $08, $8B, $8B, $10, $10, $10, $10
+	dc.b	pwmAcousticKick, $08, pwmAcousticKick, pwmAcousticKick, $10, $10, $10, $10
 
 SpeedOfSound_Loop05:
 	smpsCall            SpeedOfSound_Call04
 	smpsLoop            $01, $0C, SpeedOfSound_Loop05
-	dc.b	$8B, $10, $8B, $8B, $8B
+	dc.b	pwmAcousticKick, $10, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 	smpsJump            SpeedOfSound_Loop05
 
 SpeedOfSound_Call04:
-	dc.b	$8B, $10, $10, $08, $08, $80, $8B
+	dc.b	pwmAcousticKick, $10, $10, $08, $08, nRst, pwmAcousticKick
 	smpsLoop            $00, $03, SpeedOfSound_Call04
-	dc.b	$8B, $10, $10, $10, $10
+	dc.b	pwmAcousticKick, $10, $10, $10, $10
 	smpsReturn
 
 ; PWM2 Data
 SpeedOfSound_PWM2:
-	dc.b	$96, $40, $80, $80, $30
+	dc.b	pwmSilence, $40, nRst, nRst, $30
 	smpsFMAlterVol      $F9
-	dc.b	$85, $04
+	dc.b	pwmHighTom, $04
 	smpsFMAlterVol      $07
-	dc.b	$86
+	dc.b	pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87, $08
+	dc.b	pwmLowTom, $08
 	smpsFMAlterVol      $70
-	dc.b	$8C, $04, $8C, $8C, $80, $8C, $80, $80, $8C, $8C, $8C, $8C
-	dc.b	$80, $8C, $8C, $8C, $8C
+	dc.b	pwmAcousticSnare, $04, pwmAcousticSnare, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, nRst, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare
+	dc.b	nRst, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare
 
 SpeedOfSound_Jump00:
 	smpsCall            SpeedOfSound_Call02
@@ -1237,98 +1237,98 @@ SpeedOfSound_Jump00:
 	smpsCall            SpeedOfSound_Call02
 	smpsCall            SpeedOfSound_Call02
 	smpsCall            SpeedOfSound_Call02
-	dc.b	$80, $10, $8C, $04, $80, $80, $8C, $80, $10, $8C, $04, $80
-	dc.b	$80, $8C, $80, $10, $8C, $04, $80, $80, $8C, $80, $10, $8C
-	dc.b	$80, $10, $8C, $04, $80, $80, $8C, $80, $10, $8C, $04, $80
-	dc.b	$80, $8C, $80, $30, $8C, $08, $04, $04
+	dc.b	nRst, $10, pwmAcousticSnare, $04, nRst, nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare, $04, nRst
+	dc.b	nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare, $04, nRst, nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare
+	dc.b	nRst, $10, pwmAcousticSnare, $04, nRst, nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare, $04, nRst
+	dc.b	nRst, pwmAcousticSnare, nRst, $30, pwmAcousticSnare, $08, $04, $04
 	smpsCall            SpeedOfSound_Call02
 	smpsCall            SpeedOfSound_Call03
 	smpsCall            SpeedOfSound_Call02
-	dc.b	$80, $10, $8C, $04, $80, $80, $8C, $80, $10, $8C, $04, $80
-	dc.b	$80, $8C, $80, $10, $8C, $04, $80, $80, $8C, $80, $10, $8C
-	dc.b	$80, $10, $8C, $04, $80, $80, $8C, $80, $10, $8C, $04, $80
-	dc.b	$80, $8C, $80, $30, $8C, $08, $04, $04, $80, $30, $8C, $08
+	dc.b	nRst, $10, pwmAcousticSnare, $04, nRst, nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare, $04, nRst
+	dc.b	nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare, $04, nRst, nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare
+	dc.b	nRst, $10, pwmAcousticSnare, $04, nRst, nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare, $04, nRst
+	dc.b	nRst, pwmAcousticSnare, nRst, $30, pwmAcousticSnare, $08, $04, $04, nRst, $30, pwmAcousticSnare, $08
 	dc.b	$04, $04
 	smpsJump            SpeedOfSound_Jump00
 
 SpeedOfSound_Call02:
-	dc.b	$80, $10, $8C, $04, $80, $80, $8C, $80, $10, $8C, $04, $80
-	dc.b	$80, $8C, $80, $10, $8C, $04, $80, $80, $8C, $80, $10, $8C
-	dc.b	$80, $10, $8C, $04, $80, $80, $8C, $80, $10, $8C, $04, $80
-	dc.b	$80, $8C, $8C, $04, $8C, $8C, $80, $8C, $80, $80, $8C, $8C
-	dc.b	$8C, $8C, $80, $8C, $80, $80, $8C
+	dc.b	nRst, $10, pwmAcousticSnare, $04, nRst, nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare, $04, nRst
+	dc.b	nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare, $04, nRst, nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare
+	dc.b	nRst, $10, pwmAcousticSnare, $04, nRst, nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare, $04, nRst
+	dc.b	nRst, pwmAcousticSnare, pwmAcousticSnare, $04, pwmAcousticSnare, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, nRst, pwmAcousticSnare, pwmAcousticSnare
+	dc.b	pwmAcousticSnare, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, nRst, pwmAcousticSnare
 	smpsReturn
 
 SpeedOfSound_Call03:
-	dc.b	$80, $10, $8C, $04, $80, $80, $8C, $80, $10, $8C, $04, $80
-	dc.b	$80, $8C, $80, $10, $8C, $04, $80, $80, $8C, $80, $10, $8C
-	dc.b	$80, $10, $8C, $04, $80, $80, $8C, $80, $10, $8C, $04, $80
-	dc.b	$80, $8C, $8C, $04, $8C, $8C, $80, $8C, $80, $80, $8C, $80
+	dc.b	nRst, $10, pwmAcousticSnare, $04, nRst, nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare, $04, nRst
+	dc.b	nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare, $04, nRst, nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare
+	dc.b	nRst, $10, pwmAcousticSnare, $04, nRst, nRst, pwmAcousticSnare, nRst, $10, pwmAcousticSnare, $04, nRst
+	dc.b	nRst, pwmAcousticSnare, pwmAcousticSnare, $04, pwmAcousticSnare, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, nRst, pwmAcousticSnare, nRst
 	dc.b	$20
 	smpsReturn
 
 ; PWM3 Data
 SpeedOfSound_PWM3:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $40, $80, $89, $40
+	dc.b	pwmCrashCymbal, $40, nRst, pwmCrashCymbal, $40
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $40
+	dc.b	pwmSplashCymbal, $40
 	smpsFMAlterVol      $04
 
 SpeedOfSound_Loop03:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $40
+	dc.b	pwmCrashCymbal, $40
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $40
+	dc.b	pwmSplashCymbal, $40
 	smpsFMAlterVol      $04
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsLoop            $00, $02, SpeedOfSound_Loop03
 
 SpeedOfSound_Loop04:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $40, $80, $89, $38
+	dc.b	pwmCrashCymbal, $40, nRst, pwmCrashCymbal, $38
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $08, $80, $40
+	dc.b	pwmSplashCymbal, $08, nRst, $40
 	smpsFMAlterVol      $04
 	smpsLoop            $00, $02, SpeedOfSound_Loop04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $40
+	dc.b	pwmCrashCymbal, $40
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $40
+	dc.b	pwmCrashCymbal, $40
 	smpsFMAlterVol      $40
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $40
+	dc.b	pwmCrashCymbal, $40
 	smpsFMAlterVol      $40
 	smpsCall            SpeedOfSound_Call01
 	smpsFMAlterVol      $C0
-	dc.b	$89, $40
+	dc.b	pwmCrashCymbal, $40
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $40
+	dc.b	pwmCrashCymbal, $40
 	smpsFMAlterVol      $40
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $40
+	dc.b	pwmCrashCymbal, $40
 	smpsFMAlterVol      $40
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $40
+	dc.b	pwmCrashCymbal, $40
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $40
+	dc.b	pwmCrashCymbal, $40
 	smpsFMAlterVol      $40
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $40
+	dc.b	pwmCrashCymbal, $40
 	smpsFMAlterVol      $40
 	smpsCall            SpeedOfSound_Call01
 	smpsCall            SpeedOfSound_Call01
@@ -1336,29 +1336,29 @@ SpeedOfSound_Loop04:
 
 SpeedOfSound_Call01:
 	smpsFMAlterVol      $FC
-	dc.b	$83, $0C
+	dc.b	pwmSplashCymbal, $0C
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89
+	dc.b	pwmCrashCymbal
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89
+	dc.b	pwmCrashCymbal
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $10
+	dc.b	pwmSplashCymbal, $10
 	smpsFMAlterVol      $04
 	smpsReturn
 
 ; PWM4 Data
 SpeedOfSound_PWM4:
 	smpsFMAlterVol      $FD
-	dc.b	$96, $08, $88, $04, $04
+	dc.b	pwmSilence, $08, pwmElectricHiHat, $04, $04
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$80, $08, $88, $04, $04
+	dc.b	nRst, $08, pwmElectricHiHat, $04, $04
 	smpsFMAlterVol      $30
 	smpsLoop            $01, $08, SpeedOfSound_PWM4
 
@@ -1366,23 +1366,23 @@ SpeedOfSound_Loop00:
 	smpsCall            SpeedOfSound_Call00
 	smpsLoop            $01, $07, SpeedOfSound_Loop00
 	smpsFMAlterVol      $FD
-	dc.b	$80, $08, $88, $04, $04
+	dc.b	nRst, $08, pwmElectricHiHat, $04, $04
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$80, $08, $88, $04, $04
+	dc.b	nRst, $08, pwmElectricHiHat, $04, $04
 	smpsFMAlterVol      $30
-	dc.b	$96, $20
+	dc.b	pwmSilence, $20
 
 SpeedOfSound_Loop01:
 	smpsCall            SpeedOfSound_Call00
 	smpsLoop            $01, $1F, SpeedOfSound_Loop01
 	smpsFMAlterVol      $FD
-	dc.b	$80, $08, $88, $04, $04
+	dc.b	nRst, $08, pwmElectricHiHat, $04, $04
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$80, $08, $88, $04, $04
+	dc.b	nRst, $08, pwmElectricHiHat, $04, $04
 	smpsFMAlterVol      $30
-	dc.b	$96, $20
+	dc.b	pwmSilence, $20
 
 SpeedOfSound_Loop02:
 	smpsCall            SpeedOfSound_Call00
@@ -1391,10 +1391,10 @@ SpeedOfSound_Loop02:
 
 SpeedOfSound_Call00:
 	smpsFMAlterVol      $FD
-	dc.b	$80, $08, $88, $04, $04
+	dc.b	nRst, $08, pwmElectricHiHat, $04, $04
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$80, $08, $88, $04, $04
+	dc.b	nRst, $08, pwmElectricHiHat, $04, $04
 	smpsFMAlterVol      $30
 	smpsLoop            $00, $02, SpeedOfSound_Call00
 	smpsReturn

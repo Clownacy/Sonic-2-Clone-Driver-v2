@@ -166,19 +166,19 @@ ReachTheGoal_PSG3:
 
 ; PWM1 Data
 ReachTheGoal_PWM1:
-	dc.b	$8B, $06, $8B, $80, $18, $8B, $06, $8B, $80, $18, $8B, $06
-	dc.b	$0C, $06, $8B, $0C, $0C
+	dc.b	pwmAcousticKick, $06, pwmAcousticKick, nRst, $18, pwmAcousticKick, $06, pwmAcousticKick, nRst, $18, pwmAcousticKick, $06
+	dc.b	$0C, $06, pwmAcousticKick, $0C, $0C
 	smpsStop
 
 ; PWM2 Data
 ReachTheGoal_PWM2:
-	dc.b	$96, $18, $82, $06, $82, $80, $0C, $18, $82, $06, $82
+	dc.b	pwmSilence, $18, pwmElectricSnare, $06, pwmElectricSnare, nRst, $0C, $18, pwmElectricSnare, $06, pwmElectricSnare
 	smpsStop
 
 ; PWM3 Data
 ReachTheGoal_PWM3:
-	dc.b	$89, $30, $80, $0C, $80, $06, $85, $03, $03, $85, $06, $86
-	dc.b	$87, $87, $89, $0C, $0C
+	dc.b	pwmCrashCymbal, $30, nRst, $0C, nRst, $06, pwmHighTom, $03, $03, pwmHighTom, $06, pwmMidTom
+	dc.b	pwmLowTom, pwmLowTom, pwmCrashCymbal, $0C, $0C
 	smpsStop
 
 ; PWM4 Data

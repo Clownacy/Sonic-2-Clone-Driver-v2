@@ -690,111 +690,111 @@ ThisHorizon_Call08:
 
 ; PWM1 Data
 ThisHorizon_PWM1:
-	dc.b	$96, $60, $96, $60
+	dc.b	pwmSilence, $60, pwmSilence, $60
 
 ThisHorizon_Loop03:
-	dc.b	$81, $24, $0C, $24, $0C, $24, $0C, $12, $12, $0C
+	dc.b	pwmElectricKick, $24, $0C, $24, $0C, $24, $0C, $12, $12, $0C
 	smpsLoop            $00, $08, ThisHorizon_Loop03
 	smpsJump            ThisHorizon_Loop03
 
 ; PWM2 Data
 ThisHorizon_PWM2:
-	dc.b	$82, $04, $82, $82
+	dc.b	pwmElectricSnare, $04, pwmElectricSnare, pwmElectricSnare
 	smpsFMAlterVol      $11
 	smpsLoop            $00, $04, ThisHorizon_PWM2
 
 ThisHorizon_Loop02:
-	dc.b	$82, $04, $82
+	dc.b	pwmElectricSnare, $04, pwmElectricSnare
 	smpsFMAlterVol      $11
 	smpsLoop            $00, $06, ThisHorizon_Loop02
-	dc.b	$96, $0C, $82, $82, $82, $06, $82, $82, $82, $86, $80, $82
-	dc.b	$82
+	dc.b	pwmSilence, $0C, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, $06, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, pwmMidTom, nRst, pwmElectricSnare
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82
+	dc.b	pwmElectricSnare
 
 ThisHorizon_Jump01:
 	smpsCall            ThisHorizon_Call03
 	smpsCall            ThisHorizon_Call03
-	dc.b	$80, $18, $82, $80, $82, $80, $82, $80, $82, $80, $82, $80
-	dc.b	$82, $80, $0C
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst
+	dc.b	pwmElectricSnare, nRst, $0C
 	smpsFMAlterVol      $F9
-	dc.b	$85, $06, $85, $80, $85
+	dc.b	pwmHighTom, $06, pwmHighTom, nRst, pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86, $80, $86, $86, $80, $86
+	dc.b	pwmMidTom, nRst, pwmMidTom, pwmMidTom, nRst, pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87, $0C
+	dc.b	pwmLowTom, $0C
 	smpsFMAlterVol      $70
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsCall            ThisHorizon_Call03
 	smpsJump            ThisHorizon_Jump01
 
 ThisHorizon_Call03:
-	dc.b	$80, $18, $82
+	dc.b	nRst, $18, pwmElectricSnare
 	smpsLoop            $00, $06, ThisHorizon_Call03
-	dc.b	$80, $0C, $82, $82, $82, $06, $82, $80, $82, $80, $80, $82
-	dc.b	$82
+	dc.b	nRst, $0C, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, $06, pwmElectricSnare, nRst, pwmElectricSnare, nRst, nRst, pwmElectricSnare
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$80
+	dc.b	nRst
 	smpsReturn
 
 ; PWM3 Data
 ThisHorizon_PWM3:
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
 
 ThisHorizon_Jump00:
 	smpsCall            ThisHorizon_Call02
 	smpsCall            ThisHorizon_Call02
 	smpsFMAlterVol      $C0
-	dc.b	$89
+	dc.b	pwmCrashCymbal
 	smpsFMAlterVol      $40
-	dc.b	$80, $80
+	dc.b	nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $54
+	dc.b	pwmCrashCymbal, $54
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $0C
+	dc.b	pwmSplashCymbal, $0C
 	smpsFMAlterVol      $04
 	smpsCall            ThisHorizon_Call02
 	smpsJump            ThisHorizon_Jump00
 
 ThisHorizon_Call02:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80
+	dc.b	nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
 	smpsReturn
 
 ; PWM4 Data
 ThisHorizon_PWM4:
-	dc.b	$95, $03
+	dc.b	pwmLowTimpani, $03
 	smpsLoop            $00, $04, ThisHorizon_PWM4
 	smpsFMAlterVol      $11
 	smpsLoop            $01, $08, ThisHorizon_PWM4
 	smpsFMAlterVol      $AB
-	dc.b	$96, $30
+	dc.b	pwmSilence, $30
 	smpsFMAlterVol      $FB
-	dc.b	$91, $06
+	dc.b	pwmLowClick, $06
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91, $91, $91
+	dc.b	pwmLowClick, pwmLowClick, pwmLowClick
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90, $90, $90
+	dc.b	pwmHighClick, pwmHighClick, pwmHighClick
 	smpsFMAlterVol      $50
 
 ThisHorizon_Loop00:
@@ -804,17 +804,17 @@ ThisHorizon_Loop00:
 
 ThisHorizon_Loop01:
 	smpsFMAlterVol      $FB
-	dc.b	$91, $06
+	dc.b	pwmLowClick, $06
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $50
 	smpsLoop            $00, $04, ThisHorizon_Loop01
 	smpsFMAlterVol      $FB
-	dc.b	$91, $0C
+	dc.b	pwmLowClick, $0C
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $50
 	smpsCall            ThisHorizon_Call00
 	smpsCall            ThisHorizon_Call00
@@ -823,61 +823,61 @@ ThisHorizon_Loop01:
 ThisHorizon_Call00:
 	smpsCall            ThisHorizon_Call01
 	smpsFMAlterVol      $FB
-	dc.b	$91, $06
+	dc.b	pwmLowClick, $06
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90, $0C
+	dc.b	pwmHighClick, $0C
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91, $06
+	dc.b	pwmLowClick, $06
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90, $06, $06
+	dc.b	pwmHighClick, $06, $06
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90, $90
+	dc.b	pwmHighClick, pwmHighClick
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90, $90
+	dc.b	pwmHighClick, pwmHighClick
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91, $0C
+	dc.b	pwmLowClick, $0C
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $50
 	smpsReturn
 
 ThisHorizon_Call01:
 	smpsFMAlterVol      $FB
-	dc.b	$91, $0C, $0C
+	dc.b	pwmLowClick, $0C, $0C
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91, $06
+	dc.b	pwmLowClick, $06
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90
+	dc.b	pwmHighClick
 	smpsFMAlterVol      $50
 	smpsFMAlterVol      $FB
-	dc.b	$91, $0C
+	dc.b	pwmLowClick, $0C
 	smpsFMAlterVol      $05
 	smpsFMAlterVol      $B0
-	dc.b	$90, $0C, $0C
+	dc.b	pwmHighClick, $0C, $0C
 	smpsFMAlterVol      $50
 	smpsReturn
 

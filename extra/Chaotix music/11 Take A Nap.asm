@@ -155,51 +155,51 @@ TakeANap_Loop07:
 
 ; PWM1 Data
 TakeANap_PWM1:
-	dc.b	$96, $54
+	dc.b	pwmSilence, $54
 
 TakeANap_Loop02:
-	dc.b	$8B, $0C, $18, $0C, $80, $24, $8B, $0C, $80, $0C, $8B, $8B
+	dc.b	pwmAcousticKick, $0C, $18, $0C, nRst, $24, pwmAcousticKick, $0C, nRst, $0C, pwmAcousticKick, pwmAcousticKick
 	dc.b	$48
 	smpsLoop            $00, $04, TakeANap_Loop02
 	smpsJump            TakeANap_Loop02
 
 ; PWM2 Data
 TakeANap_PWM2:
-	dc.b	$8C, $0C, $80, $8C, $8C, $8C, $8C, $8C
+	dc.b	pwmAcousticSnare, $0C, nRst, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare, pwmAcousticSnare
 
 TakeANap_Jump00:
-	dc.b	$80, $30, $8C, $80, $8C, $80, $8C, $80, $8C, $24, $0C, $80
-	dc.b	$30, $8C, $80, $8C, $80, $8C, $80, $8C, $0C, $86
+	dc.b	nRst, $30, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, $24, $0C, nRst
+	dc.b	$30, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, nRst, pwmAcousticSnare, $0C, pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87, $18
+	dc.b	pwmLowTom, $18
 	smpsFMAlterVol      $70
 	smpsJump            TakeANap_Jump00
 
 ; PWM3 Data
 TakeANap_PWM3:
-	dc.b	$96, $24, $8A, $30
+	dc.b	pwmSilence, $24, pwmClap, $30
 
 TakeANap_Loop01:
-	dc.b	$80, $30, $8A
+	dc.b	nRst, $30, pwmClap
 	smpsLoop            $00, $08, TakeANap_Loop01
 	smpsJump            TakeANap_Loop01
 
 ; PWM4 Data
 TakeANap_PWM4:
-	dc.b	$80, $24
+	dc.b	nRst, $24
 	smpsFMAlterVol      $FD
-	dc.b	$91, $0C, $0C
+	dc.b	pwmLowClick, $0C, $0C
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$90, $0C, $0C
+	dc.b	pwmHighClick, $0C, $0C
 	smpsFMAlterVol      $30
 
 TakeANap_Loop00:
 	smpsFMAlterVol      $FD
-	dc.b	$91, $0C, $0C
+	dc.b	pwmLowClick, $0C, $0C
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$90, $0C, $0C
+	dc.b	pwmHighClick, $0C, $0C
 	smpsFMAlterVol      $30
 	smpsLoop            $00, $10, TakeANap_Loop00
 	smpsJump            TakeANap_Loop00

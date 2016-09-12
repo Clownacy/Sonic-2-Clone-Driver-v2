@@ -191,49 +191,49 @@ HaveSomeFun_Loop01:
 
 ; PWM1 Data
 HaveSomeFun_PWM1:
-	dc.b	$8B, $18, $80, $12, $8B, $06, $8B, $0C, $8B, $80, $18
+	dc.b	pwmAcousticKick, $18, nRst, $12, pwmAcousticKick, $06, pwmAcousticKick, $0C, pwmAcousticKick, nRst, $18
 	smpsLoop            $00, $02, HaveSomeFun_PWM1
-	dc.b	$8B, $18, $80, $48
+	dc.b	pwmAcousticKick, $18, nRst, $48
 	smpsStop
 
 ; PWM2 Data
 HaveSomeFun_PWM2:
-	dc.b	$96, $60, $96, $30, $82, $12
+	dc.b	pwmSilence, $60, pwmSilence, $30, pwmElectricSnare, $12
 	smpsFMAlterVol      $A6
 	dc.b	$03, $03
 	smpsFMAlterVol      $11
-	dc.b	$82, $06
+	dc.b	pwmElectricSnare, $06
 	smpsFMAlterVol      $22
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $22
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $22
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $22
-	dc.b	$82, $18, $80, $48
+	dc.b	pwmElectricSnare, $18, nRst, $48
 	smpsStop
 
 ; PWM3 Data
 HaveSomeFun_PWM3:
-	dc.b	$96, $60, $96, $60, $96, $2A, $89, $06, $80, $30
+	dc.b	pwmSilence, $60, pwmSilence, $60, pwmSilence, $2A, pwmCrashCymbal, $06, nRst, $30
 	smpsStop
 
 ; PWM4 Data
 HaveSomeFun_PWM4:
-	dc.b	$95, $30, $80, $1E
+	dc.b	pwmLowTimpani, $30, nRst, $1E
 	smpsFMAlterVol      $11
-	dc.b	$94, $12, $95, $18, $80, $18
+	dc.b	pwmHighTimpani, $12, pwmLowTimpani, $18, nRst, $18
 	smpsFMAlterVol      $78
-	dc.b	$95, $03, $95
+	dc.b	pwmLowTimpani, $03, pwmLowTimpani
 	smpsFMAlterVol      $11
-	dc.b	$95, $03, $95
+	dc.b	pwmLowTimpani, $03, pwmLowTimpani
 	smpsFMAlterVol      $11
 
 HaveSomeFun_Loop00:
-	dc.b	$95, $03, $95
+	dc.b	pwmLowTimpani, $03, pwmLowTimpani
 	smpsFMAlterVol      $22
 	smpsLoop            $00, $06, HaveSomeFun_Loop00
-	dc.b	$94, $0C
+	dc.b	pwmHighTimpani, $0C
 	smpsStop
 
 HaveSomeFun_Voices:

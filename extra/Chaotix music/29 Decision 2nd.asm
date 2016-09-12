@@ -149,21 +149,21 @@ Decision2nd_Loop00:
 
 ; PWM1 Data
 Decision2nd_PWM1:
-	dc.b	$96, $08, $8B
+	dc.b	pwmSilence, $08, pwmAcousticKick
 	smpsLoop            $00, $03, Decision2nd_PWM1
-	dc.b	$8B, $10
+	dc.b	pwmAcousticKick, $10
 	smpsStop
 
 ; PWM2 Data
 Decision2nd_PWM2:
-	dc.b	$8C, $10
+	dc.b	pwmAcousticSnare, $10
 	smpsLoop            $00, $02, Decision2nd_PWM2
-	dc.b	$8C, $0C, $04, $80, $08, $8C
+	dc.b	pwmAcousticSnare, $0C, $04, nRst, $08, pwmAcousticSnare
 	smpsStop
 
 ; PWM3 Data
 Decision2nd_PWM3:
-	dc.b	$96, $20, $18, $89, $08
+	dc.b	pwmSilence, $20, $18, pwmCrashCymbal, $08
 	smpsStop
 
 ; PWM4 Data

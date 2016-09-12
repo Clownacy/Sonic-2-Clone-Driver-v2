@@ -250,25 +250,25 @@ Overture_Jump03:
 
 ; PWM1 Data
 Overture_PWM1:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 
 Overture_Jump01:
-	dc.b	$8B, $60, $8B, $8B, $8B
+	dc.b	pwmAcousticKick, $60, pwmAcousticKick, pwmAcousticKick, pwmAcousticKick
 	smpsJump            Overture_Jump01
 
 ; PWM2 Data
 Overture_PWM2:
-	dc.b	$82, $04, $82, $82
+	dc.b	pwmElectricSnare, $04, pwmElectricSnare, pwmElectricSnare
 	smpsFMAlterVol      $11
 	smpsLoop            $00, $04, Overture_PWM2
 
 Overture_Loop01:
-	dc.b	$82, $04, $82
+	dc.b	pwmElectricSnare, $04, pwmElectricSnare
 	smpsFMAlterVol      $11
 	smpsLoop            $00, $06, Overture_Loop01
 
 Overture_Loop02:
-	dc.b	$82, $18, $08, $08, $08, $18, $14
+	dc.b	pwmElectricSnare, $18, $08, $08, $08, $18, $14
 	smpsFMAlterVol      $CD
 	dc.b	$02, $02
 	smpsFMAlterVol      $33
@@ -279,28 +279,28 @@ Overture_Loop02:
 ; PWM3 Data
 Overture_PWM3:
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
 
 Overture_Loop00:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83
+	dc.b	pwmSplashCymbal
 	smpsFMAlterVol      $04
 	smpsLoop            $00, $02, Overture_Loop00
 	smpsJump            Overture_Loop00
 
 ; PWM4 Data
 Overture_PWM4:
-	dc.b	$95, $03
+	dc.b	pwmLowTimpani, $03
 	smpsLoop            $00, $04, Overture_PWM4
 	smpsFMAlterVol      $11
 	smpsLoop            $01, $08, Overture_PWM4
 
 Overture_Jump00:
-	dc.b	$94, $60, $95, $94, $95
+	dc.b	pwmHighTimpani, $60, pwmLowTimpani, pwmHighTimpani, pwmLowTimpani
 	smpsJump            Overture_Jump00
 
 Overture_Voices:

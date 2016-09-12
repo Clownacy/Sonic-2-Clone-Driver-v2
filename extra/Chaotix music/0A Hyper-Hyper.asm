@@ -539,18 +539,18 @@ HyperHyper_Loop02:
 	smpsJump            HyperHyper_Loop02
 
 HyperHyper_Call03:
-	dc.b	$81, $12, $12, $0C, $80, $81, $80, $06, $81, $12, $81, $12
-	dc.b	$12, $0C, $80, $0C, $81, $06, $06, $80, $81, $12
+	dc.b	pwmElectricKick, $12, $12, $0C, nRst, pwmElectricKick, nRst, $06, pwmElectricKick, $12, pwmElectricKick, $12
+	dc.b	$12, $0C, nRst, $0C, pwmElectricKick, $06, $06, nRst, pwmElectricKick, $12
 	smpsReturn
 
 HyperHyper_Call04:
-	dc.b	$81, $12, $12, $0C, $80, $81, $80, $06, $81, $12, $81, $12
-	dc.b	$12, $0C, $80, $30
+	dc.b	pwmElectricKick, $12, $12, $0C, nRst, pwmElectricKick, nRst, $06, pwmElectricKick, $12, pwmElectricKick, $12
+	dc.b	$12, $0C, nRst, $30
 	smpsReturn
 
 ; PWM2 Data
 HyperHyper_PWM2:
-	dc.b	$96, $18, $82, $80, $82, $80, $82, $80, $82, $12, $06
+	dc.b	pwmSilence, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, $12, $06
 	smpsCall            HyperHyper_Call01
 	smpsCall            HyperHyper_Call02
 
@@ -562,61 +562,61 @@ HyperHyper_Loop01:
 	smpsJump            HyperHyper_Loop01
 
 HyperHyper_Call01:
-	dc.b	$80, $18, $82, $80, $82, $80, $82, $80, $82, $12, $06
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, nRst, pwmElectricSnare, $12, $06
 	smpsReturn
 
 HyperHyper_Call02:
-	dc.b	$80, $18, $82, $80, $82, $80, $0C, $82, $82, $82, $04, $82
-	dc.b	$82, $82, $06, $82, $82, $82
+	dc.b	nRst, $18, pwmElectricSnare, nRst, pwmElectricSnare, nRst, $0C, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare, $04, pwmElectricSnare
+	dc.b	pwmElectricSnare, pwmElectricSnare, $06, pwmElectricSnare, pwmElectricSnare, pwmElectricSnare
 	smpsFMAlterVol      $90
-	dc.b	$87, $87, $87, $87
+	dc.b	pwmLowTom, pwmLowTom, pwmLowTom, pwmLowTom
 	smpsFMAlterVol      $70
 	smpsReturn
 
 ; PWM3 Data
 HyperHyper_PWM3:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
 
 HyperHyper_Jump00:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $3C
+	dc.b	nRst, $3C
 	smpsFMAlterVol      $C0
-	dc.b	$89, $12
+	dc.b	pwmCrashCymbal, $12
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $12
+	dc.b	pwmSplashCymbal, $12
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80
+	dc.b	nRst
 	smpsJump            HyperHyper_Jump00
 
 ; PWM4 Data
@@ -627,7 +627,7 @@ HyperHyper_PWM4:
 HyperHyper_Loop00:
 	smpsCall            HyperHyper_Call00
 	smpsLoop            $01, $0D, HyperHyper_Loop00
-	dc.b	$88, $06
+	dc.b	pwmElectricHiHat, $06
 	smpsFMAlterVol      $CD
 	dc.b	$06
 	smpsFMAlterVol      $22
@@ -635,13 +635,13 @@ HyperHyper_Loop00:
 	smpsFMAlterVol      $DE
 	dc.b	$06
 	smpsFMAlterVol      $33
-	dc.b	$88, $06
+	dc.b	pwmElectricHiHat, $06
 	smpsFMAlterVol      $CD
 	dc.b	$06
 	smpsFMAlterVol      $22
 	dc.b	$06
 	smpsFMAlterVol      $11
-	dc.b	smpsNoAttack, $1E, $88, $06
+	dc.b	smpsNoAttack, $1E, pwmElectricHiHat, $06
 	smpsFMAlterVol      $CD
 	dc.b	$06
 	smpsFMAlterVol      $22
@@ -654,7 +654,7 @@ HyperHyper_Loop00:
 	smpsJump            HyperHyper_Loop00
 
 HyperHyper_Call00:
-	dc.b	$88, $06
+	dc.b	pwmElectricHiHat, $06
 	smpsFMAlterVol      $CD
 	dc.b	$06
 	smpsFMAlterVol      $22

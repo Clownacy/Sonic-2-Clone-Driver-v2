@@ -764,12 +764,12 @@ Electoria_PWM1:
 Electoria_Loop08:
 	smpsCall            Electoria_Call03
 	smpsLoop            $00, $07, Electoria_Loop08
-	dc.b	$80, $60
+	dc.b	nRst, $60
 
 Electoria_Loop09:
 	smpsCall            Electoria_Call03
 	smpsLoop            $00, $07, Electoria_Loop09
-	dc.b	$8B, $2A, $06, $96, $30
+	dc.b	pwmAcousticKick, $2A, $06, pwmSilence, $30
 
 Electoria_Loop0A:
 	smpsCall            Electoria_Call03
@@ -779,12 +779,12 @@ Electoria_Loop0A:
 Electoria_Loop0B:
 	smpsCall            Electoria_Call03
 	smpsLoop            $00, $07, Electoria_Loop0B
-	dc.b	$80, $60
+	dc.b	nRst, $60
 
 Electoria_Loop0C:
 	smpsCall            Electoria_Call03
 	smpsLoop            $00, $03, Electoria_Loop0C
-	dc.b	$8B, $2A, $06, $96, $30
+	dc.b	pwmAcousticKick, $2A, $06, pwmSilence, $30
 	smpsCall            Electoria_Call03
 	smpsCall            Electoria_Call03
 	smpsCall            Electoria_Call03
@@ -792,30 +792,30 @@ Electoria_Loop0C:
 	smpsJump            Electoria_Loop08
 
 Electoria_Call03:
-	dc.b	$8B, $0C, $8B, $80, $12, $8B, $06, $80, $0C, $8B, $80, $18
+	dc.b	pwmAcousticKick, $0C, pwmAcousticKick, nRst, $12, pwmAcousticKick, $06, nRst, $0C, pwmAcousticKick, nRst, $18
 	smpsReturn
 
 Electoria_Call04:
 	smpsFMAlterVol      $8D
-	dc.b	$87, $0C, $0C, $0C, $06, $06, $80, $87, $87, $0C, $0C, $0C
+	dc.b	pwmLowTom, $0C, $0C, $0C, $06, $06, nRst, pwmLowTom, pwmLowTom, $0C, $0C, $0C
 	smpsFMAlterVol      $73
 	smpsReturn
 
 ; PWM2 Data
 Electoria_PWM2:
-	dc.b	$82, $06, $80, $82, $82, $80, $82, $82
+	dc.b	pwmElectricSnare, $06, nRst, pwmElectricSnare, pwmElectricSnare, nRst, pwmElectricSnare, pwmElectricSnare
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82
+	dc.b	pwmElectricSnare
 	smpsFMAlterVol      $F9
-	dc.b	$85
+	dc.b	pwmHighTom
 	smpsFMAlterVol      $07
-	dc.b	$86, $82, $82, $86
+	dc.b	pwmMidTom, pwmElectricSnare, pwmElectricSnare, pwmMidTom
 	smpsFMAlterVol      $90
-	dc.b	$87
+	dc.b	pwmLowTom
 	smpsFMAlterVol      $70
-	dc.b	$82
+	dc.b	pwmElectricSnare
 
 Electoria_Loop04:
 	smpsCall            Electoria_Call02
@@ -828,82 +828,82 @@ Electoria_Loop05:
 Electoria_Loop06:
 	smpsCall            Electoria_Call02
 	smpsLoop            $00, $03, Electoria_Loop06
-	dc.b	$80, $18, $82, $12, $06, $80, $06, $82, $12, $18, $82, $04
-	dc.b	$04, $04, $06, $06, $06, $06, $06, $06, $80, $30
+	dc.b	nRst, $18, pwmElectricSnare, $12, $06, nRst, $06, pwmElectricSnare, $12, $18, pwmElectricSnare, $04
+	dc.b	$04, $04, $06, $06, $06, $06, $06, $06, nRst, $30
 
 Electoria_Loop07:
 	smpsCall            Electoria_Call02
 	smpsLoop            $00, $08, Electoria_Loop07
 	smpsCall            Electoria_Call02
-	dc.b	$80, $18, $82, $12, $06, $80, $06, $82, $12, $18, $80, $06
-	dc.b	$82, $12, $18, $80, $30
+	dc.b	nRst, $18, pwmElectricSnare, $12, $06, nRst, $06, pwmElectricSnare, $12, $18, nRst, $06
+	dc.b	pwmElectricSnare, $12, $18, nRst, $30
 	smpsCall            Electoria_Call02
 	smpsCall            Electoria_Call02
 	smpsJump            Electoria_Loop05
 
 Electoria_Call02:
-	dc.b	$80, $18, $82, $12, $06, $80, $06, $82, $12, $18, $80, $06
-	dc.b	$82, $12, $18, $80, $06, $82, $12, $18
+	dc.b	nRst, $18, pwmElectricSnare, $12, $06, nRst, $06, pwmElectricSnare, $12, $18, nRst, $06
+	dc.b	pwmElectricSnare, $12, $18, nRst, $06, pwmElectricSnare, $12, $18
 	smpsReturn
 
 ; PWM3 Data
 Electoria_PWM3:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $2A
+	dc.b	pwmCrashCymbal, $2A
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $36
+	dc.b	pwmSplashCymbal, $36
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
-	dc.b	$80, $80
+	dc.b	nRst, nRst
 	smpsCall            Electoria_Call01
 
 Electoria_Jump00:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80, $80, $80, $80, $80
+	dc.b	nRst, nRst, nRst, nRst, nRst, nRst, nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
-	dc.b	$80
+	dc.b	nRst
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
 	smpsFMAlterVol      $FC
-	dc.b	$83, $60
+	dc.b	pwmSplashCymbal, $60
 	smpsFMAlterVol      $04
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80, $80, $80, $80
+	dc.b	nRst, nRst, nRst, nRst, nRst, nRst
 	smpsCall            Electoria_Call01
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80, $80, $80, $80, $80
+	dc.b	nRst, nRst, nRst, nRst, nRst, nRst, nRst
 
 Electoria_Loop03:
 	smpsFMAlterVol      $C0
-	dc.b	$89, $60
+	dc.b	pwmCrashCymbal, $60
 	smpsFMAlterVol      $40
-	dc.b	$80, $80, $80
+	dc.b	nRst, nRst, nRst
 	smpsLoop            $00, $02, Electoria_Loop03
 	smpsJump            Electoria_Jump00
 
 Electoria_Call01:
 	smpsFMAlterVol      $DB
-	dc.b	$86, $0C, $0C, $0C, $06, $06, $80, $86, $86, $0C, $0C, $0C
+	dc.b	pwmMidTom, $0C, $0C, $0C, $06, $06, nRst, pwmMidTom, pwmMidTom, $0C, $0C, $0C
 	smpsFMAlterVol      $25
 	smpsReturn
 
@@ -915,12 +915,12 @@ Electoria_PWM4:
 Electoria_Loop00:
 	smpsCall            Electoria_Call00
 	smpsLoop            $00, $3E, Electoria_Loop00
-	dc.b	$96, $30
+	dc.b	pwmSilence, $30
 
 Electoria_Loop01:
 	smpsCall            Electoria_Call00
 	smpsLoop            $00, $4E, Electoria_Loop01
-	dc.b	$96, $30
+	dc.b	pwmSilence, $30
 
 Electoria_Loop02:
 	smpsCall            Electoria_Call00
@@ -928,7 +928,7 @@ Electoria_Loop02:
 	smpsJump            Electoria_Loop00
 
 Electoria_Call00:
-	dc.b	$88, $06
+	dc.b	pwmElectricHiHat, $06
 	smpsFMAlterVol      $AB
 	dc.b	$06
 	smpsFMAlterVol      $44

@@ -153,18 +153,18 @@ HaveAHappyDay_Jump06:
 
 ; PWM1 Data
 HaveAHappyDay_PWM1:
-	dc.b	$8B, $18, $80, $12, $8B, $06, $80, $8B, $8B, $0C, $80, $0C
-	dc.b	$8B
+	dc.b	pwmAcousticKick, $18, nRst, $12, pwmAcousticKick, $06, nRst, pwmAcousticKick, pwmAcousticKick, $0C, nRst, $0C
+	dc.b	pwmAcousticKick
 	smpsJump            HaveAHappyDay_PWM1
 
 ; PWM2 Data
 HaveAHappyDay_PWM2:
-	dc.b	$80, $18, $8C
+	dc.b	nRst, $18, pwmAcousticSnare
 	smpsJump            HaveAHappyDay_PWM2
 
 ; PWM3 Data
 HaveAHappyDay_PWM3:
-	dc.b	$89, $60, $80, $60, $80, $60, $80, $60
+	dc.b	pwmCrashCymbal, $60, nRst, $60, nRst, $60, nRst, $60
 	smpsJump            HaveAHappyDay_PWM3
 
 ; PWM4 Data

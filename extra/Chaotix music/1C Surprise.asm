@@ -214,19 +214,19 @@ Surprise_Jump01:
 
 ; PWM1 Data
 Surprise_PWM1:
-	dc.b	$84, $0C
+	dc.b	pwmRideBell, $0C
 	smpsFMAlterVol      $DE
-	dc.b	$84, $0C
+	dc.b	pwmRideBell, $0C
 	smpsFMAlterVol      $22
 	smpsJump            Surprise_PWM1
 
 ; PWM2 Data
 Surprise_PWM2:
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsLoop            $00, $08, Surprise_PWM2
 
 Surprise_Loop02:
-	dc.b	$8A, $18
+	dc.b	pwmClap, $18
 	smpsLoop            $00, $10, Surprise_Loop02
 	smpsJump            Surprise_PWM2
 
@@ -237,46 +237,46 @@ Surprise_PWM3:
 ; PWM4 Data
 Surprise_PWM4:
 	smpsFMAlterVol      $FD
-	dc.b	$93, $0C
+	dc.b	pwmLowBongo, $0C
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$92, $80, $06, $92
+	dc.b	pwmHighBongo, nRst, $06, pwmHighBongo
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$93, $93
+	dc.b	pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $03
 
 Surprise_Loop00:
 	smpsFMAlterVol      $33
 	smpsFMAlterVol      $D0
-	dc.b	$92
+	dc.b	pwmHighBongo
 	smpsFMAlterVol      $CD
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$93, $93
+	dc.b	pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$92
+	dc.b	pwmHighBongo
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$93, $93
+	dc.b	pwmLowBongo, pwmLowBongo
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $D0
-	dc.b	$92
+	dc.b	pwmHighBongo
 	smpsFMAlterVol      $30
 	smpsFMAlterVol      $FD
-	dc.b	$93
+	dc.b	pwmLowBongo
 	smpsFMAlterVol      $03
 	smpsLoop            $00, $03, Surprise_Loop00
 	smpsFMAlterVol      $44
 	smpsFMAlterVol      $FE
-	dc.b	$93, $06, $06
+	dc.b	pwmLowBongo, $06, $06
 	smpsFMAlterVol      $DE
-	dc.b	$06, $06, $93, $06, $06
+	dc.b	$06, $06, pwmLowBongo, $06, $06
 	smpsFMAlterVol      $DE
-	dc.b	$06, $06, $93, $06, $06
+	dc.b	$06, $06, pwmLowBongo, $06, $06
 	smpsFMAlterVol      $EF
-	dc.b	$03, $03, $03, $03, $93, $03, $03, $03, $03
+	dc.b	$03, $03, $03, $03, pwmLowBongo, $03, $03, $03, $03
 	smpsFMAlterVol      $EF
 	dc.b	$03, $03, $03, $03
 	smpsFMAlterVol      $66
@@ -284,13 +284,13 @@ Surprise_Loop00:
 	smpsFMAlterVol      $BC
 	smpsFMAlterVol      $44
 	smpsFMAlterVol      $E0
-	dc.b	$92, $06, $06
+	dc.b	pwmHighBongo, $06, $06
 	smpsFMAlterVol      $DE
-	dc.b	$06, $06, $92, $06, $06
+	dc.b	$06, $06, pwmHighBongo, $06, $06
 	smpsFMAlterVol      $DE
-	dc.b	$06, $06, $92, $06, $06
+	dc.b	$06, $06, pwmHighBongo, $06, $06
 	smpsFMAlterVol      $EF
-	dc.b	$03, $03, $03, $03, $92, $03, $03, $03, $03
+	dc.b	$03, $03, $03, $03, pwmHighBongo, $03, $03, $03, $03
 	smpsFMAlterVol      $EF
 	dc.b	$03, $03, $03, $03
 	smpsFMAlterVol      $66
@@ -299,17 +299,17 @@ Surprise_Loop00:
 	smpsLoop            $01, $02, Surprise_PWM4
 
 Surprise_Loop01:
-	dc.b	$80, $0C
+	dc.b	nRst, $0C
 	smpsFMAlterVol      $D0
-	dc.b	$92, $0C
+	dc.b	pwmHighBongo, $0C
 	smpsFMAlterVol      $30
-	dc.b	$80, $0C
+	dc.b	nRst, $0C
 	smpsFMAlterVol      $FD
-	dc.b	$93, $06, $93
+	dc.b	pwmLowBongo, $06, pwmLowBongo
 	smpsFMAlterVol      $03
 	smpsLoop            $00, $07, Surprise_Loop01
 	smpsFMAlterVol      $22
-	dc.b	$90, $06, $0C, $06, $91, $06, $06, $06, $06
+	dc.b	pwmHighClick, $06, $0C, $06, pwmLowClick, $06, $06, $06, $06
 	smpsFMAlterVol      $DE
 	smpsJump            Surprise_PWM4
 

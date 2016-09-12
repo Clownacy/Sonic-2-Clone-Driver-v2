@@ -520,29 +520,29 @@ OrientalLegend_Jump07:
 
 ; PWM1 Data
 OrientalLegend_PWM1:
-	dc.b	$8B, $18, $80, $3C, $8B, $0C, $8B, $18, $8B, $80, $18, $8B
+	dc.b	pwmAcousticKick, $18, nRst, $3C, pwmAcousticKick, $0C, pwmAcousticKick, $18, pwmAcousticKick, nRst, $18, pwmAcousticKick
 	dc.b	$18
 	smpsLoop            $00, $04, OrientalLegend_PWM1
 
 OrientalLegend_Loop04:
-	dc.b	$8B, $12, $06, $80, $18, $8B, $18, $80, $0C, $8B, $0C, $8B
-	dc.b	$12, $06, $80, $06, $8B, $06, $80, $24, $8B, $18, $8B, $12
-	dc.b	$06, $80, $0C, $8B, $0C, $80, $12, $8B, $06, $80, $18, $8B
-	dc.b	$18, $80, $0C, $8B, $0C, $18, $18
+	dc.b	pwmAcousticKick, $12, $06, nRst, $18, pwmAcousticKick, $18, nRst, $0C, pwmAcousticKick, $0C, pwmAcousticKick
+	dc.b	$12, $06, nRst, $06, pwmAcousticKick, $06, nRst, $24, pwmAcousticKick, $18, pwmAcousticKick, $12
+	dc.b	$06, nRst, $0C, pwmAcousticKick, $0C, nRst, $12, pwmAcousticKick, $06, nRst, $18, pwmAcousticKick
+	dc.b	$18, nRst, $0C, pwmAcousticKick, $0C, $18, $18
 	smpsLoop            $00, $03, OrientalLegend_Loop04
 
 OrientalLegend_Loop05:
-	dc.b	$8B, $18, $80, $12, $8B, $06, $0C, $0C, $80, $18
+	dc.b	pwmAcousticKick, $18, nRst, $12, pwmAcousticKick, $06, $0C, $0C, nRst, $18
 	smpsLoop            $00, $04, OrientalLegend_Loop05
 	smpsJump            OrientalLegend_Loop04
 
 ; PWM2 Data
 OrientalLegend_PWM2:
-	dc.b	$96, $60, $96, $3C, $8C, $0C, $80, $18
+	dc.b	pwmSilence, $60, pwmSilence, $3C, pwmAcousticSnare, $0C, nRst, $18
 	smpsLoop            $00, $03, OrientalLegend_PWM2
-	dc.b	$80, $60, $80, $30
+	dc.b	nRst, $60, nRst, $30
 	smpsFMAlterVol      $22
-	dc.b	$8C, $06
+	dc.b	pwmAcousticSnare, $06
 	smpsFMAlterVol      $BC
 	dc.b	$0C
 	smpsFMAlterVol      $11
@@ -552,92 +552,92 @@ OrientalLegend_PWM2:
 	smpsFMAlterVol      $EF
 
 OrientalLegend_Loop03:
-	dc.b	$80, $18, $8C, $18, $80, $8C, $18
+	dc.b	nRst, $18, pwmAcousticSnare, $18, nRst, pwmAcousticSnare, $18
 	smpsLoop            $00, $0C, OrientalLegend_Loop03
-	dc.b	$80, $60, $80, $54, $8C, $0C, $80, $60, $80, $30, $8C, $06
+	dc.b	nRst, $60, nRst, $54, pwmAcousticSnare, $0C, nRst, $60, nRst, $30, pwmAcousticSnare, $06
 	dc.b	$0C, $06, $0C, $0C
 	smpsJump            OrientalLegend_Loop03
 
 ; PWM3 Data
 OrientalLegend_PWM3:
-	dc.b	$84, $60, $80, $60
+	dc.b	pwmRideBell, $60, nRst, $60
 	smpsLoop            $00, $03, OrientalLegend_PWM3
-	dc.b	$84, $60
+	dc.b	pwmRideBell, $60
 	smpsFMAlterVol      $AB
-	dc.b	$89, $18
+	dc.b	pwmCrashCymbal, $18
 	smpsFMAlterVol      $11
-	dc.b	$89, $18
+	dc.b	pwmCrashCymbal, $18
 	smpsFMAlterVol      $11
-	dc.b	$89, $18
+	dc.b	pwmCrashCymbal, $18
 	smpsFMAlterVol      $11
-	dc.b	$89, $18
+	dc.b	pwmCrashCymbal, $18
 	smpsFMAlterVol      $22
 
 OrientalLegend_Jump00:
-	dc.b	$89, $60, $80, $60, $80, $60, $80, $60
+	dc.b	pwmCrashCymbal, $60, nRst, $60, nRst, $60, nRst, $60
 	smpsJump            OrientalLegend_Jump00
 
 ; PWM4 Data
 OrientalLegend_PWM4:
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsLoop            $00, $07, OrientalLegend_PWM4
-	dc.b	$80, $30
+	dc.b	nRst, $30
 	smpsFMAlterVol      $FD
-	dc.b	$90, $06, $06, $80, $90, $06, $06, $06, $06, $06
+	dc.b	pwmHighClick, $06, $06, nRst, pwmHighClick, $06, $06, $06, $06, $06
 
 OrientalLegend_Loop00:
-	dc.b	$91, $06, $06, $80
+	dc.b	pwmLowClick, $06, $06, nRst
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $CE
 	smpsFMAlterVol      $DE
-	dc.b	$93
+	dc.b	pwmLowBongo
 	smpsFMAlterVol      $32
 	smpsFMAlterVol      $22
 	smpsFMAlterVol      $FD
-	dc.b	$91, $06, $06, $80
+	dc.b	pwmLowClick, $06, $06, nRst
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $CE
 	smpsFMAlterVol      $DE
-	dc.b	$93
+	dc.b	pwmLowBongo
 	smpsFMAlterVol      $32
 	smpsFMAlterVol      $22
 	smpsFMAlterVol      $FD
-	dc.b	$91, $0C, $0C, $06, $06
+	dc.b	pwmLowClick, $0C, $0C, $06, $06
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $CE
 	smpsFMAlterVol      $DE
-	dc.b	$93
+	dc.b	pwmLowBongo
 	smpsFMAlterVol      $32
 	smpsFMAlterVol      $22
 	smpsFMAlterVol      $FD
-	dc.b	$91
+	dc.b	pwmLowClick
 	smpsLoop            $00, $0B, OrientalLegend_Loop00
-	dc.b	$91, $06, $06, $80
+	dc.b	pwmLowClick, $06, $06, nRst
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $CE
 	smpsFMAlterVol      $DE
-	dc.b	$93
+	dc.b	pwmLowBongo
 	smpsFMAlterVol      $32
 	smpsFMAlterVol      $22
 	smpsFMAlterVol      $FD
-	dc.b	$91, $06, $06, $80
+	dc.b	pwmLowClick, $06, $06, nRst
 	smpsFMAlterVol      $03
 	smpsFMAlterVol      $CE
 	smpsFMAlterVol      $DE
-	dc.b	$93
+	dc.b	pwmLowBongo
 	smpsFMAlterVol      $32
 	smpsFMAlterVol      $22
 	smpsFMAlterVol      $FD
-	dc.b	$91, $0C, $0C, $06, $06, $06, $06
+	dc.b	pwmLowClick, $0C, $0C, $06, $06, $06, $06
 	smpsFMAlterVol      $22
 
 OrientalLegend_Loop02:
-	dc.b	$90, $04, $04, $04, $06, $06, $06, $06, $06, $06, $0C, $0C
-	dc.b	$06, $06, $06, $06, $80, $06, $90, $80, $90, $90, $06, $03
+	dc.b	pwmHighClick, $04, $04, $04, $06, $06, $06, $06, $06, $06, $0C, $0C
+	dc.b	$06, $06, $06, $06, nRst, $06, pwmHighClick, nRst, pwmHighClick, pwmHighClick, $06, $03
 	dc.b	$03, $06, $06
 
 OrientalLegend_Loop01:
-	dc.b	$80, $06, $91
+	dc.b	nRst, $06, pwmLowClick
 	smpsLoop            $00, $04, OrientalLegend_Loop01
 	smpsLoop            $01, $02, OrientalLegend_Loop02
 	smpsFMAlterVol      $DE

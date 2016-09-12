@@ -272,77 +272,77 @@ CrystalNightmare_Jump02:
 
 ; PWM1 Data
 CrystalNightmare_PWM1:
-	dc.b	$96, $30, $8B, $04, $80, $04, $80, $04, $80, $0C, $8B, $04
-	dc.b	$80, $8C, $8C, $08, $04
+	dc.b	pwmSilence, $30, pwmAcousticKick, $04, nRst, $04, nRst, $04, nRst, $0C, pwmAcousticKick, $04
+	dc.b	nRst, pwmAcousticSnare, pwmAcousticSnare, $08, $04
 
 CrystalNightmare_Loop06:
-	dc.b	$8B, $06, $80, $06, $8B, $06, $80, $06, $80, $0C, $80, $08
-	dc.b	$8B, $04, $80, $18, $80, $08, $8B, $04, $80, $0C
+	dc.b	pwmAcousticKick, $06, nRst, $06, pwmAcousticKick, $06, nRst, $06, nRst, $0C, nRst, $08
+	dc.b	pwmAcousticKick, $04, nRst, $18, nRst, $08, pwmAcousticKick, $04, nRst, $0C
 	smpsLoop            $00, $06, CrystalNightmare_Loop06
-	dc.b	$8B, $06, $80, $06, $8B, $06, $80, $06, $80, $0C, $80, $08
-	dc.b	$8B, $04, $80, $18, $80, $08, $8B, $04, $8C, $03, $80, $09
-	dc.b	$8B, $06, $80, $06, $8B, $06, $80, $06, $8B, $06, $80, $06
-	dc.b	$8B, $06, $80, $06, $8B, $06, $80, $06, $8B, $06, $80, $06
-	dc.b	$8B, $04, $80, $8C, $8C, $08, $8C, $04
+	dc.b	pwmAcousticKick, $06, nRst, $06, pwmAcousticKick, $06, nRst, $06, nRst, $0C, nRst, $08
+	dc.b	pwmAcousticKick, $04, nRst, $18, nRst, $08, pwmAcousticKick, $04, pwmAcousticSnare, $03, nRst, $09
+	dc.b	pwmAcousticKick, $06, nRst, $06, pwmAcousticKick, $06, nRst, $06, pwmAcousticKick, $06, nRst, $06
+	dc.b	pwmAcousticKick, $06, nRst, $06, pwmAcousticKick, $06, nRst, $06, pwmAcousticKick, $06, nRst, $06
+	dc.b	pwmAcousticKick, $04, nRst, pwmAcousticSnare, pwmAcousticSnare, $08, pwmAcousticSnare, $04
 	smpsLoop            $01, $02, CrystalNightmare_Loop06
-	dc.b	$80, $60, $80, $60, $80, $60, $80, $60
+	dc.b	nRst, $60, nRst, $60, nRst, $60, nRst, $60
 
 CrystalNightmare_Loop07:
-	dc.b	$8B, $06, $80, $06, $8B, $06, $80, $06, $80, $0C, $80, $08
-	dc.b	$8B, $04, $80, $18, $80, $08, $8B, $04, $80, $0C
+	dc.b	pwmAcousticKick, $06, nRst, $06, pwmAcousticKick, $06, nRst, $06, nRst, $0C, nRst, $08
+	dc.b	pwmAcousticKick, $04, nRst, $18, nRst, $08, pwmAcousticKick, $04, nRst, $0C
 	smpsLoop            $00, $03, CrystalNightmare_Loop07
 	smpsJump            CrystalNightmare_PWM1
 
 ; PWM2 Data
 CrystalNightmare_PWM2:
-	dc.b	$96, $30, $96, $0C, $87, $08, $04, $80, $18
+	dc.b	pwmSilence, $30, pwmSilence, $0C, pwmLowTom, $08, $04, nRst, $18
 
 CrystalNightmare_Loop04:
-	dc.b	$80, $18, $80, $08, $87, $04, $80, $0C, $87, $06, $80, $06
-	dc.b	$80, $08, $87, $04, $80, $18
+	dc.b	nRst, $18, nRst, $08, pwmLowTom, $04, nRst, $0C, pwmLowTom, $06, nRst, $06
+	dc.b	nRst, $08, pwmLowTom, $04, nRst, $18
 	smpsLoop            $00, $07, CrystalNightmare_Loop04
-	dc.b	$80, $30, $80, $0C, $87, $08, $04, $80, $18
+	dc.b	nRst, $30, nRst, $0C, pwmLowTom, $08, $04, nRst, $18
 	smpsLoop            $01, $02, CrystalNightmare_Loop04
-	dc.b	$80, $60, $80, $60, $80, $60, $80, $60
+	dc.b	nRst, $60, nRst, $60, nRst, $60, nRst, $60
 
 CrystalNightmare_Loop05:
-	dc.b	$80, $18, $80, $08, $87, $04, $80, $0C, $87, $06, $80, $06
-	dc.b	$80, $08, $87, $04, $80, $18
+	dc.b	nRst, $18, nRst, $08, pwmLowTom, $04, nRst, $0C, pwmLowTom, $06, nRst, $06
+	dc.b	nRst, $08, pwmLowTom, $04, nRst, $18
 	smpsLoop            $00, $03, CrystalNightmare_Loop05
 	smpsJump            CrystalNightmare_PWM2
 
 ; PWM3 Data
 CrystalNightmare_PWM3:
-	dc.b	$96, $30, $80, $08, $87, $04, smpsNoAttack, $03, $80, $09, $80, $18
+	dc.b	pwmSilence, $30, nRst, $08, pwmLowTom, $04, smpsNoAttack, $03, nRst, $09, nRst, $18
 
 CrystalNightmare_Loop02:
-	dc.b	$80, $30, $24, $80, $08, $87, $04
+	dc.b	nRst, $30, $24, nRst, $08, pwmLowTom, $04
 	smpsLoop            $00, $06, CrystalNightmare_Loop02
-	dc.b	$80, $60, $96, $30, $80, $08, $87, $04, smpsNoAttack, $03, $80, $09
-	dc.b	$80, $18
+	dc.b	nRst, $60, pwmSilence, $30, nRst, $08, pwmLowTom, $04, smpsNoAttack, $03, nRst, $09
+	dc.b	nRst, $18
 	smpsLoop            $01, $02, CrystalNightmare_Loop02
-	dc.b	$80, $60, $80, $60, $80, $60, $80, $60
+	dc.b	nRst, $60, nRst, $60, nRst, $60, nRst, $60
 
 CrystalNightmare_Loop03:
-	dc.b	$80, $30, $24, $80, $08, $87, $04
+	dc.b	nRst, $30, $24, nRst, $08, pwmLowTom, $04
 	smpsLoop            $00, $03, CrystalNightmare_Loop03
 	smpsJump            CrystalNightmare_PWM3
 
 ; PWM4 Data
 CrystalNightmare_PWM4:
-	dc.b	$96, $60
+	dc.b	pwmSilence, $60
 
 CrystalNightmare_Loop00:
-	dc.b	$96, $18, $87, $03, $80, $09, $87, $0C, $80, $0C, $87, $03
-	dc.b	$80, $09, $80, $0C, $87, $03, $80, $09
+	dc.b	pwmSilence, $18, pwmLowTom, $03, nRst, $09, pwmLowTom, $0C, nRst, $0C, pwmLowTom, $03
+	dc.b	nRst, $09, nRst, $0C, pwmLowTom, $03, nRst, $09
 	smpsLoop            $00, $07, CrystalNightmare_Loop00
-	dc.b	$80, $60
+	dc.b	nRst, $60
 	smpsLoop            $01, $02, CrystalNightmare_Loop00
-	dc.b	$80, $60, $80, $60, $80, $60, $80, $60
+	dc.b	nRst, $60, nRst, $60, nRst, $60, nRst, $60
 
 CrystalNightmare_Loop01:
-	dc.b	$96, $18, $87, $03, $80, $09, $87, $0C, $80, $0C, $87, $03
-	dc.b	$80, $09, $80, $0C, $87, $03, $80, $09
+	dc.b	pwmSilence, $18, pwmLowTom, $03, nRst, $09, pwmLowTom, $0C, nRst, $0C, pwmLowTom, $03
+	dc.b	nRst, $09, nRst, $0C, pwmLowTom, $03, nRst, $09
 	smpsLoop            $00, $03, CrystalNightmare_Loop01
 	smpsJump            CrystalNightmare_PWM4
 
