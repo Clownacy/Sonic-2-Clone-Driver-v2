@@ -1,11 +1,13 @@
 /music
 /SFX
 /PWM
+/engine/Stub 32X
 /Sonic 2 Clone Driver v2 - Music.asm
 /Sonic 2 Clone Driver v2 - SFX.asm
 /Sonic 2 Clone Driver v2 - Special SFX.asm
 /Sonic 2 Clone Driver v2 - Compatibility.asm
 /Sonic 2 Clone Driver v2 - Sound IDs.asm
-/engine/Sonic 2 Clone Driver v2 - PWM Driver.asm
 /Sonic 2 Clone Driver v2 - PWM Samples.asm
+/engine/Sonic 2 Clone Driver v2 - PWM Driver.asm
 /engine/Chaotix PWM Driver.bin
+/engine/Sonic 2 Clone Driver v2 - Stub SH2.asm

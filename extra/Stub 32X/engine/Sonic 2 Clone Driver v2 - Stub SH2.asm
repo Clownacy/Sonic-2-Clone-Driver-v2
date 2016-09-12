@@ -5,7 +5,7 @@
 
 SH2_Start:
 		save
-		include	"sound/Stub 32X/code.asm"
+		include	"sound/engine/Stub 32X/code.asm"
 		restore
 		padding off ; unfortunately our flags got reset so we have to set them again...
 SH2_End:
