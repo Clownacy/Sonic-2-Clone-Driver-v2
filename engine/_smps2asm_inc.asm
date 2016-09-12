@@ -31,6 +31,9 @@ nMaxPSG2			EQU nB6
 
 	include "sound/SMPS2ASM - PSG Volume Envelope Equates.asm"
 	include "sound/SMPS2ASM - DAC Sample Equates.asm"
+    if SMPS_EnablePWM
+	include "sound/SMPS2ASM - PWM Sample Equates.asm"
+    endif
 
 ; ---------------------------------------------------------------------------------------------
 ; Channel IDs for SFX
