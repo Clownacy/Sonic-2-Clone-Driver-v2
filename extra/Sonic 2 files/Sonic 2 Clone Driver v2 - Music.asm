@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Music metadata (pointers, flags, speed shoes tempos)
+; Music metadata (pointers, speed shoes tempos, flags)
 
 ; Flags:
 ; SMPS_MUSIC_METADATA_FORCE_PAL_SPEED - Forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)

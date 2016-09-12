@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Music metadata (pointers, flags, speed shoes tempos)
+; Music metadata (pointers, speed shoes tempos, flags)
 ; ---------------------------------------------------------------------------
 ; byte_71A94: SpeedUpIndex:
 MusicIndex:
