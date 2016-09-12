@@ -385,3 +385,10 @@ Changelog
 - UpdateDAC has been restructured, so its stack usage is identical to FM and PSG (kind of undoing that last bugfix :( )
 - Made MegaPCM check that YM2612 isn't busy before enabling DAC (fixes muted drums at start of some songs)
 - SFX now properly update on the frame that a new song is played
+
+XX/XX/XXXX
+= v2.7+ =
+- Changed FM voice format, like what S2's driver did, for optimised reading
+- Split DAC table from Mega PCM Z80 .asm file
+- Rearranged file/folder structure, so files meant for the user to edit (like DAC samples and PSG envelopes) are in the root folder, the off-limits engine is in the 'engine' folder, and the optional/only-useful-during-installation files are kept in an 'extra' folder
+- Added SMPS2ASM equates for Chaotix' PWM samples (these equates were also applied to the included Chaotix dump)
