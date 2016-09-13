@@ -114,7 +114,7 @@ smpsHeaderVoiceUVB macro
 	if songStart<>*
 		fatal "Missing smpsHeaderStartSong or smpsHeaderStartSongConvert"
 	endif
-	if EnableUniversalVoiceBank
+	if SMPS_EnableUniversalVoiceBank
 		dc.l	UniVoiceBank
 	else
 		fatal "Go set EnableUniversalVoiceBank to 1."
