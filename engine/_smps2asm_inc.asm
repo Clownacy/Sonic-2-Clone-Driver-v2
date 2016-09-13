@@ -96,7 +96,7 @@ smpsHeaderVoiceNull macro
 	if songStart<>*
 		fatal "Missing smpsHeaderStartSong or smpsHeaderStartSongConvert"
 	endif
-	dc.l	$00000000
+	dc.w	$0000
 	endm
 
 ; Header - Set up Voice Location
@@ -105,7 +105,7 @@ smpsHeaderVoice macro loc
 	if songStart<>*
 		fatal "Missing smpsHeaderStartSong or smpsHeaderStartSongConvert"
 	endif
-	dc.l	loc
+	dc.w	loc-songStart
 	endm
 
 ; Header - Set up Voice Location as S3's Universal Voice Bank
@@ -115,7 +115,7 @@ smpsHeaderVoiceUVB macro
 		fatal "Missing smpsHeaderStartSong or smpsHeaderStartSongConvert"
 	endif
 	if SMPS_EnableUniversalVoiceBank
-		dc.l	UniVoiceBank
+		dc.w	$0000
 	else
 		fatal "Go set EnableUniversalVoiceBank to 1."
 	endif

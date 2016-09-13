@@ -904,8 +904,9 @@ Sound_PlayBGM:
 
 .nopalmode:
 	movea.l	d1,a4			; a4 now points to (uncompressed) song data
-	move.l	(a4),d2			; Load voice pointer	; Clownacy | Made to read a longword to suit the voices' new absolute pointer
-	move.b	4+4+1(a4),d0		; Load tempo		; Clownacy | +2 to accommodate the voices' new longword pointer
+	move.w	(a4),d2			; Load voice pointer
+	add.l	a4,d2			; It is a relative pointer
+	move.b	2+4+1(a4),d0		; Load tempo
 	move.b	d0,SMPS_RAM.variables.v_tempo_mod(a6)
 	btst	#f_speedup,SMPS_RAM.variables.bitfield2(a6)
 	beq.s	.nospeedshoes
@@ -918,20 +919,20 @@ Sound_PlayBGM:
 	move.b	#5,SMPS_RAM.variables.v_pal_audio_countdown(a6)	; Clownacy | "reset PAL update tick to 5 (update immediately)"
 	movea.l	a4,a3
 
-	addi.w	#4+4+2,a4			; Point past header			; Clownacy | +2 to accommodate the voices' new longword pointer
+	addi.w	#2+4+2,a4			; Point past header
     if SMPS_FixBugs
 	; Clownacy | One of Valley Bell's fixes: this vital code is skipped if FM/DAC channels is 0, so it's been moved to avoid that
-	move.b	4+4+0(a3),d4		; Load tempo dividing timing		; Clownacy | +2 to accommodate the voices' new longword pointer
+	move.b	2+4+0(a3),d4		; Load tempo dividing timing
 	moveq	#SMPS_Track.len,d6
 	moveq	#1,d5			; Note duration for first "note"
     endif
 	moveq	#0,d7			; Clownacy | Hey, look! It's the 'moveq	#0,d7' that the other Play_X's were missing!
-	move.b	4+0(a3),d7		; Load number of FM+DAC tracks	; Clownacy | +2 to accommodate the voices' new longword pointer
+	move.b	2+0(a3),d7		; Load number of FM+DAC tracks
 	beq.w	.bgm_fmdone		; Branch if zero
 	subq.b	#1,d7
 	move.b	#$C0,d1			; Default AMS+FMS+Panning
     if ~SMPS_FixBugs
-	move.b	4+4+0(a3),d4		; Load tempo dividing timing		; Clownacy | +2 to accommodate the voices' new longword pointer
+	move.b	2+4+0(a3),d4		; Load tempo dividing timing
 	moveq	#SMPS_Track.len,d6
 	moveq	#1,d5			; Note duration for first "note"
     endif
@@ -962,11 +963,17 @@ Sound_PlayBGM:
 	move.b	d0,SMPS_Track.DataPointer+1(a1)	; Store track pointer
 	move.b	(a4)+,SMPS_Track.Transpose(a1)	; Load FM channel modifier
 	move.b	(a4)+,SMPS_Track.Volume(a1)	; Load FM channel modifier
-	move.l	d2,SMPS_Track.VoicePtr(a1)	; Load voice pointer	; Clownacy | Made to read a longword to suit the voices' new absolute pointer
+    if SMPS_EnableUniversalVoiceBank
+	cmp.l	d2,a3
+	bne.s	.doesNotUseUniVoiceBank
+	move.l	#UniVoiceBank,d2
+.doesNotUseUniVoiceBank:
+    endif
+	move.l	d2,SMPS_Track.VoicePtr(a1)	; Load voice pointer
 	adda.w	d6,a1
 	dbf	d7,.bmg_fmloadloop
 
-	cmpi.b	#7,4+0(a3)	; Are 7 (1 x DAC + 6 x FM) tracks defined?	; Clownacy | +2 to accommodate the voices' new longword pointer
+	cmpi.b	#7,2+0(a3)	; Are 7 (1 x DAC + 6 x FM) tracks defined?
 	beq.s	.bgm_fmdone
 ; ===========================================================================
 ; loc_720D8:
@@ -988,7 +995,7 @@ Sound_PlayBGM:
 ; loc_72114:
 .bgm_fmdone:
 	moveq	#0,d7
-	move.b	4+1(a3),d7	; Load number of PSG tracks
+	move.b	2+1(a3),d7	; Load number of PSG tracks
 	beq.s	.bgm_psgdone	; Branch if zero
 	subq.b	#1,d7
 	lea	SMPS_RAM.v_music_psg_tracks(a6),a1
@@ -1026,7 +1033,7 @@ Sound_PlayBGM:
 
     if SMPS_EnablePWM
 	moveq	#0,d7
-	move.b	4+2(a3),d7	; Load number of PWM tracks
+	move.b	2+2(a3),d7	; Load number of PWM tracks
 	beq.s	.bgm_pwmdone	; Branch if zero
 	subq.b	#1,d7
 	lea	SMPS_RAM.v_music_pwm_tracks(a6),a1
@@ -1222,8 +1229,8 @@ Sound_PlaySFX:
 	movea.l	(a0,d7.w),a3		; SFX data pointer
 	movea.l	a3,a1
 	moveq	#0,d1
-	move.l	(a1)+,d1	; Voice pointer		; Clownacy | Made to read a longword to suit the voices' new absolute pointer
-;	add.l	a3,d1		; Relative pointer	; Clownacy | Voice pointers are now absolute, so this isn't needed
+	move.w	(a1)+,d1	; Voice pointer
+	add.l	a3,d1		; Relative pointer
 	move.b	(a1)+,d5	; Dividing timing
 	; DANGER! Ugh, this bug.
 	; In the stock driver, sounds >= $E0 would cause a crash.
