@@ -117,7 +117,7 @@ smpsHeaderVoiceUVB macro
 	if SMPS_EnableUniversalVoiceBank
 		dc.w	$0000
 	else
-		fatal "Go set EnableUniversalVoiceBank to 1."
+		fatal "Go set SMPS_EnableUniversalVoiceBank to 1."
 	endif
 	endm
 
