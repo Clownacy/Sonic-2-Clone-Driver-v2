@@ -423,7 +423,7 @@ smpsContinuousLoop macro loc
 		dc.b	$FF,$1E
 		dc.w	loc-*-1
 	else
-		fatal "You're using a Continuous SFX, but don't have EnableContSFX set"
+		fatal "You're using a Continuous SFX, but don't have SMPS_EnableContSFX set"
 	endif
 	endm
 
@@ -439,7 +439,7 @@ smpsChanFMCommand macro reg,val
 ; S1/S2 only coordination flag
 ; Sets D1L to maximum volume (minimum attenuation) and RR to maximum for operators 3 and 4 of FM1
 smpsMaxRelRate macro
-	; Emulate it in S3/S&K/S3D/Clone driver
+	; Emulate it in S3/S&K/S3D/Clone Driver v2
 	smpsFMICommand $88,$0F
 	smpsFMICommand $8C,$0F
 	endm
