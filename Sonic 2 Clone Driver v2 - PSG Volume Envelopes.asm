@@ -93,6 +93,8 @@ ptr_kcpsg0D:	dc.l KC_PSG0D
 ptr_kcpsg0E:	dc.l KC_PSG0E
 	endif
 
+	; Insert custom envelopes' addresses here
+
 ; ---------------------------------------------------------------------------
 ; PSG instruments used in music
 ; ---------------------------------------------------------------------------
@@ -187,4 +189,6 @@ KC_PSG0D:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG D.bin"
 KC_PSG0E:	BINCLUDE	"sound/PSG/Knuckles' Chaotix/PSG E.bin"
 	endif
 
-		even
+	; Insert custom envelopes here
+
+	even

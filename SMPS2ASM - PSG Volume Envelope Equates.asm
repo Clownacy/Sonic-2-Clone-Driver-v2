@@ -109,3 +109,5 @@ KCVolEnv_0C =		SMPS_id(ptr_kcpsg0C)
 KCVolEnv_0D =		SMPS_id(ptr_kcpsg0D)
 KCVolEnv_0E =		SMPS_id(ptr_kcpsg0E)
 	endif
+
+	; Insert custom equates here
