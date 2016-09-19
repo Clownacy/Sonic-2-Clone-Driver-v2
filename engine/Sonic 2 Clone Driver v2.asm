@@ -3064,7 +3064,6 @@ cfJumpTo:
 	lsl.w	#8,d0		; Shift it into place
 	move.b	(a4)+,d0	; Low byte of offset
 	adda.w	d0,a4		; Add to current position
-	subq.w	#1,a4		; Put back one byte
 	rts
 ; ===========================================================================
 ; loc_72E38:
