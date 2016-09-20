@@ -67,12 +67,12 @@ UpdateMusic:
 .skipfadein:
 	tst.l	SMPS_RAM.variables.v_playsnd1(a6)			; Is a music or sound queued for played?
 	beq.s	.nosndinput			; If not, branch
-	bsr.w	Sound_Play
+	bsr.w	CycleSoundQueue
 ; loc_71BBC:
 .nosndinput:
 	tst.b	SMPS_RAM.variables.v_playsnd0(a6)			; Is song queue set for silence?
 	beq.s	.nonewsound			; If yes, branch
-	bsr.w	Sound_ChkValue
+	bsr.w	PlaySoundID
 ; loc_71BC8:
 .nonewsound:
     if SMPS_EnableSpinDashSFX
@@ -100,7 +100,7 @@ UpdateMusic:
 	lea	SMPS_RAM.v_music_dac_track(a6),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is DAC track playing?
 	bpl.s	.dacdone				; Branch if not
-	bsr.w	UpdateDAC
+	bsr.w	DACUpdateTrack
 ; loc_71BD4:
 .dacdone:
 	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7	; 6 FM tracks
@@ -185,15 +185,15 @@ UpdateMusic:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-; sub_71C4E:
-UpdateDAC:
+; sub_71C4E: UpdateDAC:
+DACUpdateTrack:
 	subq.b	#1,SMPS_Track.DurationTimeout(a5)	; Has DAC sample timeout expired?
 	bne.s	.locret					; Return if not
 	bsr.s	DACDoNext
 	bra.s	DACUpdateSample
 .locret:
 	rts
-; End of function UpdateDAC
+; End of function DACUpdateTrack
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -402,7 +402,7 @@ FMSetFreq:
 	divu.w	#$C,d5
 	swap	d5
 	add.w	d5,d5
-	move.w	FM_Notes(pc,d5.w),d6
+	move.w	FMFrequencies(pc,d5.w),d6
 	swap	d5
 	andi.w	#7,d5
 	moveq	#$B,d0
@@ -416,8 +416,8 @@ FMSetFreq:
 ; ---------------------------------------------------------------------------
 ; FM Note Values: b-0 to a#8
 ; ---------------------------------------------------------------------------
-; word_72790:
-FM_Notes:
+; word_72790: FM_Notes:
+FMFrequencies:
 	dc.w $025E,$0284,$02AB,$02D3,$02FE,$032D,$035C,$038F,$03C5,$03FF,$043C,$047C
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -650,8 +650,8 @@ ResumeTrack:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
-Sound_Play:
+; Sound_Play:
+CycleSoundQueue:
 	tst.b	SMPS_RAM.variables.v_playsnd0(a6)		; Is variables.v_playsnd0 a $00 (empty)?
 	bne.s	locret_71F4A		; If yes, branch
 	lea	SMPS_RAM.variables.v_playsnd1(a6),a1	; Load music track number
@@ -693,13 +693,13 @@ Sound_Play:
 	move.b	d1,SMPS_RAM.variables.v_playsnd0(a6)	; Queue sound for play
 locret_71F4A:
 	rts
-; End of function Sound_Play
+; End of function CycleSoundQueue
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-
-Sound_ChkValue:	; For the love of god, don't rearrange the order of the groups, it has to be 'music --> SFX --> flags'
+; Sound_ChkValue:
+PlaySoundID:	; For the love of god, don't rearrange the order of the groups, it has to be 'music --> SFX --> flags'
 	moveq	#0,d7
 	move.b	SMPS_RAM.variables.v_playsnd0(a6),d7
 	clr.b	SMPS_RAM.variables.v_playsnd0(a6)		; reset	music flag
@@ -741,7 +741,7 @@ ptr_flgFB:	bra.w	FadeOutMusic		; $FB	; Clownacy | Was $E0
 ptr_flgFC:	bra.w	PlaySega		; $FC	; Clownacy | Was $E1
 ptr_flgFD:	bra.w	SpeedUpMusic		; $FD	; Clownacy | Was $E2
 ptr_flgFE:	bra.w	SlowDownMusic		; $FE	; Clownacy | Was $E3
-ptr_flgFF:	bra.w	StopSoundAndMusic	; $FF	; Clownacy | Was $E4
+ptr_flgFF:	bra.w	StopAllSound		; $FF	; Clownacy | Was $E4
 ptr_flgend
 ; ---------------------------------------------------------------------------
 ; Play "Say-gaa" PCM sound
@@ -1486,7 +1486,7 @@ Sound_PlaySpecial:
 ; locret_723C6:
 .locret:
 	rts
-; End of function Sound_ChkValue
+; End of function PlaySoundID
     endif
 
 ; ===========================================================================
@@ -1643,7 +1643,7 @@ DoFadeOut:
 ; loc_72510:
 .continuefade:
 	subq.b	#1,SMPS_RAM.variables.v_fadeout_counter(a6)	; Update fade counter
-	beq.w	StopSoundAndMusic		; Branch if fade is done
+	beq.w	StopAllSound		; Branch if fade is done
 	move.b	#3,SMPS_RAM.variables.v_fadeout_delay(a6)		; Reset fade delay
 	lea	SMPS_RAM.v_music_dac_track(a6),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
@@ -1763,8 +1763,8 @@ FMSilenceAll:
 ; ---------------------------------------------------------------------------
 ; Stop music
 ; ---------------------------------------------------------------------------
-; Sound_E4:
-StopSoundAndMusic:
+; Sound_E4: StopSoundAndMusic:
+StopAllSound:
 	moveq	#$27,d0		; Timers, FM3/FM6 mode
 	moveq	#0,d1		; FM3/FM6 normal mode, disable timers
 	bsr.w	WriteFMI
@@ -2464,7 +2464,7 @@ PSGSilenceAll:
 ; sub_72A5A:
 CoordFlag:
 	cmpi.b	#$FE,d5		; Clownacy | smpsNoAttack doesn't like being two bytes, so it uses the unique $FE byte
-	beq.w	cfPreventAttack
+	beq.w	cfHoldNote
 	move.b	(a4)+,d5	; Clownacy | The true coord flag value follows the $FF
 	add.w	d5,d5
 	add.w	d5,d5
@@ -2719,8 +2719,8 @@ cfChangeFMVolume:
     endif
 	bra.w	SendVoiceTL
 ; ===========================================================================
-; loc_72BAE:
-cfPreventAttack:
+; loc_72BAE: cfPreventAttack:
+cfHoldNote:
 	bset	#4,SMPS_Track.PlaybackControl(a5)	; Set 'do not attack next note' bit
 	rts
 ; ===========================================================================
