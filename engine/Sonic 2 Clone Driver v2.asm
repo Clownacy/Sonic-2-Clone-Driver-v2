@@ -378,17 +378,17 @@ FMDoNext:
 .gotnote:
 	bsr.w	FMNoteOff
 	tst.b	d5			; Is this a note?
-	bpl.w	.gotduration		; Branch if not
+	bpl.s	.gotduration		; Branch if not
 	bsr.s	FMSetFreq
 	move.b	(a4)+,d5		; Get another byte
-	bpl.w	.gotduration		; Branch if it is a duration
+	bpl.s	.gotduration		; Branch if it is a duration
 	subq.w	#1,a4			; Otherwise, put it back
-	bra.w	FinishTrackUpdate
+	bra.s	FinishTrackUpdate
 ; ===========================================================================
 ; loc_71D1A:
 .gotduration:
-	bsr.w	SetDuration
-	bra.w	FinishTrackUpdate
+	bsr.s	SetDuration
+	bra.s	FinishTrackUpdate
 ; End of function FMDoNext
 
 
@@ -2217,11 +2217,11 @@ PSGDoNext:
 ; loc_72890:
 .gotnote:
 	tst.b	d5			; Is it a note?
-	bpl.w	.gotduration		; Branch if not
+	bpl.s	.gotduration		; Branch if not
 	bsr.s	PSGSetFreq
 	move.b	(a4)+,d5		; Get another byte
 	tst.b	d5			; Is it a duration?
-	bpl.w	.gotduration		; Branch if yes
+	bpl.s	.gotduration		; Branch if yes
 	subq.w	#1,a4			; Put byte back
 	bra.w	FinishTrackUpdate
 ; ===========================================================================
