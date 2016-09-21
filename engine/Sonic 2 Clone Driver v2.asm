@@ -2819,13 +2819,12 @@ cfSetVoiceCont:
 
 ; sub_72C4E:
 SetVoice:
-	subq.w	#1,d0
-	bmi.s	.havevoiceptr
-	moveq	#25,d1
-; loc_72C56:
-.voicemultiply:
-	adda.w	d1,a1
-	dbf	d0,.voicemultiply
+	; Multiply d0 by 25 (size of FM voice)
+	adda.w	d0,a1
+	lsl.w	#3,d0
+	adda.w	d0,a1
+	adda.w	d0,a1
+	adda.w	d0,a1
 ; loc_72C5C:
 .havevoiceptr:
 	move.b	(a1)+,d1		; feedback/algorithm
@@ -2893,13 +2892,12 @@ SendVoiceTL:
 	movea.l	SMPS_Track.VoicePtr(a5),a1
 ; loc_72CD8:
 .gotvoiceptr:
-	subq.w	#1,d0
-	bmi.s	.gotvoice
-	moveq	#25,d1
-; loc_72CE0:
-.voicemultiply:
-	adda.w	d1,a1
-	dbf	d0,.voicemultiply
+	; Multiply d0 by 25 (size of FM voice)
+	adda.w	d0,a1
+	lsl.w	#3,d0
+	adda.w	d0,a1
+	adda.w	d0,a1
+	adda.w	d0,a1
 ; loc_72CE6:
 .gotvoice:
 	lea	5(a1),a1			; Want TL (was '21(a0)' in original driver)
