@@ -3085,7 +3085,7 @@ cfSetPSGTone:
 cfJumpTo:
 	move.b	(a4)+,d0	; High byte of offset
 	lsl.w	#8,d0		; Shift it into place
-	move.b	(a4)+,d0	; Low byte of offset
+	move.b	(a4),d0		; Low byte of offset
 	adda.w	d0,a4		; Add to current position
 	rts
 ; ===========================================================================

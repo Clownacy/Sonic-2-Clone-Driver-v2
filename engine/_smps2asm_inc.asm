@@ -376,20 +376,20 @@ smpsPSGvoice macro voice
 ; F6xxxx - Jump to xxxx
 smpsJump macro loc
 	dc.b	$FF,$14
-	dc.w	loc-(*+2)
+	dc.w	loc-(*+1)
 	endm
 
 ; F7xxyyzzzz - Loop back to zzzz yy times, xx being the loop index for loop recursion fixing
 smpsLoop macro index,loops,loc
 	dc.b	$FF,$15
 	dc.b	index,loops
-	dc.w	loc-(*+2)
+	dc.w	loc-(*+1)
 	endm
 
 ; F8xxxx - Call pattern at xxxx, saving return point
 smpsCall macro loc
 	dc.b	$FF,$16
-	dc.w	loc-(*+2)
+	dc.w	loc-(*+1)
 	endm
 ; ---------------------------------------------------------------------------------------------
 ; Alter Volume
@@ -421,7 +421,7 @@ smpsSetNote macro val
 smpsContinuousLoop macro loc
 	if SMPS_EnableContSFX
 		dc.b	$FF,$1E
-		dc.w	loc-(*+2)
+		dc.w	loc-(*+1)
 	else
 		fatal "You're using a Continuous SFX, but don't have SMPS_EnableContSFX set"
 	endif
