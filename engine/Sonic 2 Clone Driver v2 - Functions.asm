@@ -89,7 +89,7 @@ SMPS_PlayPWMSample:
 	; Save a0
 	move.l	a0,d0
 	; Send PWM command
-	lea	($A15128).l,a0
+	lea	(SMPS_pwm_comm).l,a0
 	move.w	d1,(a0,d2.w)
 	; Restore a0
 	movea.l	d0,a0

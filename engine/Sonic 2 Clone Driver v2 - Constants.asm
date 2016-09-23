@@ -10,6 +10,10 @@ SMPS_ym2612_d0 =	$A04001
 SMPS_ym2612_a1 =	$A04002
 SMPS_ym2612_d1 =	$A04003
 
+    if SMPS_EnablePWM
+SMPS_pwm_comm =		$A15128
+    endif
+
 SMPS_psg_input =	$C00011
 
 SMPS_MUSIC_TRACK_COUNT = ((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/SMPS_Track.len)

@@ -2463,7 +2463,7 @@ PWMUpdateSample:
 	; Send command
 	moveq	#0,d2
 	move.b	SMPS_Track.VoiceControl(a5),d2
-	lea	($A15128).l,a0
+	lea	(SMPS_pwm_comm).l,a0
 	move.w	d1,-8(a0,d2.w)
 
 .skipSampleUpdate:
@@ -2474,7 +2474,7 @@ PWMUpdateSample:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 PWMSilenceAll:
-	lea	($A15128).l,a0
+	lea	(SMPS_pwm_comm).l,a0
 	move.l	#(pwmSilence<<16)|pwmSilence,d0
 	move.l	d0,(a0)+	; Silence PWM 1&2
 	move.l	d0,(a0)		; Silence PWM 3&4
