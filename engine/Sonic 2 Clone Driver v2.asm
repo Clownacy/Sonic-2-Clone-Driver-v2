@@ -507,6 +507,9 @@ DoPauseMusic:
 	move.b	#2,SMPS_RAM.f_stopmusic(a6)
 	bsr.w	FMSilenceAll
 	bsr.w	PSGSilenceAll
+    if SMPS_EnablePWM
+	bsr.w	PWMSilenceAll
+    endif
 	; From Vladikcomper:
 	; "Playing sample $7F executes pause command."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
@@ -1734,8 +1737,11 @@ StopAllSound:
 	move.b  #$80,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; stop DAC playback
 	SMPS_startZ80
 
-	pea	PSGSilenceAll(pc)
-	bra.w	FMSilenceAll
+    if SMPS_EnablePWM
+	bsr.w	PWMSilenceAll
+    endif
+	bsr.w	FMSilenceAll
+	bra.w	PSGSilenceAll
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -1817,8 +1823,11 @@ InitMusicPlayback:
 	; This actually causes a bug in S1's driver, where an SFX is interrupted
 	; when a new song starts, causing sound distortion. S2 just stopped all
 	; SFX when a new song plays, which just hides the problem.
-	pea	PSGSilenceAll(pc)
-	bra.w	FMSilenceAll
+    if SMPS_EnablePWM
+	bsr.w	PWMSilenceAll
+    endif
+	bsr.w	FMSilenceAll
+	bra.w	PSGSilenceAll
     endif
 ; End of function InitMusicPlayback
 
@@ -2459,6 +2468,19 @@ PWMUpdateSample:
 
 .skipSampleUpdate:
 	rts
+; End of function PWMUpdateSample
+
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+PWMSilenceAll:
+	lea	($A15128).l,a0
+	move.l	#(pwmSilence<<16)|pwmSilence,d0
+	move.l	d0,(a0)+	; Silence PWM 1&2
+	move.l	d0,(a0)		; Silence PWM 3&4
+	rts
+; End of function PWMSilenceAll
+
    endif
 
 
