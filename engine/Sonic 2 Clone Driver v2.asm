@@ -2859,7 +2859,7 @@ SetVoice:
 	; Send voice data.
 	; Like S2's driver, and unlike S1's original driver, we calculate
 	; the operator value, and have a different voice format as a result.
-	; Unlike S2's driver, out custom format also has TL data start at 5
+	; Unlike S2's driver, our custom format also has TL data start at 5
 	; bytes into the data, instead of 21.
 
 	; Send detune/multiple
