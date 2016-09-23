@@ -3106,11 +3106,10 @@ cfRepeatAtPos:
 ; ===========================================================================
 ; loc_72E52:
 cfJumpToGosub:
+	subq.b	#4,SMPS_Track.StackPointer(a5)	; Add space for another target
 	moveq	#0,d0
 	move.b	SMPS_Track.StackPointer(a5),d0	; Current stack pointer
-	subq.b	#4,d0				; Add space for another target
 	move.l	a4,(a5,d0.w)			; Put in current address (*before* target for jump!)
-	move.b	d0,SMPS_Track.StackPointer(a5)	; Store new stack pointer
 	bra.s	cfJumpTo
 ; ===========================================================================
 
