@@ -264,81 +264,6 @@ locret_71CAA:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-    if SMPS_EnablePWM
-PWMUpdateTrack:
-	subq.b	#1,SMPS_Track.DurationTimeout(a5)	; Has PWM sample timeout expired?
-	bne.s	locret_71CAA				; Return if not
-	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
-	bsr.s	PWMDoNext
-	bra.s	PWMUpdateSample
-; End of function PWMUpdateTrack
-
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-PWMDoNext:
-	movea.l	SMPS_Track.DataPointer(a5),a4		; PWM track data pointer
-
-.sampleloop:
-	moveq	#0,d5
-	move.b	(a4)+,d5		; Get next SMPS unit
-	cmpi.b	#$FE,d5			; Is it a coord. flag?
-	blo.s	.notcoord		; Branch if not
-	bsr.w	CoordFlag
-	bra.s	.sampleloop
-; ===========================================================================
-
-.notcoord:
-	tst.b	d5			; Is it a sample?
-	bpl.s	.gotduration		; Branch if not (duration)
-	move.b	d5,SMPS_Track.SavedPWM(a5)	; Store new sample
-	move.b	(a4)+,d5		; Get another byte
-	bpl.s	.gotduration		; Branch if it is a duration
-	subq.w	#1,a4			; Put byte back
-	move.b	SMPS_Track.SavedDuration(a5),SMPS_Track.DurationTimeout(a5) ; Use last duration
-	bra.s	.gotsampleduration
-; ===========================================================================
-
-.gotduration:
-	bsr.w	SetDuration
-
-.gotsampleduration:
-	move.w	a4,SMPS_Track.DataPointer+2(a5)	; Save pointer
-	move.l	a4,d0
-	swap	d0
-	move.b	d0,SMPS_Track.DataPointer+1(a5)	; Save pointer
-	rts
-; End of function PWMDoNext
-
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-PWMUpdateSample:
-	move.b	SMPS_Track.SavedPWM(a5),d0
-	cmpi.b	#$80,d0				; Is this a rest?
-	beq.s	.skipVolumeUpdate		; If so, skip obtaining volume
-	move.b	SMPS_Track.Volume(a5),d1
-	lsl.w	#8,d1
-
-.skipVolumeUpdate:
-	btst	#4,SMPS_Track.PlaybackControl(a5)	; Is 'do not attack' enabled?
-	bne.s	.skipSampleUpdate			; If so, skip obtaining sample ID
-	subi.b	#$81,d0
-	bmi.s	.skipSampleUpdate			; If invalid sample ($80-$FF), skip obtaining sample ID
-	move.b	d0,d1
-
-	; Send command
-	moveq	#0,d2
-	move.b	SMPS_Track.VoiceControl(a5),d2
-	lea	($A15128).l,a0
-	move.w	d1,-8(a0,d2.w)
-
-.skipSampleUpdate:
-	rts
-   endif
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
 ; sub_71CCA:
 FMUpdateTrack:
 	subq.b	#1,SMPS_Track.DurationTimeout(a5)	; Update duration timeout
@@ -2458,6 +2383,84 @@ PSGSilenceAll:
 	move.b	#$FF,(a0)	; Silence noise channel
 	rts
 ; End of function PSGSilenceAll
+
+; ===========================================================================
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+    if SMPS_EnablePWM
+PWMUpdateTrack:
+	subq.b	#1,SMPS_Track.DurationTimeout(a5)	; Has PWM sample timeout expired?
+	bne.s	locret_729B4				; Return if not
+	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
+	bsr.s	PWMDoNext
+	bra.s	PWMUpdateSample
+; End of function PWMUpdateTrack
+
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+PWMDoNext:
+	movea.l	SMPS_Track.DataPointer(a5),a4		; PWM track data pointer
+
+.sampleloop:
+	moveq	#0,d5
+	move.b	(a4)+,d5		; Get next SMPS unit
+	cmpi.b	#$FE,d5			; Is it a coord. flag?
+	blo.s	.notcoord		; Branch if not
+	bsr.w	CoordFlag
+	bra.s	.sampleloop
+; ===========================================================================
+
+.notcoord:
+	tst.b	d5			; Is it a sample?
+	bpl.s	.gotduration		; Branch if not (duration)
+	move.b	d5,SMPS_Track.SavedPWM(a5)	; Store new sample
+	move.b	(a4)+,d5		; Get another byte
+	bpl.s	.gotduration		; Branch if it is a duration
+	subq.w	#1,a4			; Put byte back
+	move.b	SMPS_Track.SavedDuration(a5),SMPS_Track.DurationTimeout(a5) ; Use last duration
+	bra.s	.gotsampleduration
+; ===========================================================================
+
+.gotduration:
+	bsr.w	SetDuration
+
+.gotsampleduration:
+	move.w	a4,SMPS_Track.DataPointer+2(a5)	; Save pointer
+	move.l	a4,d0
+	swap	d0
+	move.b	d0,SMPS_Track.DataPointer+1(a5)	; Save pointer
+	rts
+; End of function PWMDoNext
+
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+PWMUpdateSample:
+	move.b	SMPS_Track.SavedPWM(a5),d0
+	cmpi.b	#$80,d0				; Is this a rest?
+	beq.s	.skipVolumeUpdate		; If so, skip obtaining volume
+	move.b	SMPS_Track.Volume(a5),d1
+	lsl.w	#8,d1
+
+.skipVolumeUpdate:
+	btst	#4,SMPS_Track.PlaybackControl(a5)	; Is 'do not attack' enabled?
+	bne.s	.skipSampleUpdate			; If so, skip obtaining sample ID
+	subi.b	#$81,d0
+	bmi.s	.skipSampleUpdate			; If invalid sample ($80-$FF), skip obtaining sample ID
+	move.b	d0,d1
+
+	; Send command
+	moveq	#0,d2
+	move.b	SMPS_Track.VoiceControl(a5),d2
+	lea	($A15128).l,a0
+	move.w	d1,-8(a0,d2.w)
+
+.skipSampleUpdate:
+	rts
+   endif
+
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
