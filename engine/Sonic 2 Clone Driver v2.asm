@@ -53,7 +53,7 @@ UpdateMusic:
 	lea	(Clone_Driver_RAM).w,a6
     endif
 	clr.b	SMPS_RAM.f_voice_selector(a6)
-	tst.b	SMPS_RAM.f_stopmusic(a6)			; Is music paused?
+	tst.b	SMPS_RAM.f_stopmusic(a6)	; Is music paused?
 	bne.w	DoPauseMusic			; If yes, branch
 	move.b	SMPS_RAM.variables.v_fadeout_counter(a6),d0
 	beq.s	.skipfadeout
@@ -65,13 +65,13 @@ UpdateMusic:
 	bsr.w	DoFadeIn
 ; loc_71BB2:
 .skipfadein:
-	tst.l	SMPS_RAM.variables.v_playsnd1(a6)			; Is a music or sound queued for played?
-	beq.s	.nosndinput			; If not, branch
+	tst.l	SMPS_RAM.variables.v_playsnd1(a6)	; Is a music or sound queued for played?
+	beq.s	.nosndinput				; If not, branch
 	bsr.w	CycleSoundQueue
 ; loc_71BBC:
 .nosndinput:
-	tst.b	SMPS_RAM.variables.v_playsnd0(a6)			; Is song queue set for silence?
-	beq.s	.nonewsound			; If yes, branch
+	tst.b	SMPS_RAM.variables.v_playsnd0(a6)	; Is song queue set for silence?
+	beq.s	.nonewsound				; If yes, branch
 	bsr.w	PlaySoundID
 ; loc_71BC8:
 .nonewsound:
@@ -2539,8 +2539,7 @@ cfJumpReturn:
 	movea.l	(a5,d0.w),a4			; Set track return address
 	clr.l	(a5,d0.w)			; Set 'popped' value to zero
 	addq.w	#2,a4				; Skip jump target address from gosub flag
-	addq.b	#4,d0				; Actually 'pop' value
-	move.b	d0,SMPS_Track.StackPointer(a5)	; Set new stack pointer
+	addq.b	#4,SMPS_Track.StackPointer(a5)	; Actually 'pop' value
 	rts
 ; ===========================================================================
 ; loc_72B14:
@@ -2688,8 +2687,9 @@ cfNoteFillS3K:	; Ported from S3K
 ; ===========================================================================
 ; loc_72BB4:
 cfNoteFill:
-	move.b	(a4),SMPS_Track.NoteFillTimeout(a5)	; Note fill timeout
-	move.b	(a4)+,SMPS_Track.NoteFillMaster(a5)	; Note fill master
+	move.b	(a4)+,d0
+	move.b	d0,SMPS_Track.NoteFillTimeout(a5)	; Note fill timeout
+	move.b	d0,SMPS_Track.NoteFillMaster(a5)	; Note fill master
 	rts
 ; ===========================================================================
 ; loc_72BBE: cfAddKey:
@@ -2700,19 +2700,21 @@ cfChangeTransposition:
 ; ===========================================================================
 ; loc_72BC6:
 cfSetTempo:
-	move.b	(a4),SMPS_RAM.variables.v_main_tempo(a6)		; Set main tempo
-	move.b	(a4)+,SMPS_RAM.variables.v_main_tempo_timeout(a6)	; And reset timeout (!)
+	move.b	(a4)+,d0
+	move.b	d0,SMPS_RAM.variables.v_main_tempo(a6)		; Set main tempo
+	move.b	d0,SMPS_RAM.variables.v_main_tempo_timeout(a6)	; And reset timeout (!)
 	rts
 ; ===========================================================================
 ; loc_72BD0:
 cfSetTempoMod:
-	lea	SMPS_RAM.v_music_track_ram(a6),a0
 	move.b	(a4)+,d0		; Get new tempo divider
+	lea	SMPS_RAM.v_music_track_ram(a6),a0
+	moveq	#SMPS_Track.len,d1
 	moveq	#SMPS_MUSIC_TRACK_COUNT-1,d2	; 1 DAC + 6 FM + 3 PSG tracks
 ; loc_72BDA:
 .trackloop:
 	move.b	d0,SMPS_Track.TempoDivider(a0)	; Set track's tempo divider
-	lea	SMPS_Track.len(a0),a0
+	adda.w	d1,a0
 	dbf	d2,.trackloop
 
 	rts
@@ -2908,17 +2910,17 @@ cfStopTrack:
 	bmi.s	.stoppsg			; Branch if yes
 	btst	#4,SMPS_Track.VoiceControl(a5)	; Is this the DAC we are updating?
 	bne.w	.locexit			; Exit if yes
-	pea	.stoppedchannel(pc)
-	bra.w	FMNoteOff
+	bsr.w	FMNoteOff
+	bra.s	.stoppedchannel
 ; ===========================================================================
 ; loc_72D74:
 .stoppsg:
 	bsr.w	PSGNoteOff
 ; loc_72D78:
 .stoppedchannel:
-	tst.b	SMPS_RAM.f_voice_selector(a6)		; Are we updating SFX?
+	tst.b	SMPS_RAM.f_voice_selector(a6)	; Are we updating SFX?
 	bpl.w	.locexit			; Exit if not
-	clr.b	SMPS_RAM.variables.v_sndprio(a6)			; Clear priority
+	clr.b	SMPS_RAM.variables.v_sndprio(a6)	; Clear priority
 	moveq	#0,d0
 	move.b	SMPS_Track.VoiceControl(a5),d0	; Get voice control bits
 	bmi.s	.getpsgptr			; Branch if PSG
@@ -2975,7 +2977,7 @@ cfStopTrack:
 	bclr	#2,SMPS_Track.PlaybackControl(a0)	; Clear 'SFX overriding' bit
 	bset	#1,SMPS_Track.PlaybackControl(a0)	; Set 'track at rest' bit
 	cmpi.b	#$E0,SMPS_Track.VoiceControl(a0)	; Is this a noise pointer?
-	bne.s	.locexit			; Branch if not
+	bne.s	.locexit				; Branch if not
 	move.b	SMPS_Track.PSGNoise(a0),(SMPS_psg_input).l ; Set noise tone
 ; loc_72E02:
 .locexit:
@@ -2985,11 +2987,11 @@ cfStopTrack:
 ; loc_72E06:
 cfSetPSGNoise:
 	move.b	#$E0,SMPS_Track.VoiceControl(a5)	; Turn channel into noise channel
-	move.b	(a4)+,d0			; Get tone noise
+	move.b	(a4)+,d0				; Get tone noise
 	move.b	d0,SMPS_Track.PSGNoise(a5)		; Save it
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
-	bne.s	.locret				; Return if yes
-	move.b	d0,(SMPS_psg_input).l		; Set tone
+	bne.s	.locret					; Return if yes
+	move.b	d0,(SMPS_psg_input).l			; Set tone
 ; locret_72E1E:
 .locret:
 	rts
@@ -3002,7 +3004,7 @@ cfDisableModulation:
 ; loc_72E26:
 cfSetPSGTone:
 	move.b	(a4)+,d0
-	tst.b	SMPS_Track.VoiceControl(a5)		; Is this a PSG track?
+	tst.b	SMPS_Track.VoiceControl(a5)	; Is this a PSG track?
 	bpl.s	+				; Return if not
 	move.b	d0,SMPS_Track.VoiceIndex(a5)	; Set current PSG tone
 +	rts
@@ -3018,16 +3020,16 @@ cfJumpTo:
 ; loc_72E38:
 cfRepeatAtPos:
 	moveq	#0,d0
-	move.b	(a4)+,d0			; Loop index
-	move.b	(a4)+,d1			; Repeat count
+	move.b	(a4)+,d0				; Loop index
+	move.b	(a4)+,d1				; Repeat count
 	tst.b	SMPS_Track.LoopCounters(a5,d0.w)	; Has this loop already started?
-	bne.s	.loopexists			; Branch if yes
+	bne.s	.loopexists				; Branch if yes
 	move.b	d1,SMPS_Track.LoopCounters(a5,d0.w)	; Initialize repeat count
 ; loc_72E48:
 .loopexists:
 	subq.b	#1,SMPS_Track.LoopCounters(a5,d0.w)	; Decrease loop's repeat count
-	bne.s	cfJumpTo			; If nonzero, branch to target
-	addq.w	#2,a4				; Skip target address
+	bne.s	cfJumpTo				; If nonzero, branch to target
+	addq.w	#2,a4					; Skip target address
 	rts
 ; ===========================================================================
 ; loc_72E52:
@@ -3050,6 +3052,7 @@ cfJumpToGosub:
 ;	moveq	#$F,d1		; Loaded with fixed value (max RR, 1TL)
 ;	bra.w	WriteFMI
 ; ===========================================================================
+
 cfSilenceStopTrack:
 	tst.b	SMPS_Track.VoiceControl(a5)	; Is this a PSG track?
 	bmi.w	cfStopTrack			; If so, don't mess with the YM2612
@@ -3103,17 +3106,17 @@ cfSetKey:
 ;
 cfSetVolume:
 	tst.b	SMPS_Track.VoiceControl(a5)	; Is this a psg track?
-	bpl.s	.FMVolume		; If not, branch
-	move.b	(a4)+,d0		; Load parameter byte
-	lsr.b	#4,d0			; Move bits 4,5,6,7 to the position of 0,1,2,3
-	not.b	d0			; Invert bits
+	bpl.s	.FMVolume			; If not, branch
+	move.b	(a4)+,d0			; Load parameter byte
+	lsr.b	#4,d0				; Move bits 4,5,6,7 to the position of 0,1,2,3
+	not.b	d0				; Invert bits
 	andi.b	#$F,d0
 	move.b	d0,SMPS_Track.Volume(a5)	; Write volume
 	rts
 .FMVolume:
-	move.b	(a4)+,d0		; Load parameter byte
-	not.b	d0			; Invert bits
-	bchg	#7,d0			; Retain sign bit
+	move.b	(a4)+,d0			; Load parameter byte
+	not.b	d0				; Invert bits
+	bchg	#7,d0				; Retain sign bit
 	move.b	d0,SMPS_Track.Volume(a5)	; Write volume
 	bra.w	SendVoiceTL
 ; ===========================================================================
@@ -3128,16 +3131,16 @@ cfSetVolume:
 cfLoopContinuousSFX:
     if SMPS_EnableContSFX
 	btst	#f_continuous_sfx,SMPS_RAM.bitfield1(a6)	; Is the flag for continuous playback mode set?
-	bne.s	.continuousmode				; If so, branch
-	clr.b	SMPS_RAM.variables.v_current_contsfx(a6)			; Communicate that there is no continuous SFX playing
-	addq.w	#2,a4					; Clownacy | Advance reading counter to skip the address
+	bne.s	.continuousmode					; If so, branch
+	clr.b	SMPS_RAM.variables.v_current_contsfx(a6)	; Communicate that there is no continuous SFX playing
+	addq.w	#2,a4						; Clownacy | Advance reading counter to skip the address
 	rts
 
 .continuousmode:
-	subq.b	#1,SMPS_RAM.variables.v_contsfx_channels(a6)		; Mark one channel as processed
-	bne.w	cfJumpTo				; If that wasn't the last channel, branch
+	subq.b	#1,SMPS_RAM.variables.v_contsfx_channels(a6)	; Mark one channel as processed
+	bne.w	cfJumpTo					; If that wasn't the last channel, branch
 	bclr	#f_continuous_sfx,SMPS_RAM.bitfield1(a6)	; If it was, clear flag for continuous playback mode...
-	bra.w	cfJumpTo				; ...and then branch
+	bra.w	cfJumpTo					; ...and then branch
     else
 	addq.w	#2,a4			; Skip parameters
 	rts
@@ -3150,9 +3153,9 @@ cfLoopContinuousSFX:
 ; Has 2 parameter bytes: a 1-byte register selector and a 1-byte register data.
 ;
 cfSendFMI:
-	move.b	(a4)+,d0				; Get YM2612 register selector
-	move.b	(a4)+,d1				; Get YM2612 register data
-	bra.w	WriteFMI				; Send it to YM2612
+	move.b	(a4)+,d0	; Get YM2612 register selector
+	move.b	(a4)+,d1	; Get YM2612 register data
+	bra.w	WriteFMI	; Send it to YM2612
 ; ===========================================================================
 ; Sends an FM command to the YM2612. The command is sent to the adequate part
 ; for the current track, so it is only appropriate for those registers that
