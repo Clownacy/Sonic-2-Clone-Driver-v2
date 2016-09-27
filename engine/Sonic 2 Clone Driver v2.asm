@@ -2106,7 +2106,7 @@ PSGDoNext:
 ; sub_728AC:
 PSGSetFreq:
 	subi.b	#$81,d5			; Convert to 0-based index
-	blo.s	.restpsg		; If $80, put track at rest
+	bcs.s	.restpsg		; If $80, put track at rest
 	add.b	SMPS_Track.Transpose(a5),d5	; Add in channel transposition
 	andi.w	#$7F,d5			; Clear high byte and sign bit
 	add.w	d5,d5
@@ -2194,17 +2194,14 @@ PSGUpdateVolFX:
 	beq.s	locret_72924		; Return if it is zero
 ; loc_7292E:
 PSGDoVolFX:
-	; Clownacy | Rearranged to closer fit Super Shinobi 2's version of this code (SMPS 68k Type 2)
-	; from which the additional PSG flags were ported
 	move.b	SMPS_Track.Volume(a5),d6	; Get volume
+	beq.s	SetPSGVolume
 	moveq	#0,d0
 	move.b	SMPS_Track.VoiceIndex(a5),d0 ; Get PSG tone
-	beq.s	SetPSGVolume
+	add.w	d0,d0
+	add.w	d0,d0
 	lea	(PSG_Index).l,a0
-	subq.w	#1,d0
-	add.w	d0,d0
-	add.w	d0,d0
-	movea.l	(a0,d0.w),a0
+	movea.l	-4(a0,d0.w),a0
 
 PSGDoVolFX_Loop:
 	moveq	#0,d0
@@ -2212,14 +2209,14 @@ PSGDoVolFX_Loop:
 	addq.b	#1,SMPS_Track.VolFlutter(a5)	; Increment flutter index
 	move.b	(a0,d0.w),d0		; Get flutter value
 	bpl.s	.gotflutter		; If it is not a terminator, branch
-	cmpi.b	#$81,d0			; Clownacy | Most commonly used
-	beq.s	VolEnv_Hold		; 81 - hold at current level
-	cmpi.b	#$83,d0			; Clownacy | Second most commonly used
-	beq.s	VolEnv_Off		; 83 - turn Note Off
 	cmpi.b	#$80,d0			; Clownacy | Third most commonly used
 	beq.s	VolEnv_Reset		; 80 - loop back to beginning
+	cmpi.b	#$81,d0			; Clownacy | Most commonly used
+	beq.s	VolEnv_Hold		; 81 - hold at current level
 	cmpi.b	#$82,d0			; Clownacy | Fourth most commonly used
 	beq.s	VolEnv_Jump2Idx		; 82 xx	- jump to byte xx
+	cmpi.b	#$83,d0			; Clownacy | Second most commonly used
+	beq.s	VolEnv_Off		; 83 - turn Note Off
 ; loc_72960:
 .gotflutter:
 	add.w	d0,d6		; Add flutter to volume
@@ -2324,7 +2321,7 @@ PSGSilenceAll:
 	move.b	#$9F,(a0)	; Silence PSG 1
 	move.b	#$BF,(a0)	; Silence PSG 2
 	move.b	#$DF,(a0)	; Silence PSG 3
-	move.b	#$FF,(a0)	; Silence noise channel
+	move.b	#$FF,(a0)	; Silence PSG noise channel
 	rts
 ; End of function PSGSilenceAll
 
