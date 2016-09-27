@@ -99,7 +99,7 @@ spec__Last =		SMPS_id(ptr_specend)-1
 
 ; Sound commands
 offset :=	Sound_ExIndex
-ptrsize :=	4
+ptrsize :=	2
 idstart :=	$FA
 
 flg__First = idstart

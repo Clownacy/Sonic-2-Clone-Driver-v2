@@ -659,17 +659,17 @@ PlaySoundID:	; For the love of god, don't rearrange the order of the groups, it 
 	cmpi.b	#FlgID__End-FlgID__First,d7	; Is this after commands?
 	bhs.s	locret_71F4A			; Return if yes
 	add.w	d7,d7
-	add.w	d7,d7
+	move.w	Sound_ExIndex(pc,d7.w),d7
 	jmp	Sound_ExIndex(pc,d7.w)
 ; ===========================================================================
 
 Sound_ExIndex:
-ptr_flgFA:	bra.w	StopSFX			; $FA	; Clownacy | Brand new. Was missing from the stock S1 driver because Sonic Team had stripped out various unused components of the driver
-ptr_flgFB:	bra.w	FadeOutMusic		; $FB	; Clownacy | Was $E0
-ptr_flgFC:	bra.w	PlaySega		; $FC	; Clownacy | Was $E1
-ptr_flgFD:	bra.w	SpeedUpMusic		; $FD	; Clownacy | Was $E2
-ptr_flgFE:	bra.w	SlowDownMusic		; $FE	; Clownacy | Was $E3
-ptr_flgFF:	bra.w	StopAllSound		; $FF	; Clownacy | Was $E4
+ptr_flgFA:	dc.w	StopSFX-Sound_ExIndex		; $FA	; Clownacy | Brand new. Was missing from the stock S1 driver because Sonic Team had stripped out various unused components of the driver
+ptr_flgFB:	dc.w	FadeOutMusic-Sound_ExIndex	; $FB	; Clownacy | Was $E0
+ptr_flgFC:	dc.w	PlaySega-Sound_ExIndex		; $FC	; Clownacy | Was $E1
+ptr_flgFD:	dc.w	SpeedUpMusic-Sound_ExIndex	; $FD	; Clownacy | Was $E2
+ptr_flgFE:	dc.w	SlowDownMusic-Sound_ExIndex	; $FE	; Clownacy | Was $E3
+ptr_flgFF:	dc.w	StopAllSound-Sound_ExIndex	; $FF	; Clownacy | Was $E4
 ptr_flgend
 ; ---------------------------------------------------------------------------
 ; Play "Say-gaa" PCM sound
@@ -2492,92 +2492,86 @@ CoordFlag:
 	beq.w	cfHoldNote
 	move.b	(a4)+,d5	; Clownacy | The true coord flag value follows the $FF
 	add.w	d5,d5
-	add.w	d5,d5
+	move.w	coordflagLookup(pc,d5.w),d5
 	jmp	coordflagLookup(pc,d5.w)
 ; End of function CoordFlag
 
 ; ===========================================================================
 ; loc_72A64:
 coordflagLookup:
-	bra.w	cfPanningAMSFMS		; $FF, $00	Clownacy | Was $E0
+	dc.w	cfPanningAMSFMS-coordflagLookup		; $FF, $00	Clownacy | Was $E0
 ; ===========================================================================
-	bra.w	cfDetune		; $FF, $01	Clownacy | Was $E1
+	dc.w	cfDetune-coordflagLookup		; $FF, $01	Clownacy | Was $E1
 ; ===========================================================================
-	bra.w	cfSetCommunication	; $FF, $02	Clownacy | Was $E2
+	dc.w	cfSetCommunication-coordflagLookup	; $FF, $02	Clownacy | Was $E2
 ; ===========================================================================
-	bra.w	cfJumpReturn		; $FF, $03	Clownacy | Was $E3
+	dc.w	cfJumpReturn-coordflagLookup		; $FF, $03	Clownacy | Was $E3
 ; ===========================================================================
-	bra.w	cfFadeInToPrevious	; $FF, $04	Clownacy | Was $E4
+	dc.w	cfFadeInToPrevious-coordflagLookup	; $FF, $04	Clownacy | Was $E4
 ; ===========================================================================
-	bra.w	cfSetTempoDivider	; $FF, $05	Clownacy | Was $E5
+	dc.w	cfSetTempoDivider-coordflagLookup	; $FF, $05	Clownacy | Was $E5
 ; ===========================================================================
-	bra.w	cfChangeFMVolume	; $FF, $06	Clownacy | Was $E6
+	dc.w	cfChangeFMVolume-coordflagLookup	; $FF, $06	Clownacy | Was $E6
 ; ===========================================================================
     if SMPS_EnableSpecSFX
-	bra.w	cfStopSpecialFM4	; $FF, $07	Clownacy | Was $EE
+	dc.w	cfStopSpecialFM4-coordflagLookup	; $FF, $07	Clownacy | Was $EE
     else
-	bra.w	cfStopTrack
+	dc.w	cfStopTrack-coordflagLookup
     endif
 ; ===========================================================================
-	bra.w	cfNoteFill		; $FF, $08	Clownacy | Was $E8
+	dc.w	cfNoteFill-coordflagLookup		; $FF, $08	Clownacy | Was $E8
 ; ===========================================================================
-	bra.w	cfChangeTransposition	; $FF, $09	Clownacy | Was $E9
+	dc.w	cfChangeTransposition-coordflagLookup	; $FF, $09	Clownacy | Was $E9
 ; ===========================================================================
-	bra.w	cfSetTempo		; $FF, $0A	Clownacy | Was $EA
+	dc.w	cfSetTempo-coordflagLookup		; $FF, $0A	Clownacy | Was $EA
 ; ===========================================================================
-	bra.w	cfSetTempoMod		; $FF, $0B	Clownacy | Was $EB
+	dc.w	cfSetTempoMod-coordflagLookup		; $FF, $0B	Clownacy | Was $EB
 ; ===========================================================================
-	bra.w	cfChangePSGVolume	; $FF, $0C	Clownacy | Was $EC
+	dc.w	cfChangePSGVolume-coordflagLookup	; $FF, $0C	Clownacy | Was $EC
 ; ===========================================================================
-	bra.w	cfSetVoice		; $FF, $0D	Clownacy | Was $EF
+	dc.w	cfSetVoice-coordflagLookup		; $FF, $0D	Clownacy | Was $EF
 ; ===========================================================================
-	bra.w	cfModulation		; $FF, $0E	Clownacy | Was $F0
+	dc.w	cfModulation-coordflagLookup		; $FF, $0E	Clownacy | Was $F0
 ; ===========================================================================
-	bra.w	cfEnableModulation	; $FF, $0F	Clownacy | Was $F1
+	dc.w	cfEnableModulation-coordflagLookup	; $FF, $0F	Clownacy | Was $F1
 ; ===========================================================================
-	bra.w	cfStopTrack		; $FF, $10	Clownacy | Was $F2
+	dc.w	cfStopTrack-coordflagLookup		; $FF, $10	Clownacy | Was $F2
 ; ===========================================================================
-	bra.w	cfSetPSGNoise		; $FF, $11	Clownacy | Was $F3
+	dc.w	cfSetPSGNoise-coordflagLookup		; $FF, $11	Clownacy | Was $F3
 ; ===========================================================================
-	bra.w	cfDisableModulation	; $FF, $12	Clownacy | Was $F4
+	dc.w	cfDisableModulation-coordflagLookup	; $FF, $12	Clownacy | Was $F4
 ; ===========================================================================
-	bra.w	cfSetPSGTone		; $FF, $13	Clownacy | Was $F5
+	dc.w	cfSetPSGTone-coordflagLookup		; $FF, $13	Clownacy | Was $F5
 ; ===========================================================================
-	bra.w	cfJumpTo		; $FF, $14	Clownacy | Was $F6
+	dc.w	cfJumpTo-coordflagLookup		; $FF, $14	Clownacy | Was $F6
 ; ===========================================================================
-	bra.w	cfRepeatAtPos		; $FF, $15	Clownacy | Was $F7
+	dc.w	cfRepeatAtPos-coordflagLookup		; $FF, $15	Clownacy | Was $F7
 ; ===========================================================================
-	bra.w	cfJumpToGosub		; $FF, $16	Clownacy | Was $F8
+	dc.w	cfJumpToGosub-coordflagLookup		; $FF, $16	Clownacy | Was $F8
 ; ===========================================================================
-	bra.w	cfChanFMCommand		; $FF, $17	Clownacy | Brand new
+	dc.w	cfChanFMCommand-coordflagLookup		; $FF, $17	Clownacy | Brand new
 ; ===========================================================================
-	bra.w	cfSilenceStopTrack	; $FF, $18	Clownacy | Brand new
+	dc.w	cfSilenceStopTrack-coordflagLookup	; $FF, $18	Clownacy | Brand new
 ; ===========================================================================
-	bra.w	cfPlayDACSample		; $FF, $19	Clownacy | Brand new
+	dc.w	cfPlayDACSample-coordflagLookup		; $FF, $19	Clownacy | Brand new
 ; ===========================================================================
-	bra.w	cfPlaySound		; $FF, $1A	Clownacy | Brand new
+	dc.w	cfPlaySound-coordflagLookup		; $FF, $1A	Clownacy | Brand new
 ; ===========================================================================
-	bra.w	cfSetKey		; $FF, $1B	Clownacy | Brand new
+	dc.w	cfSetKey-coordflagLookup		; $FF, $1B	Clownacy | Brand new
 ; ===========================================================================
-	bra.w	cfSetVolume		; $FF, $1C	Clownacy | Brand new
+	dc.w	cfSetVolume-coordflagLookup		; $FF, $1C	Clownacy | Brand new
 ; ===========================================================================
-	bra.w	cfNoteFillS3K		; $FF, $1D	Clownacy | Brand new
+	dc.w	cfNoteFillS3K-coordflagLookup		; $FF, $1D	Clownacy | Brand new
 ; ===========================================================================
-    if SMPS_EnableContSFX
-	bra.w	cfLoopContinuousSFX	; $FF, $1E	Clownacy | Brand new
-    else
-	addq.w	#2,a4			; Skip parameters
-	rts
-    endif
+	dc.w	cfLoopContinuousSFX-coordflagLookup	; $FF, $1E	Clownacy | Brand new
 ; ===========================================================================
     if SMPS_PushSFXBehaviour
-	bra.w	cfClearPush		; $FF, $1F	Clownacy | Was $ED
+	dc.w	cfClearPush-coordflagLookup		; $FF, $1F	Clownacy | Was $ED
     else
-	rts
-	nop
+	dc.w	locret_72AEA-coordflagLookup
     endif
 ; ===========================================================================
-	bra.w	cfSendFMI		; $FF, $20	Clownacy | Brand new
+	dc.w	cfSendFMI-coordflagLookup		; $FF, $20	Clownacy | Brand new
 ; ===========================================================================
 ; loc_72ACC:
 cfPanningAMSFMS:
@@ -3199,8 +3193,8 @@ cfSetVolume:
 ;
 ; Has a 2-byte parameter, the jump target address.
 ;
-    if SMPS_EnableContSFX
 cfLoopContinuousSFX:
+    if SMPS_EnableContSFX
 	btst	#f_continuous_sfx,SMPS_RAM.bitfield1(a6)	; Is the flag for continuous playback mode set?
 	bne.s	.continuousmode				; If so, branch
 	clr.b	SMPS_RAM.variables.v_current_contsfx(a6)			; Communicate that there is no continuous SFX playing
@@ -3212,6 +3206,9 @@ cfLoopContinuousSFX:
 	bne.w	cfJumpTo				; If that wasn't the last channel, branch
 	bclr	#f_continuous_sfx,SMPS_RAM.bitfield1(a6)	; If it was, clear flag for continuous playback mode...
 	bra.w	cfJumpTo				; ...and then branch
+    else
+	addq.w	#2,a4			; Skip parameters
+	rts
     endif
 ; ===========================================================================
 ; Sends an FM command to the YM2612. The command is sent to part I, so not all

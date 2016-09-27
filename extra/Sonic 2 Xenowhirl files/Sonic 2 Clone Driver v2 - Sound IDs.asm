@@ -137,7 +137,7 @@ SndID__End =                    SMPS_id(ptr_sndend)  ; D1
 
 ; Sound command IDs
 offset :=	Sound_ExIndex
-ptrsize :=	4
+ptrsize :=	2
 idstart :=	$F8
 
 FlgID__First			= idstart
