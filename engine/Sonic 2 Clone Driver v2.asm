@@ -999,6 +999,7 @@ PSGInitBytes:
 PWMInitBytes:
 	; PWM1, PWM2, PWM3, PWM4
 	dc.b $00|%1000, $02|%1000, $04|%1000, $06|%1000
+	; $00, $02, $04, and $06 are indexes into SMPS_pwm_comm
 	; %1000 is to mark the track as PWM
     endif
 	even
