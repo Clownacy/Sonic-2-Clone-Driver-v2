@@ -1965,7 +1965,7 @@ SendFMNoteOff:
 WriteFMIorII:
 	btst	#2,SMPS_Track.VoiceControl(a5)	; Is this bound for part I or II?
 	bne.s	WriteFMIIPart			; Branch if for part II
-	add.b	SMPS_Track.VoiceControl(a5),d0	; Add in voice control bits
+	or.b	SMPS_Track.VoiceControl(a5),d0	; Add in voice control bits
 ; End of function WriteFMIorII
 
 
