@@ -1775,16 +1775,16 @@ InitMusicPlayback:
 
 ; sub_7260C:
 TempoWait:	; Clownacy | Ported straight from S3K's Z80 driver
-	move.b	SMPS_RAM.variables.v_main_tempo(a6),d0				; Get current tempo value
+	move.b	SMPS_RAM.variables.v_main_tempo(a6),d0		; Get current tempo value
 	add.b	d0,SMPS_RAM.variables.v_main_tempo_timeout(a6)
 	bcc.s	.skipdelay					; If the addition did not overflow, return
 	lea	SMPS_RAM.v_music_track_ram+SMPS_Track.DurationTimeout(a6),a0	; Duration timeout of first track
 	moveq	#SMPS_MUSIC_TRACK_COUNT-1,d1	; Number of tracks (1x DAC + 6x FM + 3x PSG)
 
 .delayloop:
-	addq.b	#1,(a0)					; Delay notes another frame
-	lea	SMPS_Track.len(a0),a0					; Advance to next track
-	dbf	d1,.delayloop				; Loop for all tracks
+	addq.b	#1,(a0)			; Delay notes another frame
+	lea	SMPS_Track.len(a0),a0	; Advance to next track
+	dbf	d1,.delayloop		; Loop for all tracks
 ; loc_71B9E:
 .skipdelay:
 	rts
