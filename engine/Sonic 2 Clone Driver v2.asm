@@ -1983,11 +1983,9 @@ WriteFMIorII:
 
 ; (SMPS 68k Type 1b)
 ;  Sonic the Hedgehog:
-;	32(6/2) + 80(17/0) (Interestingly, this uses the Type 1a version, with some nops)
+;	32(6/2) + 80(17/0) (Interestingly, this uses the Type 1a version, with some nops, so is this an *early* Type 1b driver?)
 ;  Mega PCM standard:
 ;	52(10/3) + 102(21/0)
-;  Clone Driver v2:
-;	40(7/3) + 74(15/0)
 ;  Golden Axe 2:
 ;	32(6/2) + 44(9/0)
 ;  Nekketsu Koukou Dodgeball Bu Soccer Hen MD:
@@ -2008,18 +2006,17 @@ WriteFMIorII:
 ;  Bishoujo Senshi Sailor Moon
 ;	Same as Golden Axe 2
 
-; Vladikcomper's modified WriteFMI, optimised by Clownacy
 ; sub_7272E:
 WriteFMI:
 	SMPS_stopZ80
 	SMPS_waitZ80
 	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
 	SMPS_waitYM				; 24(5/0)
-	move.b	d0,(a0)		; ym2612_a0	; 8(1/1)
-	SMPS_waitYM (a0)+			; 8(2/0) + 18(4/0)
+	move.b	d0,(a0)+	; ym2612_a0	; 8(1/1)
+	SMPS_waitYM				; 8(2/0) + 18(4/0)
 	move.b	d1,(a0)		; ym2612_d0	; 8(1/1)
-	SMPS_waitYM -(a0)			; 10(2/0) + 18(4/0)
-	move.b	#$2A,(a0)	; ym2612_a0	; 12(2/1)
+	SMPS_waitYM				; 10(2/0) + 18(4/0)
+	move.b	#$2A,-(a0)	; ym2612_a0	; 12(2/1)
 	SMPS_startZ80				; Total: 40(7/3) + 78(17/0)
 	rts
 ; End of function WriteFMI
@@ -2029,22 +2026,21 @@ WriteFMI:
 WriteFMIIPart:
 	move.b	SMPS_Track.VoiceControl(a5),d2	; Get voice control bits
 	bclr	#2,d2				; Clear chip toggle
-	add.b	d2,d0				; Add in to destination register
+	or.b	d2,d0				; Add in to destination register
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-; Vladikcomper's modified WriteFMII, optimised by Clownacy
 ; sub_72764:
 WriteFMII:
 	SMPS_stopZ80
 	SMPS_waitZ80
-	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
+	lea	(SMPS_ym2612_a1).l,a0		; 12(3/0)
 	SMPS_waitYM				; 24(5/0)
-	move.b	d0,2(a0)	; ym2612_a1	; 12(2/1)
+	move.b	d0,(a0)+	; ym2612_a1	; 12(2/1)
 	SMPS_waitYM				; 24(5/0)
-	move.b	d1,3(a0)	; ym2612_d1	; 12(2/1)
+	move.b	d1,(a0)		; ym2612_d1	; 12(2/1)
 	SMPS_waitYM				; 24(5/0)
-	move.b	#$2A,(a0)	; ym2612_a0	; 12(2/1)
+	move.b	#$2A,SMPS_ym2612_a0-SMPS_ym2612_d1(a0)	; ym2612_a0	; 12(2/1)
 	SMPS_startZ80				; Total: 48(9/3) + 72(15/0)
 	rts
 ; End of function WriteFMII

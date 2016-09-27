@@ -69,13 +69,8 @@ SMPS_waitYM macro target
 	nop		; 4(1/0)
 	nop		; 4(1/0)
 	; If you're gonna overclock your 68k, you may need to pad this out with more 'nop's to avoid missed writes
-    if "target"<>""
-	tst.b	target
-	bpl.s	.skip	; 10(2/0) | 8(1/0)
-    endif
 .loop:	tst.b	(a0)	; 8(2/0)
 	bmi.s	.loop	; 10(2/0) | 8(1/0)
-.skip:
 	endm	; optimal cycle count: 24(5/0)
 
 ; ---------------------------------------------------------------------------
