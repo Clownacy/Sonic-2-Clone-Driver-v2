@@ -126,6 +126,4 @@ ptr_dacDE:	DAC_Entry	0Ah+1, LetsGo,		dpcm	; $DE	- "Let's Go!"
 ptr_dacDF:	DAC_Entry	0Ah+1, Hey,		dpcm	; $DF	- "Hey!"	; Clownacy | X_X Extending the DAC range is going to take some creativity...
 	endif
 
-	if SMPS_SegaPCM_68k = 0
 ptr_dacE0:	DAC_Entry	08h, SegaPCM,		pcm	; $E0	- Sega!
-	endif

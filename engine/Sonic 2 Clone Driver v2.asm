@@ -676,8 +676,6 @@ ptr_flgend
 ; ---------------------------------------------------------------------------
 ; Sound_E1:
 PlaySega:
-    if SMPS_SegaPCM_68k = 0
-
 	SMPS_stopZ80
 	SMPS_waitZ80
 	st.b	(SMPS_z80_ram+MegaPCM_DAC_Type).l	; This is a DAC SFX; ignore music DAC volume
@@ -695,43 +693,6 @@ PlaySega:
 
 		dbf	d1,.busyloop_outer
 	    endif
-    else
-
-    if SMPS_FixBugs
-	; Clownacy | One of Valley Bell's fixes: this resets the DAC pan, so the SEGA chant isn't accidentally panned by a previously-playing song
-	move.b	#$B6,d0		; AMS/FMS/panning of FM6
-	move.b	#$C0,d1		; Stereo
-	bsr.w	WriteFMII
-    endif
-	; Clownacy | Fancy-pantsy optimised version of Puto's 68k DAC code
-	moveq	#$2B,d0		; DAC enable/disable register
-	move.b	#$80,d1		; Enable DAC
-	bsr.w	WriteFMI
-	SMPS_stopZ80
-	SMPS_waitZ80
-	lea	(SMPS_ym2612_a0).l,a0		; Load $A04000 (YM2612 register A0) into a0 for some temporary use
-	lea	(SegaPCM).l,a2			; Load the SEGA PCM sample into a2. It's important that we use a2 since a0 and a1 are going to be used up ahead when reading the joypad ports
-	lea	(SMPS_ym2612_d0).l,a3		; Load $A04001 (YM2612 register D0) into a3
-	lea	(Ctrl_1).w,a4			; Load address where JoyPad states are written into a4
-	lea	(SMPS_HW_Port_1_Data).l,a5	; Load address where JoyPad states are read from into a5
-	move.w	#(SegaPCM_End-SegaPCM)-1,d3	; Load the size of the SEGA PCM sample into d3
-	SMPS_waitYM
-	move.b	#$2A,(a0)			; $A04000 = $2A -> Write to DAC channel
-	SMPS_waitYM
-.loop:
-	move.b	(a2)+,(a3)			; Write the PCM data (contained in a2) to YM2612 register D0 (contained in a3)
-	moveq	#$18,d0				; Write the pitch ($18 in this case) to d0
-.idle:
-	dbf	d0,.idle			; Decrement d0; jump to itself if not 0. (for pitch control, avoids playing the sample too fast)
-	movea.w	a4,a0				; address where JoyPad states are written
-	movea.l	a5,a1				; address where JoyPad states are read from
-	jsr	(Joypad_Read).w			; Read only the first joypad port. It's important that we do NOT do the two ports, we don't have the cycles for that
-	tst.b	(a4)				; Check for Start button
-	bmi.s	.endloop			; If start is pressed, stop playing, leave this loop, and unfreeze the 68K, otherwise, continue playing PCM sample
-	dbf	d3,.loop			; Count down d3 and loop. If d3 = 0, we finished playing the PCM sample, so stop playing, leave this loop, and unfreeze the 68K
-.endloop:
-	SMPS_startZ80
-    endif
 
 	addq.w	#4,sp				; Tamper return value so we don't return to caller
 	rts

@@ -26,9 +26,6 @@ SMPS_IdlingSegaSound	= 0
 SMPS_EnableUniversalVoiceBank	= 0
 ;	| If 1, include the Universal Voice Bank, used by S3 and S&K
 ;
-SMPS_SegaPCM_68k	= 0
-;	| If 0, the Z80 and Mega PCM handle the SEGA sample playback. If 1, the 68k handles it. I recommend Z80, as with the 68k version, if overclocked, the sound plays wrongly.
-;
 SMPS_EnablePlaySoundLocal	= 1
 ;	| If 1, SMPS_PlaySoundLocal is included
 ;

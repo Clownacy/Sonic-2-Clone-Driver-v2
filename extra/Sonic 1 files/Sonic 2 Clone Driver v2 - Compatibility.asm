@@ -26,9 +26,6 @@ SMPS_IdlingSegaSound	= 1
 SMPS_EnableUniversalVoiceBank	= 0
 ;	| If 1, include the Universal Voice Bank, used by S3 and S&K
 ;
-SMPS_SegaPCM_68k	= 0
-;	| If 0, the Z80 and Mega PCM handle the SEGA sample playback. If 1, the 68k handles it. I recommend Z80, as with the 68k version, if overclocked, the sound plays wrongly.
-;
 SMPS_EnablePlaySoundLocal	= 0
 ;	| If 1, SMPS_PlaySoundLocal is included
 ;
@@ -63,7 +60,6 @@ PlaySound_Unused	= SMPS_QueueSound3
 Clone_Driver_RAM	= (-(v_snddriver_ram&$80000000)<<1)|v_snddriver_ram
 Graphics_Flags		= v_megadrive
 Ctrl_1			= v_jpadhold1
-Joypad_Read		= ReadJoypads.read
 
 ; ---SOUND ID BOUNDARIES---
 MusID__First		= bgm__First

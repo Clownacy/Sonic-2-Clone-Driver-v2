@@ -132,7 +132,5 @@ dLetsGo =			SMPS_id(ptr_dacDE)
 dHey =				SMPS_id(ptr_dacDF)
 	endif
 
-	if SMPS_SegaPCM_68k = 0
 ; Sonic 2
 dSega_S2 =			SMPS_id(ptr_dacE0)
-	endif
