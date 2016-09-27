@@ -861,26 +861,6 @@ Sound_PlayBGM:
 	move.l	d2,SMPS_Track.VoicePtr(a1)	; Load voice pointer
 	adda.w	d6,a1
 	dbf	d7,.bmg_fmloadloop
-
-	cmpi.b	#7,2+0(a3)	; Are 7 (1 x DAC + 6 x FM) tracks defined?
-	beq.s	.bgm_fmdone
-; ===========================================================================
-; loc_720D8:
-;.silencefm6:
-	; Silence FM Channel 6 specifically if it's not in use
-	; Clownacy | Optimising this a bit by doing what Sonic 2's driver does
-	moveq	#$42,d0		; TL for operator 1 of FM6
-	moveq	#$FF,d1		; Total silence
-	moveq	#4-1,d2
-
-.silenceloop:
-	bsr.w	WriteFMII
-	addq.b	#4,d0		; Next operator
-	dbf	d2,.silenceloop
-
-	move.b	#$B6,d0		; AMS/FMS/panning of FM6
-	move.b	#$C0,d1		; Stereo
-	bsr.w	WriteFMII
 ; loc_72114:
 .bgm_fmdone:
 	moveq	#0,d7
@@ -1594,25 +1574,22 @@ DoFadeOut:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 FMSilenceChannel:
-	moveq	#3,d4
-	moveq	#$40,d3
-	moveq	#$7F,d1
+	moveq	#$40,d3	; Total level
+	moveq	#$7F,d1	; Total attenuation (silent)
+	bsr.s	+
 
--	move.b	d3,d0
-	bsr.w	WriteFMIorII
-	addq.b	#4,d3
-	dbf	d4,-
-
-	moveq	#3,d4
-	move.b	#$80,d3
-	moveq	#$F,d1
-
--	move.b	d3,d0
-	bsr.w	WriteFMIorII
-	addq.b	#4,d3
-	dbf	d4,-
+	move.b	#$80,d3	; Release rate
+	moveq	#$F,d1	; Maximum
+	bsr.s	+
 
 	bra.w	FMNoteOff
+
++	moveq	#4-1,d4	; Four operators
+-	move.b	d3,d0
+	bsr.w	WriteFMIorII
+	addq.b	#4,d3
+	dbf	d4,-
+	rts
 ; End of function FMSilenceChannel
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
