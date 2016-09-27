@@ -70,11 +70,6 @@ UpdateMusic:
 	bsr.w	CycleSoundQueue
 ; loc_71BBC:
 .nosndinput:
-	tst.b	SMPS_RAM.variables.v_playsnd0(a6)	; Is song queue set for silence?
-	beq.s	.nonewsound				; If yes, branch
-	bsr.w	PlaySoundID
-; loc_71BC8:
-.nonewsound:
     if SMPS_EnableSpinDashSFX
 	tst.b   SMPS_RAM.v_spindash_timer(a6)
 	beq.s	.notimer
@@ -580,8 +575,6 @@ ResumeTrack:
 
 ; Sound_Play:
 CycleSoundQueue:
-	tst.b	SMPS_RAM.variables.v_playsnd0(a6)		; Is variables.v_playsnd0 a $00 (empty)?
-	bne.s	locret_71F4A		; If yes, branch
 	lea	SMPS_RAM.variables.v_playsnd1(a6),a1	; Load music track number
 	move.b	SMPS_RAM.variables.v_sndprio(a6),d3	; Get priority of currently playing SFX
 	moveq	#SMPS_SOUND_QUEUE_COUNT-1,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
@@ -589,7 +582,7 @@ CycleSoundQueue:
 ; loc_71F12:
 .inputloop:
 	move.b	(a1),d0			; Move track number to d0
-	move.b	d0,d1
+	move.w	d0,d7
 	clr.b	(a1)+			; Clear entry
 	cmpi.b	#MusID__First,d0	; Make it into 0-based index
 	blo.s	.nextinput		; If negative (i.e., it was $80 or lower), branch
@@ -608,19 +601,18 @@ CycleSoundQueue:
 
 .lowerpriority:
 	tst.b	d3			; We don't want to change sound priority if it is negative
-	bmi.s	locret_71F4A
+	bmi.s	.locret
 	move.b	d3,SMPS_RAM.variables.v_sndprio(a6)	; Set new sound priority
 	rts
 
 ; loc_71F3E:
 .nextinput:
 	dbf	d4,.inputloop
+.locret:
 	rts
 
 .queueinput:
-	move.b	d1,SMPS_RAM.variables.v_playsnd0(a6)	; Queue sound for play
-locret_71F4A:
-	rts
+	bra.w	PlaySoundID
 ; End of function CycleSoundQueue
 
 
@@ -628,36 +620,32 @@ locret_71F4A:
 
 ; Sound_ChkValue:
 PlaySoundID:	; For the love of god, don't rearrange the order of the groups, it has to be 'music --> SFX --> flags'
-	moveq	#0,d7
-	move.b	SMPS_RAM.variables.v_playsnd0(a6),d7
-	clr.b	SMPS_RAM.variables.v_playsnd0(a6)		; reset	music flag
-
 	; Music
 	cmpi.b	#MusID__First,d7	; Is this before music?
-	blo.s	locret_71F4A		; Return if yes
+	blo.s	CycleSoundQueue.locret	; Return if yes
 	cmpi.b	#MusID__End,d7		; Is this music ($01-$1F)?
 	blo.w	Sound_PlayBGM		; Branch if yes
 
 	; SFX
 	cmpi.b	#SndID__First,d7	; Is this after music but before sfx?
-	blo.s	locret_71F4A		; Return if yes
+	blo.s	CycleSoundQueue.locret	; Return if yes
 	cmpi.b	#SndID__End,d7		; Is this sfx ($80-$D0)?
 	blo.w	Sound_PlaySFX		; Branch if yes
 
 	; Special SFX
     if SMPS_EnableSpecSFX
 	cmpi.b	#SpecID__First,d7	; Is this after sfx but before spec sfx?
-	blo.s	locret_71F4A		; Return if yes
+	blo.s	CycleSoundQueue.locret	; Return if yes
 	; These are old special SFX slots (GHZ waterfall)
 	cmpi.b	#SpecID__End,d7		; Is this spec sfx
 	blo.w	Sound_PlaySpecial	; Branch if yes
     endif
 
 	; Commands
-	subi.b	#FlgID__First,d7	; Is this after sfx (spec if above code is assembled) but before commands?
-	bcs.s	locret_71F4A		; Return if yes
+	subi.b	#FlgID__First,d7		; Is this after sfx (spec if above code is assembled) but before commands?
+	bcs.s	CycleSoundQueue.locret		; Return if yes
 	cmpi.b	#FlgID__End-FlgID__First,d7	; Is this after commands?
-	bhs.s	locret_71F4A			; Return if yes
+	bhs.s	CycleSoundQueue.locret		; Return if yes
 	add.w	d7,d7
 	move.w	Sound_ExIndex(pc,d7.w),d7
 	jmp	Sound_ExIndex(pc,d7.w)
@@ -1667,7 +1655,6 @@ StopAllSound:
 	move.b	d0,(a0)+
     endif
 
-	;move.b	d0,SMPS_RAM.variables.v_playsnd0(a6)	; Set music to $00 (silence)
 	; From Vladikcomper:
 	; "Playing sample $80 forces to stop playback."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
@@ -1733,7 +1720,6 @@ InitMusicPlayback:
 	move.b	d4,SMPS_RAM.variables.bitfield2(a6)
 	move.b	d5,SMPS_RAM.variables.v_fadein_counter(a6)
 	move.l	d6,SMPS_RAM.variables.v_playsnd1(a6)
-	;move.b	d6,SMPS_RAM.variables.v_playsnd0(a6)	; set music to $00 (silence)
 	moveq	#0|((MegaPCM_VolumeTbls&$F000)>>8),d0	; Clownacy | Reset DAC volume to maximum
 	bsr.w	WriteDACVolume
 
