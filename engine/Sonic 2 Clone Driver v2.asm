@@ -797,12 +797,15 @@ Sound_PlayBGM:
 	move.b	#5,SMPS_RAM.variables.v_pal_audio_countdown(a6)	; Clownacy | "reset PAL update tick to 5 (update immediately)"
 	movea.l	a4,a3
 
-	addi.w	#2+4+2,a4			; Point past header
+	addq.w	#2+4+2,a4			; Point past header
     if SMPS_FixBugs
 	; Clownacy | One of Valley Bell's fixes: this vital code is skipped if FM/DAC channels is 0, so it's been moved to avoid that
 	move.b	2+4+0(a3),d4		; Load tempo dividing timing
 	moveq	#SMPS_Track.len,d6
 	moveq	#1,d5			; Note duration for first "note"
+    endif
+    if SMPS_FixBugs
+	move.b	#$82,d3			; Initial PlaybackControl value
     endif
 	moveq	#0,d7			; Clownacy | Hey, look! It's the 'moveq	#0,d7' that the other Play_X's were missing!
 	move.b	2+0(a3),d7		; Load number of FM+DAC tracks
@@ -822,7 +825,7 @@ Sound_PlayBGM:
 .bmg_fmloadloop:
     if SMPS_FixBugs
 	; Clownacy | (From S2) Now sets 'track at rest' bit to prevent hanging notes
-	move.b	#$82,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
+	move.b	d3,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
     else
 	bset	#7,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' bit
     endif
@@ -864,7 +867,7 @@ Sound_PlayBGM:
 .bgm_psgloadloop:
     if SMPS_FixBugs
 	; Clownacy | (From S2) Now sets 'track at rest' bit to prevent hanging notes
-	move.b	#$82,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
+	move.b	d3,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
     else
 	bset	#7,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' bit
     endif
@@ -897,7 +900,7 @@ Sound_PlayBGM:
 	lea	SMPS_RAM.v_music_pwm_tracks(a6),a1
 
 .bgm_pwmloadloop:
-	move.b	#$82,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
+	move.b	d3,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
 	move.b	d4,SMPS_Track.TempoDivider(a1)
 	move.b	d6,SMPS_Track.StackPointer(a1)	; Set "gosub" (coord flag F8h) stack init value
 	move.b	d5,SMPS_Track.DurationTimeout(a1)	; Set duration of first "note"
