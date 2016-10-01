@@ -1225,24 +1225,24 @@ Sound_PlaySFX:
 ; ---------------------------------------------------------------------------
 ; dword_722CC: BGMChannelRAM:
 SFX_BGMChannelRAM:
-		dc.w SMPS_RAM.v_music_fm3_track
-		dc.w 0
-		dc.w SMPS_RAM.v_music_fm4_track
-		dc.w SMPS_RAM.v_music_fm5_track
-		dc.w SMPS_RAM.v_music_psg1_track
-		dc.w SMPS_RAM.v_music_psg2_track
-		dc.w SMPS_RAM.v_music_psg3_track	; Plain PSG3
-		dc.w SMPS_RAM.v_music_psg3_track	; Noise
+	dc.w SMPS_RAM.v_music_fm3_track
+	dc.w 0
+	dc.w SMPS_RAM.v_music_fm4_track
+	dc.w SMPS_RAM.v_music_fm5_track
+	dc.w SMPS_RAM.v_music_psg1_track
+	dc.w SMPS_RAM.v_music_psg2_track
+	dc.w SMPS_RAM.v_music_psg3_track	; Plain PSG3
+	dc.w SMPS_RAM.v_music_psg3_track	; Noise
 ; dword_722EC: SFXChannelRAM:
 SFX_SFXChannelRAM:
-		dc.w SMPS_RAM.v_sfx_fm3_track
-		dc.w 0
-		dc.w SMPS_RAM.v_sfx_fm4_track
-		dc.w SMPS_RAM.v_sfx_fm5_track
-		dc.w SMPS_RAM.v_sfx_psg1_track
-		dc.w SMPS_RAM.v_sfx_psg2_track
-		dc.w SMPS_RAM.v_sfx_psg3_track	; Plain PSG3
-		dc.w SMPS_RAM.v_sfx_psg3_track	; Noise
+	dc.w SMPS_RAM.v_sfx_fm3_track
+	dc.w 0
+	dc.w SMPS_RAM.v_sfx_fm4_track
+	dc.w SMPS_RAM.v_sfx_fm5_track
+	dc.w SMPS_RAM.v_sfx_psg1_track
+	dc.w SMPS_RAM.v_sfx_psg2_track
+	dc.w SMPS_RAM.v_sfx_psg3_track	; Plain PSG3
+	dc.w SMPS_RAM.v_sfx_psg3_track	; Noise
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
