@@ -1441,36 +1441,36 @@ StopSFX:
 ; Snd_FadeOut2: Snd_FadeOutSFX2: FadeOutSpecSFX:
 StopSpecSFX:
 	lea	SMPS_RAM.v_spcsfx_fm4_track(a6),a5
-	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
-	bpl.s	.fadedfm				; Branch if not
+	tst.b	SMPS_Track.PlaybackControl(a5)			; Is track playing?
+	bpl.s	.fadedfm					; Branch if not
 	bclr	#7,SMPS_Track.PlaybackControl(a5)		; Stop track
 	btst	#2,SMPS_Track.PlaybackControl(a5)		; Is SFX overriding?
-	bne.s	.fadedfm				; Branch if not
+	bne.s	.fadedfm					; Branch if not
 	bsr.w	SendFMNoteOff
 	lea	SMPS_RAM.v_music_fm4_track(a6),a5
 	bclr	#2,SMPS_Track.PlaybackControl(a5)		; Clear 'SFX is overriding' bit
 	bset	#1,SMPS_Track.PlaybackControl(a5)		; Set 'track at rest' bit
-	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
-	bpl.s	.fadedfm				; Branch if not
+	tst.b	SMPS_Track.PlaybackControl(a5)			; Is track playing?
+	bpl.s	.fadedfm					; Branch if not
 	movea.l	SMPS_Track.VoicePtr(a5),a1			; Voice pointer
-	move.b	SMPS_Track.VoiceIndex(a5),d0		; Current voice
+	move.b	SMPS_Track.VoiceIndex(a5),d0			; Current voice
 	bsr.w	SetVoice
 ; loc_724AE:
 .fadedfm:
 	lea	SMPS_RAM.v_spcsfx_psg3_track(a6),a5
-	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
-	bpl.s	.fadedpsg				; Branch if not
+	tst.b	SMPS_Track.PlaybackControl(a5)			; Is track playing?
+	bpl.s	.fadedpsg					; Branch if not
 	bclr	#7,SMPS_Track.PlaybackControl(a5)		; Stop track
 	btst	#2,SMPS_Track.PlaybackControl(a5)		; Is SFX overriding?
-	bne.s	.fadedpsg				; Return if not
+	bne.s	.fadedpsg					; Return if not
 	bsr.w	SendPSGNoteOff
 	lea	SMPS_RAM.v_music_psg3_track(a6),a5
 	bclr	#2,SMPS_Track.PlaybackControl(a5)		; Clear 'SFX is overriding' bit
 	bset	#1,SMPS_Track.PlaybackControl(a5)		; Set 'track at rest' bit
-	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
-	bpl.s	.fadedpsg				; Return if not
+	tst.b	SMPS_Track.PlaybackControl(a5)			; Is track playing?
+	bpl.s	.fadedpsg					; Return if not
 	cmpi.b	#$E0,SMPS_Track.VoiceControl(a5)		; Is this a noise channel?
-	bne.s	.fadedpsg				; Return if not
+	bne.s	.fadedpsg					; Return if not
 	move.b	SMPS_Track.PSGNoise(a5),(SMPS_psg_input).l	; Set noise type
 ; locret_724E4:
 .fadedpsg
@@ -1489,9 +1489,9 @@ FadeOutMusic:
 ;    if SMPS_EnableSpecSFX
 ;	bsr.s	StopSpecSFX
 ;    endif
-	move.b	#3,SMPS_RAM.variables.v_fadeout_delay(a6)		; Set fadeout delay to 3
+	move.b	#3,SMPS_RAM.variables.v_fadeout_delay(a6)	; Set fadeout delay to 3
 	move.b	#$28,SMPS_RAM.variables.v_fadeout_counter(a6)	; Set fadeout counter
-	bclr	#f_speedup,SMPS_RAM.variables.bitfield2(a6)			; Disable speed shoes tempo
+	bclr	#f_speedup,SMPS_RAM.variables.bitfield2(a6)	; Disable speed shoes tempo
 	rts
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -1499,21 +1499,21 @@ FadeOutMusic:
 ; sub_72504:
 DoFadeOut:
 	move.b	SMPS_RAM.variables.v_fadeout_delay(a6),d0	; Has fadeout delay expired?
-	beq.s	.continuefade		; Branch if yes
+	beq.s	.continuefade					; Branch if yes
 	subq.b	#1,SMPS_RAM.variables.v_fadeout_delay(a6)
 	rts
 ; ===========================================================================
 ; loc_72510:
 .continuefade:
 	subq.b	#1,SMPS_RAM.variables.v_fadeout_counter(a6)	; Update fade counter
-	beq.w	StopAllSound		; Branch if fade is done
-	move.b	#3,SMPS_RAM.variables.v_fadeout_delay(a6)		; Reset fade delay
+	beq.w	StopAllSound					; Branch if fade is done
+	move.b	#3,SMPS_RAM.variables.v_fadeout_delay(a6)	; Reset fade delay
 	lea	SMPS_RAM.v_music_dac_track(a6),a5
-	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
-	bpl.s	.fadefm				; Branch if not
-	addq.b	#4,SMPS_Track.Volume(a5)		; Increase volume attenuation
-	bpl.s	.senddacvol			; Branch if still positive
-	bclr	#7,SMPS_Track.PlaybackControl(a5)	; Stop track
+	tst.b	SMPS_Track.PlaybackControl(a5)			; Is track playing?
+	bpl.s	.fadefm						; Branch if not
+	addq.b	#4,SMPS_Track.Volume(a5)			; Increase volume attenuation
+	bpl.s	.senddacvol					; Branch if still positive
+	bclr	#7,SMPS_Track.PlaybackControl(a5)		; Stop track
 	bra.s	.fadefm
 ; ===========================================================================
 
@@ -1522,13 +1522,13 @@ DoFadeOut:
 
 .fadefm:
 	lea	SMPS_RAM.v_music_track_ram(a6),a5
-	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7	; 6 FM tracks
+	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7		; 6 FM tracks
 ; loc_72524:
 .fmloop:
-	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
-	bpl.s	.nextfm				; Branch if not
+	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
+	bpl.s	.nextfm					; Branch if not
 	addq.b	#1,SMPS_Track.Volume(a5)		; Increase volume attenuation
-	bpl.s	.sendfmtl			; Branch if still positive
+	bpl.s	.sendfmtl				; Branch if still positive
 	bclr	#7,SMPS_Track.PlaybackControl(a5)	; Stop track
 	bra.s	.nextfm
 ; ===========================================================================
@@ -1543,12 +1543,12 @@ DoFadeOut:
 	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT-1,d7	; 3 PSG tracks
 ; loc_72542:
 .psgloop:
-	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
-	bpl.s	.nextpsg			; branch if not
+	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
+	bpl.s	.nextpsg				; branch if not
 	lea	SMPS_Track.Volume(a5),a0		; Optimise the following code that uses this
-	addq.b	#1,(a0)				; Increase volume attenuation
-	cmpi.b	#$10,(a0)			; Is it greater than $F?
-	blo.s	.sendpsgvol			; Branch if not
+	addq.b	#1,(a0)					; Increase volume attenuation
+	cmpi.b	#$10,(a0)				; Is it greater than $F?
+	blo.s	.sendpsgvol				; Branch if not
 	bclr	#7,SMPS_Track.PlaybackControl(a5)	; Stop track
 	bra.s	.nextpsg
 ; ===========================================================================
@@ -1821,29 +1821,29 @@ SlowDownMusic_1up:
 ; sub_7267C:
 DoFadeIn:
 	tst.b	SMPS_RAM.variables.v_fadein_delay(a6)	; Has fadein delay expired?
-	beq.s	.continuefade		; Branch if yes
+	beq.s	.continuefade				; Branch if yes
 	subq.b	#1,SMPS_RAM.variables.v_fadein_delay(a6)
 	rts
 ; ===========================================================================
 ; loc_72688:
 .continuefade:
-	tst.b	SMPS_RAM.variables.v_fadein_counter(a6)	; Is fade done?
-	beq.s	.fadedone		; Branch if yes
+	tst.b	SMPS_RAM.variables.v_fadein_counter(a6)		; Is fade done?
+	beq.s	.fadedone					; Branch if yes
 	subq.b	#1,SMPS_RAM.variables.v_fadein_counter(a6)	; Update fade counter
 	move.b	#2,SMPS_RAM.variables.v_fadein_delay(a6)	; Reset fade delay
 	lea	SMPS_RAM.v_music_dac_track(a6),a5
-	tst.b	SMPS_Track.PlaybackControl(a5) ; Is track playing?
-	bpl.s	.fadefm			; Branch if not
-	subq.b	#4,SMPS_Track.Volume(a5)	; Reduce volume attenuation
+	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
+	bpl.s	.fadefm					; Branch if not
+	subq.b	#4,SMPS_Track.Volume(a5)		; Reduce volume attenuation
 	bsr.w	SetDACVolume
 
 .fadefm:
 	lea	SMPS_RAM.v_music_fm_tracks(a6),a5
-	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7	; 6 FM tracks
+	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7		; 6 FM tracks
 ; loc_7269E:
 .fmloop:
-	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
-	bpl.s	.nextfm				; Branch if not
+	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
+	bpl.s	.nextfm					; Branch if not
 	subq.b	#1,SMPS_Track.Volume(a5)		; Reduce volume attenuation
 	bsr.w	SendVoiceTL
 ; loc_726AA:
@@ -1855,8 +1855,8 @@ DoFadeIn:
 .psgloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
 	bpl.s	.nextpsg			; Branch if not
-	subq.b	#1,SMPS_Track.Volume(a5)		; Reduce volume attenuation
-	move.b	SMPS_Track.Volume(a5),d6		; Get value
+	subq.b	#1,SMPS_Track.Volume(a5)	; Reduce volume attenuation
+	move.b	SMPS_Track.Volume(a5),d6	; Get value
 ;	cmpi.b	#$10,d6				; Is it is < $10?	; Clownacy | This correction is moved to SetPSGVolume (the S2 way)
 ;	blo.s	.sendpsgvol			; Branch if yes
 ;	moveq	#$F,d6				; Limit to $F (maximum attenuation)
@@ -1880,11 +1880,11 @@ DoFadeIn:
 .fadedone:	; Modified version of MJ's original DAC fade-in fix
 	bclr	#f_fadein_flag,SMPS_RAM.variables.bitfield2(a6)		; Stop fadein
 	tst.b	SMPS_RAM.v_music_dac_track.PlaybackControl(a6)		; is the DAC channel running?
-	bpl.s	.locret					; if not, return
+	bpl.s	.locret							; if not, return
 ;.DAC:
-	move.b	#$B6,d0					; MJ: AMS/FMS/panning of FM6
+	move.b	#$B6,d0							; MJ: AMS/FMS/panning of FM6
 	move.b	SMPS_RAM.v_music_dac_track.AMSFMSPan(a6),d1		; MJ: load DAC channel's L/R/AMS/FMS value
-	bra.w	WriteFMII				; MJ: write to FM 6
+	bra.w	WriteFMII						; MJ: write to FM 6
 
 ;.locret:
 ;	rts
@@ -1918,13 +1918,13 @@ WriteDACVolume:
 ; loc_726E2:
 FMNoteOn:
 	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track resting?
-	bne.s	locret_726FC			; Return if so
+	bne.s	locret_726FC				; Return if so
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
-	bne.s	locret_726FC			; Return if so
-	cmpi.b	#6,SMPS_Track.VoiceControl(a5)	; If this FM6?
-	bne.s	.notfm6				; If not, branch
-	moveq	#$2B,d0				; DAC enable/disable register
-	moveq	#0,d1				; Disable DAC (letting FM6 run)
+	bne.s	locret_726FC				; Return if so
+	cmpi.b	#6,SMPS_Track.VoiceControl(a5)		; If this FM6?
+	bne.s	.notfm6					; If not, branch
+	moveq	#$2B,d0					; DAC enable/disable register
+	moveq	#0,d1					; Disable DAC (letting FM6 run)
 	bsr.w	WriteFMI
 .notfm6:
 	moveq	#$28,d0				; Note on/off register
@@ -1940,9 +1940,9 @@ locret_726FC:
 ; sub_726FE:
 FMNoteOff:
 	btst	#4,SMPS_Track.PlaybackControl(a5)	; Is 'do not attack next note' set?
-	bne.s	locret_726FC			; Return if yes
+	bne.s	locret_726FC				; Return if yes
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding?
-	bne.s	locret_726FC			; Return if yes
+	bne.s	locret_726FC				; Return if yes
 ; loc_7270A:
 SendFMNoteOff:
 	moveq	#$28,d0				; Note on/off register
@@ -2096,10 +2096,10 @@ PSGDoNext:
 
 ; sub_728AC:
 PSGSetFreq:
-	subi.b	#$81,d5			; Convert to 0-based index
-	bcs.s	.restpsg		; If $80, put track at rest
+	subi.b	#$81,d5				; Convert to 0-based index
+	bcs.s	.restpsg			; If $80, put track at rest
 	add.b	SMPS_Track.Transpose(a5),d5	; Add in channel transposition
-	andi.w	#$7F,d5			; Clear high byte and sign bit
+	andi.w	#$7F,d5				; Clear high byte and sign bit
 	add.w	d5,d5
 	move.w	PSGFrequencies(pc,d5.w),SMPS_Track.Freq(a5)	; Set new frequency
 	; Clownacy | Sonic 2's driver doesn't continue to FinishTrackUpdate
@@ -2108,7 +2108,7 @@ PSGSetFreq:
 ; loc_728CA:
 .restpsg:
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
-	move.w	#-1,SMPS_Track.Freq(a5)		; Invalidate note frequency
+	move.w	#-1,SMPS_Track.Freq(a5)			; Invalidate note frequency
 	; Clownacy | Sonic 2's driver doesn't continue to FinishTrackUpdate
 	bra.w	PSGNoteOff
 ; End of function PSGSetFreq
@@ -2145,22 +2145,22 @@ PSGDoNoteOn:
 PSGUpdateFreq:
 	move.b	SMPS_Track.Detune(a5),d0		; Get detune value
 	ext.w	d0
-	add.w	d0,d6				; Add to frequency
+	add.w	d0,d6					; Add to frequency
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
-	bne.s	.locret				; Return if yes
+	bne.s	.locret					; Return if yes
 	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track at rest?
-	bne.s	.locret				; Return if yes
-	move.b	SMPS_Track.VoiceControl(a5),d0	; Get channel bits
-	cmpi.b	#$E0,d0				; Is it a noise channel?
-	bne.s	.notnoise			; Branch if not
-	move.b	#$C0,d0				; Use PSG 3 channel bits
+	bne.s	.locret					; Return if yes
+	move.b	SMPS_Track.VoiceControl(a5),d0		; Get channel bits
+	cmpi.b	#$E0,d0					; Is it a noise channel?
+	bne.s	.notnoise				; Branch if not
+	move.b	#$C0,d0					; Use PSG 3 channel bits
 ; loc_72904:
 .notnoise:
 	move.w	d6,d1
-	andi.b	#$F,d1		; Low nibble of frequency
-	or.b	d1,d0		; Latch tone data to channel
-	lsr.w	#4,d6		; Get upper 6 bits of frequency
-	andi.b	#$3F,d6		; Send to latched channel
+	andi.b	#$F,d1			; Low nibble of frequency
+	or.b	d1,d0			; Latch tone data to channel
+	lsr.w	#4,d6			; Get upper 6 bits of frequency
+	andi.b	#$3F,d6			; Send to latched channel
 	lea	(SMPS_psg_input).l,a0
 	move.b	d0,(a0)
 	move.b	d6,(a0)
@@ -2182,13 +2182,13 @@ locret_72924:
 ; sub_72926:
 PSGUpdateVolFX:
 	tst.b	SMPS_Track.VoiceIndex(a5)	; Test PSG tone
-	beq.s	locret_72924		; Return if it is zero
+	beq.s	locret_72924			; Return if it is zero
 ; loc_7292E:
 PSGDoVolFX:
 	move.b	SMPS_Track.Volume(a5),d6	; Get volume
 	beq.s	SetPSGVolume
 	moveq	#0,d0
-	move.b	SMPS_Track.VoiceIndex(a5),d0 ; Get PSG tone
+	move.b	SMPS_Track.VoiceIndex(a5),d0	; Get PSG tone
 	add.w	d0,d0
 	add.w	d0,d0
 	lea	(PSG_Index).l,a0
@@ -2198,16 +2198,16 @@ PSGDoVolFX_Loop:
 	moveq	#0,d0
 	move.b	SMPS_Track.VolFlutter(a5),d0	; Get flutter index
 	addq.b	#1,SMPS_Track.VolFlutter(a5)	; Increment flutter index
-	move.b	(a0,d0.w),d0		; Get flutter value
-	bpl.s	.gotflutter		; If it is not a terminator, branch
-	cmpi.b	#$80,d0			; Clownacy | Third most commonly used
-	beq.s	VolEnv_Reset		; 80 - loop back to beginning
-	cmpi.b	#$81,d0			; Clownacy | Most commonly used
-	beq.s	VolEnv_Hold		; 81 - hold at current level
-	cmpi.b	#$82,d0			; Clownacy | Fourth most commonly used
-	beq.s	VolEnv_Jump2Idx		; 82 xx	- jump to byte xx
-	cmpi.b	#$83,d0			; Clownacy | Second most commonly used
-	beq.s	VolEnv_Off		; 83 - turn Note Off
+	move.b	(a0,d0.w),d0			; Get flutter value
+	bpl.s	.gotflutter			; If it is not a terminator, branch
+	cmpi.b	#$80,d0				; Clownacy | Third most commonly used
+	beq.s	VolEnv_Reset			; 80 - loop back to beginning
+	cmpi.b	#$81,d0				; Clownacy | Most commonly used
+	beq.s	VolEnv_Hold			; 81 - hold at current level
+	cmpi.b	#$82,d0				; Clownacy | Fourth most commonly used
+	beq.s	VolEnv_Jump2Idx			; 82 xx	- jump to byte xx
+	cmpi.b	#$83,d0				; Clownacy | Second most commonly used
+	beq.s	VolEnv_Off			; 83 - turn Note Off
 ; loc_72960:
 .gotflutter:
 	add.w	d0,d6		; Add flutter to volume
@@ -2222,11 +2222,11 @@ PSGDoVolFX_Loop:
 ; sub_7296A:
 SetPSGVolume:
 	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track at rest?
-	bne.s	locret_7298A			; Return if so
+	bne.s	locret_7298A				; Return if so
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding?
-	bne.s	locret_7298A			; Return if so
+	bne.s	locret_7298A				; Return if so
 	btst	#4,SMPS_Track.PlaybackControl(a5)	; Is track set to not attack next note?
-	bne.s	PSGCheckNoteFill		; Branch if yes
+	bne.s	PSGCheckNoteFill			; Branch if yes
 ; loc_7297C:
 PSGSendVolume:
 	; Clownacy | This correction is present elsewhere in S1's driver, but just having
@@ -2268,13 +2268,13 @@ VolEnv_Reset:	; For compatibility with S3K
 ; ===========================================================================
 ; loc_7299A: FlutterDone:
 VolEnv_Hold:
-	subq.b	#1,SMPS_Track.VolFlutter(a5)	; Decrement flutter index
+	subq.b	#1,SMPS_Track.VolFlutter(a5)		; Decrement flutter index
 	rts
 
 ; ===========================================================================
 
 VolEnv_Off:	; For compatibility with S3K
-	subq.b	#1,SMPS_Track.VolFlutter(a5)	; Decrement flutter index
+	subq.b	#1,SMPS_Track.VolFlutter(a5)		; Decrement flutter index
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
 ;	bra.s	PSGNoteOff
 
@@ -2283,7 +2283,7 @@ VolEnv_Off:	; For compatibility with S3K
 ; sub_729A0:
 PSGNoteOff:
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding?
-	bne.s	locret_729B4			; Return if so
+	bne.s	locret_729B4				; Return if so
 ; loc_729A6:
 SendPSGNoteOff:
 	move.b	SMPS_Track.VoiceControl(a5),d0	; PSG channel to change
@@ -2498,18 +2498,18 @@ coordflagLookup:
 ; ===========================================================================
 ; loc_72ACC:
 cfPanningAMSFMS:
-	move.b	(a4)+,d1		; New AMS/FMS/panning value
-	tst.b	SMPS_Track.VoiceControl(a5)	; Is this a PSG track?
-	bmi.s	locret_72AEA		; Return if yes
+	move.b	(a4)+,d1				; New AMS/FMS/panning value
+	tst.b	SMPS_Track.VoiceControl(a5)		; Is this a PSG track?
+	bmi.s	locret_72AEA				; Return if yes
 	btst	#2,SMPS_Track.PlaybackControl(a5)
 	bne.s	locret_72AEA
-	move.b	SMPS_Track.AMSFMSPan(a5),d0	; Get current AMS/FMS/panning
-	andi.b	#$37,d0			; Retain bits 0-2, 3-4 if set
-	or.b	d0,d1			; Mask in new value
-	move.b	d1,SMPS_Track.AMSFMSPan(a5)	; Store value
+	move.b	SMPS_Track.AMSFMSPan(a5),d0		; Get current AMS/FMS/panning
+	andi.b	#$37,d0					; Retain bits 0-2, 3-4 if set
+	or.b	d0,d1					; Mask in new value
+	move.b	d1,SMPS_Track.AMSFMSPan(a5)		; Store value
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overriden by sfx?
-	bne.s	locret_72AEA			; Return if yes
-	move.b	#$B4,d0			; Command to set AMS/FMS/panning
+	bne.s	locret_72AEA				; Return if yes
+	move.b	#$B4,d0					; Command to set AMS/FMS/panning
 	bra.w	WriteFMIorII
 ; ===========================================================================
 ; loc_72AEC: cfAlterNotes:
@@ -2570,7 +2570,7 @@ cfFadeInToPrevious:
     endif
 
 	lea	SMPS_RAM.v_music_track_ram(a6),a0
-	moveq	#SMPS_MUSIC_TRACK_COUNT-1,d0	; 1 DAC + 6 FM + 3 PSG tracks
+	moveq	#SMPS_MUSIC_TRACK_COUNT-1,d0		; 1 DAC + 6 FM + 3 PSG tracks
 ; loc_71FE6:
 .restoreplaybackloop:
 	move.b	SMPS_Track.PlaybackControlBackup(a0),SMPS_Track.PlaybackControl(a0)
@@ -2579,32 +2579,32 @@ cfFadeInToPrevious:
 
 	movea.l	a5,a3
 	moveq	#$28,d6
-	sub.b	SMPS_RAM.variables.v_fadein_counter(a6),d6			; If fade already in progress, this adjusts track volume accordingly
+	sub.b	SMPS_RAM.variables.v_fadein_counter(a6),d6	; If fade already in progress, this adjusts track volume accordingly
 	lea	SMPS_RAM.v_music_dac_track(a6),a5
 	btst	#7,SMPS_Track.PlaybackControl(a5)	; Is track playing?
-	beq.s	.fadefm				; Branch if not
+	beq.s	.fadefm					; Branch if not
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
 	move.b	d6,d0
 	add.b	d0,d0
 	add.b	d0,d0
 	add.b	d0,SMPS_Track.Volume(a5)		; Apply current volume fade-in
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding?
-	bne.s	.fadefm				; Branch if yes
+	bne.s	.fadefm					; Branch if yes
 	bsr.w	SetDACVolume
 
 .fadefm:
-	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7 ; 6 FM tracks
+	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7 	; 6 FM tracks
 	lea	SMPS_RAM.v_music_fm_tracks(a6),a5
 ; loc_72B3A:
 .fmloop:
-	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
-	bpl.s	.nextfm				; Branch if not
+	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
+	bpl.s	.nextfm					; Branch if not
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
 	add.b	d6,SMPS_Track.Volume(a5)		; Apply current volume fade-in
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding?
-	bne.s	.nextfm				; Branch if yes
+	bne.s	.nextfm					; Branch if yes
 	moveq	#0,d0
-	move.b	SMPS_Track.VoiceIndex(a5),d0	; Get voice
+	move.b	SMPS_Track.VoiceIndex(a5),d0		; Get voice
 	movea.l	SMPS_Track.VoicePtr(a5),a1		; Voice pointer
 	bsr.w	SetVoice
 ; loc_72B5C:
@@ -2615,14 +2615,14 @@ cfFadeInToPrevious:
 	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT-1,d7
 ; loc_72B66:
 .psgloop:
-	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
-	bpl.s	.nextpsg			; Branch if not
+	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
+	bpl.s	.nextpsg				; Branch if not
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
 	bsr.w	PSGNoteOff
 	add.b	d6,SMPS_Track.Volume(a5)		; Apply current volume fade-in
     if SMPS_FixBugs
 	; Clownacy | One of Valley Bell's fixes: this restores the noise mode if need be, avoiding a bug where unwanted noise plays
-	cmpi.b	#$E0,SMPS_Track.VoiceControl(a5)		; Is this a noise channel?
+	cmpi.b	#$E0,SMPS_Track.VoiceControl(a5)	; Is this a noise channel?
 	bne.s	.nextpsg				; Branch if not
 	move.b	SMPS_Track.PSGNoise(a5),(SMPS_psg_input).l	; Set noise type
     endif
@@ -2669,9 +2669,9 @@ cfNoteFillS3K:	; Ported from S3K
 ; S3K's zComputeNoteDuration
 	moveq	#0,d0
 	moveq	#0,d1
-	move.b	(a4)+,d1			; Get parameter
-	move.b	SMPS_Track.TempoDivider(a5),d0	; Get tempo divider for this track
-	mulu.w	d0,d1				; Multiply the parameter by tempo divider
+	move.b	(a4)+,d1				; Get parameter
+	move.b	SMPS_Track.TempoDivider(a5),d0		; Get tempo divider for this track
+	mulu.w	d0,d1					; Multiply the parameter by tempo divider
 	move.b	d1,SMPS_Track.NoteFillTimeout(a5)	; Note fill timeout
 	move.b	d1,SMPS_Track.NoteFillMaster(a5)	; Note fill master
 	rts
@@ -2685,7 +2685,7 @@ cfNoteFill:
 ; ===========================================================================
 ; loc_72BBE: cfAddKey:
 cfChangeTransposition:
-	move.b	(a4)+,d0		; Get parameter
+	move.b	(a4)+,d0			; Get parameter
 	add.b	d0,SMPS_Track.Transpose(a5)	; Add to transpose value
 	rts
 ; ===========================================================================
@@ -2698,7 +2698,7 @@ cfSetTempo:
 ; ===========================================================================
 ; loc_72BD0:
 cfSetTempoMod:
-	move.b	(a4)+,d0		; Get new tempo divider
+	move.b	(a4)+,d0			; Get new tempo divider
 	lea	SMPS_RAM.v_music_track_ram(a6),a0
 	moveq	#SMPS_Track.len,d1
 	moveq	#SMPS_MUSIC_TRACK_COUNT-1,d2	; 1 DAC + 6 FM + 3 PSG tracks
@@ -2712,7 +2712,7 @@ cfSetTempoMod:
 ; ===========================================================================
 ; loc_72BE6: cfChangeVolume:
 cfChangePSGVolume:
-	move.b	(a4)+,d0		; Get volume change
+	move.b	(a4)+,d0			; Get volume change
 	add.b	d0,SMPS_Track.Volume(a5)	; Apply it
 
 locret_72CAA:
@@ -2732,13 +2732,13 @@ cfStopSpecialFM4:
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
 	bsr.w	FMNoteOff
 	tst.b	SMPS_RAM.v_sfx_fm4_track(a6)		; Is SFX using FM4?
-	bmi.s	.locexit			; Branch if yes
+	bmi.s	.locexit				; Branch if yes
 	movea.l	a5,a3
 	lea	SMPS_RAM.v_music_fm4_track(a6),a5
 	movea.l	SMPS_Track.VoicePtr(a5),a1		; Voice pointer
 	bclr	#2,SMPS_Track.PlaybackControl(a5)	; Clear 'SFX is overriding' bit
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
-	move.b	SMPS_Track.VoiceIndex(a5),d0	; Current voice
+	move.b	SMPS_Track.VoiceIndex(a5),d0		; Current voice
 	bsr.s	SetVoice
 	movea.l	a3,a5
 ; loc_72C22:
@@ -2748,14 +2748,14 @@ cfStopSpecialFM4:
     endif
 ; ===========================================================================
 ; loc_72C26:
-cfSetVoice:			; Branch if yes
+cfSetVoice:
 	moveq	#0,d0
-	move.b	(a4)+,d0			; Get new voice
-	move.b	d0,SMPS_Track.VoiceIndex(a5)	; Store it
+	move.b	(a4)+,d0				; Get new voice
+	move.b	d0,SMPS_Track.VoiceIndex(a5)		; Store it
 	tst.b	SMPS_Track.VoiceControl(a5)		; Is this a PSG track?
 	bmi.s	locret_72CAA
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding this track?
-	bne.s	locret_72CAA			; Return if yes
+	bne.s	locret_72CAA				; Return if yes
 
 cfSetVoiceCont:
 	movea.l	SMPS_Track.VoicePtr(a5),a1		; SFX track voice pointer
@@ -2793,7 +2793,7 @@ SetVoice:
 
 	; Send total level
 	move.b	SMPS_Track.Volume(a5),d5	; Track volume attenuation
-	moveq	#(1*4)-1,d4		; Four operators
+	moveq	#(1*4)-1,d4			; Four operators
 
 -	move.b	d3,d0
 	move.b	(a1)+,d1
@@ -2817,7 +2817,7 @@ SetVoice:
 	addq.b	#4,d3			; Next operator
 	dbf	d4,-
 
-	move.b	#$B4,d0			; Register for AMS/FMS/Panning
+	move.b	#$B4,d0				; Register for AMS/FMS/Panning
 	move.b	SMPS_Track.AMSFMSPan(a5),d1	; Value to send
 	bra.w	WriteFMIorII
 
@@ -2830,9 +2830,9 @@ SetVoice:
 ; sub_72CB4:
 SendVoiceTL:
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding?
-	bne.s	.locret				; Return if so
+	bne.s	.locret					; Return if so
 	moveq	#0,d0
-	move.b	SMPS_Track.VoiceIndex(a5),d0	; Current voice
+	move.b	SMPS_Track.VoiceIndex(a5),d0		; Current voice
 	movea.l	SMPS_Track.VoicePtr(a5),a1
 ; loc_72CD8:
 .gotvoiceptr:
@@ -2870,17 +2870,17 @@ SendVoiceTL:
 ; ===========================================================================
 ; loc_72D30:
 cfModulation:
-	bset	#3,SMPS_Track.PlaybackControl(a5)		; Turn on modulation
-	move.w	a4,SMPS_Track.ModulationPtr+2(a5)		; Save pointer to modulation data
+	bset	#3,SMPS_Track.PlaybackControl(a5)	; Turn on modulation
+	move.w	a4,SMPS_Track.ModulationPtr+2(a5)	; Save pointer to modulation data
 	move.l	a4,d0
 	swap	d0
-	move.b	d0,SMPS_Track.ModulationPtr+1(a5)		; Save pointer to modulation data
-	move.b	(a4)+,SMPS_Track.ModulationWait(a5)		; Modulation delay
+	move.b	d0,SMPS_Track.ModulationPtr+1(a5)	; Save pointer to modulation data
+	move.b	(a4)+,SMPS_Track.ModulationWait(a5)	; Modulation delay
 	move.b	(a4)+,SMPS_Track.ModulationSpeed(a5)	; Modulation speed
 	move.b	(a4)+,SMPS_Track.ModulationDelta(a5)	; Modulation delta
 	move.b	(a4)+,d0				; Modulation steps...
 	lsr.b	#1,d0					; ... divided by 2...
-	move.b	d0,SMPS_Track.ModulationSteps(a5)		; ... before being stored
+	move.b	d0,SMPS_Track.ModulationSteps(a5)	; ... before being stored
 	clr.w	SMPS_Track.ModulationVal(a5)		; Total accumulated modulation frequency change
 	rts
 ; ===========================================================================
@@ -2898,9 +2898,9 @@ cfStopTrack:
     endif
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
 	tst.b	SMPS_Track.VoiceControl(a5)		; Is this a PSG track?
-	bmi.s	.stoppsg			; Branch if yes
-	btst	#4,SMPS_Track.VoiceControl(a5)	; Is this the DAC we are updating?
-	bne.w	.locexit			; Exit if yes
+	bmi.s	.stoppsg				; Branch if yes
+	btst	#4,SMPS_Track.VoiceControl(a5)		; Is this the DAC we are updating?
+	bne.w	.locexit				; Exit if yes
 	bsr.w	FMNoteOff
 	bra.s	.stoppedchannel
 ; ===========================================================================
@@ -2909,21 +2909,21 @@ cfStopTrack:
 	bsr.w	PSGNoteOff
 ; loc_72D78:
 .stoppedchannel:
-	tst.b	SMPS_RAM.f_voice_selector(a6)	; Are we updating SFX?
-	bpl.w	.locexit			; Exit if not
+	tst.b	SMPS_RAM.f_voice_selector(a6)		; Are we updating SFX?
+	bpl.w	.locexit				; Exit if not
 	clr.b	SMPS_RAM.variables.v_sndprio(a6)	; Clear priority
 	moveq	#0,d0
-	move.b	SMPS_Track.VoiceControl(a5),d0	; Get voice control bits
-	bmi.s	.getpsgptr			; Branch if PSG
+	move.b	SMPS_Track.VoiceControl(a5),d0		; Get voice control bits
+	bmi.s	.getpsgptr				; Branch if PSG
 	lea	SFX_BGMChannelRAM(pc),a0
 	movea.l	a5,a3
     if SMPS_EnableSpecSFX
-	cmpi.b	#4,d0				; Is this FM4?
-	bne.s	.getpointer			; Branch if not
+	cmpi.b	#4,d0					; Is this FM4?
+	bne.s	.getpointer				; Branch if not
 	tst.b	SMPS_RAM.v_spcsfx_fm4_track.PlaybackControl(a6)	; Is special SFX playing?
-	bpl.s	.getpointer			; Branch if not
+	bpl.s	.getpointer				; Branch if not
 	lea	SMPS_RAM.v_spcsfx_fm4_track(a6),a5
-	movea.l	SMPS_Track.VoicePtr(a5),a1	; Get voice pointer
+	movea.l	SMPS_Track.VoicePtr(a5),a1		; Get voice pointer
 	bra.s	.gotpointer
 ; ===========================================================================
 ; loc_72DA8:
@@ -2932,14 +2932,14 @@ cfStopTrack:
 	subq.w	#2,d0			; SFX can only use FM3 and up
 	add.w	d0,d0
 	movea.w	(a0,d0.w),a5
-	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
-	bpl.s	.novoiceupd			; Branch if not
+	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
+	bpl.s	.novoiceupd				; Branch if not
 	movea.l	SMPS_Track.VoicePtr(a5),a1		; Get voice pointer
 ; loc_72DB8:
 .gotpointer:
 	bclr	#2,SMPS_Track.PlaybackControl(a5)	; Clear 'SFX overriding' bit
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
-	move.b	SMPS_Track.VoiceIndex(a5),d0	; Current voice
+	move.b	SMPS_Track.VoiceIndex(a5),d0		; Current voice
 	bsr.w	SetVoice
 ; loc_72DC8:
 .novoiceupd:
