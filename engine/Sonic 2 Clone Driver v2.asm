@@ -781,6 +781,7 @@ Sound_PlayBGM:
 
 .nopalmode:
 	movea.l	d1,a4			; a4 now points to (uncompressed) song data
+	moveq	#0,d2
 	move.w	(a4),d2			; Load voice pointer
 	add.l	a4,d2			; It is a relative pointer
 	move.b	2+4+1(a4),d0		; Load tempo
@@ -1255,8 +1256,9 @@ Sound_PlaySpecial:
 	add.w	d7,d7
 	movea.l	(a0,d7.w),a3
 	movea.l	a3,a1
-;	moveq	#0,d0
-	move.l	(a1)+,d1	; Store voice pointer
+	moveq	#0,d1
+	move.w	(a1)+,d1	; Store voice pointer
+	add.l	a3,d1
 	move.b	(a1)+,d5			; Dividing timing
 	; DANGER! there is a missing 'moveq	#0,d7' here, without which Special SFXes whose
 	; index entry is above $3F will cause a crash. Ristar's driver didn't have this
