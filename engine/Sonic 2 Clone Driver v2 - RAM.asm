@@ -54,7 +54,6 @@ SMPS_RAM_Variables STRUCT DOTS
 	v_playsnd3:			ds.b 1	; secondary sound to play
 	v_playsnd4:			ds.b 1	; secondary music to play
 	SOUND_QUEUES_END:
-	v_playsnd0:			ds.b 1	; sound or music copied from below
 
 	v_sndprio:			ds.b 1	; sound priority (priority of new music/SFX must be higher or equal to this value or it won't play; bit 7 of priority being set prevents this value from changing)
 	v_main_tempo_timeout:		ds.b 1	; Has v_main_tempo added to it; when it carries, delays song by 1 frame
@@ -186,9 +185,9 @@ f_continuous_sfx		= 4
 	v_spindash_pitch:	ds.b 1
     endif
 
-	Saved_SR:		ds.b 2
-
 	SMPS_running_flag:	ds.b 1
+
+	Saved_SR:		ds.b 2
 SMPS_RAM ENDSTRUCT
 
     if MOMPASS=1
