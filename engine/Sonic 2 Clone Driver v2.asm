@@ -80,14 +80,14 @@ SMPS_UpdateDriver:
 	; Sonic 2-style selective PAL mode. With S2's driver, if the drowning music played on a PAL
 	; system, the drowning theme would play at 50fps speed, or 'PAL speed'
 	; this code is part of that feature's replication
-	btst	#6,(Graphics_Flags).w			; is this a PAL console?
-	beq.s	.updatemusictracks			; if not, branch
+	btst	#6,(Graphics_Flags).w					; is this a PAL console?
+	beq.s	.updatemusictracks					; if not, branch
 	btst	#f_force_pal_tempo,SMPS_RAM.variables.bitfield2(a6)	; is this song forced to play slow on PAL consoles?
-	bne.s	.updatemusictracks			; if so, skip the double-update
+	bne.s	.updatemusictracks					; if so, skip the double-update
 	subq.b	#1,SMPS_RAM.variables.v_pal_audio_countdown(a6)		; subtract 1 from the PAL countdown
-	bne.s	.updatemusictracks			; if the PAL countdown is not 0, we are not ready to double-update, branch
+	bne.s	.updatemusictracks					; if the PAL countdown is not 0, we are not ready to double-update, branch
 	move.b	#5,SMPS_RAM.variables.v_pal_audio_countdown(a6)		; if the countdown is now at 0, reset the counter...
-	bset	#f_doubleupdate,SMPS_RAM.variables.bitfield2(a6)		; ...and then set the double-update flag
+	bset	#f_doubleupdate,SMPS_RAM.variables.bitfield2(a6)	; ...and then set the double-update flag
 
 .updatemusictracks:
 	bsr.w	TempoWait
