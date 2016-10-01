@@ -938,6 +938,7 @@ Sound_PlayBGM:
 .gotchannelindex:
 	lea	SFX_BGMChannelRAM(pc),a0
 	movea.w	(a0,d0.w),a0
+	adda.l	a6,a0
 	; Clownacy | For some reason, this was changed to a bclr in S2's driver, breaking the code
 	bset	#2,SMPS_Track.PlaybackControl(a0)	; Set 'SFX is overriding' bit
 ; loc_7217C:
@@ -1125,6 +1126,7 @@ Sound_PlaySFX:
 	add.w	d3,d3
 	lea	SFX_BGMChannelRAM(pc),a5
 	movea.w	(a5,d3.w),a5
+	adda.l	a6,a5
 	bset	#2,SMPS_Track.PlaybackControl(a5)	; Mark music track as being overridden
 	bra.s	.sfxoverridedone
 ; ===========================================================================
@@ -1133,6 +1135,7 @@ Sound_PlaySFX:
 	lsr.w	#4,d3
 	lea	SFX_BGMChannelRAM(pc),a5
 	movea.w	(a5,d3.w),a5
+	adda.l	a6,a5
 	bset	#2,SMPS_Track.PlaybackControl(a5)	; Mark music track as being overridden
     if ~SMPS_FixBugs
 	; This check is in the wrong place: this should prevent PSG 1&2 from trying
@@ -1153,6 +1156,7 @@ Sound_PlaySFX:
 ; loc_7226E:
 .sfxoverridedone:
 	movea.w	SFX_SFXChannelRAM(pc,d3.w),a5
+	adda.l	a6,a5
 	movea.l	a5,a2
 	moveq	#(SMPS_Track.len/4)-1,d0	; $30 bytes
 	moveq	#0,d2
@@ -1219,26 +1223,26 @@ Sound_PlaySFX:
 ; ---------------------------------------------------------------------------
 ; RAM addresses for FM and PSG channel variables used by the SFX
 ; ---------------------------------------------------------------------------
-; dword_722EC: SFXChannelRAM:
-SFX_SFXChannelRAM:
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_sfx_fm3_track
-		dc.w 0
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_sfx_fm4_track
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_sfx_fm5_track
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_sfx_psg1_track
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_sfx_psg2_track
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_sfx_psg3_track	; Plain PSG3
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_sfx_psg3_track	; Noise
 ; dword_722CC: BGMChannelRAM:
 SFX_BGMChannelRAM:
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_music_fm3_track
+		dc.w SMPS_RAM.v_music_fm3_track
 		dc.w 0
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_music_fm4_track
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_music_fm5_track
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_music_psg1_track
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_music_psg2_track
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_music_psg3_track	; Plain PSG3
-		dc.w Clone_Driver_RAM+SMPS_RAM.v_music_psg3_track	; Noise
+		dc.w SMPS_RAM.v_music_fm4_track
+		dc.w SMPS_RAM.v_music_fm5_track
+		dc.w SMPS_RAM.v_music_psg1_track
+		dc.w SMPS_RAM.v_music_psg2_track
+		dc.w SMPS_RAM.v_music_psg3_track	; Plain PSG3
+		dc.w SMPS_RAM.v_music_psg3_track	; Noise
+; dword_722EC: SFXChannelRAM:
+SFX_SFXChannelRAM:
+		dc.w SMPS_RAM.v_sfx_fm3_track
+		dc.w 0
+		dc.w SMPS_RAM.v_sfx_fm4_track
+		dc.w SMPS_RAM.v_sfx_fm5_track
+		dc.w SMPS_RAM.v_sfx_psg1_track
+		dc.w SMPS_RAM.v_sfx_psg2_track
+		dc.w SMPS_RAM.v_sfx_psg3_track	; Plain PSG3
+		dc.w SMPS_RAM.v_sfx_psg3_track	; Noise
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -1392,9 +1396,10 @@ StopSFX:
 .getfmpointer:
 	subq.w	#2,d3				; SFX only has FM3 and up
 	add.w	d3,d3
-	lea	SFX_BGMChannelRAM(pc),a0
 	movea.l	a5,a3
-	movea.w	(a0,d3.w),a5
+	lea	SFX_BGMChannelRAM(pc),a5
+	movea.w	(a5,d3.w),a5
+	adda.l	a6,a5
 	movea.l	SMPS_Track.VoicePtr(a5),a1		; Get music voice pointer
 ; loc_72428:
 .gotfmpointer:
@@ -1420,6 +1425,7 @@ StopSFX:
 	lsr.w	#4,d3
 	lea	SFX_BGMChannelRAM(pc),a0
 	movea.w	(a0,d3.w),a0
+	adda.l	a6,a0
 ; loc_7245A:
 .gotpsgpointer:
 	bclr	#2,SMPS_Track.PlaybackControl(a0)		; Clear 'SFX is overriding' bit
@@ -2932,6 +2938,7 @@ cfStopTrack:
 	subq.w	#2,d0			; SFX can only use FM3 and up
 	add.w	d0,d0
 	movea.w	(a0,d0.w),a5
+	adda.l	a6,a5
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.novoiceupd				; Branch if not
 	movea.l	SMPS_Track.VoicePtr(a5),a1		; Get voice pointer
@@ -2963,6 +2970,7 @@ cfStopTrack:
 	lea	SFX_BGMChannelRAM(pc),a0
 	lsr.w	#4,d0
 	movea.w	(a0,d0.w),a0
+	adda.l	a6,a0
 ; loc_72DEA:
 .gotchannelptr:
 	bclr	#2,SMPS_Track.PlaybackControl(a0)	; Clear 'SFX overriding' bit
