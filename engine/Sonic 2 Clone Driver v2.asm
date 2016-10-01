@@ -15,8 +15,8 @@ SMPS_FixBugs	= 1
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-; sub_71B4C:
-UpdateMusic:
+; sub_71B4C: UpdateMusic:
+SMPS_UpdateDriver:
 	; From Vladikcomper:
 	; "This is the code to stop Z80.
 	; Thus, SMPS stops it at the beginning of its main routine execution and starts it at the end.
