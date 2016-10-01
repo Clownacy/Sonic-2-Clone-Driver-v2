@@ -1425,7 +1425,7 @@ StopSFX:
 	bclr	#2,SMPS_Track.PlaybackControl(a0)		; Clear 'SFX is overriding' bit
 	bset	#1,SMPS_Track.PlaybackControl(a0)		; Set 'track at rest' bit
 	cmpi.b	#$E0,SMPS_Track.VoiceControl(a0)		; Is this a noise channel?
-	bne.s	.nexttrack				; Branch if not
+	bne.s	.nexttrack					; Branch if not
 	move.b	SMPS_Track.PSGNoise(a0),(SMPS_psg_input).l	; Set noise type
 ; loc_72472:
 .nexttrack:
