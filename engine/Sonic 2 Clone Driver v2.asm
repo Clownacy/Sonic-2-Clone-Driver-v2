@@ -1882,17 +1882,9 @@ DoFadeIn:
 	rts
 ; ===========================================================================
 ; loc_726D6:
-.fadedone:	; Modified version of MJ's original DAC fade-in fix
+.fadedone:
 	bclr	#f_fadein_flag,SMPS_RAM.variables.bitfield2(a6)		; Stop fadein
-	tst.b	SMPS_RAM.v_music_dac_track.PlaybackControl(a6)		; is the DAC channel running?
-	bpl.s	.locret							; if not, return
-;.DAC:
-	move.b	#$B6,d0							; MJ: AMS/FMS/panning of FM6
-	move.b	SMPS_RAM.v_music_dac_track.AMSFMSPan(a6),d1		; MJ: load DAC channel's L/R/AMS/FMS value
-	bra.w	WriteFMII						; MJ: write to FM 6
-
-;.locret:
-;	rts
+	rts
 ; End of function DoFadeIn
 
 ; ===========================================================================
