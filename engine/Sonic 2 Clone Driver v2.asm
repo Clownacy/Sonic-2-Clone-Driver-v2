@@ -602,12 +602,12 @@ CycleSoundQueue:
 	tst.b	d3			; We don't want to change sound priority if it is negative
 	bmi.s	.locret
 	move.b	d3,SMPS_RAM.variables.v_sndprio(a6)	; Set new sound priority
+.locret:
 	rts
 
 ; loc_71F3E:
 .nextinput:
 	dbf	d4,.inputloop
-.locret:
 	rts
 
 .queueinput:
@@ -631,11 +631,10 @@ PlaySoundID:	; For the love of god, don't rearrange the order of the groups, it 
 	cmpi.b	#SndID__End,d7		; Is this sfx ($80-$D0)?
 	blo.w	Sound_PlaySFX		; Branch if yes
 
-	; Special SFX
     if SMPS_EnableSpecSFX
+	; Special SFX
 	cmpi.b	#SpecID__First,d7	; Is this after sfx but before spec sfx?
 	blo.s	CycleSoundQueue.locret	; Return if yes
-	; These are old special SFX slots (GHZ waterfall)
 	cmpi.b	#SpecID__End,d7		; Is this spec sfx
 	blo.w	Sound_PlaySpecial	; Branch if yes
     endif
@@ -708,8 +707,10 @@ Sound_PlayBGM:
 ; loc_71FE6:
 .clearsfxloop:
 	bclr	#2,SMPS_Track.PlaybackControl(a5)		; Clear 'SFX is overriding' bit
-	move.b	SMPS_Track.PlaybackControl(a5),SMPS_Track.PlaybackControlBackup(a5)	; Clownacy | Backup PlaybackControl...
-	bclr	#7,SMPS_Track.PlaybackControl(a5)		; ...then screw with 'track is playing' bit (we don't want the SFX update processing the music track backup!!!)
+	bclr	#7,SMPS_Track.PlaybackControl(a5)		; we don't want the SFX update processing the music track backup
+	beq.s	.notPlaying
+	bset	#2,SMPS_Track.PlaybackControl(a5)		; Backup 'track is playing' bit in bit 2
+.notPlaying:
 	lea	SMPS_Track.len(a5),a5
 	dbf	d0,.clearsfxloop
 
@@ -755,7 +756,6 @@ Sound_PlayBGM:
 	move.b	(a0)+,(a1)+
     endif
 
-	;bset	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
 	clr.b	SMPS_RAM.variables.v_sndprio(a6)		; Clear priority twice?
 	bra.s	.bgm_loadMusic
 ; ===========================================================================
@@ -2570,7 +2570,11 @@ cfFadeInToPrevious:
 	moveq	#SMPS_MUSIC_TRACK_COUNT-1,d0		; 1 DAC + 6 FM + 3 PSG tracks
 ; loc_71FE6:
 .restoreplaybackloop:
-	move.b	SMPS_Track.PlaybackControlBackup(a0),SMPS_Track.PlaybackControl(a0)
+	bclr	#2,SMPS_Track.PlaybackControl(a0)
+	beq.s	.notPlaying
+	bset	#7,SMPS_Track.PlaybackControl(a0)
+
+.notPlaying:
 	lea	SMPS_Track.len(a0),a0
 	dbf	d0,.restoreplaybackloop
 

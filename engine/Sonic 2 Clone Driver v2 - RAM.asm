@@ -37,7 +37,6 @@ SMPS_Track STRUCT DOTS
 	Detune:			ds.b 1		; FM/PSG only
 	PSGNoise:		ds.b 1		; PSG only
 
-	PlaybackControlBackup:	;ds.b 1		; Clownacy | New, used by music tracks only (1UP backup)
 	VoicePtr:		ds.l 1		; This used to be FM SFX only (well, technically all SFX tracks), but now music and Special SFX use it too
 
 	LoopCounters:		ds.l 3		; All tracks
