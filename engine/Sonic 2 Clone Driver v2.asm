@@ -516,20 +516,20 @@ DoUnpauseMusic:
 	; Resume music FM channels
 	lea	SMPS_RAM.v_music_fm_tracks(a6),a5
 	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7		; 6 FM
-	bsr.s	ResumeFMTrack
+	bsr.s	RestoreFMTrackVoice
 
 	; Resume SFX FM channels
 	move.b	#$80,SMPS_RAM.f_voice_selector(a6)
 	lea	SMPS_RAM.v_sfx_fm_tracks(a6),a5
 	moveq	#SMPS_SFX_FM_TRACK_COUNT-1,d7		; 3 FM
-	bsr.s	ResumeFMTrack
+	bsr.s	RestoreFMTrackVoice
 
     if SMPS_EnableSpecSFX
 	; Resume Special SFX FM channels
 	move.b	#$40,SMPS_RAM.f_voice_selector(a6)
 	lea	SMPS_RAM.v_spcsfx_fm_tracks(a6),a5
 	moveq	#SMPS_SPECIAL_SFX_FM_TRACK_COUNT-1,d7	; 1 FM
-	bsr.s	ResumeFMTrack
+	bsr.s	RestoreFMTrackVoice
     endif
 
 	clr.b	SMPS_RAM.f_voice_selector(a6)			; Now at SFX tracks
@@ -549,7 +549,7 @@ locret_71EFE:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 ; ResumeTrack:
-ResumeFMTrack:
+RestoreFMTrackVoice:
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.nextTrack				; Branch if not
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding track?
