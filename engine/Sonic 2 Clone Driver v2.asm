@@ -611,7 +611,7 @@ CycleSoundQueue:
 	rts
 
 .queueinput:
-	bra.w	PlaySoundID
+;	bra.s	PlaySoundID
 ; End of function CycleSoundQueue
 
 
