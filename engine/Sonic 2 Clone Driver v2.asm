@@ -367,11 +367,11 @@ FinishTrackUpdate:
 	btst	#4,SMPS_Track.PlaybackControl(a5)		; Is track set to not attack note?
 	bne.s	locret_71D9C				; If so, branch
 	move.b	SMPS_Track.NoteFillMaster(a5),SMPS_Track.NoteFillTimeout(a5) ; Reset note fill timeout
-	; Clownacy | We only want VolFlutter clearing on PSG tracks, now.
+	; Clownacy | We only want VolEnvIndex clearing on PSG tracks, now.
 	; Non-PSG tracks use the RAM for something else.
 	tst.b	SMPS_Track.VoiceControl(a5)			; Is this a psg track?
 	bpl.s	.notpsg					; If not, branch
-	clr.b	SMPS_Track.VolFlutter(a5)			; Reset PSG flutter index
+	clr.b	SMPS_Track.VolEnvIndex(a5)			; Reset PSG volume envelope index
 .notpsg:
 	btst	#3,SMPS_Track.PlaybackControl(a5)		; Is modulation on?
 	beq.s	locret_71D9C				; If not, return
@@ -653,7 +653,7 @@ PlaySoundID:	; For the love of god, don't rearrange the order of the groups, it 
 Sound_ExIndex:
 ptr_flgFA:	dc.w	StopSFX-Sound_ExIndex		; $FA	; Clownacy | Brand new. Was missing from the stock S1 driver because Sonic Team had stripped out various unused components of the driver
 ptr_flgFB:	dc.w	FadeOutMusic-Sound_ExIndex	; $FB	; Clownacy | Was $E0
-ptr_flgFC:	dc.w	PlaySega-Sound_ExIndex		; $FC	; Clownacy | Was $E1
+ptr_flgFC:	dc.w	PlaySegaSound-Sound_ExIndex	; $FC	; Clownacy | Was $E1
 ptr_flgFD:	dc.w	SpeedUpMusic-Sound_ExIndex	; $FD	; Clownacy | Was $E2
 ptr_flgFE:	dc.w	SlowDownMusic-Sound_ExIndex	; $FE	; Clownacy | Was $E3
 ptr_flgFF:	dc.w	StopAllSound-Sound_ExIndex	; $FF	; Clownacy | Was $E4
@@ -661,8 +661,8 @@ ptr_flgend
 ; ---------------------------------------------------------------------------
 ; Play "Say-gaa" PCM sound
 ; ---------------------------------------------------------------------------
-; Sound_E1:
-PlaySega:
+; Sound_E1: PlaySega:
+PlaySegaSound:
 	SMPS_stopZ80
 	SMPS_waitZ80
 	st.b	(SMPS_z80_ram+MegaPCM_DAC_Type).l	; This is a DAC SFX; ignore music DAC volume
@@ -2193,21 +2193,21 @@ PSGDoVolFX:
 
 PSGDoVolFX_Loop:
 	moveq	#0,d0
-	move.b	SMPS_Track.VolFlutter(a5),d0	; Get flutter index
-	addq.b	#1,SMPS_Track.VolFlutter(a5)	; Increment flutter index
-	move.b	(a0,d0.w),d0			; Get flutter value
+	move.b	SMPS_Track.VolEnvIndex(a5),d0	; Get volume envelope index
+	addq.b	#1,SMPS_Track.VolEnvIndex(a5)	; Increment volume envelope index
+	move.b	(a0,d0.w),d0			; Get volume envelope value
 	bpl.s	.gotflutter			; If it is not a terminator, branch
 	cmpi.b	#$80,d0				; Clownacy | Third most commonly used
-	beq.s	VolEnv_Reset			; 80 - loop back to beginning
+	beq.s	VolEnvReset			; 80 - loop back to beginning
 	cmpi.b	#$81,d0				; Clownacy | Most commonly used
-	beq.s	VolEnv_Hold			; 81 - hold at current level
+	beq.s	VolEnvHold			; 81 - hold at current level
 	cmpi.b	#$82,d0				; Clownacy | Fourth most commonly used
-	beq.s	VolEnv_Jump2Idx			; 82 xx	- jump to byte xx
+	beq.s	VolEnvJump2Idx			; 82 xx	- jump to byte xx
 	cmpi.b	#$83,d0				; Clownacy | Second most commonly used
-	beq.s	VolEnv_Off			; 83 - turn Note Off
+	beq.s	VolEnvOff			; 83 - turn Note Off
 ; loc_72960:
 .gotflutter:
-	add.w	d0,d6		; Add flutter to volume
+	add.w	d0,d6		; Add volume envelope value to volume
 ;	cmpi.b	#$10,d6		; Is volume $10 or higher?	; Clownacy | This correction is moved to SetPSGVolume (the S2 way)
 ;	blo.s	SetPSGVolume	; Branch if not
 ;	moveq	#$F,d6		; Limit to silence and fall through
@@ -2252,26 +2252,26 @@ PSGCheckNoteFill:
 ; ===========================================================================
 	; Clownacy | This isn't used by any current PSGs
 	; but for the sake of forwards compatibility, it's here
-VolEnv_Jump2Idx:
-	move.b	1(a0,d0.w),SMPS_Track.VolFlutter(a5)	; Change flutter index to the byte following the flag
+VolEnvJump2Idx:
+	move.b	1(a0,d0.w),SMPS_Track.VolEnvIndex(a5)	; Change flutter index to the byte following the flag
 	bra.s	PSGDoVolFX_Loop
 
 ; ===========================================================================
 
-VolEnv_Reset:	; For compatibility with S3K
-	clr.b	SMPS_Track.VolFlutter(a5)
+VolEnvReset:	; For compatibility with S3K
+	clr.b	SMPS_Track.VolEnvIndex(a5)
 	bra.s	PSGDoVolFX_Loop
 
 ; ===========================================================================
 ; loc_7299A: FlutterDone:
-VolEnv_Hold:
-	subq.b	#1,SMPS_Track.VolFlutter(a5)		; Decrement flutter index
+VolEnvHold:
+	subq.b	#1,SMPS_Track.VolEnvIndex(a5)		; Decrement flutter index
 	rts
 
 ; ===========================================================================
 
-VolEnv_Off:	; For compatibility with S3K
-	subq.b	#1,SMPS_Track.VolFlutter(a5)		; Decrement flutter index
+VolEnvOff:	; For compatibility with S3K
+	subq.b	#1,SMPS_Track.VolEnvIndex(a5)		; Decrement flutter index
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
 ;	bra.s	PSGNoteOff
 

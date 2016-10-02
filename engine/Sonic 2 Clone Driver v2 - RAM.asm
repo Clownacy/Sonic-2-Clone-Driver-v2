@@ -5,7 +5,7 @@ SMPS_Track STRUCT DOTS
 	PlaybackControl:	ds.b 1		; All tracks
 	VoiceControl:		ds.b 1		; All tracks
 
-	VolFlutter:		;ds.b 1		; PSG only	; Clownacy | Now shared with panning RAM
+	VolEnvIndex:		;ds.b 1		; PSG only	; Clownacy | Now shared with panning RAM
 	AMSFMSPan:		ds.b 1		; FM/DAC only
 
 	TempoDivider:		ds.b 1		; All tracks
