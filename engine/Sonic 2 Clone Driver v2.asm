@@ -550,13 +550,14 @@ locret_71EFE:
 
 ResumeTrack:
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
-	bpl.s	+					; Branch if not
+	bpl.s	.nextTrack				; Branch if not
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding track?
-	bne.s	+					; Branch if not
+	bne.s	.nextTrack				; Branch if so
 	moveq	#0,d0
 	move.b	SMPS_Track.VoiceIndex(a5),d0	; Current track FM instrument
 	bsr.w	cfSetVoiceCont
-+
+
+.nextTrack:
 	lea	SMPS_Track.len(a5),a5	; Advance to next track
 	dbf	d7,ResumeTrack		; loop
 	rts
