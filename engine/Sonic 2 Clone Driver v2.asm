@@ -1503,7 +1503,7 @@ FadeOutMusic:
 
 ; sub_72504:
 DoFadeOut:
-	move.b	SMPS_RAM.variables.v_fadeout_delay(a6),d0	; Has fadeout delay expired?
+	tst.b	SMPS_RAM.variables.v_fadeout_delay(a6)		; Has fadeout delay expired?
 	beq.s	.continuefade					; Branch if yes
 	subq.b	#1,SMPS_RAM.variables.v_fadeout_delay(a6)
 	rts
