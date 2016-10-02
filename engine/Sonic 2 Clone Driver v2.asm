@@ -492,7 +492,7 @@ locret_71E48:
 DoPauseMusic:
 	bmi.s	DoUnpauseMusic		; Branch if music is being unpaused
 	cmpi.b	#2,SMPS_RAM.f_stopmusic(a6)
-	beq.w	locret_71EFE
+	beq.s	.locret
 	move.b	#2,SMPS_RAM.f_stopmusic(a6)
 	bsr.w	FMSilenceAll
 	bsr.w	PSGSilenceAll
@@ -507,6 +507,7 @@ DoPauseMusic:
 	move.b  #$7F,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; pause DAC
 	SMPS_startZ80
 
+.locret:
 	rts
 ; ===========================================================================
 ; loc_71E94: .unpausemusic: UnpauseMusic:
@@ -516,23 +517,24 @@ DoUnpauseMusic:
 	; Resume music FM channels
 	lea	SMPS_RAM.v_music_fm_tracks(a6),a5
 	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7		; 6 FM
-	bsr.s	RestoreFMTrackVoice
+	bsr.s	RestoreFMTrackVoices
 
 	; Resume SFX FM channels
-	move.b	#$80,SMPS_RAM.f_voice_selector(a6)
+	move.b	#$80,SMPS_RAM.f_voice_selector(a6)	; SFX mode
 	lea	SMPS_RAM.v_sfx_fm_tracks(a6),a5
 	moveq	#SMPS_SFX_FM_TRACK_COUNT-1,d7		; 3 FM
-	bsr.s	RestoreFMTrackVoice
+	bsr.s	RestoreFMTrackVoices
 
     if SMPS_EnableSpecSFX
 	; Resume Special SFX FM channels
-	move.b	#$40,SMPS_RAM.f_voice_selector(a6)
+	move.b	#$40,SMPS_RAM.f_voice_selector(a6)	; Special SFX mode
 	lea	SMPS_RAM.v_spcsfx_fm_tracks(a6),a5
 	moveq	#SMPS_SPECIAL_SFX_FM_TRACK_COUNT-1,d7	; 1 FM
-	bsr.s	RestoreFMTrackVoice
+	bsr.s	RestoreFMTrackVoices
     endif
 
-	clr.b	SMPS_RAM.f_voice_selector(a6)			; Now at SFX tracks
+	clr.b	SMPS_RAM.f_voice_selector(a6)		; Music mode
+
 	; From Vladikcomper:
 	; "Playing sample $00 cancels pause mode."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
@@ -541,15 +543,13 @@ DoUnpauseMusic:
 	clr.b  (SMPS_z80_ram+MegaPCM_DAC_Number).l	; unpause DAC
 	SMPS_startZ80
 
-; loc_71EFE:
-locret_71EFE:
 	rts
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 ; ResumeTrack:
-RestoreFMTrackVoice:
+RestoreFMTrackVoices:
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.nextTrack				; Branch if not
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding track?
@@ -560,9 +560,9 @@ RestoreFMTrackVoice:
 
 .nextTrack:
 	lea	SMPS_Track.len(a5),a5	; Advance to next track
-	dbf	d7,ResumeFMTrack	; loop
+	dbf	d7,RestoreFMTrackVoices	; loop
 	rts
-; End of function ResumeFMTrack
+; End of function RestoreFMTrackVoices
 
 ; ===========================================================================
 
