@@ -2183,9 +2183,9 @@ PSGUpdateVolFX:
 ; loc_7292E:
 PSGDoVolFX:
 	move.b	SMPS_Track.Volume(a5),d6	; Get volume
-	beq.s	SetPSGVolume
 	moveq	#0,d0
 	move.b	SMPS_Track.VoiceIndex(a5),d0	; Get PSG tone
+	beq.s	SetPSGVolume
 	add.w	d0,d0
 	add.w	d0,d0
 	lea	(PSG_Index).l,a0
