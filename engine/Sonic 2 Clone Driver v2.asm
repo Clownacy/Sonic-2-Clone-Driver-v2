@@ -2638,7 +2638,7 @@ cfFadeInToPrevious:
 	bset	#f_fadein_flag,SMPS_RAM.variables.bitfield2(a6)	; Trigger fade-in
 	move.b	#$28,SMPS_RAM.variables.v_fadein_counter(a6)	; Fade-in delay
 	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
-	addq.w	#8,sp				; Tamper return value so we don't return to caller
+	addi.w	#4*3,sp				; Tamper return value so we don't return to caller
 	rts
 ; ===========================================================================
 ; loc_72B9E:
