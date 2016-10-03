@@ -567,6 +567,7 @@ RestoreFMTrackVoices:
 
 ; Sound_Play:
 CycleSoundQueue:
+	lea	(SoundIndex).l,a0
 	lea	SMPS_RAM.variables.v_playsnd1(a6),a1	; Load music track number
 	move.b	SMPS_RAM.variables.v_sndprio(a6),d3	; Get priority of currently playing SFX
 	moveq	#SMPS_SOUND_QUEUE_COUNT-1,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
@@ -584,7 +585,6 @@ CycleSoundQueue:
 	blo.s	.queueinput		; If it was music, branch
 	add.w	d0,d0
 	add.w	d0,d0
-	lea	(SoundIndex).l,a0
 	move.b	(a0,d0.w),d2		; Get sound type
 	cmp.b	d3,d2			; Is it a lower priority sound?
 	blo.s	.lowerpriority		; Branch if yes
