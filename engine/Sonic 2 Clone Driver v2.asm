@@ -64,7 +64,7 @@ SMPS_UpdateDriver:
 	bsr.w	DoFadeIn
 ; loc_71BB2:
 .skipfadein:
-	tst.l	SMPS_RAM.variables.queue.v_playsnd1(a6)	; Is a music or sound queued for played?
+	tst.l	SMPS_RAM.variables.queue(a6)		; Is a music or sound queued for played?
 	beq.s	.nosndinput				; If not, branch
 	bsr.w	CycleSoundQueue
 ; loc_71BBC:
@@ -568,7 +568,7 @@ RestoreFMTrackVoices:
 ; Sound_Play:
 CycleSoundQueue:
 	lea	(SoundIndex).l,a0
-	lea	SMPS_RAM.variables.queue.v_playsnd1(a6),a1	; Load music track number
+	lea	SMPS_RAM.variables.queue(a6),a1		; Load music track number
 	move.b	SMPS_RAM.variables.v_sndprio(a6),d3	; Get priority of currently playing SFX
 	moveq	#SMPS_Queue.len-1,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
 	moveq	#0,d0
@@ -1687,7 +1687,7 @@ InitMusicPlayback:
 	move.b	SMPS_RAM.variables.bitfield2(a6),d4
 	andi.b	#(1<<f_1up_playing)|(1<<f_speedup),d4
 	move.b	SMPS_RAM.variables.v_fadein_counter(a6),d5
-	move.l	SMPS_RAM.variables.queue.v_playsnd1(a6),d6
+	move.l	SMPS_RAM.variables.queue(a6),d6
 
 	; Clear variables
 	lea	SMPS_RAM.variables(a6),a0
@@ -1726,7 +1726,7 @@ InitMusicPlayback:
 	move.b	d3,SMPS_RAM.variables.v_sndprio(a6)
 	move.b	d4,SMPS_RAM.variables.bitfield2(a6)
 	move.b	d5,SMPS_RAM.variables.v_fadein_counter(a6)
-	move.l	d6,SMPS_RAM.variables.queue.v_playsnd1(a6)
+	move.l	d6,SMPS_RAM.variables.queue(a6)
 	moveq	#0|((MegaPCM_VolumeTbls&$F000)>>8),d0	; Clownacy | Reset DAC volume to maximum
 	bsr.w	WriteDACVolume
 
