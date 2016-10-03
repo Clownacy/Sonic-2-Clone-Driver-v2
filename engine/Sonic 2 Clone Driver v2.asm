@@ -580,9 +580,9 @@ CycleSoundQueue:
 	cmpi.b	#MusID__First,d0	; Make it into 0-based index
 	blo.s	.nextinput		; If negative (i.e., it was $80 or lower), branch
 	cmpi.b	#SndID__End,d0		; Is it a special command?
-	bhs.s	.queueinput		; If so, branch
+	bhs.s	PlaySoundID		; If so, branch
 	subi.b	#SndID__First,d0	; Subtract first SFX index
-	blo.s	.queueinput		; If it was music, branch
+	blo.s	PlaySoundID		; If it was music, branch
 	add.w	d0,d0
 	add.w	d0,d0
 	move.b	(a0,d0.w),d2		; Get sound type
@@ -590,7 +590,7 @@ CycleSoundQueue:
 	blo.s	.lowerpriority		; Branch if yes
 	move.b	d2,d3			; Store new priority
 	movem.l	d0-a6,-(sp)
-	bsr.s	.queueinput
+	bsr.s	PlaySoundID
 	movem.l	(sp)+,d0-a6
 
 .lowerpriority:
@@ -604,9 +604,6 @@ CycleSoundQueue:
 .nextinput:
 	dbf	d4,.inputloop
 	rts
-
-.queueinput:
-;	bra.s	PlaySoundID
 ; End of function CycleSoundQueue
 
 
