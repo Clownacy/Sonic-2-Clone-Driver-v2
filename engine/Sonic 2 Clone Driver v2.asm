@@ -1514,7 +1514,7 @@ DoFadeOut:
 	tst.b	SMPS_Track.PlaybackControl(a5)			; Is track playing?
 	bpl.s	.fadefm						; Branch if not
 	addq.b	#4,SMPS_Track.Volume(a5)			; Increase volume attenuation
-	bpl.s	.senddacvol					; Branch if still positive
+	bpl.s	.senddacvol					; Branch if maximum reached (channel is silent)
 	bclr	#7,SMPS_Track.PlaybackControl(a5)		; Stop track
 	bra.s	.fadefm
 ; ===========================================================================
@@ -1889,7 +1889,7 @@ DoFadeIn:
 SetDACVolume:
 	moveq	#0,d0
 	move.b	SMPS_Track.Volume(a5),d0
-	cmpi.b	#$7F,d0	; $7F is the last valid volume
+	cmpi.b	#($10<<3)-1,d0	; $7F is the last valid volume
 	bhi.s	.maxreached
 	lsr.b	#3,d0
 	andi.b	#$F,d0
