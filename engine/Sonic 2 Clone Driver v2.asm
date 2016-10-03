@@ -589,7 +589,9 @@ CycleSoundQueue:
 	cmp.b	d3,d2			; Is it a lower priority sound?
 	blo.s	.lowerpriority		; Branch if yes
 	move.b	d2,d3			; Store new priority
+	movem.l	d0-a6,-(sp)
 	bsr.s	.queueinput
+	movem.l	(sp)+,d0-a6
 
 .lowerpriority:
 	tst.b	d3			; We don't want to change sound priority if it is negative
