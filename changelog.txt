@@ -392,3 +392,16 @@ XX/XX/XXXX
 - Split DAC table from Mega PCM Z80 .asm file
 - Rearranged file/folder structure, so files meant for the user to edit (like DAC samples and PSG envelopes) are in the root folder, the off-limits engine is in the 'engine' folder, and the optional/only-useful-during-installation files are kept in an 'extra' folder
 - Added SMPS2ASM equates for Chaotix' PWM samples (these equates were also applied to the included Chaotix dump)
+- Fixed typo in smpsHeaderVoiceUVB, causing errors
+- Restored music/SFX/Special SFX FM voice pointer to relative 16-bit value
+- Changed some labels and symbols to suit ValleyBell's suggestions (https://vgmrips.net/misc/SMPS_Disasm_Terms.txt)
+- Added PWMSilenceAll, so PWM is silenced with the rest of the driver
+- Changed internal branch tables to offset tables
+- Removed 68k-based Sega chant playback support
+- Removed v_playsnd0 and f_voice_selector, after making them redundant
+- Renamed UpdateMusic, so old S1 code that accidentally still called the driver should correctly flag an error now
+- In-driver track RAM addresses are now relative (this is in preparation of possible binary-blob)
+- Changed PauseMusic to not "resume" DAC channel (this should be pointless, since that track doesn't use voices, and Mega PCM handles panning)
+- Removed a redundant bugfix (sorry, Markey)
+- Removed PlaybackControlBackup from track RAM/SMPS_Track (relevant data is stored in unused bit of PlaybackControl)
+- Fixed bug introduced in v2.7, where the extra life jingle would cause the level's music to have a delayed DAC track
