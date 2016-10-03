@@ -31,5 +31,3 @@ SMPS_SFX_PSG_TRACK_COUNT = ((SMPS_RAM.v_sfx_psg_tracks_end-SMPS_RAM.v_sfx_psg_tr
 SMPS_SPECIAL_SFX_TRACK_COUNT = ((SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.v_spcsfx_track_ram)/SMPS_Track.len)
 SMPS_SPECIAL_SFX_FM_TRACK_COUNT = ((SMPS_RAM.v_spcsfx_fm_tracks_end-SMPS_RAM.v_spcsfx_fm_tracks)/SMPS_Track.len)
 SMPS_SPECIAL_SFX_PSG_TRACK_COUNT = ((SMPS_RAM.v_spcsfx_psg_tracks_end-SMPS_RAM.v_spcsfx_psg_tracks)/SMPS_Track.len)
-
-SMPS_SOUND_QUEUE_COUNT = (SMPS_RAM_Variables.SOUND_QUEUES_END-SMPS_RAM_Variables.SOUND_QUEUES_START)

@@ -44,15 +44,21 @@ SMPS_Track STRUCT DOTS
 SMPS_Track ENDSTRUCT
 
 ; ---------------------------------------------------------------------------
-; Global sound driver variables
+; Queue variables
 ; ---------------------------------------------------------------------------
-SMPS_RAM_Variables STRUCT DOTS
-	SOUND_QUEUES_START:
+SMPS_Queue STRUCT DOTS
 	v_playsnd1:			ds.b 1	; music to play	; Clownacy | Note to all, must be on even address!
 	v_playsnd2:			ds.b 1	; sound to play
 	v_playsnd3:			ds.b 1	; secondary sound to play
 	v_playsnd4:			ds.b 1	; secondary music to play
-	SOUND_QUEUES_END:
+SMPS_Queue ENDSTRUCT
+
+; ---------------------------------------------------------------------------
+; Global sound driver variables
+; ---------------------------------------------------------------------------
+SMPS_RAM_Variables STRUCT DOTS
+	SMPS_RAM_even
+	queue:				SMPS_Queue
 
 	v_sndprio:			ds.b 1	; sound priority (priority of new music/SFX must be higher or equal to this value or it won't play; bit 7 of priority being set prevents this value from changing)
 	v_main_tempo_timeout:		ds.b 1	; Has v_main_tempo added to it; when it carries, delays song by 1 frame

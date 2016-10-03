@@ -27,12 +27,12 @@ SMPS_LoadDACDriver:
 ; ---------------------------------------------------------------------------
 ; sub_135E: PlayMusic:
 SMPS_QueueSound1:
-	tst.b	(Clone_Driver_RAM+SMPS_RAM.variables.v_playsnd1).w
+	tst.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
 	bne.s	+
-	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.v_playsnd1).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
 	rts
 +
-	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.v_playsnd4).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd4).w
 	rts
 ; End of function SMPS_QueueSound1
 
@@ -48,7 +48,7 @@ SMPS_QueueSound2Local:
     endif
 ; sub_1370: PlaySound:
 SMPS_QueueSound2:
-	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.v_playsnd2).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
 +	rts
 ; End of function SMPS_QueueSound2
 
@@ -57,7 +57,7 @@ SMPS_QueueSound2:
 ; ---------------------------------------------------------------------------
 ; sub_1376: PlaySoundStereo:
 SMPS_QueueSound3:
-	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.v_playsnd3).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3).w
 	rts
 ; End of function SMPS_QueueSound3
 
