@@ -160,8 +160,6 @@ SMPS_RAM STRUCT DOTS
 	SMPS_RAM_even
 	variables_backup:	SMPS_RAM_Variables
 
-	f_voice_selector:	ds.b 1	; $00 = use music voice pointer; $80 = use track voice pointer
-
 	f_stopmusic:		ds.b 1	; flag set to stop music when paused
 
 	bitfield1:		ds.b 1
@@ -184,9 +182,9 @@ f_continuous_sfx		= 4
 	v_spindash_pitch:	ds.b 1
     endif
 
-	SMPS_running_flag:	ds.b 1
-
 	Saved_SR:		ds.b 2
+
+	SMPS_running_flag:	ds.b 1
 SMPS_RAM ENDSTRUCT
 
     if MOMPASS=1

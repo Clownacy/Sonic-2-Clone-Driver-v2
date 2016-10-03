@@ -52,7 +52,6 @@ SMPS_UpdateDriver:
     else
 	lea	(Clone_Driver_RAM).w,a6
     endif
-	clr.b	SMPS_RAM.f_voice_selector(a6)
 	tst.b	SMPS_RAM.f_stopmusic(a6)	; Is music paused?
 	bne.w	DoPauseMusic			; If yes, branch
 	move.b	SMPS_RAM.variables.v_fadeout_counter(a6),d0
@@ -137,7 +136,6 @@ SMPS_UpdateDriver:
 	bne.s	.updatemusictracks		; Was the flag set? If so, double-update
 
 ;.updatesfxtracks:
-	move.b	#$80,SMPS_RAM.f_voice_selector(a6)					; Now at SFX tracks
 	moveq	#SMPS_SFX_FM_TRACK_COUNT-1,d7	; SFX only has access to 3 FM tracks
 ; loc_71C04:
 .sfxfmloop:
@@ -161,7 +159,6 @@ SMPS_UpdateDriver:
 	dbf	d7,.sfxpsgloop
 
     if SMPS_EnableSpecSFX
-	move.b	#$40,SMPS_RAM.f_voice_selector(a6)	; Now at special SFX tracks
 	lea	SMPS_Track.len(a5),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
 	bpl.s	.specfmdone			; Branch if not
@@ -520,20 +517,16 @@ DoUnpauseMusic:
 	bsr.s	RestoreFMTrackVoices
 
 	; Resume SFX FM channels
-	move.b	#$80,SMPS_RAM.f_voice_selector(a6)	; SFX mode
 	lea	SMPS_RAM.v_sfx_fm_tracks(a6),a5
 	moveq	#SMPS_SFX_FM_TRACK_COUNT-1,d7		; 3 FM
 	bsr.s	RestoreFMTrackVoices
 
     if SMPS_EnableSpecSFX
 	; Resume Special SFX FM channels
-	move.b	#$40,SMPS_RAM.f_voice_selector(a6)	; Special SFX mode
 	lea	SMPS_RAM.v_spcsfx_fm_tracks(a6),a5
 	moveq	#SMPS_SPECIAL_SFX_FM_TRACK_COUNT-1,d7	; 1 FM
 	bsr.s	RestoreFMTrackVoices
     endif
-
-	clr.b	SMPS_RAM.f_voice_selector(a6)		; Music mode
 
 	; From Vladikcomper:
 	; "Playing sample $00 cancels pause mode."
@@ -2910,8 +2903,10 @@ cfStopTrack:
 	bsr.w	PSGNoteOff
 ; loc_72D78:
 .stoppedchannel:
-	tst.b	SMPS_RAM.f_voice_selector(a6)		; Are we updating SFX?
-	bpl.w	.locexit				; Exit if not
+	move.l	#SMPS_RAM.v_sfx_track_ram,d0
+	add.l	a6,d0
+	cmpa.l	d0,a5					; Are we updating SFX?
+	blo.w	.locexit				; Exit if not
 	clr.b	SMPS_RAM.variables.v_sndprio(a6)	; Clear priority
 	moveq	#0,d0
 	move.b	SMPS_Track.VoiceControl(a5),d0		; Get voice control bits
