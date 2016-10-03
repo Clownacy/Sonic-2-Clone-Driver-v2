@@ -966,7 +966,12 @@ Sound_PlayBGM:
 	adda.w	d6,a5
 	dbf	d5,.psgnoteoffloop	; Run all PSG tracks
 
+    if SMPS_EnablePWM
+	bra.w	PWMSilenceAll		; TODO - We don't properly support PWM SFX yet, but when we do, this needs changing
+    else
 	rts
+    endif
+
 ; ===========================================================================
 ChannelInitBytes:
 ; byte_721BA:
