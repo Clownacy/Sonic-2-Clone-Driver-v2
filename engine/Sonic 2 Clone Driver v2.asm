@@ -1071,7 +1071,7 @@ Sound_PlaySFX:
 	add.w	d7,d7
 	lea	(SoundIndex).l,a0
 	movea.l	(a0,d7.w),a0
-	move.b	3+2(a0),SMPS_RAM.variables.v_contsfx_channels(a6)	; Save number of channels in SFX
+	move.b	3(a0),SMPS_RAM.variables.v_contsfx_channels(a6)	; Save number of channels in SFX
 	rts
 
 .sfx_notsame:
