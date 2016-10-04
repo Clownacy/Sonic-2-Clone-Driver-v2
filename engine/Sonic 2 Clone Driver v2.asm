@@ -2909,9 +2909,8 @@ cfStopTrack:
 	bsr.w	PSGNoteOff
 ; loc_72D78:
 .stoppedchannel:
-	move.l	#SMPS_RAM.v_sfx_track_ram,d0
-	add.l	a6,d0
-	cmpa.l	d0,a5					; Are we updating SFX?
+	lea	SMPS_RAM.v_sfx_track_ram(a6),a0
+	cmpa.l	a0,a5					; Are we updating SFX?
 	blo.w	.locexit				; Exit if not
 	clr.b	SMPS_RAM.variables.v_sndprio(a6)	; Clear priority
 	moveq	#0,d0
