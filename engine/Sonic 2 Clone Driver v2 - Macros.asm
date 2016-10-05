@@ -71,7 +71,7 @@ SMPS_waitYM macro target
 	; If you're gonna overclock your 68k, you may need to pad this out with more 'nop's to avoid missed writes
 .loop:	tst.b	(a0)	; 8(2/0)
 	bmi.s	.loop	; 10(2/0) | 8(1/0)
-	endm	; optimal cycle count: 24(5/0)
+	endm	; optimal cycle count: 28(6/0)
 
 ; ---------------------------------------------------------------------------
 ; pause music

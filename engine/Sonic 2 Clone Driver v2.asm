@@ -1973,6 +1973,8 @@ WriteFMIorII:
 ;	32(6/2) + 80(17/0) (Interestingly, this uses the Type 1a version, with some nops, so is this an *early* Type 1b driver?)
 ;  Mega PCM standard:
 ;	52(10/3) + 102(21/0)
+;  Sonic 2 Clone Driver v2:
+;	40(7/3) + 84(18/0)
 ;  Golden Axe 2:
 ;	32(6/2) + 44(9/0)
 ;  Nekketsu Koukou Dodgeball Bu Soccer Hen MD:
@@ -1998,13 +2000,13 @@ WriteFMI:
 	SMPS_stopZ80
 	SMPS_waitZ80
 	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
-	SMPS_waitYM				; 24(5/0)
+	SMPS_waitYM				; 28(6/0)
 	move.b	d0,(a0)+	; ym2612_a0	; 8(1/1)
-	SMPS_waitYM				; 8(2/0) + 18(4/0)
+	SMPS_waitYM				; 28(6/0)
 	move.b	d1,(a0)		; ym2612_d0	; 8(1/1)
-	SMPS_waitYM				; 10(2/0) + 18(4/0)
+	SMPS_waitYM				; 28(6/0)
 	move.b	#$2A,-(a0)	; ym2612_a0	; 12(2/1)
-	SMPS_startZ80				; Total: 40(7/3) + 78(17/0)
+	SMPS_startZ80				; Total: 40(7/3) + 84(18/0)
 	rts
 ; End of function WriteFMI
 
@@ -2022,13 +2024,13 @@ WriteFMII:
 	SMPS_stopZ80
 	SMPS_waitZ80
 	lea	(SMPS_ym2612_a1).l,a0		; 12(3/0)
-	SMPS_waitYM				; 24(5/0)
-	move.b	d0,(a0)+	; ym2612_a1	; 12(2/1)
-	SMPS_waitYM				; 24(5/0)
-	move.b	d1,(a0)		; ym2612_d1	; 12(2/1)
-	SMPS_waitYM				; 24(5/0)
-	move.b	#$2A,SMPS_ym2612_a0-SMPS_ym2612_d1(a0)	; ym2612_a0	; 12(2/1)
-	SMPS_startZ80				; Total: 48(9/3) + 72(15/0)
+	SMPS_waitYM				; 28(6/0)
+	move.b	d0,(a0)+	; ym2612_a1	; 8(1/1)
+	SMPS_waitYM				; 28(6/0)
+	move.b	d1,(a0)		; ym2612_d1	; 8(1/1)
+	SMPS_waitYM				; 28(6/0)
+	move.b	#$2A,SMPS_ym2612_a0-SMPS_ym2612_d1(a0)	; ym2612_a0	; 16(3/1)
+	SMPS_startZ80				; Total: 44(8/3) + 84(18/0)
 	rts
 ; End of function WriteFMII
 
