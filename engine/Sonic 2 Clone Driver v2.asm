@@ -1950,9 +1950,10 @@ SendFMNoteOff:
 
 ; sub_72722:
 WriteFMIorII:
-	btst	#2,SMPS_Track.VoiceControl(a5)	; Is this bound for part I or II?
+	move.b	SMPS_Track.VoiceControl(a5),d2	; Get voice control bits
+	bclr	#2,d2				; Clear chip toggle
 	bne.s	WriteFMIIPart			; Branch if for part II
-	or.b	SMPS_Track.VoiceControl(a5),d0	; Add in voice control bits
+	or.b	d2,d0				; Add in voice control bits
 ; End of function WriteFMIorII
 
 
@@ -2013,8 +2014,6 @@ WriteFMI:
 ; ===========================================================================
 ; loc_7275A:
 WriteFMIIPart:
-	move.b	SMPS_Track.VoiceControl(a5),d2	; Get voice control bits
-	bclr	#2,d2				; Clear chip toggle
 	or.b	d2,d0				; Add in to destination register
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
