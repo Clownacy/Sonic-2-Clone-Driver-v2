@@ -1727,8 +1727,14 @@ InitMusicPlayback:
 	move.b	d4,SMPS_RAM.variables.bitfield2(a6)
 	move.b	d5,SMPS_RAM.variables.v_fadein_counter(a6)
 	move.l	d6,SMPS_RAM.variables.queue(a6)
-	moveq	#0|((MegaPCM_VolumeTbls&$F000)>>8),d0	; Clownacy | Reset DAC volume to maximum
-	bsr.w	WriteDACVolume
+
+	; Reset DAC volume
+	bsr.w	SetDACVolume
+	; Also reset DAC pan
+	move.b	#$B6,d0			; Register for AMS/FMS/Panning on FM6 (DAC)
+	move.b	#$C0,d1			; Value to send
+	bsr.w	WriteFMIorII
+
 
     if SMPS_FixBugs
 	; InitMusicPlayback, and Sound_PlayBGM for that matter,
