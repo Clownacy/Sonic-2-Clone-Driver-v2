@@ -59,7 +59,7 @@ SMPS_UpdateDriver:
 	bsr.w	DoFadeOut
 ; loc_71BA8:
 .skipfadeout:
-	btst	#f_fadein_flag,SMPS_RAM.variables.bitfield2(a6)
+	tst.b	SMPS_RAM.variables.v_fadein_counter(a6)
 	beq.s	.skipfadein
 	bsr.w	DoFadeIn
 ; loc_71BB2:
@@ -1002,7 +1002,7 @@ Sound_PlaySFX:
 	bne.w	.clear_sndprio			; Exit is it is
 ;	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)		; Is music being faded out?	; Clownacy | S2's driver doesn't bother with this
 ;	bne.w	.clear_sndprio			; Exit if it is
-	btst	#f_fadein_flag,SMPS_RAM.variables.bitfield2(a6)	; Is music being faded in?
+	tst.b	SMPS_RAM.variables.v_fadein_counter(a6)		; Is music being faded in?
 	bne.w	.clear_sndprio			; Exit if it is
     if SMPS_EnableSpinDashSFX
 	bclr	#f_spindash_lastsound,SMPS_RAM.bitfield1(a6)
@@ -1251,7 +1251,7 @@ Sound_PlaySpecial:
 	bne.w	.locret				; Return if so
 ;	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)		; Is music being faded out?	; Clownacy | S2's driver didn't bother with this in Sound_PlaySFX
 ;	bne.w	.locret				; Exit if it is
-	btst	#f_fadein_flag,SMPS_RAM.variables.bitfield2(a6)	; Is music being faded in?
+	tst.b	SMPS_RAM.variables.v_fadein_counter(a6)		; Is music being faded in?
 	bne.w	.locret				; Exit if it is
 	lea	(SpecSoundIndex).l,a0
 	subi.b	#SpecID__First,d7		; Make it 0-based
@@ -1831,8 +1831,6 @@ DoFadeIn:
 ; ===========================================================================
 ; loc_72688:
 .continuefade:
-	tst.b	SMPS_RAM.variables.v_fadein_counter(a6)		; Is fade done?
-	beq.s	.fadedone					; Branch if yes
 	subq.b	#1,SMPS_RAM.variables.v_fadein_counter(a6)	; Update fade counter
 	move.b	#2,SMPS_RAM.variables.v_fadein_delay(a6)	; Reset fade delay
 	lea	SMPS_RAM.v_music_dac_track(a6),a5
@@ -1878,11 +1876,6 @@ DoFadeIn:
 	lea	SMPS_Track.len(a5),a5
 	dbf	d7,.psgloop
 .locret:
-	rts
-; ===========================================================================
-; loc_726D6:
-.fadedone:
-	bclr	#f_fadein_flag,SMPS_RAM.variables.bitfield2(a6)		; Stop fadein
 	rts
 ; End of function DoFadeIn
 
@@ -2635,7 +2628,6 @@ cfFadeInToPrevious:
 
 	movea.l	a3,a5
 
-	bset	#f_fadein_flag,SMPS_RAM.variables.bitfield2(a6)	; Trigger fade-in
 	move.b	#$28,SMPS_RAM.variables.v_fadein_counter(a6)	; Fade-in delay
 	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
 	addi.w	#4*3,sp				; Tamper return value so we don't return to caller
