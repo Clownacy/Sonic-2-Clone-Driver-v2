@@ -2640,10 +2640,10 @@ cfSetTempoDivider:
 ; ===========================================================================
 ; loc_72BA4: cfSetVolume:
 cfChangeFMVolume:
-	move.b	(a4)+,d0		; Get parameter
-	add.b	d0,SMPS_Track.Volume(a5)	; Add to current volume
 	tst.b	SMPS_Track.VoiceControl(a5)	; Is this a PSG track?
 	bmi.s	cfSetTempoDivider.locret	; If so, return
+	move.b	(a4)+,d0		; Get parameter
+	add.b	d0,SMPS_Track.Volume(a5)	; Add to current volume
 	btst	#4,SMPS_Track.VoiceControl(a5)	; Is this the DAC track?
 	bne.w	SetDACVolume			; If so, branch
     if SMPS_EnablePWM
