@@ -54,7 +54,7 @@ SMPS_UpdateDriver:
     endif
 	tst.b	SMPS_RAM.f_stopmusic(a6)	; Is music paused?
 	bne.w	DoPauseMusic			; If yes, branch
-	move.b	SMPS_RAM.variables.v_fadeout_counter(a6),d0
+	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)
 	beq.s	.skipfadeout
 	bsr.w	DoFadeOut
 ; loc_71BA8:
