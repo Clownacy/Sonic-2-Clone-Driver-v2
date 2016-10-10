@@ -1547,16 +1547,14 @@ DoFadeOut:
 .psgloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.nextpsg				; branch if not
-	lea	SMPS_Track.Volume(a5),a0		; Optimise the following code that uses this
-	addq.b	#1,(a0)					; Increase volume attenuation
-	cmpi.b	#$10,(a0)				; Is it greater than $F?
-	blo.s	.sendpsgvol				; Branch if not
+	addq.b	#4,SMPS_Track.Volume(a5)		; Increase volume attenuation
+	bpl.s	.sendpsgvol				; Branch if maximum annutation not reached
 	bclr	#7,SMPS_Track.PlaybackControl(a5)	; Stop track
 	bra.s	.nextpsg
 ; ===========================================================================
 ; loc_72558:
 .sendpsgvol:
-	move.b	(a0),d6	; Store new volume attenuation
+	move.b	SMPS_Track.Volume(a5),d6	; Store new volume attenuation
 	bsr.w	SetPSGVolume
 ; loc_72560:
 .nextpsg:
@@ -1864,19 +1862,8 @@ DoFadeIn:
 .psgloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
 	bpl.s	.nextpsg			; Branch if not
-	subq.b	#1,SMPS_Track.Volume(a5)	; Reduce volume attenuation
+	subq.b	#4,SMPS_Track.Volume(a5)	; Reduce volume attenuation
 	move.b	SMPS_Track.Volume(a5),d6	; Get value
-;	cmpi.b	#$10,d6				; Is it is < $10?	; Clownacy | This correction is moved to SetPSGVolume (the S2 way)
-;	blo.s	.sendpsgvol			; Branch if yes
-;	moveq	#$F,d6				; Limit to $F (maximum attenuation)
-    if SMPS_FixBugs
-	; While the above check is now pointless, we could do with checking for maximum volume
-	cmpi.b	#-1,d6				; Has value underflowed to <0?
-	bne.s	.sendpsgvol			; Branch if not
-	moveq	#0,d6				; Cap at 0 
-; loc_726C8:
-.sendpsgvol:
-    endif
 	bsr.w	SetPSGVolume
 ; loc_726CC:
 .nextpsg:
@@ -2207,7 +2194,8 @@ PSGDoVolFX_Loop:
 	beq.s	VolEnvOff			; 83 - turn Note Off
 ; loc_72960:
 .gotflutter:
-	add.w	d0,d6		; Add volume envelope value to volume
+	lsl.b	#3,d0
+	add.b	d0,d6		; Add volume envelope value to volume
 ;	cmpi.b	#$10,d6		; Is volume $10 or higher?	; Clownacy | This correction is moved to SetPSGVolume (the S2 way)
 ;	blo.s	SetPSGVolume	; Branch if not
 ;	moveq	#$F,d6		; Limit to silence and fall through
@@ -2229,10 +2217,11 @@ PSGSendVolume:
 	; Clownacy | This correction is present elsewhere in S1's driver, but just having
 	; a single copy here saves space and eliminates the few instances where the correction
 	; isn't performed
-	cmpi.b	#$10,d6				; Is volume $10 or higher?
-	blo.s	+				; Branch if not
-	moveq	#$F,d6				; Limit to silence and fall through
+	tst.b	d6				; Is volume $10 or higher?
+	bpl.s	+				; Branch if not
+	moveq	#$F<<3,d6			; Limit to silence and fall through
 +
+	lsr.b	#3,d6
 	or.b	SMPS_Track.VoiceControl(a5),d6	; Add in track selector bits
 	ori.b	#$10,d6				; Mark it as a volume command
 	move.b	d6,(SMPS_psg_input).l
@@ -2620,7 +2609,10 @@ cfFadeInToPrevious:
 	bpl.s	.nextpsg				; Branch if not
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
 	bsr.w	PSGNoteOff
-	add.b	d6,SMPS_Track.Volume(a5)		; Apply current volume fade-in
+	move.b	d6,d0
+	add.b	d0,d0
+	add.b	d0,d0
+	add.b	d0,SMPS_Track.Volume(a5)		; Apply current volume fade-in
     if SMPS_FixBugs
 	; Clownacy | One of Valley Bell's fixes: this restores the noise mode if need be, avoiding a bug where unwanted noise plays
 	cmpi.b	#$E0,SMPS_Track.VoiceControl(a5)	; Is this a noise channel?
@@ -3105,17 +3097,14 @@ cfSetKey:
 ; bits are discarded.
 ;
 cfSetVolume:
+	move.b	(a4)+,d0			; Load parameter byte
+	not.b	d0				; Invert bits
 	tst.b	SMPS_Track.VoiceControl(a5)	; Is this a psg track?
 	bpl.s	.FMVolume			; If not, branch
-	move.b	(a4)+,d0			; Load parameter byte
-	lsr.b	#4,d0				; Move bits 4,5,6,7 to the position of 0,1,2,3
-	not.b	d0				; Invert bits
-	andi.b	#$F,d0
+	andi.b	#$F0,d0
 	move.b	d0,SMPS_Track.Volume(a5)	; Write volume
 	rts
 .FMVolume:
-	move.b	(a4)+,d0			; Load parameter byte
-	not.b	d0				; Invert bits
 	bchg	#7,d0				; Retain sign bit
 	move.b	d0,SMPS_Track.Volume(a5)	; Write volume
 	bra.w	SendVoiceTL
