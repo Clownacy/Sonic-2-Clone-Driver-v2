@@ -1729,7 +1729,8 @@ InitMusicPlayback:
 	move.l	d6,SMPS_RAM.variables.queue(a6)
 
 	; Reset DAC volume
-	bsr.w	SetDACVolume
+	moveq	#0|((MegaPCM_VolumeTbls&$F000)>>8),d0	; Clownacy | Reset DAC volume to maximum
+	bsr.w	WriteDACVolume
 	; Also reset DAC pan
 	move.b	#$B6,d0			; Register for AMS/FMS/Panning on FM6 (DAC)
 	move.b	#$C0,d1			; Value to send
