@@ -2664,8 +2664,11 @@ cfSetTempoDivider:
 ; ===========================================================================
 ; loc_72BA4: cfSetVolume:
 cfChangeFMVolume:
+    if SMPS_FixBugs
+	; SMPS Z80 (at least the version S&K uses) prevents PSG channels from using this
 	tst.b	SMPS_Track.VoiceControl(a5)	; Is this a PSG track?
 	bmi.s	cfSetTempoDivider.locret	; If so, return
+    endif
 	move.b	(a4)+,d0		; Get parameter
 	add.b	d0,SMPS_Track.Volume(a5)	; Add to current volume
 	btst	#4,SMPS_Track.VoiceControl(a5)	; Is this the DAC track?
