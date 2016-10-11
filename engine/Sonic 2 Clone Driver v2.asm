@@ -1902,17 +1902,12 @@ DoFadeIn:
 ; ===========================================================================
 
 SetDACVolume:
-	moveq	#0,d0
 	move.b	SMPS_Track.Volume(a5),d0
-	cmpi.b	#($10<<3)-1,d0	; $7F is the last valid volume
-	bhi.s	.maxreached
+	bpl.s	+		; $7F is the last valid volume
+	moveq	#$F<<3,d0	; cap at maximum value (minimum volume)
++
 	lsr.b	#3,d0
-	andi.b	#$F,d0
 	ori.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
-	bra.s	WriteDACVolume
-.maxreached:
-	moveq	#$F|((MegaPCM_VolumeTbls&$F000)>>8),d0	; cap at maximum value (minimum volume)
-	;bra.s	WriteDACVolume
 
 WriteDACVolume:
 	SMPS_stopZ80
