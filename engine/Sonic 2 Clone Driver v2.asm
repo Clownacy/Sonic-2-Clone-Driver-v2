@@ -653,11 +653,11 @@ ptr_flgend
 ; ---------------------------------------------------------------------------
 ; Sound_E1: PlaySega:
 PlaySegaSound:
+	move.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 	SMPS_stopZ80
 	SMPS_waitZ80
 
 	; This is a DAC SFX: set to full volume
-	move.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
 	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
 
@@ -3097,14 +3097,13 @@ cfSilenceStopTrack:
 ; Has one parameter, the index (1-based) of the DAC sample to play.
 ;
 cfPlayDACSample:
+	move.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 	SMPS_stopZ80
 	SMPS_waitZ80
+	move.b	(a4)+,(SMPS_z80_ram+MegaPCM_DAC_Number).l
 	; This is a DAC SFX: set to full volume
-	move.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
 	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
-
-	move.b	(a4)+,(SMPS_z80_ram+MegaPCM_DAC_Number).l
 	SMPS_startZ80
 	rts
 ; ===========================================================================
