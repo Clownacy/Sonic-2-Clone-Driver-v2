@@ -396,8 +396,8 @@ XX/XX/XXXX
 - Restored music/SFX/Special SFX FM voice pointer to relative 16-bit value
 - Changed some labels and symbols to suit ValleyBell's suggestions (https://vgmrips.net/misc/SMPS_Disasm_Terms.txt)
 - Added PWMSilenceAll, so PWM is silenced with the rest of the driver
-- Changed internal branch tables to offset tables
-- Removed 68k-based Sega chant playback support
+- Changed internal branch tables to offset tables (requires modifications to user file 'Sound IDs.asm')
+- Removed 68k-based Sega chant playback support (fewer dependencies)
 - Removed v_playsnd0 and f_voice_selector, after making them redundant
 - Renamed UpdateMusic, so old S1 code that accidentally still called the driver should correctly flag an error now
 - In-driver track RAM addresses are now relative (this is in preparation of possible binary-blob)
@@ -405,3 +405,8 @@ XX/XX/XXXX
 - Removed a redundant bugfix (sorry, Markey)
 - Removed PlaybackControlBackup from track RAM/SMPS_Track (relevant data is stored in unused bit of PlaybackControl)
 - Fixed bug introduced in v2.7, where the extra life jingle would cause the level's music to have a delayed DAC track
+- Made PWM be silenced on song start (consider PWM SFX extremely experimental; use with caution)
+- Added support for disabling noise mode on PSG 3 (this is done in the same way as in SMPS Z80)
+- Adjusted PSG fading, so it's more in-line with FM and DAC (fades in roughly $20 frames, rather than $10)
+- Changed cfChangeFMVolume to not run at all on PSG channels (the SMPS Z80 way)
+- Added bugfix for PSG fading (volume updates would conflict with volume envelopes)
