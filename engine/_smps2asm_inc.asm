@@ -312,7 +312,7 @@ smpsSetVol macro val
 
 ; Works on all drivers
 smpsPSGAlterVol macro vol
-	dc.b	$FF,$0C,vol<<3
+	dc.b	$FF,$0C,((vol<<3)&$7F)|(vol&$80)
 	endm
 
 ; Clears pushing sound flag in S1
