@@ -1554,6 +1554,12 @@ DoFadeOut:
 ; ===========================================================================
 ; loc_72558:
 .sendpsgvol:
+    if SMPS_FixBugs
+	; If a volume envelope is active, then it will handle updating the volume for us.
+	; Doing it manually will just conflict with it.
+	tst.b	SMPS_Track.VoiceIndex(a5)
+	bne.s	.nextpsg
+    endif
 	move.b	SMPS_Track.Volume(a5),d6	; Store new volume attenuation
 	bsr.w	SetPSGVolume
 ; loc_72560:
@@ -1863,6 +1869,12 @@ DoFadeIn:
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
 	bpl.s	.nextpsg			; Branch if not
 	subq.b	#4,SMPS_Track.Volume(a5)	; Reduce volume attenuation
+    if SMPS_FixBugs
+	; If a volume envelope is active, then it will handle updating the volume for us.
+	; Doing it manually will just conflict with it.
+	tst.b	SMPS_Track.VoiceIndex(a5)
+	bne.s	.nextpsg
+    endif
 	move.b	SMPS_Track.Volume(a5),d6	; Get value
 	bsr.w	SetPSGVolume
 ; loc_726CC:
@@ -2254,13 +2266,25 @@ VolEnvReset:	; For compatibility with S3K
 ; ===========================================================================
 ; loc_7299A: FlutterDone:
 VolEnvHold:
-	subq.b	#1,SMPS_Track.VolEnvIndex(a5)		; Decrement flutter index
+    if SMPS_FixBugs
+	; Decrement volume envelope index to before flag and last volume update (PSG volume will still update on subsequent frame)
+	subq.b	#2,SMPS_Track.VolEnvIndex(a5)
+    else
+	; Decrement volume envelope index to before flag (note, this halts subsequent PSG volume updates, which conflicts with a fix in the fading subroutines)
+	subq.b	#1,SMPS_Track.VolEnvIndex(a5)
+    endif
 	rts
 
 ; ===========================================================================
 
 VolEnvOff:	; For compatibility with S3K
-	subq.b	#1,SMPS_Track.VolEnvIndex(a5)		; Decrement flutter index
+    if SMPS_FixBugs
+	; Decrement volume envelope index to before flag and last volume update (PSG volume will still update on subsequent frame)
+	subq.b	#2,SMPS_Track.VolEnvIndex(a5)
+    else
+	; Decrement volume envelope index to before flag (note, this halts subsequent PSG volume updates, which conflicts with a fix in the fading subroutines)
+	subq.b	#1,SMPS_Track.VolEnvIndex(a5)
+    endif
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
 ;	bra.s	PSGNoteOff
 
