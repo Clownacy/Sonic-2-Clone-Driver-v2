@@ -144,27 +144,6 @@ MegaPCM_SetupDAC:
 	ret
 
 ; ---------------------------------------------------------------
-; Setup volume depending on DAC is music or SFX
-; ---------------------------------------------------------------
-
-; Clownacy | I can't be the only one that thinks it would be stupid
-; for DAC SFX to be at the same volume as music DACs, right?
-; The guys that made SMPS 32x didn't. Anyway, that's what this subroutine does.
-; If a DAC is marked as one used for music, it's affected by volume.
-; SMPS 32x didn't do this, but then again, there's a lot of stuff SMPS 32x
-; didn't do properly with its DAC volume control.
-MegaPCM_SetupVolume:
-	ld	a,(MegaPCM_DAC_Type)
-	or	a
-	ld	a,MegaPCM_VolumeTbls>>8
-	jp	m,+
-	ld	a,(MegaPCM_DAC_Volume)
-+
-	ld	(MegaPCM_LoadBank.volume+1),a
-	ld	(MegaPCM_Init_PCM.volume+1),a
-	ret
-
-; ---------------------------------------------------------------
 ; Generate tables used by driver
 ; ---------------------------------------------------------------
 
@@ -390,7 +369,6 @@ MegaPCM_Reload_PCM:
 
 MegaPCM_Init_PCM:
 	call	MegaPCM_SetupDAC       
-	call	MegaPCM_SetupVolume
 	call	MegaPCM_InitBankSwitching
 	ld	c,(ix+MegaPCM_pitch)		; c  = pitch
 	ld	h,(ix+MegaPCM_s_pos+1)		;
@@ -473,7 +451,6 @@ MegaPCM_Reload_DPCM:
 
 MegaPCM_Init_DPCM:
 	call	MegaPCM_SetupDAC
-	call	MegaPCM_SetupVolume
 	call	MegaPCM_InitBankSwitching
 	ld	c,(ix+MegaPCM_pitch)	; c  = pitch
 	ld	d,(ix+MegaPCM_s_pos+1)	;

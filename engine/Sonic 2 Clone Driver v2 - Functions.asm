@@ -68,8 +68,11 @@ SMPS_QueueSound3:
 ; ---------------------------------------------------------------------------
 SMPS_PlayDACSample:
 	SMPS_stopZ80_safe
-	st.b	(SMPS_z80_ram+MegaPCM_DAC_Type).l	; This is a DAC SFX; ignore music DAC volume
 	move.b  d0,(SMPS_z80_ram+MegaPCM_DAC_Number).l
+	; This is a DAC SFX: set to full volume
+	move.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
+	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
+	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
 	SMPS_startZ80_safe
 	rts
 ; End of function SMPS_PlayDACSample

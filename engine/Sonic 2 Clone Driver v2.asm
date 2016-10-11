@@ -239,7 +239,6 @@ DACUpdateSample:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80
 	SMPS_waitZ80
-	sf.b	(SMPS_z80_ram+MegaPCM_DAC_Type).l	; This is music DAC; change according to volume
 	move.b	d0,(SMPS_z80_ram+MegaPCM_DAC_Number).l
 	SMPS_startZ80
 
@@ -656,7 +655,12 @@ ptr_flgend
 PlaySegaSound:
 	SMPS_stopZ80
 	SMPS_waitZ80
-	st.b	(SMPS_z80_ram+MegaPCM_DAC_Type).l	; This is a DAC SFX; ignore music DAC volume
+
+	; This is a DAC SFX: set to full volume
+	move.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
+	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
+	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
+
 	move.b	#dSega_S2,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; Queue Sega PCM
 	SMPS_startZ80
 	    if SMPS_IdlingSegaSound
@@ -1912,7 +1916,8 @@ SetDACVolume:
 WriteDACVolume:
 	SMPS_stopZ80
 	SMPS_waitZ80
-	move.b	d0,(SMPS_z80_ram+MegaPCM_DAC_Volume).l
+	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
+	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
 	SMPS_startZ80
 	rts
 ; End of function SetDACVolume
@@ -3094,7 +3099,11 @@ cfSilenceStopTrack:
 cfPlayDACSample:
 	SMPS_stopZ80
 	SMPS_waitZ80
-	st.b	(SMPS_z80_ram+MegaPCM_DAC_Type).l	; This is a DAC SFX; ignore music DAC volume
+	; This is a DAC SFX: set to full volume
+	move.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
+	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
+	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
+
 	move.b	(a4)+,(SMPS_z80_ram+MegaPCM_DAC_Number).l
 	SMPS_startZ80
 	rts
