@@ -2295,6 +2295,7 @@ VolEnvHold:
 VolEnvOff:	; For compatibility with S3K
     if SMPS_FixBugs
 	; Decrement volume envelope index to before flag and last volume update (PSG volume will still update on subsequent frame)
+	; TODO: This might be redundant (why update volume if A. it's mean to be mute, and B. the update is ignored because it's at rest)
 	subq.b	#2,SMPS_Track.VolEnvIndex(a5)
     else
 	; Decrement volume envelope index to before flag (note, this halts subsequent PSG volume updates, which conflicts with a fix in the fading subroutines)

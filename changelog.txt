@@ -410,3 +410,4 @@ XX/XX/XXXX
 - Adjusted PSG fading, so it's more in-line with FM and DAC (fades in roughly $20 frames, rather than $10)
 - Changed cfChangeFMVolume to not run at all on PSG channels (the SMPS Z80 way)
 - Added bugfix for PSG fading (volume updates would conflict with volume envelopes)
+- Fixed held volume envelops only updating the volume every other frame (silly SMPS 68k Type 2)
