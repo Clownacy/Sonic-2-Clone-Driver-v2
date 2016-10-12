@@ -2283,11 +2283,12 @@ VolEnvHold:
     if SMPS_FixBugs
 	; Decrement volume envelope index to before flag and last volume update (PSG volume will still update on subsequent frame)
 	subq.b	#2,SMPS_Track.VolEnvIndex(a5)
+	bra.s	PSGDoVolFX_Loop
     else
 	; Decrement volume envelope index to before flag (note, this halts subsequent PSG volume updates, which conflicts with a fix in the fading subroutines)
 	subq.b	#1,SMPS_Track.VolEnvIndex(a5)
-    endif
 	rts
+    endif
 
 ; ===========================================================================
 
