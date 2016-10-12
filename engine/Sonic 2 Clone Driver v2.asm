@@ -2153,13 +2153,13 @@ PSGDoNoteOn:
 
 ; sub_728E2:
 PSGUpdateFreq:
-	move.b	SMPS_Track.Detune(a5),d0		; Get detune value
-	ext.w	d0
-	add.w	d0,d6					; Add to frequency
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
 	bne.s	.locret					; Return if yes
 	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track at rest?
 	bne.s	.locret					; Return if yes
+	move.b	SMPS_Track.Detune(a5),d0		; Get detune value
+	ext.w	d0
+	add.w	d0,d6					; Add to frequency
 	move.b	SMPS_Track.VoiceControl(a5),d0		; Get channel bits
 	cmpi.b	#$E0,d0					; Is it a noise channel?
 	bne.s	.notnoise				; Branch if not
