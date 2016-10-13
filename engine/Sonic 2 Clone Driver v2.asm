@@ -778,6 +778,7 @@ Sound_PlayBGM:
 	movea.l	d1,a4			; a4 now points to (uncompressed) song data
 	moveq	#0,d2
 	move.w	(a4),d2			; Load voice pointer
+	ext.l	d2
 	add.l	a4,d2			; It is a relative pointer
 	move.b	2+4+1(a4),d0		; Load tempo
 	move.b	d0,SMPS_RAM.variables.v_tempo_mod(a6)
@@ -1093,6 +1094,7 @@ Sound_PlaySFX:
 	movea.l	a3,a1
 	moveq	#0,d1
 	move.w	(a1)+,d1	; Voice pointer
+	ext.l	d1
 	add.l	a3,d1		; Relative pointer
 	move.b	(a1)+,d5	; Dividing timing
 	; DANGER! Ugh, this bug.
@@ -1265,6 +1267,7 @@ Sound_PlaySpecial:
 	movea.l	a3,a1
 	moveq	#0,d1
 	move.w	(a1)+,d1	; Store voice pointer
+	ext.l	d1
 	add.l	a3,d1
 	move.b	(a1)+,d5			; Dividing timing
 	; DANGER! there is a missing 'moveq	#0,d7' here, without which Special SFXes whose
