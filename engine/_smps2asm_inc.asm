@@ -106,7 +106,7 @@ smpsHeaderVoice macro loc
 		fatal "Missing smpsHeaderStartSong or smpsHeaderStartSongConvert"
 	endif
 	if MOMPASS==2
-	if (loc-songStart >= $8000) || (loc-songStart < -$8000)
+	if ((loc-songStart >= $8000) || (loc-songStart < -$8000))
 		fatal "Voice bank too far away from song"
 	endif
 	endif
@@ -147,7 +147,7 @@ smpsHeaderTempo macro div,mod
 ; Header - Set up DAC Channel
 smpsHeaderDAC macro loc,pitch,vol
 	if MOMPASS==2
-	if ((loc>=songStart) && (loc-songStart>=$8000))
+	if ((loc-songStart >= $8000) || (loc-songStart < -$8000))
 		fatal "Track is too far away from its header"
 	endif
 	endif
@@ -167,7 +167,7 @@ smpsHeaderDAC macro loc,pitch,vol
 ; Header - Set up FM Channel
 smpsHeaderFM macro loc,pitch,vol
 	if MOMPASS==2
-	if ((loc>=songStart) && (loc-songStart>=$8000))
+	if ((loc-songStart >= $8000) || (loc-songStart < -$8000))
 		fatal "Track is too far away from its header"
 	endif
 	endif
@@ -178,7 +178,7 @@ smpsHeaderFM macro loc,pitch,vol
 ; Header - Set up PSG Channel
 smpsHeaderPSG macro loc,pitch,vol,mod,voice
 	if MOMPASS==2
-	if ((loc>=songStart) && (loc-songStart>=$8000))
+	if ((loc-songStart >= $8000) || (loc-songStart < -$8000))
 		fatal "Track is too far away from its header"
 	endif
 	endif
@@ -214,7 +214,7 @@ smpsHeaderSFXChannel macro chanid,loc,pitch,vol
 	endif
 	dc.b	$80,chanid
 	if MOMPASS==2
-	if ((loc>=songStart) && (loc-songStart>=$8000))
+	if ((loc-songStart >= $8000) || (loc-songStart < -$8000))
 		fatal "Track is too far away from its header"
 	endif
 	endif

@@ -776,7 +776,6 @@ Sound_PlayBGM:
 
 .nopalmode:
 	movea.l	d1,a4			; a4 now points to (uncompressed) song data
-	moveq	#0,d2
 	move.w	(a4),d2			; Load voice pointer
 	ext.l	d2
 	add.l	a4,d2			; It is a relative pointer
@@ -1092,7 +1091,6 @@ Sound_PlaySFX:
 	lea	(SoundIndex).l,a0
 	movea.l	(a0,d7.w),a3		; SFX data pointer
 	movea.l	a3,a1
-	moveq	#0,d1
 	move.w	(a1)+,d1	; Voice pointer
 	ext.l	d1
 	add.l	a3,d1		; Relative pointer
@@ -1177,9 +1175,8 @@ Sound_PlaySFX:
 
 	move.w	(a1)+,SMPS_Track.PlaybackControl(a5)	; Initial playback control bits
 	move.b	d5,SMPS_Track.TempoDivider(a5)		; Initial voice control bits
-	moveq	#0,d0
 	move.w	(a1)+,d0				; Track data pointer
-	ext.l	d0				; Clownacy | Fix negative pointers
+	ext.l	d0					; Clownacy | Fix negative pointers
 	add.l	a3,d0					; Relative pointer
 	move.w	d0,SMPS_Track.DataPointer+2(a5)		; Store track pointer
 	swap	d0
@@ -1265,7 +1262,6 @@ Sound_PlaySpecial:
 	add.w	d7,d7
 	movea.l	(a0,d7.w),a3
 	movea.l	a3,a1
-	moveq	#0,d1
 	move.w	(a1)+,d1	; Store voice pointer
 	ext.l	d1
 	add.l	a3,d1
@@ -1311,8 +1307,8 @@ Sound_PlaySpecial:
 
 	move.w	(a1)+,SMPS_Track.PlaybackControl(a5)	; Initial playback control bits
 	move.b	d5,SMPS_Track.TempoDivider(a5)		; Initial voice control bits
-	moveq	#0,d0
 	move.w	(a1)+,d0				; Track data pointer
+	ext.l	d0					; Clownacy | Support negative pointers
 	add.l	a3,d0					; Relative pointer
 	move.w	d0,SMPS_Track.DataPointer+2(a5)		; Store track pointer
 	swap	d0
