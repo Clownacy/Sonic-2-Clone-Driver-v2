@@ -406,8 +406,10 @@ XX/XX/XXXX
 - Removed PlaybackControlBackup from track RAM/SMPS_Track (relevant data is stored in unused bit of PlaybackControl)
 - Fixed bug introduced in v2.7, where the extra life jingle would cause the level's music to have a delayed DAC track
 - Made PWM be silenced on song start (consider PWM SFX extremely experimental; use with caution)
-- Added support for disabling noise mode on PSG 3 (this is done in the same way as in SMPS Z80)
+- Added support for disabling noise mode on PSG 3 (this is done in the same way as SMPS Z80)
 - Adjusted PSG fading, so it's more in-line with FM and DAC (fades in roughly $20 frames, rather than $10)
 - Changed cfChangeFMVolume to not run at all on PSG channels (the SMPS Z80 way)
 - Added bugfix for PSG fading (volume updates would conflict with volume envelopes)
 - Fixed held volume envelops only updating the volume every other frame (silly SMPS 68k Type 2)
+- Added support for negative FM voice pointers in Special SFX
+
