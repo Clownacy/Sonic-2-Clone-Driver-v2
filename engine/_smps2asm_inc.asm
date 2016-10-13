@@ -105,6 +105,11 @@ smpsHeaderVoice macro loc
 	if songStart<>*
 		fatal "Missing smpsHeaderStartSong or smpsHeaderStartSongConvert"
 	endif
+	if MOMPASS==2
+	if (loc-songStart >= $8000) || (loc-songStart < -$8000)
+		fatal "Voice bank too far away from song"
+	endif
+	endif
 	dc.w	loc-songStart
 	endm
 
