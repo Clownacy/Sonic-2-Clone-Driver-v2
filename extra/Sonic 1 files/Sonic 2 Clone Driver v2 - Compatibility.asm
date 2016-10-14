@@ -1,5 +1,7 @@
 ; ========SONIC 1 GIT EQUATES========
 
+Size_of_Mega_PCM_guess = $81C
+
 ; ---FLAGS---
 SMPS_GloopSFXBehaviour	= 0
 ;	| If 1, SndID_Gloop only plays on every other call.
