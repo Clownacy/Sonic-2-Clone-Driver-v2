@@ -16,18 +16,12 @@
 
 ; Memory variables
 
-MegaPCM_Stack		equ	0DF0h
+MegaPCM_Stack		equ	0DFEh
 MegaPCM_Ptr_InitPlayback equ	MegaPCM_Event_InitPlayback+1	; Init Playback event pointer
 MegaPCM_Ptr_SoundProc	equ	MegaPCM_Event_SoundProc+1	; Sound process event pointer
 MegaPCM_Ptr_Interrupt	equ	MegaPCM_Event_Interrupt+1	; Sound interrupt event pointer
 MegaPCM_Ptr_EndPlayback	equ	MegaPCM_Event_EndPlayback+1	; End playback event pointer
 MegaPCM_DAC_Number	equ	0DFFh				; Number of DAC sample to play ($81-based)
-						; There are special numbers to control playback:
-						;	$80	- Stop Playback
-						;	$7F	- Pause Playback
-						;	$00	- Continue Playback
-MegaPCM_DAC_Volume	equ	0DFEh		; DAC volume
-MegaPCM_DAC_Type	equ	0DFDh		; Type of DAC ($00 - music, $FF - SFX), this is effectively an 'ignore volume' flag
 
 ; Look-up tables
 
@@ -640,5 +634,5 @@ MegaPCM_pri	= 1
 	include "sound/MegaPCM - DAC Table.asm"
 
 	if $ > MegaPCM_Stack
-		fatal "There's too much data before the volume lookup table! There should be less than \{Stack}h bytes of data, but you're using \{$}h bytes!"
+		fatal "There's too much data before the stack! There should be less than \{MegaPCM_Stack}h bytes of data, but you're using \{$}h bytes!"
 	endif
