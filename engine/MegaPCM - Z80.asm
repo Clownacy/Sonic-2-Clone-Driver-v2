@@ -78,8 +78,8 @@ MegaPCM_Idle_Loop:
 
 MegaPCM_Idle_WaitDAC:
 	ld	a,(hl)			; load DAC number
-	or	a			; test it
-	jp	p,MegaPCM_Idle_WaitDAC	; if it's positive, branch
+;	or	a			; test it
+;	jp	p,MegaPCM_Idle_WaitDAC	; if it's positive, branch
 
 ; ---------------------------------------------------------------
 ; Load DAC sample according to its number and play it
