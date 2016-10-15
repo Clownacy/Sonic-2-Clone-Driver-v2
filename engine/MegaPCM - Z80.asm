@@ -16,7 +16,7 @@
 
 ; Memory variables
 
-MegaPCM_Stack		equ	0DFEh
+MegaPCM_Stack		equ	0DFFh
 MegaPCM_Ptr_InitPlayback equ	MegaPCM_Event_InitPlayback+1	; Init Playback event pointer
 MegaPCM_Ptr_SoundProc	equ	MegaPCM_Event_SoundProc+1	; Sound process event pointer
 MegaPCM_Ptr_Interrupt	equ	MegaPCM_Event_Interrupt+1	; Sound interrupt event pointer
