@@ -612,7 +612,11 @@ zmake68kBank function addr,(((addr&3F8000h)/8000h))
 
 DAC_Entry macro vPitch,vOffset,vFlags
 	db	MegaPCM_vFlags			; 00h	- Flags
-	db	vPitch				; 01h	- Pitch
+	if MegaPCM_vFlags&MegaPCM_dpcm
+		db	((((3579545*2)/vPitch)-238)/26)+1	; 01h	- Pitch
+	else
+		db	(((3579545/vPitch)-130)/13)+1	; 01h	- Pitch
+	endif
 	db	zmake68kBank(vOffset)		; 02h	- Start Bank
 	db	zmake68kBank(vOffset_End)	; 03h	- End Bank
 	dw	zmake68kPtr(vOffset)		; 04h	- Start Offset (in Start bank)
