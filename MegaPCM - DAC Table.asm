@@ -102,7 +102,6 @@ ptr_dacD2:	DAC_Entry	10040, HipHopHitKick,	dpcm	; $D2	- Low Power Kick Hit
 ptr_dacD3:	DAC_Entry	 9687, HipHopHitKick,	dpcm	; $D3	- Lower Power Kick Hit
 ptr_dacD4:	DAC_Entry	12852, HipHopHitKick,	dpcm	; $D4	- Lowest Power Kick Hit
 	endif
-;7159090
 
 	if SMPS_S3DDACSamples
 		; Sonic 3D
