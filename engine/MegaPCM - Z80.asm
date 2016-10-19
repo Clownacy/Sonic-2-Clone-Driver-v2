@@ -520,12 +520,13 @@ MegaPCM_Init_DPCM:
 	set	7,d			; make it 8000h-based if it's not (perverts memory damage if playing corrupted slots)
 	ld	(iy+0),2Ah		; YM => prepare to fetch DAC bytes
 	ld	b,80h			; init DAC value
+	ld	h,MegaPCM_DPCM_LowNibble>>8	; load delta table base
 
 MegaPCM_Process_DPCM:
 
 	; Calculate and send 2 values to DAC
 	ld	a,(de)			; 7	; get a byte from DPCM stream
-	ld	h,MegaPCM_DPCM_HighNibble>>8	; 7	; load delta table base
+	inc	h			; 4	; load DPLC high nibble delta table base
 	ld	l,a			; 4	; setup delta table index
 	ld	a,b			; 4	; load DAC Value
 	add	a,(hl)			; 7	; add delta to it
@@ -537,10 +538,10 @@ MegaPCM_Process_DPCM:
 	ld	a,(de)			; 7	; Clownacy | get volume-adjusted PCM byte
 	exx				; 4
 	ld	(MegaPCM_YM_Port0_Data),a	; 13	; write to DAC
-	; Cycles: 76
+	; Cycles: 73
 
 	ld	a,(de)			; 7	; reload DPCM stream byte
-	ld	h,MegaPCM_DPCM_LowNibble>>8	; 7	; load delta table base
+	dec	h			; 4	; load DPLC low nibble delta table base
 	ld	l,a			; 4	; setup delta table index
 	ld	a,b			; 4	; load DAC Value
 	add	a,(hl)			; 7	; add delta to it
@@ -552,7 +553,7 @@ MegaPCM_Process_DPCM:
 	ld	a,(de)			; 7	; Clownacy | get volume-adjusted PCM byte
 	exx				; 4
 	ld	(MegaPCM_YM_Port0_Data),a	; 13	; write to DAC
-	; Cycles: 76
+	; Cycles: 73
 
 	; Increment DPCM byte pointer and switch the bank if necessary
 	inc	de			; 6	; next DPCM byte
@@ -589,8 +590,8 @@ MegaPCM_Process_DPCM:
 	jp	-
 
 ; ---------------------------------------------------------------
-; Best cycles per loop:	243/2
-; Max possible rate:	3,550 kHz / 122 = 32 kHz (PAL)
+; Best cycles per loop:	237/2
+; Max possible rate:	3,550 kHz / 118 = 30 kHz (PAL)
 ; ---------------------------------------------------------------
 
 ; ---------------------------------------------------------------
