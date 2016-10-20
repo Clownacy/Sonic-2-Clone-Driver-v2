@@ -412,4 +412,5 @@ XX/XX/XXXX
 - Added bugfix for PSG fading (volume updates would conflict with volume envelopes)
 - Fixed held volume envelops only updating the volume every other frame (silly SMPS 68k Type 2)
 - Added support for negative FM voice pointers in Special SFX
+- Changed DAC_Entry pitch value so it's the playback speed in Hz instead of a djnz loop counter
 
