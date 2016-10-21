@@ -612,6 +612,25 @@ zmake68kBank function addr,(((addr&3F8000h)/8000h))
 
 DAC_Entry macro vPitch,vOffset,vFlags
 	db	vFlags			; 00h	- Flags
+
+	; Lemme explain what's going on here: the Z80 is clocked at 3579545Hz.
+	; 1Hz means 1 cycle per second. So, we divide the clock by the playback speed
+	; we want. This gets us a kind of delta: the amount of cycles the Z80 needs to occupy
+	; itself before sending the next sample, to get the correct playback speed.
+	; Our way of controlling playback speed is through a 'djnz' instruction, so we need to
+	; get a djnz counter from this delta. First, we subtract the number of cycles the actual
+	; update loop takes - which, in the case of the PCM loop, is 130 - that will leave us
+	; with the cycles that really matter: these are the 'spare' cycles, ones that won't
+	; otherwise be used by the normal update loop. Instead, we artificially use them with
+	; the aforementioned djnz loop. To get the djnz loop counter, we divide our remaining
+	; cycles by the amount of cycles one djnz loop takes, which is 13. We also add 1,
+	; because 1 to a djnz instruction technically means 0 (and 0 means 255, so we obviously
+	; can't use that).
+	; We use '*2' in the DPCM converter a couple of times because the DPCM loop updates
+	; the sample twice (one for each nibble in a byte of sample data).
+	; An extra thing we do is perform rounding, to get more-accurate conversions, hence
+	; the '*10's and '+5'.
+
 	if vFlags&MegaPCM_dpcm
 		db	(((((((3579545*10)*2)/vPitch)-(238*10))/(13*2))+5)/10)+1	; 01h	- Pitch (DPCM-converted)
 	else
