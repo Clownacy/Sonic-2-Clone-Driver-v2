@@ -611,8 +611,8 @@ zmake68kPtr  function addr,8000h+(addr&7FFFh)
 zmake68kBank function addr,(((addr&3F8000h)/8000h))
 
 DAC_Entry macro vPitch,vOffset,vFlags
-	db	MegaPCM_vFlags			; 00h	- Flags
-	if MegaPCM_vFlags&MegaPCM_dpcm
+	db	vFlags			; 00h	- Flags
+	if vFlags&MegaPCM_dpcm
 		db	(((((((3579545*10)*2)/vPitch)-(238*10))/(13*2))+5)/10)+1	; 01h	- Pitch (DPCM-converted)
 	else
 		db	((((((3579545*10)/vPitch)-(130*10))/13)+5)/10)+1		; 01h	- Pitch (PCM-converted)
