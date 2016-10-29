@@ -1,7 +1,6 @@
 /* -*- Mode: C++; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
- * Copyright (C) Flamewing 2011-2015 <flamewing.sonic@gmail.com>
- * Copyright (C) 2002-2004 The KENS Project Development Team
+ * Copyright (C) Flamewing 2016 <flamewing.sonic@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published
@@ -17,18 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __LIB_KOSINSKI_H
-#define __LIB_KOSINSKI_H
+#ifndef __LIB_IGNORE_UNUSED_VARIABLE_WARNING_H
+#define __LIB_IGNORE_UNUSED_VARIABLE_WARNING_H
 
-#include <iosfwd>
-class kosinski {
-public:
-	static bool decode(std::istream &Src, std::iostream &Dst,
-	                   std::streampos Location = 0, bool Moduled = false,
-	                   std::streamsize const ModulePadding = 16u);
-	static bool encode(std::istream &Src, std::ostream &Dst,
-	                   bool Moduled = false, std::streamoff ModuleSize = 0x1000,
-	                   std::streamsize const ModulePadding = 16u);
-};
+template <typename... T>
+constexpr inline void ignore_unused_variable_warning(T const&...) {  }
 
-#endif // __LIB_KOSINSKI_H
+#endif // __LIB_IGNORE_UNUSED_VARIABLE_WARNING_H

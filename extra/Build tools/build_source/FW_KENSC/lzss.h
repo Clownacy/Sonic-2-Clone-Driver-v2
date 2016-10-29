@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _LZSS_H_
-#define _LZSS_H_
+#ifndef __LIB_LZSS_H
+#define __LIB_LZSS_H
 
 #include <iosfwd>
 #include <limits>
@@ -73,16 +73,18 @@ public:
 	// Comparison operator. Lowest weight first, on tie, break by shortest
 	// length, on further tie break by distance. Used only on the multimap.
 	bool operator<(AdjListNode const &other) const noexcept {
-		if (weight < other.weight)
+		if (weight < other.weight) {
 			return true;
-		else if (weight > other.weight)
+		} else if (weight > other.weight) {
 			return false;
-		if (length < other.length)
+		}
+		if (length < other.length) {
 			return true;
-		else if (length > other.length)
+		} else if (length > other.length) {
 			return false;
-		else
+		} else {
 			return distance < other.distance;
+		}
 	}
 };
 
@@ -95,38 +97,40 @@ public:
  * 	typedef unsigned char  stream_t;
  * 	typedef unsigned short descriptor_t;
  * 	typedef littleendian<descriptor_t> descriptor_endian_t;
- * 	constexpr static size_t NumDescBits = sizeof(descriptor_t) * 8;
+ * 	constexpr static size_t const NumDescBits = sizeof(descriptor_t) * 8;
  * 	// Number of bits used in descriptor bitfield to signal the end-of-file
  * 	// marker sequence.
- * 	constexpr static size_t NumTermBits = 2;
+ * 	constexpr static size_t const NumTermBits = 2;
  * 	// Flag that tells the compressor that new descriptor fields are needed
  * 	// as soon as the last bit in the previous one is used up.
- * 	constexpr static size_t NeedEarlyDescriptor = 1;
+ * 	constexpr static size_t const NeedEarlyDescriptor = 1;
  * 	// Flag that marks the descriptor bits as being in little-endian bit
  * 	// order (that is, lowest bits come out first).
- * 	constexpr static size_t DescriptorLittleEndianBits = 1;
+ * 	constexpr static size_t const DescriptorLittleEndianBits = 1;
  * 	// Size of the search buffer.
- * 	constexpr static size_t SearchBufSize = 8192;
+ * 	constexpr static size_t const SearchBufSize = 8192;
  * 	// Size of the look-ahead buffer.
- * 	constexpr static size_t LookAheadBufSize = 256;
+ * 	constexpr static size_t const LookAheadBufSize = 256;
  * 	// Total size of the sliding window.
- * 	constexpr static size_t SlidingWindowSize = SearchBufSize + LookAheadBufSize;
+ * 	constexpr static size_t const SlidingWindowSize = SearchBufSize + LookAheadBufSize;
  * 	// Computes the cost of a symbolwise encoding, that is, the cost of encoding
- * 	// one single symbol..
- * 	constexpr static size_t symbolwise_weight() noexcept;
+ * 	// one single symbol. May be constexpr.
+ * 	static size_t symbolwise_weight() noexcept;
  * 	// Computes the cost of covering all of the "len" vertices starting from
  * 	// "off" vertices ago, for matches with len > 1.
  * 	// A return of "std::numeric_limits<size_t>::max()" means "infinite",
- * 	// or "no edge".
+ * 	// or "no edge". May be constexpr.
  * 	static size_t dictionary_weight(size_t dist, size_t len) noexcept;
  * 	// Given an edge, computes how many bits are used in the descriptor field.
+ *	// May be constexpr.
  * 	static size_t desc_bits(AdjListNode const &edge) noexcept;
  * 	// Function that finds extra matches in the data that are specific to the
- * 	// given encoder and not general LZSS dictionary matches.
+ * 	// given encoder and not general LZSS dictionary matches. May be constexpr.
  * 	static void extra_matches(stream_t const *data, size_t basenode,
  * 	                          size_t ubound, size_t lbound,
  * 	                          LZSSGraph<KosinskiAdaptor>::MatchVector &matches) noexcept;
- * };
+ * 	// Function that computes padding between modules, if any. May be constexpr.
+ * 	static size_t get_padding(size_t totallen, size_t padmask) noexcept;
  */
 template<typename Adaptor>
 class LZSSGraph {
@@ -184,8 +188,9 @@ private:
 					best = std::move(AdjListNode(basenode + jj, basenode - ii, jj, wgt));
 				}
 				// We can find no more matches with the current starting node.
-				if (jj >= ubound)
+				if (jj >= ubound) {
 					break;
+				}
 			}
 		} while (ii-- > lbound);
 
@@ -202,11 +207,10 @@ public:
 		for (size_t ii = 0; ii < nlen; ii++) {
 			// Find all matches for all subsequent nodes.
 			MatchVector const matches = find_matches(ii);
-			for (MatchVector::const_iterator it = matches.begin();
-			     it != matches.end(); ++it) {
+			for (const auto & match : matches) {
 				// Insert the best (lowest cost) edge linking these two nodes.
-				if (it->get_weight() != std::numeric_limits<size_t>::max()) {
-					adjs[ii].push_back(*it);
+				if (match.get_weight() != std::numeric_limits<size_t>::max()) {
+					adjs[ii].push_back(match);
 				}
 			}
 		}
@@ -244,12 +248,11 @@ public:
 			AdjList const &list = adjs[ii];
 			// Get remaining unused descriptor bits up to this node.
 			size_t basedesc = desccosts[ii];
-			for (AdjList::const_iterator it = list.begin();
-			        it != list.end(); ++it) {
+			for (const auto & elem : list) {
 				// Need destination ID and edge weight.
-				size_t nextnode = it->get_dest(), wgt = it->get_weight();
+				size_t nextnode = elem.get_dest(), wgt = elem.get_weight();
 				// Compute remaining unused bits from using this edge.
-				size_t desccost = basedesc + Adaptor::desc_bits(*it);
+				size_t desccost = basedesc + Adaptor::desc_bits(elem);
 				desccost %= Adaptor::NumDescBits;
 				if (nextnode == nlen) {
 					// This is the ending node. Add the descriptor bits for the
@@ -273,7 +276,7 @@ public:
 					// If so, update the data structures with new best edge.
 					costs[nextnode] = costs[ii] + wgt;
 					parents[nextnode] = ii;
-					pedges[nextnode] = *it;
+					pedges[nextnode] = elem;
 					desccosts[nextnode] = desccost;
 				}
 			}
@@ -393,4 +396,4 @@ public:
 	}
 };
 
-#endif // _LZSS_H_
+#endif // __LIB_LZSS_H

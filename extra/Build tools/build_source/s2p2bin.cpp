@@ -1,7 +1,8 @@
+#include <sstream>
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h> // for unlink
-#include <fstream>
+
 #include "FW_KENSC/kosinski.h"
 
 using namespace std;
@@ -158,14 +159,19 @@ bool buildRom(FILE* from, FILE* to)
 		if(cpuType == 0x51 && start == 0) // 0x51 is the type for Z80 family (0x01 is for 68000)
 		{
 			// Kosinski-compressed Z80 segment
-			start = lastStart + lastLength;
-			int srcStart = ftell(from);
-			int dstStart = ftell(to);
-			ifstream fin(codeFileName, ios::in|ios::binary);
-			fstream fout(romFileName, ios::in|ios::out|ios::binary);
-			compressedLength = kosinski::encode(fin, fout, srcStart, length, dstStart);
-			fseek(from, length, SEEK_CUR);
-			fseek(to, compressedLength, SEEK_CUR);
+			std::stringstream in(std::ios::in|std::ios::out|std::ios::binary);
+			std::stringstream out(std::ios::in|std::ios::out|std::ios::binary);
+
+			for (int i=0; i < length; ++i)
+				in.put(fgetc(from));
+
+			kosinski::encode(in, out);
+
+			compressedLength = out.tellp();
+			out.seekg(0);
+			for (int i=0; i < compressedLength; ++i)
+				fputc(out.get(), to);
+
 			lastSegmentCompressed = true;
 			continue;
 		}
@@ -179,7 +185,7 @@ bool buildRom(FILE* from, FILE* to)
 		{
 			if(start < ftell(to))
 			{
-				printf("\nERROR: Compressed DAC driver might not fit.\nPlease increase your value of Size_of_Mega_PCM_guess (found in MegaPCM - 68k.asm) to at least $%X and try again.", compressedLength);
+				printf("\nERROR: Compressed DAC driver might not fit.\nPlease increase your value of Size_of_Mega_PCM_guess (found in 'Sonic 2 Clone Driver v2 - Compatibility.asm') to at least $%X and try again.", compressedLength);
 				return false;
 			}
 			else

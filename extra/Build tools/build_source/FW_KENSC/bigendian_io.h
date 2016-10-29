@@ -16,23 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _BIGENDIAN_IO_H_
-#define _BIGENDIAN_IO_H_
+#ifndef __LIB_BIGENDIAN_IO_H
+#define __LIB_BIGENDIAN_IO_H
 
 #include <iosfwd>
 #include <iterator>
 #include <string>
-
-#ifdef UNUSED
-#elif defined(__GNUC__)
-#	define UNUSED(x) UNUSED_ ## x __attribute__((unused))
-#elif defined(__LCLINT__)
-#	define UNUSED(x) /*@unused@*/ x
-#elif defined(__cplusplus)
-#	define UNUSED(x)
-#else
-#	define UNUSED(x) x
-#endif
 
 inline size_t Read1(std::istream &in) noexcept {
 	size_t c = static_cast<unsigned char>(in.get());
@@ -94,8 +83,9 @@ namespace BigEndian {
 	template <typename T, int N>
 	inline size_t ReadN(T &in) noexcept {
 		size_t c = 0;
-		for (size_t i = 0; i < N; i++)
+		for (size_t i = 0; i < N; i++) {
 			c = (c << 8) | Read1(in);
+		}
 		return c;
 	}
 
@@ -115,10 +105,11 @@ namespace BigEndian {
 
 	template <typename T, int N>
 	inline void WriteN(T &out, size_t c) noexcept {
-		for (int i = 8 * (N - 1); i >= 0; i -= 8)
+		for (int i = 8 * (N - 1); i >= 0; i -= 8) {
 			Write1(out, (c >> i) & 0xff);
+		}
 	}
-}
+}// namespace BigEndian
 
 namespace LittleEndian {
 	template <typename T>
@@ -140,8 +131,9 @@ namespace LittleEndian {
 	template <typename T, int N>
 	inline size_t ReadN(T &in) noexcept {
 		size_t c = 0;
-		for (size_t i = 0; i < 8 * N; i += 8)
+		for (size_t i = 0; i < 8 * N; i += 8) {
 			c = c | (Read1(in) << i);
+		}
 		return c;
 	}
 
@@ -161,9 +153,10 @@ namespace LittleEndian {
 
 	template <typename T, int N>
 	inline void WriteN(T &out, size_t c) noexcept {
-		for (size_t i = 0; i < 8 * N; i += 8)
+		for (size_t i = 0; i < 8 * N; i += 8) {
 			Write1(out, (c >> i) & 0xff);
+		}
 	}
-}
+}// namespace LittleEndian
 
 #endif
