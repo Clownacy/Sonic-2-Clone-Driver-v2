@@ -59,7 +59,7 @@ SMPS_UpdateDriver:
 	bsr.w	DoFadeOut
 ; loc_71BA8:
 .skipfadeout:
-	tst.b	SMPS_RAM.variables.v_fadein_counter(a6)
+	btst	#f_fadeinflag,SMPS_RAM.variables.bitfield2(a6)
 	beq.s	.skipfadein
 	bsr.w	DoFadeIn
 ; loc_71BB2:
@@ -691,10 +691,6 @@ Sound_PlayBGM:
 ;    if SMPS_EnableSpecSFX
 ;	bsr.w	StopSpecSFX
 ;    endif
-	moveq	#0,d0
-	move.b	d0,SMPS_RAM.variables.v_fadein_counter(a6)
-	move.b	d0,SMPS_RAM.variables.v_fadeout_counter(a6)
-
 	cmpi.b	#MusID_ExtraLife,d7	; Is the "extra life" music to be played?
 	bne.s	.bgmnot1up		; If not, branch
 	bset	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)	; Is a 1-up music playing?
@@ -761,6 +757,9 @@ Sound_PlayBGM:
 ; ===========================================================================
 ; loc_72024:
 .bgmnot1up:
+	moveq	#0,d0
+	move.b	d0,SMPS_RAM.variables.v_fadein_counter(a6)
+	move.b	d0,SMPS_RAM.variables.v_fadeout_counter(a6)
 	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
 ; loc_7202C:
 .bgm_loadMusic:
@@ -1007,7 +1006,7 @@ Sound_PlaySFX:
 	bne.w	.clear_sndprio			; Exit is it is
 ;	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)		; Is music being faded out?	; Clownacy | S2's driver doesn't bother with this
 ;	bne.w	.clear_sndprio			; Exit if it is
-	tst.b	SMPS_RAM.variables.v_fadein_counter(a6)		; Is music being faded in?
+	btst	#f_fadeinflag,SMPS_RAM.variables.bitfield2(a6)		; Is music being faded in?
 	bne.w	.clear_sndprio			; Exit if it is
     if SMPS_EnableSpinDashSFX
 	bclr	#f_spindash_lastsound,SMPS_RAM.bitfield1(a6)
@@ -1255,7 +1254,7 @@ Sound_PlaySpecial:
 	bne.w	.locret				; Return if so
 ;	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)		; Is music being faded out?	; Clownacy | S2's driver didn't bother with this in Sound_PlaySFX
 ;	bne.w	.locret				; Exit if it is
-	tst.b	SMPS_RAM.variables.v_fadein_counter(a6)		; Is music being faded in?
+	btst	#f_fadeinflag,SMPS_RAM.variables.bitfield2(a6)		; Is music being faded in?
 	bne.w	.locret				; Exit if it is
 	lea	(SpecSoundIndex).l,a0
 	subi.b	#SpecID__First,d7		; Make it 0-based
@@ -1852,6 +1851,13 @@ DoFadeIn:
 ; ===========================================================================
 ; loc_72688:
 .continuefade:
+	tst.b	SMPS_RAM.variables.v_fadein_counter(a6)	; Update fade counter
+	bne.s	.notdone
+	bclr	#f_fadeinflag,SMPS_RAM.variables.bitfield2(a6)
+	rts
+; ===========================================================================
+
+.notdone:
 	subq.b	#1,SMPS_RAM.variables.v_fadein_counter(a6)	; Update fade counter
 	move.b	#2,SMPS_RAM.variables.v_fadein_delay(a6)	; Reset fade delay
 	lea	SMPS_RAM.v_music_track_ram(a6),a5
@@ -2224,7 +2230,7 @@ PSGDoVolFX_Loop:
 	lsl.b	#3,d0
 	add.b	d0,d6		; Add volume envelope value to volume
 	bcc.s	SetPSGVolume
-	moveq	#$7F,d6
+	moveq	#$F<<3,d6
 ;	cmpi.b	#$10,d6		; Is volume $10 or higher?	; Clownacy | This correction is moved to SetPSGVolume (the S2 way)
 ;	blo.s	SetPSGVolume	; Branch if not
 ;	moveq	#$F,d6		; Limit to silence and fall through
@@ -2671,6 +2677,7 @@ cfFadeInToPrevious:
 
 	movea.l	a3,a5
 
+	bset	#f_fadeinflag,SMPS_RAM.variables.bitfield2(a6)
 	move.b	#$28,SMPS_RAM.variables.v_fadein_counter(a6)	; Fade-in delay
 	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
 	addi.w	#4*3,sp				; Tamper return value so we don't return to caller
