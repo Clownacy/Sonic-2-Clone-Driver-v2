@@ -691,6 +691,10 @@ Sound_PlayBGM:
 ;    if SMPS_EnableSpecSFX
 ;	bsr.w	StopSpecSFX
 ;    endif
+	moveq	#0,d0
+	move.b	d0,SMPS_RAM.variables.v_fadein_counter(a6)
+	move.b	d0,SMPS_RAM.variables.v_fadeout_counter(a6)
+
 	cmpi.b	#MusID_ExtraLife,d7	; Is the "extra life" music to be played?
 	bne.s	.bgmnot1up		; If not, branch
 	bset	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)	; Is a 1-up music playing?
@@ -757,9 +761,6 @@ Sound_PlayBGM:
 ; ===========================================================================
 ; loc_72024:
 .bgmnot1up:
-	moveq	#0,d0
-	move.b	d0,SMPS_RAM.variables.v_fadein_counter(a6)
-	move.b	d0,SMPS_RAM.variables.v_fadeout_counter(a6)	; Clownacy | (From S2)
 	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
 ; loc_7202C:
 .bgm_loadMusic:
@@ -2222,6 +2223,8 @@ PSGDoVolFX_Loop:
 .gotflutter:
 	lsl.b	#3,d0
 	add.b	d0,d6		; Add volume envelope value to volume
+	bcc.s	SetPSGVolume
+	moveq	#$7F,d6
 ;	cmpi.b	#$10,d6		; Is volume $10 or higher?	; Clownacy | This correction is moved to SetPSGVolume (the S2 way)
 ;	blo.s	SetPSGVolume	; Branch if not
 ;	moveq	#$F,d6		; Limit to silence and fall through
@@ -2245,11 +2248,12 @@ PSGSendVolume:
 	; isn't performed
 	tst.b	d6				; Is volume $10 or higher?
 	bpl.s	+				; Branch if not
-	moveq	#$F<<3,d6			; Limit to silence and fall through
+	moveq	#$1F,d6				; Limit to silence and fall through
+	bra.s	++
 +
 	lsr.b	#3,d6
-	or.b	SMPS_Track.VoiceControl(a5),d6	; Add in track selector bits
 	ori.b	#$10,d6				; Mark it as a volume command
++	or.b	SMPS_Track.VoiceControl(a5),d6	; Add in track selector bits
 	move.b	d6,(SMPS_psg_input).l
 
 locret_7298A:
