@@ -7,3 +7,4 @@ Note that these are not stock; I (Clownacy) have made modifications to these fil
 - Incorrect smpsVcTotalLevel values in '84 - OOZ.asm'
 - Incorrect smpsVcTotalLevel values in '95 - SWEET SWEET SWEET.asm'
 - Incorrect smpsVcTotalLevel values in '99 - Title Screen.asm'
+- Incorrect smpsAlterVol usage in '8D - SCZ.asm'
