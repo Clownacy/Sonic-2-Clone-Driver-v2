@@ -13,13 +13,13 @@ ptr_mus87:	SMPS_MUSIC_METADATA	Music87, s1TempotoS3($FF), 0	; Invincible
 ptr_mus88:	SMPS_MUSIC_METADATA	Music88, s1TempotoS3($05), 0	; Extra Life
 ptr_mus89:	SMPS_MUSIC_METADATA	Music89, s1TempotoS3($08), 0	; Special Stage
 ptr_mus8A:	SMPS_MUSIC_METADATA	Music8A, s1TempotoS3($05), 0	; Title Screen
-ptr_mus8B:	SMPS_MUSIC_METADATA	Music8B, s1TempotoS3($05), 0	; Ending
+ptr_mus8B:	SMPS_MUSIC_METADATA	Music8B, s1TempotoS3($05), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Ending
 ptr_mus8C:	SMPS_MUSIC_METADATA	Music8C, s1TempotoS3($04)-$20, 0	; Boss
 ptr_mus8D:	SMPS_MUSIC_METADATA	Music8D, s1TempotoS3($06)-$20, 0	; Final Zone
 ptr_mus8E:	SMPS_MUSIC_METADATA	Music8E, s1TempotoS3($03), 0	; End of Act
 ptr_mus8F:	SMPS_MUSIC_METADATA	Music8F, s1TempotoS3($13), 0	; Game Over
-ptr_mus90:	SMPS_MUSIC_METADATA	Music90, s1TempotoS3($07), 0	; Continue
-ptr_mus91:	SMPS_MUSIC_METADATA	Music91, s1TempotoS3($33), 0	; Credits
+ptr_mus90:	SMPS_MUSIC_METADATA	Music90, s1TempotoS3($07), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Continue
+ptr_mus91:	SMPS_MUSIC_METADATA	Music91, s1TempotoS3($33), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Credits
 ptr_mus92:	SMPS_MUSIC_METADATA	Music92, s1TempotoS3($02), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Drowning
 ptr_mus93:	SMPS_MUSIC_METADATA	Music93, s1TempotoS3($06), 0	; Emerald
 ptr_musend
