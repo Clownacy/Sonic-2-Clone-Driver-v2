@@ -108,13 +108,17 @@ HPZ_PSG3:
 	smpsNoteFill        $10
 
 HPZ_Loop05:
-	smpsPSGAlterVol        $FE
+	;smpsAlterVol        $FE
+	smpsPSGAlterVol     $FE
 	dc.b	nF4, $06
-	smpsPSGAlterVol        $02
+	;smpsAlterVol        $02
+	smpsPSGAlterVol     $02
 	dc.b	nC5, nC5, nF4, nA4, nF4
-	smpsPSGAlterVol        $FE
+	;smpsAlterVol        $FE
+	smpsPSGAlterVol     $FE
 	dc.b	nB4
-	smpsPSGAlterVol        $02
+	;smpsAlterVol        $02
+	smpsPSGAlterVol     $02
 	dc.b	nF4, nC5, nF4, nB4, nF4
 	smpsLoop            $01, $10, HPZ_Loop05
 
