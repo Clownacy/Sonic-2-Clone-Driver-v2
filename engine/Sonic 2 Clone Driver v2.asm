@@ -2802,6 +2802,8 @@ cfSetVoice:
 	bmi.s	locret_72CAA
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding this track?
 	bne.s	locret_72CAA				; Return if yes
+	bsr.w	FMSilenceChannel
+	move.b	SMPS_Track.VoiceIndex(a5),d0		; Get new voice ID again
 
 cfSetVoiceCont:
 	movea.l	SMPS_Track.VoicePtr(a5),a1		; SFX track voice pointer
