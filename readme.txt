@@ -20,8 +20,7 @@ Credits:
 Contributors to the sound driver disassemblies
 Valley Bell - General help, fixes for some bugs, SMPS Research Pack, inspiration
 Shobiz - Ported Spin Dash rev code
-Puto - Original 68k Sega chant playback code
-MarkeyJester - DAC fade-in fix, along with pointing several other bugs in S1's driver
+MarkeyJester - DAC fade-in fix, along with pointing out several other bugs in S1's driver
 Cinossu - S1SMPS2ASM, the basis of SMPS2ASM
 Flamewing - SMPS2ASM core; pointing out S3K's additional PSG frequencies; his perfect-compression koscmp, used to compress Mega PCM
 Vladikcomper - Mega PCM, a fix involving interupts
