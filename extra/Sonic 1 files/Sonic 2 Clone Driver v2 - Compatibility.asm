@@ -61,7 +61,6 @@ PlaySound_Unused	= SMPS_QueueSound3
 
 Clone_Driver_RAM	= (-(v_snddriver_ram&$80000000)<<1)|v_snddriver_ram
 Graphics_Flags		= v_megadrive
-Ctrl_1			= v_jpadhold1
 
 ; ---SOUND ID BOUNDARIES---
 MusID__First		= bgm__First
