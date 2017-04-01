@@ -372,3 +372,45 @@ Changelog
 - Fixed OOZ oil slide SFX (was updating FM volume on a PSG channel)
 - Added check to prevent above bug from having any negative effects, just like S2's driver
 - A branch is available that uses the stock v1.1 MegaPCM
+
+12/08/2016
+= v2.7 =
+- Support for the 32X
+- Support for four PWM tracks
+- Fixed bug where Special SFX incorrectly mute PSG3 while it's being used by SFX (thanks, Markey)
+- Added proper volume cap check to DoFadeIn (thanks again, Markey)
+- Fixed bug where PSG 1&2 are not muted during SFX initialisation (Markey, stop, please)
+- Added a bugfix from S2's driver that stops cfStopTrack from altering the stack too much on DAC channels
+- Tried to reduce name collision with MegaPCM by adding a prefix to most labels
+- UpdateDAC has been restructured, so its stack usage is identical to FM and PSG (kind of undoing that last bugfix :( )
+- Made MegaPCM check that YM2612 isn't busy before enabling DAC (fixes muted drums at start of some songs)
+- SFX now properly update on the frame that a new song is played
+
+XX/XX/XXXX
+= v2.7+ =
+- Changed FM voice format, like what S2's driver did, for optimised reading
+- Split DAC table from Mega PCM Z80 .asm file
+- Rearranged file/folder structure, so files meant for the user to edit (like DAC samples and PSG envelopes) are in the root folder, the off-limits engine is in the 'engine' folder, and the optional/only-useful-during-installation files are kept in an 'extra' folder
+- Added SMPS2ASM equates for Chaotix' PWM samples (these equates were also applied to the included Chaotix dump)
+- Fixed typo in smpsHeaderVoiceUVB, causing errors
+- Restored music/SFX/Special SFX FM voice pointer to relative 16-bit value
+- Changed some labels and symbols to suit ValleyBell's suggestions (https://vgmrips.net/misc/SMPS_Disasm_Terms.txt)
+- Added PWMSilenceAll, so PWM is silenced with the rest of the driver
+- Changed internal branch tables to offset tables (requires modifications to user file 'Sound IDs.asm')
+- Removed 68k-based Sega chant playback support (fewer dependencies)
+- Removed v_playsnd0 and f_voice_selector, after making them redundant
+- Renamed UpdateMusic, so old S1 code that accidentally still called the driver should correctly flag an error now
+- In-driver track RAM addresses are now relative (this is in preparation of possible binary-blob)
+- Changed PauseMusic to not "resume" DAC channel (this should be pointless, since that track doesn't use voices, and Mega PCM handles panning)
+- Removed a redundant bugfix (sorry, Markey)
+- Removed PlaybackControlBackup from track RAM/SMPS_Track (relevant data is stored in unused bit of PlaybackControl)
+- Fixed bug introduced in v2.7, where the extra life jingle would cause the level's music to have a delayed DAC track
+- Made PWM be silenced on song start (consider PWM SFX extremely experimental; use with caution)
+- Added support for disabling noise mode on PSG 3 (this is done in the same way as SMPS Z80)
+- Adjusted PSG fading, so it's more in-line with FM and DAC (fades in roughly $20 frames, rather than $10)
+- Changed cfChangeFMVolume to not run at all on PSG channels (the SMPS Z80 way)
+- Added bugfix for PSG fading (volume updates would conflict with volume envelopes)
+- Fixed held volume envelops only updating the volume every other frame (silly SMPS 68k Type 2)
+- Added support for negative FM voice pointers in Special SFX
+- Changed DAC_Entry pitch value so it's the playback speed in Hz instead of a djnz loop counter
+
