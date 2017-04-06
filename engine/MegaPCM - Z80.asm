@@ -469,7 +469,7 @@ MegaPCM_Process_PCM:
 	or	h			; 4	; is hl positive?
 	jp	p,MegaPCM_QuitPlaybackLoop	; 10	; if yes, quit playback loop
 	exx				; 4	;
-	; Cycles: 43
+	; Cycles: 43 (last bank) 44 (every other bank)
 
 	; Check if we should play a new sample
 -	ld	a,(MegaPCM_DAC_Number)		; 13	; load DAC number
@@ -489,8 +489,8 @@ MegaPCM_Process_PCM:
 	jp	-
 
 ; ---------------------------------------------------------------
-; Best cycles per loop:	129
-; Max Possible rate:	3,550 kHz / 129 = 27.5 kHz (PAL)
+; Best cycles per loop (not counting last bank):	130
+; Max Possible rate:	3,579.545 kHz / 130 = 27.5 kHz (NTSC)
 ; ---------------------------------------------------------------
 
 ; ===============================================================
@@ -570,7 +570,7 @@ MegaPCM_Process_DPCM:
 	or	h			; 4	; is hl positive?
 	jp	p,MegaPCM_QuitPlaybackLoop	; 10	; if yes, quit playback loop
 	exx				; 4	;
-	; Cycles: 43
+	; Cycles: 43 (last bank) 44 (every other bank)
 
 	; Check if we should play a new sample
 -	ld	a,(MegaPCM_DAC_Number)	; 13	; load DAC number
@@ -590,8 +590,8 @@ MegaPCM_Process_DPCM:
 	jp	-
 
 ; ---------------------------------------------------------------
-; Best cycles per loop:	237/2
-; Max possible rate:	3,550 kHz / 118 = 30 kHz (PAL)
+; Best cycles per loop (not counting last bank):	238/2
+; Max possible rate:	3,579.545 kHz / 119 = 30 kHz (NTSC)
 ; ---------------------------------------------------------------
 
 ; ---------------------------------------------------------------
