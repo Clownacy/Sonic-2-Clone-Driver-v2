@@ -5,13 +5,13 @@
 MegaPCM_DAC_Table:
 	if SMPS_S1DACSamples||SMPS_S2DACSamples
 		; Sonic 1 & 2
-ptr_dac81:	DAC_Entry	 8324, Kick,		MegaPCM_dpcm|MegaPCM_panLR	; $81	- Kick
-ptr_dac82:	DAC_Entry	24857, Snare,		MegaPCM_dpcm|MegaPCM_panLR	; $82	- Snare
-ptr_dac85:	DAC_Entry	 7426, Timpani,		MegaPCM_dpcm|MegaPCM_panLR	; $85	- Timpani
-ptr_dac88:	DAC_Entry	 9806, Timpani,		MegaPCM_dpcm|MegaPCM_panLR	; $88	- Hi-Timpani
-ptr_dac89:	DAC_Entry	 8860, Timpani,		MegaPCM_dpcm|MegaPCM_panLR	; $89	- Mid-Timpani
-ptr_dac8A:	DAC_Entry	 7231, Timpani,		MegaPCM_dpcm|MegaPCM_panLR	; $8A	- Low-Timpani
-ptr_dac8B:	DAC_Entry	 7046, Timpani,		MegaPCM_dpcm|MegaPCM_panLR	; $8B	- Very Low-Timpani
+ptr_dac81:	DAC_Entry	 8201, Kick,		MegaPCM_dpcm|MegaPCM_panLR	; $81	- Kick
+ptr_dac82:	DAC_Entry	23784, Snare,		MegaPCM_dpcm|MegaPCM_panLR	; $82	- Snare
+ptr_dac85:	DAC_Entry	 7328, Timpani,		MegaPCM_dpcm|MegaPCM_panLR	; $85	- Timpani
+ptr_dac88:	DAC_Entry	 9635, Timpani,		MegaPCM_dpcm|MegaPCM_panLR	; $88	- Hi-Timpani
+ptr_dac89:	DAC_Entry	 8720, Timpani,		MegaPCM_dpcm|MegaPCM_panLR	; $89	- Mid-Timpani
+ptr_dac8A:	DAC_Entry	 7138, Timpani,		MegaPCM_dpcm|MegaPCM_panLR	; $8A	- Low-Timpani
+ptr_dac8B:	DAC_Entry	 6957, Timpani,		MegaPCM_dpcm|MegaPCM_panLR	; $8B	- Very Low-Timpani
 	endif
 
 	if SMPS_S2DACSamples
