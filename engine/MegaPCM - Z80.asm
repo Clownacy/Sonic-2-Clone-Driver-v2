@@ -516,7 +516,9 @@ MegaPCM_Process_PCM_idle:
 ;	C	= Pitch
 ;	DE	= DPCM byte pointer
 ;	HL	= Delta Table
+;	BC'	= YM2612 data port pointer
 ;	DE'	= Volume byte pointer
+;	HL'	= Number of bytes in last bank
 ; ---------------------------------------------------------------
 
 ; ---------------------------------------------------------------
@@ -535,6 +537,9 @@ MegaPCM_Init_DPCM:
 	ld	(iy+0),2Ah		; YM => prepare to fetch DAC bytes
 	ld	b,80h			; init DAC value
 	ld	h,MegaPCM_DPCM_LowNibble>>8	; load delta table base
+	exx
+	ld	bc,MegaPCM_YM_Port0_Data
+	exx
 
 MegaPCM_Process_DPCM:
 
@@ -550,9 +555,9 @@ MegaPCM_Process_DPCM:
 	exx				; 4
 	ld	e,a			; 4	; Clownacy | get address of volume-adjusted PCM byte
 	ld	a,(de)			; 7	; Clownacy | get volume-adjusted PCM byte
+	ld	(bc),a			; 7	; write to DAC
 	exx				; 4
-	ld	(MegaPCM_YM_Port0_Data),a	; 13	; write to DAC
-	; Cycles: 74
+	; Cycles: 68
 
 	ld	a,(de)			; 7	; reload DPCM stream byte
 	dec	h			; 4	; load DPLC low nibble delta table base
@@ -565,9 +570,9 @@ MegaPCM_Process_DPCM:
 	exx				; 4
 	ld	e,a			; 4	; Clownacy | get address of volume-adjusted PCM byte
 	ld	a,(de)			; 7	; Clownacy | get volume-adjusted PCM byte
+	ld	(bc),a			; 7	; write to DAC
 	exx				; 4
-	ld	(MegaPCM_YM_Port0_Data),a	; 13	; write to DAC
-	; Cycles: 74
+	; Cycles: 68
 
 	; Increment DPCM byte pointer and switch the bank if necessary
 	inc	de			; 6	; next DPCM byte
@@ -602,8 +607,8 @@ MegaPCM_Process_DPCM_idle:
 	jp	-
 
 ; ---------------------------------------------------------------
-; Best cycles per loop:	224/2
-; Max possible rate:	3,579.545 kHz / 112 = 32 kHz (NTSC)
+; Best cycles per loop:	212/2
+; Max possible rate:	3,579.545 kHz / 106 = 34 kHz (NTSC)
 ; ---------------------------------------------------------------
 
 MegaPCM_LastBankNotReached:
