@@ -2178,9 +2178,8 @@ PSGUpdateFreq:
 	or.b	d1,d0			; Latch tone data to channel
 	lsr.w	#4,d6			; Get upper 6 bits of frequency
 	andi.b	#$3F,d6			; Send to latched channel
-	lea	(SMPS_psg_input).l,a0
-	move.b	d0,(a0)
-	move.b	d6,(a0)
+	move.b	d0,(SMPS_psg_input).l
+	move.b	d6,(SMPS_psg_input).l
 ; locret_7291E:
 .locret:
 	rts
