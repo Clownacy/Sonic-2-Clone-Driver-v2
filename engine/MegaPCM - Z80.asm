@@ -559,9 +559,7 @@ MegaPCM_Process_DPCM:
 	exx				; 4
 	; Cycles: 68
 
-	ld	a,(de)			; 7	; reload DPCM stream byte
 	dec	h			; 4	; load DPLC low nibble delta table base
-	ld	l,a			; 4	; setup delta table index
 	ld	a,b			; 4	; load DAC Value
 	add	a,(hl)			; 7	; add delta to it
 	ld	b,c			; 4	; b = Pitch
@@ -572,7 +570,7 @@ MegaPCM_Process_DPCM:
 	ld	a,(de)			; 7	; Clownacy | get volume-adjusted PCM byte
 	ld	(bc),a			; 7	; write to DAC
 	exx				; 4
-	; Cycles: 68
+	; Cycles: 57
 
 	; Increment DPCM byte pointer and switch the bank if necessary
 	inc	de			; 6	; next DPCM byte
@@ -607,8 +605,8 @@ MegaPCM_Process_DPCM_idle:
 	jp	-
 
 ; ---------------------------------------------------------------
-; Best cycles per loop:	212/2
-; Max possible rate:	3,579.545 kHz / 106 = 34 kHz (NTSC)
+; Best cycles per loop:	201/2
+; Max possible rate:	3,579.545 kHz / 100.5 = 35.6 kHz (NTSC)
 ; ---------------------------------------------------------------
 
 MegaPCM_LastBankNotReached:
@@ -668,7 +666,7 @@ DAC_Entry macro vPitch,vOffset,vFlags
 	; the '*10's and '+5'.
 
 	if vFlags&MegaPCM_dpcm
-		db	(((((((3579545*10)*2)/vPitch)-(224*10))/(13*2))+5)/10)+1	; 01h	- Pitch (DPCM-converted)
+		db	(((((((3579545*10)*2)/vPitch)-(201*10))/(13*2))+5)/10)+1	; 01h	- Pitch (DPCM-converted)
 	else
 		db	((((((3579545*10)/vPitch)-(115*10))/13)+5)/10)+1		; 01h	- Pitch (PCM-converted)
 	endif
