@@ -2021,11 +2021,11 @@ WriteFMI:
 	SMPS_waitZ80
 	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
 	SMPS_waitYM				; 28(6/0)
-	move.b	d0,(a0)+	; ym2612_a0	; 8(1/1)
+	move.b	d0,SMPS_ym2612_a0-SMPS_ym2612_a0(a0)	; ym2612_a0	; 8(1/1)
 	SMPS_waitYM				; 28(6/0)
-	move.b	d1,(a0)		; ym2612_d0	; 8(1/1)
+	move.b	d1,SMPS_ym2612_d0-SMPS_ym2612_a0(a0)		; ym2612_d0	; 8(1/1)
 	SMPS_waitYM				; 28(6/0)
-	move.b	#$2A,-(a0)	; ym2612_a0	; 12(2/1)
+	move.b	#$2A,SMPS_ym2612_a0-SMPS_ym2612_a0(a0)	; ym2612_a0	; 12(2/1)
 	SMPS_startZ80				; Total: 40(7/3) + 84(18/0)
 	rts
 ; End of function WriteFMI
@@ -2042,13 +2042,13 @@ WriteFMIIPart:
 WriteFMII:
 	SMPS_stopZ80
 	SMPS_waitZ80
-	lea	(SMPS_ym2612_a1).l,a0		; 12(3/0)
+	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
 	SMPS_waitYM				; 28(6/0)
-	move.b	d0,(a0)+	; ym2612_a1	; 8(1/1)
+	move.b	d0,SMPS_ym2612_a1-SMPS_ym2612_a0(a0)	; ym2612_a1	; 8(1/1)
 	SMPS_waitYM				; 28(6/0)
-	move.b	d1,(a0)		; ym2612_d1	; 8(1/1)
+	move.b	d1,SMPS_ym2612_d1-SMPS_ym2612_a0(a0)		; ym2612_d1	; 8(1/1)
 	SMPS_waitYM				; 28(6/0)
-	move.b	#$2A,SMPS_ym2612_a0-SMPS_ym2612_d1(a0)	; ym2612_a0	; 16(3/1)
+	move.b	#$2A,SMPS_ym2612_a0-SMPS_ym2612_a0(a0)	; ym2612_a0	; 16(3/1)
 	SMPS_startZ80				; Total: 44(8/3) + 84(18/0)
 	rts
 ; End of function WriteFMII
