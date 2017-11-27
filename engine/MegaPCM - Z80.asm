@@ -239,10 +239,10 @@ MegaPCM_DPCM_DeltaArray:
 MegaPCM_DPCM_DeltaArray_End
 
 MegaPCM_Volume_DeltaArray:
-	dw	100h, 0F0h, 0E0h, 0D0h
-	dw	0C0h, 0B0h, 0A0h, 090h
-	dw	080h, 070h, 060h, 050h
-	dw	040h, 030h, 020h, 010h
+	dw	100h*100h/100h, 0F0h*0F0h/100h, 0E0h*0E0h/100h, 0D0h*0D0h/100h
+	dw	0C0h*0C0h/100h, 0B0h*0B0h/100h, 0A0h*0A0h/100h, 090h*090h/100h
+	dw	080h*080h/100h, 070h*070h/100h, 060h*060h/100h, 050h*050h/100h
+	dw	040h*040h/100h, 030h*030h/100h, 020h*020h/100h, 010h*010h/100h
 
 ; ---------------------------------------------------------------
 
