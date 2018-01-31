@@ -255,17 +255,16 @@ FMUpdateTrack:
 	bne.s	.notegoing			; Branch if it hasn't expired
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
 	bsr.s	FMDoNext
-	bsr.w	FMPrepareNote
-	bsr.w	FMNoteOn
-	; Clownacy | Sonic 2 adds these two branches
 	bsr.w	DoModulation
-	bra.w	FMUpdateFreq
+	bsr.w	FMPrepareNote
+	bra.w	FMNoteOn
 ; ===========================================================================
 ; loc_71CE0:
 .notegoing:
 	bsr.w	NoteFillUpdate
 	bsr.w	DoModulation
-	bra.w	FMUpdateFreq
+	bcs.w	FMUpdateFreq
+	rts
 ; End of function FMUpdateTrack
 
 
@@ -417,14 +416,14 @@ DoModulation:
 	subq.b	#1,SMPS_Track.ModulationWait(a5)	; Update wait timeout
 ; locret_71E16:
 .locret:
-	addq.w	#4,sp				; Do not return to caller (but see below)
+	move.w	#0,ccr
 	rts
 ; ===========================================================================
 ; loc_71DDA:
 .waitdone:
 	subq.b	#1,SMPS_Track.ModulationSpeed(a5)	; Update speed
 	beq.s	.updatemodulation		; If it expired, want to update modulation
-	addq.w	#4,sp				; Do not return to caller (but see below)
+	move.w	#0,ccr
 	rts
 ; ===========================================================================
 ; loc_71DE2:
@@ -435,7 +434,7 @@ DoModulation:
 	bne.s	.calcfreq				; If nonzero, branch
 	move.b	3(a0),SMPS_Track.ModulationSteps(a5)	; Restore from modulation data
 	neg.b	SMPS_Track.ModulationDelta(a5)		; Negate modulation delta
-	addq.w	#4,sp				; Do not return to caller (but see below)
+	move.w	#0,ccr
 	rts
 ; ===========================================================================
 ; loc_71DFE:
@@ -443,9 +442,8 @@ DoModulation:
 	subq.b	#1,SMPS_Track.ModulationSteps(a5)	; Update modulation steps
 	move.b	SMPS_Track.ModulationDelta(a5),d6	; Get modulation delta
 	ext.w	d6
-	add.w	SMPS_Track.ModulationVal(a5),d6	; Add cumulative modulation change
-	move.w	d6,SMPS_Track.ModulationVal(a5)	; Store it
-	add.w	SMPS_Track.Freq(a5),d6		; Add note frequency to it
+	add.w	d6,SMPS_Track.ModulationVal(a5)
+	move.w	#1,ccr
 	rts
 ; End of function DoModulation
 
@@ -456,12 +454,18 @@ DoModulation:
 FMPrepareNote:
 	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track resting?
 	bne.s	locret_71E48			; Return if so
-	move.w	SMPS_Track.Freq(a5),d6		; Get current note frequency
+	tst.w	SMPS_Track.Freq(a5)		; Get current note frequency
 	beq.s	FMSetRest			; Branch if zero
 ; loc_71E24:
 FMUpdateFreq:
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
 	bne.s	locret_71E48			; Return if so
+	move.w	SMPS_Track.Freq(a5),d6		; Get current note frequency
+	btst	#3,SMPS_Track.PlaybackControl(a5)
+	beq.s	.no_modulation
+	add.w	SMPS_Track.ModulationVal(a5),d6
+
+.no_modulation:
 	move.b	SMPS_Track.Detune(a5),d0		; Get detune value
 	ext.w	d0
 	add.w	d0,d6				; Add note frequency
@@ -2061,18 +2065,17 @@ PSGUpdateTrack:
 	bne.s	.notegoing
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack note' flag
 	bsr.s	PSGDoNext
-	bsr.w	PSGDoNoteOn
-	bsr.w	PSGDoVolFX
-	; Clownacy | Sonic 2 adds these two branches
 	bsr.w	DoModulation
-	bra.w	PSGUpdateFreq
+	bsr.w	PSGDoNoteOn
+	bra.w	PSGDoVolFX
 ; ===========================================================================
 ; loc_72866:
 .notegoing:
 	bsr.w	NoteFillUpdate
 	bsr.w	PSGUpdateVolFX
 	bsr.w	DoModulation
-	bra.w	PSGUpdateFreq
+	bcs.w	PSGUpdateFreq
+	rts
 ; End of function PSGUpdateTrack
 
 
@@ -2151,7 +2154,9 @@ PSGFrequencies:
 
 ; sub_728DC:
 PSGDoNoteOn:
-	move.w	SMPS_Track.Freq(a5),d6	; Get note frequency
+	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track at rest?
+	bne.s	PSGUpdateFreq.locret			; Return if yes
+	tst.w	SMPS_Track.Freq(a5)	; Get note frequency
 	bmi.s	PSGSetRest		; If invalid, branch
 ; End of function PSGDoNoteOn
 
@@ -2162,8 +2167,12 @@ PSGDoNoteOn:
 PSGUpdateFreq:
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
 	bne.s	.locret					; Return if yes
-	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track at rest?
-	bne.s	.locret					; Return if yes
+	move.w	SMPS_Track.Freq(a5),d6		; Get current note frequency
+	btst	#3,SMPS_Track.PlaybackControl(a5)
+	beq.s	.no_modulation
+	add.w	SMPS_Track.ModulationVal(a5),d6
+
+.no_modulation:
 	move.b	SMPS_Track.Detune(a5),d0		; Get detune value
 	ext.w	d0
 	add.w	d0,d6					; Add to frequency
