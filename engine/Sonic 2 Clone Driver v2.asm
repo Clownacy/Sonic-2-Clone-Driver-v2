@@ -5,9 +5,6 @@
 	dc.b	"Clownacy's Sonic 2 Clone Driver v2 (v2.7+ prototype)"
 	even
 
-SMPS_FixBugs	= 1
-;	| Fix bugs, what else?
-;
 ; ---------------------------------------------------------------------------
 ; Subroutine to update music more than once per frame
 ; (Called by horizontal & vert. interrupts)
@@ -405,11 +402,10 @@ NoteFillUpdate:
 
 ; sub_71DC6:
 DoModulation:
-    if SMPS_FixBugs
 	; Clownacy | (From S2) Corrects modulation during rests (can be heard in ARZ's theme, as beeping right after the song loops)
 	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track at rest?
 	bne.s	.locret				; Return if so
-    endif
+
 	btst	#3,SMPS_Track.PlaybackControl(a5)	; Is modulation active?
 	beq.s	.locret				; Return if not
 	tst.b	SMPS_Track.ModulationWait(a5)	; Has modulation wait expired?
@@ -798,40 +794,25 @@ Sound_PlayBGM:
 	movea.l	a4,a3
 
 	addq.w	#2+4+2,a4			; Point past header
-    if SMPS_FixBugs
+
 	; Clownacy | One of Valley Bell's fixes: this vital code is skipped if FM/DAC channels is 0, so it's been moved to avoid that
 	move.b	2+4+0(a3),d4		; Load tempo dividing timing
 	moveq	#SMPS_Track.len,d6
 	moveq	#1,d5			; Note duration for first "note"
-    endif
-    if SMPS_FixBugs
+
 	move.b	#$82,d3			; Initial PlaybackControl value
-    endif
+
 	moveq	#0,d7			; Clownacy | Hey, look! It's the 'moveq	#0,d7' that the other Play_X's were missing!
 	move.b	2+0(a3),d7		; Load number of FM+DAC tracks
 	beq.w	.bgm_fmdone		; Branch if zero
 	subq.b	#1,d7
 	move.b	#$C0,d1			; Default AMS+FMS+Panning
-    if ~SMPS_FixBugs
-	move.b	2+4+0(a3),d4		; Load tempo dividing timing
-	moveq	#SMPS_Track.len,d6
-	moveq	#1,d5			; Note duration for first "note"
-    endif
 	lea	SMPS_RAM.v_music_fmdac_tracks(a6),a1
-    if ~SMPS_FixBugs
-	lea	FMDACInitBytes(pc),a2	; Clownacy | InitMusicPlayback will do this instead
-    endif
 ; loc_72098:
 .bmg_fmloadloop:
-    if SMPS_FixBugs
 	; Clownacy | (From S2) Now sets 'track at rest' bit to prevent hanging notes
 	move.b	d3,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
-    else
-	bset	#7,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' bit
-    endif
-    if ~SMPS_FixBugs
-	move.b	(a2)+,SMPS_Track.VoiceControl(a1)	; Voice control bits	; Clownacy | InitMusicPlayback will do this instead
-    endif
+
 	move.b	d4,SMPS_Track.TempoDivider(a1)
 	move.b	d6,SMPS_Track.StackPointer(a1)	; Set "gosub" (coord flag F8h) stack init value
 	move.b	d1,SMPS_Track.AMSFMSPan(a1)		; Set AMS/FMS/Panning
@@ -860,20 +841,11 @@ Sound_PlayBGM:
 	beq.s	.bgm_psgdone	; Branch if zero
 	subq.b	#1,d7
 	lea	SMPS_RAM.v_music_psg_tracks(a6),a1
-    if ~SMPS_FixBugs
-	lea	PSGInitBytes(pc),a2	; Clownacy | InitMusicPlayback will do this instead
-    endif
 ; loc_72126:
 .bgm_psgloadloop:
-    if SMPS_FixBugs
 	; Clownacy | (From S2) Now sets 'track at rest' bit to prevent hanging notes
 	move.b	d3,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
-    else
-	bset	#7,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' bit
-    endif
-    if ~SMPS_FixBugs
-	move.b	(a2)+,SMPS_Track.VoiceControl(a1)	; Voice control bits	; Clownacy | InitMusicPlayback will do this instead
-    endif
+
 	move.b	d4,SMPS_Track.TempoDivider(a1)
 	move.b	d6,SMPS_Track.StackPointer(a1)	; Set "gosub" (coord flag F8h) stack init value
 	move.b	d5,SMPS_Track.DurationTimeout(a1)	; Set duration of first "note"
@@ -1115,9 +1087,8 @@ Sound_PlaySFX:
 	; DANGER! there is a missing 'moveq	#0,d7' here, without which SFXes whose
 	; index entry is above $3F will cause a crash. This is actually the same way that
 	; this bug is fixed in Ristar's driver.
-    if SMPS_FixBugs
 	moveq	#0,d7
-    endif
+
 	move.b	(a1)+,d7	; Number of tracks (FM + PSG)
 	subq.b	#1,d7
 	moveq	#SMPS_Track.len,d6
@@ -1142,20 +1113,11 @@ Sound_PlaySFX:
 	movea.w	(a5,d3.w),a5
 	adda.l	a6,a5
 	bset	#2,SMPS_Track.PlaybackControl(a5)	; Mark music track as being overridden
-    if ~SMPS_FixBugs
-	; This check is in the wrong place: this should prevent PSG 1&2 from trying
-	; to silence the noise channel, but it also stops PSG 1&2 from being
-	; silenced altogether.
-	cmpi.b	#$C0,d4			; Is this PSG 3?
-	bne.s	.sfxoverridedone	; Branch if not
-    endif
 	move.b	d4,d0
 	ori.b	#$1F,d0			; Command to silence PSG
 	move.b	d0,(SMPS_psg_input).l
-    if SMPS_FixBugs
 	cmpi.b	#$C0,d4			; Is this PSG 3?
 	bne.s	.sfxoverridedone	; Branch if not
-    endif
 	bchg	#5,d0			; Command to silence noise channel
 	move.b	d0,(SMPS_psg_input).l	; Silence PSG 4 (noise), too
 ; loc_7226E:
@@ -1274,9 +1236,8 @@ Sound_PlaySpecial:
 	; DANGER! there is a missing 'moveq	#0,d7' here, without which Special SFXes whose
 	; index entry is above $3F will cause a crash. Ristar's driver didn't have this
 	; particular instance fixed.
-    if SMPS_FixBugs
 	moveq	#0,d7
-    endif
+
 	move.b	(a1)+,d7	; Number of tracks (FM + PSG)
 	subq.b	#1,d7
 	moveq	#SMPS_Track.len,d6
@@ -1336,19 +1297,13 @@ Sound_PlaySpecial:
 ; loc_723A6:
 .doneoverride:
 	tst.b	SMPS_RAM.v_sfx_psg3_track.PlaybackControl(a6)	; Is track playing?
-    if SMPS_FixBugs
 	bpl.s	.PSG3NotOverrided			; Branch if not
-    else
-	bpl.s	.locret					; Branch if not
-    endif
 	bset	#2,SMPS_RAM.v_spcsfx_psg3_track.PlaybackControl(a6) ; Set 'SFX is overriding' track
-    if SMPS_FixBugs
 	; The original driver made the mistake of silencing PSG3 when the
 	; SFX track is using it, not the Special SFX
 	rts
 
 .PSG3NotOverrided:
-    endif
 	ori.b	#$1F,d4					; Command to silence channel
 	lea	(SMPS_psg_input).l,a1
 	move.b	d4,(a1)
@@ -1387,9 +1342,7 @@ StopSFX:
 	; DANGER! there is a missing 'movea.l	a5,a3' here, without which the
 	; code is broken. It is dangerous to do a fade out when a GHZ waterfall
 	; is playing its sound!
-    if SMPS_FixBugs
 	movea.l	a5,a3
-    endif
 
 	lea	SMPS_RAM.v_spcsfx_fm4_track(a6),a5
 	movea.l	SMPS_Track.VoicePtr(a5),a1	; Get special voice pointer
@@ -1567,12 +1520,11 @@ DoFadeOut:
 ; ===========================================================================
 ; loc_72558:
 .sendpsgvol:
-    if SMPS_FixBugs
 	; If a volume envelope is active, then it will handle updating the volume for us.
 	; Doing it manually will just conflict with it.
 	tst.b	SMPS_Track.VoiceIndex(a5)
 	bne.s	.nextpsg
-    endif
+
 	move.b	SMPS_Track.Volume(a5),d6	; Store new volume attenuation
 	bsr.w	SetPSGVolume
 ; loc_72560:
@@ -1754,8 +1706,6 @@ InitMusicPlayback:
 	move.b	#$C0,d1			; Value to send
 	bsr.w	WriteFMIorII
 
-
-    if SMPS_FixBugs
 	; InitMusicPlayback, and Sound_PlayBGM for that matter,
 	; don't do a very good job of setting up the music tracks.
 	; Tracks that aren't defined in a music file's header don't have
@@ -1774,18 +1724,6 @@ InitMusicPlayback:
 	dbf	d1,.writeloop		; Loop for all DAC/FM/PSG tracks
 
 	rts
-    else
-	; Clownacy | We don't need this, especially since .sfxstoploop does the
-	; same thing, only better (it only silences the music channels).
-	; This actually causes a bug in S1's driver, where an SFX is interrupted
-	; when a new song starts, causing sound distortion. S2 just stopped all
-	; SFX when a new song plays, which just hides the problem.
-    if SMPS_EnablePWM
-	bsr.w	PWMSilenceAll
-    endif
-	bsr.w	FMSilenceAll
-	bra.w	PSGSilenceAll
-    endif
 ; End of function InitMusicPlayback
 
 
@@ -1896,12 +1834,12 @@ DoFadeIn:
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
 	bpl.s	.nextpsg			; Branch if not
 	subq.b	#4,SMPS_Track.Volume(a5)	; Reduce volume attenuation
-    if SMPS_FixBugs
+
 	; If a volume envelope is active, then it will handle updating the volume for us.
 	; Doing it manually will just conflict with it.
 	tst.b	SMPS_Track.VoiceIndex(a5)
 	bne.s	.nextpsg
-    endif
+
 	move.b	SMPS_Track.Volume(a5),d6	; Get value
 	bsr.w	SetPSGVolume
 ; loc_726CC:
@@ -2300,27 +2238,16 @@ VolEnvReset:	; For compatibility with S3K
 ; ===========================================================================
 ; loc_7299A: FlutterDone:
 VolEnvHold:
-    if SMPS_FixBugs
 	; Decrement volume envelope index to before flag and last volume update (PSG volume will still update on subsequent frame)
 	subq.b	#2,SMPS_Track.VolEnvIndex(a5)
 	bra.s	PSGDoVolFX_Loop
-    else
-	; Decrement volume envelope index to before flag (note, this halts subsequent PSG volume updates, which conflicts with a fix in the fading subroutines)
-	subq.b	#1,SMPS_Track.VolEnvIndex(a5)
-	rts
-    endif
 
 ; ===========================================================================
 
 VolEnvOff:	; For compatibility with S3K
-    if SMPS_FixBugs
 	; Decrement volume envelope index to before flag and last volume update (PSG volume will still update on subsequent frame)
-	; TODO: This might be redundant (why update volume if A. it's mean to be mute, and B. the update is ignored because it's at rest)
+	; TODO: This might be redundant (why update volume if A. it's meant to be mute, and B. the update is ignored because it's at rest)
 	subq.b	#2,SMPS_Track.VolEnvIndex(a5)
-    else
-	; Decrement volume envelope index to before flag (note, this halts subsequent PSG volume updates, which conflicts with a fix in the fading subroutines)
-	subq.b	#1,SMPS_Track.VolEnvIndex(a5)
-    endif
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
 ;	bra.s	PSGNoteOff
 
@@ -2335,7 +2262,6 @@ SendPSGNoteOff:
 	move.b	SMPS_Track.VoiceControl(a5),d0	; PSG channel to change
 	ori.b	#$1F,d0				; Maximum volume attenuation
 	move.b	d0,(SMPS_psg_input).l
-    if SMPS_FixBugs
 	; Without InitMusicPlayback forcefully muting all channels, there's the
 	; risk of music accidentally playing noise because it can't detect if
 	; the PSG 4/noise channel needs muting, on track initialisation.
@@ -2344,7 +2270,6 @@ SendPSGNoteOff:
 	cmpi.b	#$DF,d0			; Are we stopping PSG 3?
 	bne.s	locret_729B4
 	move.b	#$FF,(SMPS_psg_input).l	; If so, stop noise channel while we're at it
-    endif
 locret_729B4:
 	rts
 ; End of function PSGNoteOff
@@ -2673,12 +2598,10 @@ cfFadeInToPrevious:
 	add.b	d0,d0
 	add.b	d0,d0
 	add.b	d0,SMPS_Track.Volume(a5)		; Apply current volume fade-in
-    if SMPS_FixBugs
 	; Clownacy | One of Valley Bell's fixes: this restores the noise mode if need be, avoiding a bug where unwanted noise plays
 	cmpi.b	#$E0,SMPS_Track.VoiceControl(a5)	; Is this a noise channel?
 	bne.s	.nextpsg				; Branch if not
 	move.b	SMPS_Track.PSGNoise(a5),(SMPS_psg_input).l	; Set noise type
-    endif
 
 ; loc_72B78:
 .nextpsg:
@@ -2702,11 +2625,10 @@ cfSetTempoDivider:
 ; loc_72BA4: cfSetVolume:
 cfChangeFMVolume:
 	move.b	(a4)+,d0		; Get parameter
-    if SMPS_FixBugs
 	; SMPS Z80 (at least the version S&K uses) prevents PSG channels from using this
 	tst.b	SMPS_Track.VoiceControl(a5)	; Is this a PSG track?
 	bmi.s	cfSetTempoDivider.locret	; If so, return
-    endif
+
 	add.b	d0,SMPS_Track.Volume(a5)	; Add to current volume
 	btst	#4,SMPS_Track.VoiceControl(a5)	; Is this the DAC track?
 	bne.w	SetDACVolume			; If so, branch
