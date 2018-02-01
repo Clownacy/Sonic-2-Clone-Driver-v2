@@ -385,14 +385,14 @@ DoModulation:
 	subq.b	#1,SMPS_Track.ModulationWait(a5)	; Update wait timeout
 ; locret_71E16:
 .locret:
-	move.w	#0,ccr
+	move.b	#0,ccr
 	rts
 ; ===========================================================================
 ; loc_71DDA:
 .waitdone:
 	subq.b	#1,SMPS_Track.ModulationSpeed(a5)	; Update speed
 	beq.s	.updatemodulation		; If it expired, want to update modulation
-	move.w	#0,ccr
+	move.b	#0,ccr
 	rts
 ; ===========================================================================
 ; loc_71DE2:
@@ -403,7 +403,7 @@ DoModulation:
 	bne.s	.calcfreq				; If nonzero, branch
 	move.b	3(a0),SMPS_Track.ModulationSteps(a5)	; Restore from modulation data
 	neg.b	SMPS_Track.ModulationDelta(a5)		; Negate modulation delta
-	move.w	#0,ccr
+	move.b	#0,ccr
 	rts
 ; ===========================================================================
 ; loc_71DFE:
@@ -412,7 +412,7 @@ DoModulation:
 	move.b	SMPS_Track.ModulationDelta(a5),d6	; Get modulation delta
 	ext.w	d6
 	add.w	d6,SMPS_Track.ModulationVal(a5)
-	move.w	#1,ccr
+	move.b	#1,ccr
 	rts
 ; End of function DoModulation
 
