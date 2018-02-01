@@ -438,15 +438,13 @@ FMUpdateFreq:
 	move.b	SMPS_Track.Detune(a5),d0		; Get detune value
 	ext.w	d0
 	add.w	d0,d6				; Add note frequency
-	move.w	d6,d1
-	lsr.w	#8,d1
+	move.w	d6,-(sp)
+	move.b	(sp)+,d1
 	move.b	#$A4,d0		; Register for upper 6 bits of frequency
 	bsr.w	WriteFMIorII
 	move.b	d6,d1
 	move.b	#$A0,d0		; Register for lower 8 bits of frequency
 	bra.w	WriteFMIorII
-;locret_71E48:
-;	rts
 ; ===========================================================================
 ; loc_71E4A:
 FMSetRest:
@@ -2328,8 +2326,8 @@ PWMUpdateSample:
 	move.b	SMPS_Track.SavedPWM(a5),d0
 	cmpi.b	#$80,d0				; Is this a rest?
 	beq.s	.skipVolumeUpdate		; If so, skip obtaining volume
-	move.b	SMPS_Track.Volume(a5),d1
-	lsl.w	#8,d1
+	move.b	SMPS_Track.Volume(a5),-(sp)
+	move.w	(sp)+,d1
 
 .skipVolumeUpdate:
 	btst	#4,SMPS_Track.PlaybackControl(a5)	; Is 'do not attack' enabled?
@@ -2366,7 +2364,6 @@ PWMSilenceAll:
 
 ; sub_72A5A:
 CoordFlag:
-	cmpi.b	#$FE,d5		; Clownacy | smpsNoAttack doesn't like being two bytes, so it uses the unique $FE byte
 	beq.w	cfHoldNote
 	move.b	(a4)+,d5	; Clownacy | The true coord flag value follows the $FF
 	add.w	d5,d5
@@ -2975,8 +2972,8 @@ cfSetPSGTone:
 ; ===========================================================================
 ; loc_72E2C:
 cfJumpTo:
-	move.b	(a4)+,d0	; High byte of offset
-	lsl.w	#8,d0		; Shift it into place
+	move.b	(a4)+,-(sp)
+	move.w	(sp)+,d0
 	move.b	(a4),d0		; Low byte of offset
 	adda.w	d0,a4		; Add to current position
 	rts
