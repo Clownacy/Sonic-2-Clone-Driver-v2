@@ -2453,8 +2453,6 @@ cfPanningAMSFMS:
 	move.b	(a4)+,d1				; New AMS/FMS/panning value
 	tst.b	SMPS_Track.VoiceControl(a5)		; Is this a PSG track?
 	bmi.s	locret_72AEA				; Return if yes
-	btst	#2,SMPS_Track.PlaybackControl(a5)
-	bne.s	locret_72AEA
 	move.b	SMPS_Track.AMSFMSPan(a5),d0		; Get current AMS/FMS/panning
 	andi.b	#$37,d0					; Retain bits 0-2, 3-4 if set
 	or.b	d0,d1					; Mask in new value
