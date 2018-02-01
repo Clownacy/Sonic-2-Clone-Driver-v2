@@ -14,43 +14,15 @@
 
 ; sub_71B4C: UpdateMusic:
 SMPS_UpdateDriver:
-	; From Vladikcomper:
-	; "This is the code to stop Z80.
-	; Thus, SMPS stops it at the beginning of its main routine execution and starts it at the end.
-	; You won't need this code anymore."
-;	SMPS_stopZ80
-;	SMPS_waitZ80
-;	nop
-;	nop
-;	nop
-; loc_71B5A:
-;.updateloop:	; Clownacy | Vlad's guide missed this
-;	btst	#0,(z80_bus_request).l		; Is the z80 busy?	; Clownacy | And this
-;	bne.s	.updateloop:			; If so, wait		; Clownacy | And this
-
-	; From Vladikcomper:
-	; "This code checked driver's status and didn't run SMPS engine until driver tells SMPS can interrupt him.
-	; "Mega PCM" doesn't need this trick anymore."
-
-;	tst.b	(z80_dac_status).l		; Is DAC accepting new samples?
-;	bpl.s	.driverinput			; Branch if yes
-;	SMPS_startZ80
-;	nop
-;	nop
-;	nop
-;	nop
-;	nop
-;	bra.s	UpdateMusic
-; ===========================================================================
-; loc_71B82:
-;.driverinput:
     if ((Clone_Driver_RAM)&$8000)==0
 	lea	(Clone_Driver_RAM).l,a6
     else
 	lea	(Clone_Driver_RAM).w,a6
     endif
+
 	tst.b	SMPS_RAM.f_stopmusic(a6)	; Is music paused?
 	bne.w	DoPauseMusic			; If yes, branch
+
 	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)
 	beq.s	.skipfadeout
 	bsr.w	DoFadeOut
@@ -290,12 +262,12 @@ FMDoNext:
 	move.b	(a4)+,d5		; Get another byte
 	bpl.s	.gotduration		; Branch if it is a duration
 	subq.w	#1,a4			; Otherwise, put it back
-	bra.s	FinishTrackUpdate
+	bra.w	FinishTrackUpdate
 ; ===========================================================================
 ; loc_71D1A:
 .gotduration:
-	bsr.s	SetDuration
-	bra.s	FinishTrackUpdate
+	bsr.w	SetDuration
+	bra.w	FinishTrackUpdate
 ; End of function FMDoNext
 
 
@@ -306,16 +278,9 @@ FMSetFreq:
 	subi.b	#$80,d5				; Make it a zero-based index
 	beq.w	TrackSetRest
 	add.b	SMPS_Track.Transpose(a5),d5		; Add track transposition
-	divu.w	#$C,d5
-	swap	d5
+	andi.w	#$7F,d5			; Clear high byte and sign bit
 	add.w	d5,d5
-	move.w	FMFrequencies(pc,d5.w),d6
-	swap	d5
-	andi.w	#7,d5
-	moveq	#$B,d0
-	lsl.w	d0,d5
-	or.w	d5,d6
-	move.w	d6,SMPS_Track.Freq(a5) ; Store new frequency
+	move.w	FMFrequencies(pc,d5.w),SMPS_Track.Freq(a5)
 	rts
 ; End of function FMSetFreq
 
@@ -326,6 +291,13 @@ FMSetFreq:
 ; word_72790: FM_Notes:
 FMFrequencies:
 	dc.w $025E,$0284,$02AB,$02D3,$02FE,$032D,$035C,$038F,$03C5,$03FF,$043C,$047C
+	dc.w $0A5E,$0A84,$0AAB,$0AD3,$0AFE,$0B2D,$0B5C,$0B8F,$0BC5,$0BFF,$0C3C,$0C7C
+	dc.w $125E,$1284,$12AB,$12D3,$12FE,$132D,$135C,$138F,$13C5,$13FF,$143C,$147C
+	dc.w $1A5E,$1A84,$1AAB,$1AD3,$1AFE,$1B2D,$1B5C,$1B8F,$1BC5,$1BFF,$1C3C,$1C7C
+	dc.w $225E,$2284,$22AB,$22D3,$22FE,$232D,$235C,$238F,$23C5,$23FF,$243C,$247C
+	dc.w $2A5E,$2A84,$2AAB,$2AD3,$2AFE,$2B2D,$2B5C,$2B8F,$2BC5,$2BFF,$2C3C,$2C7C
+	dc.w $325E,$3284,$32AB,$32D3,$32FE,$332D,$335C,$338F,$33C5,$33FF,$343C,$347C
+	dc.w $3A5E,$3A84,$3AAB,$3AD3,$3AFE,$3B2D,$3B5C,$3B8F,$3BC5,$3BFF,$3C3C,$3C7C
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
