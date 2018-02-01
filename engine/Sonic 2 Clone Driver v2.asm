@@ -658,7 +658,7 @@ PlaySegaSound:
 ; ---------------------------------------------------------------------------
 ; Sound_81to9F:
 Sound_PlayBGM:
-	; Clownacy | The commented-out is from S2's driver, which was used to hide a certain bug.
+	; Clownacy | The commented-out bsr is from S2's driver, which was used to hide a certain bug.
 	; Lucky for us, though, we just fix the bug directly, so we don't need this.
 ;	bsr.w	StopSFX			; Clownacy | (From S2) Helps stop audio artefacts after SFX interruption
 ;    if SMPS_EnableSpecSFX
@@ -946,53 +946,32 @@ PWMInitBytes:
     endif
 	even
 ; ===========================================================================
-; ---------------------------------------------------------------------------
-; Play normal sound effect
-; ---------------------------------------------------------------------------
-; Sound_A0toCF:
-Sound_PlaySFX:
-	btst	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)		; Is 1-up playing?
-	bne.w	.clear_sndprio			; Exit is it is
-;	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)		; Is music being faded out?	; Clownacy | S2's driver doesn't bother with this
-;	bne.w	.clear_sndprio			; Exit if it is
-	btst	#f_fadeinflag,SMPS_RAM.variables.bitfield2(a6)		; Is music being faded in?
-	bne.w	.clear_sndprio			; Exit if it is
-    if SMPS_EnableSpinDashSFX
-	bclr	#f_spindash_lastsound,SMPS_RAM.bitfield1(a6)
-    endif
-	cmpi.b	#SndID_Ring,d7			; Is ring sound	effect played?
-	bne.s	.sfx_notRing			; If not, branch
+
+PlaySFX_Ring:
 	btst	#v_ring_speaker,SMPS_RAM.bitfield1(a6)	; Is the ring sound playing on right speaker?
 	bne.s	.gotringspeaker			; Branch if not
 	move.b	#SndID_RingLeft,d7		; Play ring sound in left speaker
 ; loc_721EE:
 .gotringspeaker:
 	bchg	#v_ring_speaker,SMPS_RAM.bitfield1(a6)	; Change speaker
-; Sound_notB5:
-.sfx_notRing:
+	bra.s	Sound_PlaySFX.play_sfx
+
     if SMPS_PushSFXBehaviour
-	cmpi.b	#sfx_Push,d7			; Is "pushing" sound played?
-	bne.s	.sfx_notPush			; If not, branch
-
+PlaySFX_Push:
 	bset	#f_push_playing,SMPS_RAM.bitfield1(a6)	; Mark pushing sound as playing
-	bne.w	.locret				; Return if already playing
+	beq.s	Sound_PlaySFX.play_sfx
+	rts
     endif
-; Sound_notA7:
-.sfx_notPush:
+
     if SMPS_GloopSFXBehaviour
-	; Turns out S2 uses a version of the above code for the gloop SFX (zPlaySound_CheckGloop).
-	; This is my best attempt at porting it.
-	cmpi.b	#SndID_Gloop,d7			; Is bloop/gloop sound played?
-	bne.s	.sfx_notgloop			; If not, branch
-
+PlaySFX_Gloop:
 	bchg	#v_gloop_toggle,SMPS_RAM.bitfield1(a6)	; Z80 cpl
-	beq.w	.locret				; Is value set to 0? If so, branch
+	bne.s	Sound_PlaySFX.play_sfx
+	rts
     endif
 
-.sfx_notgloop:
     if SMPS_EnableSpinDashSFX
-	cmpi.b	#SndID_SpindashRev,d7		; Is this the Spin Dash sound?
-	bne.s	.sfx_notspindashrev		; If not, branch
+PlaySFX_SpinDashRev:
 	move.b	SMPS_RAM.v_spindash_pitch(a6),d0		; Store extra frequency
 	tst.b	SMPS_RAM.v_spindash_timer(a6)		; Is the Spin Dash timer active?
 	bne.s	.sfx_timeractive		; If it is, branch
@@ -1007,9 +986,42 @@ Sound_PlaySFX:
 .sfx_limitreached:
 	bset	#f_spindash_lastsound,SMPS_RAM.bitfield1(a6)	; Set flag
 	move.b	#60,SMPS_RAM.v_spindash_timer(a6)		; Set timer
+	bra.s	Sound_PlaySFX.play_sfx
 
 .sfx_notspindashrev:
     endif
+
+; ---------------------------------------------------------------------------
+; Play normal sound effect
+; ---------------------------------------------------------------------------
+; Sound_A0toCF:
+Sound_PlaySFX:
+	btst	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)		; Is 1-up playing?
+	bne.w	.clear_sndprio			; Exit is it is
+;	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)		; Is music being faded out?	; Clownacy | S2's driver doesn't bother with this
+;	bne.w	.clear_sndprio			; Exit if it is
+	btst	#f_fadeinflag,SMPS_RAM.variables.bitfield2(a6)		; Is music being faded in?
+	bne.w	.clear_sndprio			; Exit if it is
+    if SMPS_EnableSpinDashSFX
+	bclr	#f_spindash_lastsound,SMPS_RAM.bitfield1(a6)
+    endif
+
+	cmpi.b	#SndID_Ring,d7			; Is ring sound	effect played?
+	beq.s	PlaySFX_Ring
+    if SMPS_PushSFXBehaviour
+	cmpi.b	#sfx_Push,d7			; Is "pushing" sound played?
+	beq.s	PlaySFX_Push
+    endif
+    if SMPS_GloopSFXBehaviour
+	cmpi.b	#SndID_Gloop,d7			; Is bloop/gloop sound played?
+	beq.s	PlaySFX_Gloop
+    endif
+    if SMPS_EnableSpinDashSFX
+	cmpi.b	#SndID_SpindashRev,d7		; Is this the Spin Dash sound?
+	beq.s	PlaySFX_SpinDashRev
+    endif
+
+.play_sfx:
 
     if SMPS_EnableContSFX
 	cmpi.b	#SMPS_First_ContSFX,d7		; Is this a continuous SFX?
