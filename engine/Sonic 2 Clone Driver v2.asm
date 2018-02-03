@@ -748,8 +748,15 @@ Sound_PlayBGM:
 .nopalmode:
 	movea.l	d1,a4			; a4 now points to (uncompressed) song data
 	move.w	(a4),d2			; Load voice pointer
+    if SMPS_EnableUniversalVoiceBank
+	bne.s	.doesNotUseUniVoiceBank
+	move.l	#UniVoiceBank,d2
+	bra.s	.got_voice_pointer
+.doesNotUseUniVoiceBank:
+    endif
 	ext.l	d2
 	add.l	a4,d2			; It is a relative pointer
+.got_voice_pointer:
 	move.b	2+4+1(a4),d0		; Load tempo
 	move.b	d0,SMPS_RAM.variables.v_tempo_mod(a6)
 	btst	#f_speedup,SMPS_RAM.variables.bitfield2(a6)
@@ -795,12 +802,6 @@ Sound_PlayBGM:
 	move.b	d0,SMPS_Track.DataPointer+1(a1)	; Store track pointer
 	move.b	(a4)+,SMPS_Track.Transpose(a1)	; Load FM channel modifier
 	move.b	(a4)+,SMPS_Track.Volume(a1)	; Load FM channel modifier
-    if SMPS_EnableUniversalVoiceBank
-	cmp.l	d2,a3
-	bne.s	.doesNotUseUniVoiceBank
-	move.l	#UniVoiceBank,d2
-.doesNotUseUniVoiceBank:
-    endif
 	move.l	d2,SMPS_Track.VoicePtr(a1)	; Load voice pointer
 	adda.w	d6,a1
 	dbf	d7,.bmg_fmloadloop
