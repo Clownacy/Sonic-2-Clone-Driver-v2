@@ -437,6 +437,9 @@ MegaPCM_LoadBank:
 ;	C	= Pitch
 ;	DE	= Volume byte pointer
 ;	HL	= PCM byte pointer
+;	B'	= Current bank
+;	C'	= Final bank
+;	HL'	= Number of bytes in last bank
 ; ---------------------------------------------------------------
 
 ; ---------------------------------------------------------------
@@ -516,7 +519,8 @@ MegaPCM_Process_PCM_idle:
 ;	C	= Pitch
 ;	DE	= DPCM byte pointer
 ;	HL	= Delta Table
-;	BC'	= YM2612 data port pointer
+;	B'	= Current bank
+;	C'	= Final bank
 ;	DE'	= Volume byte pointer
 ;	HL'	= Number of bytes in last bank
 ; ---------------------------------------------------------------
@@ -537,9 +541,6 @@ MegaPCM_Init_DPCM:
 	ld	(iy+0),2Ah		; YM => prepare to fetch DAC bytes
 	ld	b,80h			; init DAC value
 	ld	h,MegaPCM_DPCM_LowNibble>>8	; load delta table base
-	exx
-	ld	bc,MegaPCM_YM_Port0_Data
-	exx
 
 MegaPCM_Process_DPCM:
 
@@ -555,9 +556,9 @@ MegaPCM_Process_DPCM:
 	exx				; 4
 	ld	e,a			; 4	; Clownacy | get address of volume-adjusted PCM byte
 	ld	a,(de)			; 7	; Clownacy | get volume-adjusted PCM byte
-	ld	(bc),a			; 7	; write to DAC
+	ld	(MegaPCM_YM_Port0_Data),a	; 13	; write to DAC
 	exx				; 4
-	; Cycles: 68
+	; Cycles: 74
 
 	dec	h			; 4	; load DPLC low nibble delta table base
 	ld	a,b			; 4	; load DAC Value
@@ -568,9 +569,9 @@ MegaPCM_Process_DPCM:
 	exx				; 4
 	ld	e,a			; 4	; Clownacy | get address of volume-adjusted PCM byte
 	ld	a,(de)			; 7	; Clownacy | get volume-adjusted PCM byte
-	ld	(bc),a			; 7	; write to DAC
+	ld	(MegaPCM_YM_Port0_Data),a	; 13	; write to DAC
 	exx				; 4
-	; Cycles: 57
+	; Cycles: 63
 
 	; Increment DPCM byte pointer and switch the bank if necessary
 	inc	de			; 6	; next DPCM byte
@@ -605,8 +606,8 @@ MegaPCM_Process_DPCM_idle:
 	jp	-
 
 ; ---------------------------------------------------------------
-; Best cycles per loop:	201/2
-; Max possible rate:	3,579.545 kHz / 100.5 = 35.6 kHz (NTSC)
+; Best cycles per loop:	213/2
+; Max possible rate:	3,579.545 kHz / 106.5 = 33.6 kHz (NTSC)
 ; ---------------------------------------------------------------
 
 MegaPCM_LastBankNotReached:
@@ -666,7 +667,7 @@ DAC_Entry macro vPitch,vOffset,vFlags
 	; the '*10's and '+5'.
 
 	if vFlags&MegaPCM_dpcm
-		db	(((((((3579545*10)*2)/vPitch)-(201*10))/(13*2))+5)/10)+1	; 01h	- Pitch (DPCM-converted)
+		db	(((((((3579545*10)*2)/vPitch)-(213*10))/(13*2))+5)/10)+1	; 01h	- Pitch (DPCM-converted)
 	else
 		db	((((((3579545*10)/vPitch)-(115*10))/13)+5)/10)+1		; 01h	- Pitch (PCM-converted)
 	endif
