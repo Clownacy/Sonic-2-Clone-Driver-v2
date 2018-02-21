@@ -847,14 +847,14 @@ Sound_PlayBGM:
 	move.b	d4,SMPS_Track.TempoDivider(a1)
 	move.b	d6,SMPS_Track.StackPointer(a1)	; Set "gosub" (coord flag F8h) stack init value
 	move.b	d5,SMPS_Track.DurationTimeout(a1)	; Set duration of first "note"
-	move.w	(a4)+,d0			; Load PSG channel pointer
+	move.w	(a4)+,d0			; Load PWM channel pointer
 	ext.l	d0				; Clownacy | Fix negative pointers
 	add.l	a3,d0				; Relative pointer
 	move.w	d0,SMPS_Track.DataPointer+2(a1)	; Store track pointer
 	swap	d0
 	move.b	d0,SMPS_Track.DataPointer+1(a1)	; Store track pointer
-	move.b	(a4)+,SMPS_Track.Transpose(a1)	; Load PSG modifier
-	move.b	(a4)+,SMPS_Track.Volume(a1)	; Load PSG modifier
+	move.b	(a4)+,SMPS_Track.Transpose(a1)	; Load PWM modifier
+	move.b	(a4)+,SMPS_Track.Volume(a1)	; Load PWM modifier
 	adda.w	d6,a1
 	dbf	d7,.bgm_pwmloadloop
 
@@ -947,12 +947,11 @@ PWMInitBytes:
 ; ===========================================================================
 
 PlaySFX_Ring:
-	btst	#v_ring_speaker,SMPS_RAM.bitfield1(a6)	; Is the ring sound playing on right speaker?
+	bchg	#v_ring_speaker,SMPS_RAM.bitfield1(a6)	; Is the ring sound playing on right speaker?
 	bne.s	.gotringspeaker			; Branch if not
 	move.b	#SndID_RingLeft,d7		; Play ring sound in left speaker
 ; loc_721EE:
 .gotringspeaker:
-	bchg	#v_ring_speaker,SMPS_RAM.bitfield1(a6)	; Change speaker
 	bra.s	Sound_PlaySFX.play_sfx
 
     if SMPS_PushSFXBehaviour
