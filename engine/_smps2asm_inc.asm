@@ -3,6 +3,8 @@
 ; =============================================================================================
 ; This modification supports the Sonic 2 Clone Driver v2, and strips out support for all other drivers
 
+SMPS2ASMVer	= 1
+
 ; PSG conversion to S3/S&K/S3D drivers require a tone shift of 12 semi-tones.
 psgdelta	EQU 12
 ; ---------------------------------------------------------------------------------------------
@@ -82,19 +84,29 @@ PSGPitchConvert macro pitch
 	endm
 ; ---------------------------------------------------------------------------------------------
 ; Header Macros
-smpsHeaderStartSong macro ver
-SourceDriver set ver
-songStart set *
-	endm
+smpsHeaderStartSong macro ver, sourcesmps2asmver
 
-smpsHeaderStartSongConvert macro ver
 SourceDriver set ver
+
+	if ("sourcesmps2asmver"<>"")
+SourceSMPS2ASM set sourcesmps2asmver
+	else
+SourceSMPS2ASM set 0
+	endif
+
 songStart set *
+
+	if MOMPASS==2
+	if SMPS2ASMVer < SourceSMPS2ASM
+	message "Song at 0x\{songStart} was made for a newer version of SMPS2ASM (this is version \{SMPS2ASMVer}, but song wants at least version \{SourceSMPS2ASM})."
+	endif
+	endif
+
 	endm
 
 smpsHeaderVoiceNull macro
 	if songStart<>*
-		fatal "Missing smpsHeaderStartSong or smpsHeaderStartSongConvert"
+		fatal "Missing smpsHeaderStartSong"
 	endif
 	dc.w	$0000
 	endm
@@ -103,7 +115,7 @@ smpsHeaderVoiceNull macro
 ; Common to music and SFX
 smpsHeaderVoice macro loc
 	if songStart<>*
-		fatal "Missing smpsHeaderStartSong or smpsHeaderStartSongConvert"
+		fatal "Missing smpsHeaderStartSong"
 	endif
 	if MOMPASS==2
 	if ((loc-songStart >= $8000) || (loc-songStart < -$8000))
@@ -117,7 +129,7 @@ smpsHeaderVoice macro loc
 ; Common to music and SFX
 smpsHeaderVoiceUVB macro
 	if songStart<>*
-		fatal "Missing smpsHeaderStartSong or smpsHeaderStartSongConvert"
+		fatal "Missing smpsHeaderStartSong"
 	endif
 	if SMPS_EnableUniversalVoiceBank
 		dc.w	$0000
@@ -243,11 +255,6 @@ smpsDetune macro val
 	dc.b	$FF,$01,val
 	endm
 
-; Historical version of smpsDetune
-smpsAlterNote macro val
-	smpsDetune val
-	endm
-
 ; E2xx - Useless
 smpsNop macro val
 	dc.b	$FF,$02,val
@@ -294,11 +301,6 @@ smpsChangeTransposition macro val
 	dc.b	$FF,$09,val
 	endm
 
-; Historical version of smpsChangeTransposition
-smpsAlterPitch macro val
-	smpsChangeTransposition val
-	endm
-
 ; Set music tempo modifier to xx
 smpsSetTempoMod macro mod
 	dc.b	$FF,$0A
@@ -339,7 +341,7 @@ smpsStopSpecial macro
 	endm
 
 ; EFxx[yy] - Set Voice of FM channel to xx; xx < 0 means yy present
-smpsSetvoice macro voice,songID
+smpsFMvoice macro voice,songID
 	dc.b	$FF,$0D,voice
 	endm
 
@@ -448,6 +450,23 @@ smpsMaxRelRate macro
 	smpsFMICommand $88,$0F
 	smpsFMICommand $8C,$0F
 	endm
+; ---------------------------------------------------------------------------
+; Backwards compatibility
+smpsAlterNote macro
+	smpsDetune	ALLARGS
+	endm
+
+smpsAlterPitch macro
+	smpsChangeTransposition	ALLARGS
+	endm
+
+smpsWeirdD1LRR macro
+	smpsMaxRelRate ALLARGS
+	endm
+
+smpsSetvoice macro
+	smpsFMvoice ALLARGS
+	endm
 ; ---------------------------------------------------------------------------------------------
 ; Macros for FM instruments
 ; Voices - Feedback
@@ -497,11 +516,21 @@ vcAR4 set op4
 	endm
 
 ; Voices - Amplitude Modulation
+; The original SMPS2ASM erroneously assumed the 6th and 7th bits
+; were the Amplitude Modulation.
+; According to several docs, however, it's actually the high bit.
 smpsVcAmpMod macro op1,op2,op3,op4
-vcAM1 set op1
-vcAM2 set op2
-vcAM3 set op3
-vcAM4 set op4
+	if SMPS2ASMVer==0
+vcAM1 set op1<<5
+vcAM2 set op2<<5
+vcAM3 set op3<<5
+vcAM4 set op4<<5
+	else
+vcAM1 set op1<<7
+vcAM2 set op2<<7
+vcAM3 set op3<<7
+vcAM4 set op4<<7
+	endif
 	endm
 
 ; Voices - First Decay Rate
@@ -537,6 +566,15 @@ vcRR4 set op4
 	endm
 
 ; Voices - Total Level
+; The original SMPS2ASM decides TL high bits automatically,
+; but later versions leave it up to the user.
+; Alternatively, if we're converting an SMPS 68k song to SMPS Z80,
+; then we *want* the TL bits to match the algorithm, because SMPS 68k
+; prefers the algorithm over the TL bits, ignoring the latter, while
+; SMPS Z80 does the opposite.
+; Unfortunately, there's nothing we can do if we're trying to convert
+; an SMPS Z80 song to SMPS 68k. It will ignore the bits no matter
+; what we do, so we just print a warning.
 smpsVcTotalLevel macro op1,op2,op3,op4
 vcTL1 set op1
 vcTL2 set op2
@@ -545,14 +583,33 @@ vcTL4 set op4
 	dc.b	(vcUnusedBits<<6)+(vcFeedback<<3)+vcAlgorithm
 ;   0     1     2     3     4     5     6     7
 ;%1000,%1000,%1000,%1000,%1010,%1110,%1110,%1111
+	if SourceSMPS2ASM==0
 vcTLMask4 set ((vcAlgorithm==7)<<7)
 vcTLMask3 set ((vcAlgorithm>=4)<<7)
 vcTLMask2 set ((vcAlgorithm>=5)<<7)
 vcTLMask1 set $80
+	else
+vcTLMask4 set 0
+vcTLMask3 set 0
+vcTLMask2 set 0
+vcTLMask1 set 0
+	endif
+
+	if SourceDriver<3
+vcTLMask4 set ((vcAlgorithm==7)<<7)
+vcTLMask3 set ((vcAlgorithm>=4)<<7)
+vcTLMask2 set ((vcAlgorithm>=5)<<7)
+vcTLMask1 set $80
+vcTL1 set vcTL1&$7F
+vcTL2 set vcTL2&$7F
+vcTL3 set vcTL3&$7F
+vcTL4 set vcTL4&$7F
+	endif
+
 	dc.b	(vcDT4<<4)+vcCF4 ,(vcDT2<<4)+vcCF2 ,(vcDT3<<4)+vcCF3 ,(vcDT1<<4)+vcCF1
 	dc.b	vcTL4|vcTLMask4  ,vcTL2|vcTLMask2  ,vcTL3|vcTLMask3  ,vcTL1|vcTLMask1
 	dc.b	(vcRS4<<6)+vcAR4 ,(vcRS2<<6)+vcAR2 ,(vcRS3<<6)+vcAR3 ,(vcRS1<<6)+vcAR1
-	dc.b	(vcAM4<<5)+vcD1R4,(vcAM2<<5)+vcD1R2,(vcAM3<<5)+vcD1R3,(vcAM1<<5)+vcD1R1
+	dc.b	vcAM4|vcD1R4     ,vcAM2|vcD1R2     ,vcAM3|vcD1R3     ,vcAM1|vcD1R1
 	dc.b	vcD2R4           ,vcD2R2           ,vcD2R3           ,vcD2R1
 	dc.b	(vcDL4<<4)+vcRR4 ,(vcDL2<<4)+vcRR2 ,(vcDL3<<4)+vcRR3 ,(vcDL1<<4)+vcRR1
 	endm
