@@ -1944,6 +1944,8 @@ WriteFMIorII:
 WriteFMI:
 	SMPS_stopZ80
 	SMPS_waitZ80
+	tst.b	(Z80_RAM+MegaPCM_Busy_Flag).l
+	bne.s	.delayForZ80
 	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
 	SMPS_waitYM				; 28(6/0)
 	move.b	d0,SMPS_ym2612_a0-SMPS_ym2612_a0(a0)	; ym2612_a0	; 8(1/1)
@@ -1954,6 +1956,10 @@ WriteFMI:
 	SMPS_startZ80				; Total: 40(7/3) + 84(18/0)
 	rts
 ; End of function WriteFMI
+
+.delayForZ80:
+	SMPS_startZ80
+	bra.s	WriteFMI
 
 ; ===========================================================================
 ; loc_7275A:
@@ -1967,6 +1973,8 @@ WriteFMIIPart:
 WriteFMII:
 	SMPS_stopZ80
 	SMPS_waitZ80
+	tst.b	(Z80_RAM+MegaPCM_Busy_Flag).l
+	bne.s	.delayForZ80
 	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
 	SMPS_waitYM				; 28(6/0)
 	move.b	d0,SMPS_ym2612_a1-SMPS_ym2612_a0(a0)	; ym2612_a1	; 8(1/1)
@@ -1977,6 +1985,10 @@ WriteFMII:
 	SMPS_startZ80				; Total: 44(8/3) + 84(18/0)
 	rts
 ; End of function WriteFMII
+
+.delayForZ80:
+	SMPS_startZ80
+	bra.s	WriteFMII
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
