@@ -352,14 +352,6 @@ MegaPCM_StopDAC:
 	jp	MegaPCM_Idle_Loop
 
 ; ---------------------------------------------------------------
-; Quit playback loop (used by Process_PCM/Process_DPCM)
-; ---------------------------------------------------------------
-	; Clownacy | Some portable duplicate code, moved to padding territory
-MegaPCM_QuitPlaybackLoop:
-	exx
-	jr	MegaPCM_Event_EndPlayback	; Clownacy | (jp -> jr)
-
-; ---------------------------------------------------------------
 ; Routines to control bank-switching
 ; ---------------------------------------------------------------
 ; Bank-Switch Registers Set:
@@ -497,10 +489,10 @@ MegaPCM_Process_PCM:
 MegaPCM_Process_PCM_writeme:
 	; jp	MegaPCM_Process_PCM_idle	; 10	; Self-modified code that overwrites the following when we're on the last bank
 	dec	hl			; 6	; decrease number of bytes to play in last bank
-	or	h			; 4	; is hl positive?
-	jp	p,MegaPCM_QuitPlaybackLoop	; 10	; if yes, quit playback loop
+	bit	7,h			; 8	; is hl positive?
+	jr	z,++			; 7/12	; if yes, quit playback loop
 -	exx				; 4	;
-	; Cycles: 28
+	; Cycles: 29
 
 	; Check if we should play a new sample
 -	ld	a,(MegaPCM_DAC_Number)		; 13	; load DAC number
@@ -518,9 +510,13 @@ MegaPCM_Process_PCM_idle:
 	call	MegaPCM_LoadNextBank
 	jp	-
 
+	; Quit playback loop
++	exx
+	jp	MegaPCM_Event_EndPlayback
+
 ; ---------------------------------------------------------------
-; Best cycles per loop:	115
-; Max Possible rate:	3,579.545 kHz / 115 = 31 kHz (NTSC)
+; Best cycles per loop:	116
+; Max Possible rate:	3,579.545 kHz / 116 = 30.8 kHz (NTSC)
 ; ---------------------------------------------------------------
 
 ; ===============================================================
@@ -597,10 +593,10 @@ MegaPCM_Process_DPCM:
 MegaPCM_Process_DPCM_writeme:
 	; jp	MegaPCM_Process_DPCM_idle	; 10	; Self-modified code that overwrites the following when we're on the last bank
 	dec	hl			; 6	; decrease number of bytes to play in last bank
-	or	h			; 4	; is hl positive?
-	jp	p,MegaPCM_QuitPlaybackLoop	; 10	; if yes, quit playback loop
+	bit	7,h			; 8	; is hl positive?
+	jr	z,++			; 7/12	; if yes, quit playback loop
 -	exx				; 4	;
-	; Cycles: 28
+	; Cycles: 29
 
 	; Check if we should play a new sample
 -	ld	a,(MegaPCM_DAC_Number)	; 13	; load DAC number
@@ -618,9 +614,13 @@ MegaPCM_Process_DPCM_idle:
 	call	MegaPCM_LoadNextBank
 	jp	-
 
+	; Quit playback loop
++	exx
+	jp	MegaPCM_Event_EndPlayback
+
 ; ---------------------------------------------------------------
-; Best cycles per loop:	213/2
-; Max possible rate:	3,579.545 kHz / 106.5 = 33.6 kHz (NTSC)
+; Best cycles per loop:	214/2
+; Max possible rate:	3,579.545 kHz / 107 = 33.4 kHz (NTSC)
 ; ---------------------------------------------------------------
 
 MegaPCM_LastBankNotReached:
@@ -637,7 +637,7 @@ MegaPCM_LastBankReached:
 	ld	a,2Bh
 	ld	(MegaPCM_Process_PCM_writeme),a
 	ld	(MegaPCM_Process_DPCM_writeme),a
-	ld	de,0F2B4h
+	ld	de,07CCBh
 	ld	(MegaPCM_Process_PCM_writeme+1),de
 	ld	(MegaPCM_Process_DPCM_writeme+1),de
 	ret
@@ -680,9 +680,9 @@ DAC_Entry macro vPitch,vOffset,vFlags
 	; the '*10's and '+5'.
 
 	if vFlags&MegaPCM_dpcm
-		db	(((((((3579545*10)*2)/vPitch)-(213*10))/(13*2))+5)/10)+1	; 01h	- Pitch (DPCM-converted)
+		db	(((((((3579545*10)*2)/vPitch)-(214*10))/(13*2))+5)/10)+1	; 01h	- Pitch (DPCM-converted)
 	else
-		db	((((((3579545*10)/vPitch)-(115*10))/13)+5)/10)+1		; 01h	- Pitch (PCM-converted)
+		db	((((((3579545*10)/vPitch)-(116*10))/13)+5)/10)+1		; 01h	- Pitch (PCM-converted)
 	endif
 	db	zmake68kBank(vOffset)		; 02h	- Start Bank
 	db	zmake68kBank(vOffset_End)	; 03h	- End Bank
