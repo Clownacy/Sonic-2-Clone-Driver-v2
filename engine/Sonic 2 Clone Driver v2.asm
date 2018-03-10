@@ -3140,34 +3140,34 @@ cfChanFMCommand:
 ; ---------------------------------------------------------------------------
 ; Music 'include's and pointers
 ; ---------------------------------------------------------------------------
-	include "sound/Sonic 2 Clone Driver v2 - Music.asm"
+	include "Clone Driver v2/Sonic 2 Clone Driver v2 - Music.asm"
 
 ; ---------------------------------------------------------------------------
 ; SFX 'include's and pointers
 ; ---------------------------------------------------------------------------
-	include "sound/Sonic 2 Clone Driver v2 - SFX.asm"
+	include "Clone Driver v2/Sonic 2 Clone Driver v2 - SFX.asm"
 
 ; ---------------------------------------------------------------------------
 ; Special SFX 'include's and pointers
 ; ---------------------------------------------------------------------------
     if SMPS_EnableSpecSFX
-	include "sound/Sonic 2 Clone Driver v2 - Special SFX.asm"
+	include "Clone Driver v2/Sonic 2 Clone Driver v2 - Special SFX.asm"
     endif
 ; ---------------------------------------------------------------------------
 ; FM Universal Voice Bank
 ; ---------------------------------------------------------------------------
     if SMPS_EnableUniversalVoiceBank
-	include "sound/Sonic 2 Clone Driver v2 - FM Universal Voice Bank.asm"
+	include "Clone Driver v2/Sonic 2 Clone Driver v2 - FM Universal Voice Bank.asm"
     endif
 ; ---------------------------------------------------------------------------
 ; PSG volume envelopes 'include's and pointers
 ; ---------------------------------------------------------------------------
-	include "sound/Sonic 2 Clone Driver v2 - PSG Volume Envelopes.asm"
+	include "Clone Driver v2/Sonic 2 Clone Driver v2 - PSG Volume Envelopes.asm"
 
 ; ---------------------------------------------------------------------------
 ; Vladikcomper's Mega PCM DAC driver
 ; ---------------------------------------------------------------------------
-	include	"sound/engine/MegaPCM - 68k.asm"
+	include	"Clone Driver v2/engine/MegaPCM - 68k.asm"
 
 	dc.b	$43,$6C,$6F,$77,$6E,$61,$63,$79
 	even

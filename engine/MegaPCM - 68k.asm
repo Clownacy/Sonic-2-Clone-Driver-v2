@@ -10,7 +10,7 @@
 
 MegaPCM:
 	save
-	include	"sound/engine/MegaPCM - Z80.asm"
+	include	"Clone Driver v2/engine/MegaPCM - Z80.asm"
 	restore
 	padding off
 	!org (MegaPCM+Size_of_Mega_PCM_guess)
@@ -23,15 +23,15 @@ IncludeDAC macro Name,Extension,Path
 Name:		label *
     if ("Path"<>"")
 	if ("Extension"="WAV")
-		BINCLUDE	"sound/DAC/Path/Name.Extension",$3A
+		BINCLUDE	"Clone Driver v2/DAC/Path/Name.Extension",$3A
 	else
-		BINCLUDE	"sound/DAC/Path/Name.Extension"
+		BINCLUDE	"Clone Driver v2/DAC/Path/Name.Extension"
 	endif
     else
 	if ("Extension"="WAV")
-		BINCLUDE	"sound/DAC/Name.Extension",$3A
+		BINCLUDE	"Clone Driver v2/DAC/Name.Extension",$3A
 	else
-		BINCLUDE	"sound/DAC/Name.Extension"
+		BINCLUDE	"Clone Driver v2/DAC/Name.Extension"
 	endif
     endif
 Name_End:	label *
@@ -41,4 +41,4 @@ Name_End:	label *
 ; DAC Samples Files
 ; ---------------------------------------------------------------
 
-	include "sound/Sonic 2 Clone Driver v2 - DAC Samples.asm"
+	include "Clone Driver v2/Sonic 2 Clone Driver v2 - DAC Samples.asm"

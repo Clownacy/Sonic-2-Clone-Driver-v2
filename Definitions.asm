@@ -1,0 +1,6 @@
+	include "Clone Driver v2/engine/Sonic 2 Clone Driver v2 - Macros.asm"
+	include "Clone Driver v2/Sonic 2 Clone Driver v2 - Sound IDs.asm"
+	include "Clone Driver v2/Sonic 2 Clone Driver v2 - Compatibility.asm"
+	include "Clone Driver v2/engine/Sonic 2 Clone Driver v2 - RAM.asm"
+	include "Clone Driver v2/engine/Sonic 2 Clone Driver v2 - Constants.asm"
+	include "Clone Driver v2/engine/_smps2asm_inc.asm"

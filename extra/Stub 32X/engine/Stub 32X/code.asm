@@ -6,7 +6,7 @@
 		CPU SH7600
 		listing purecode
 
-		include	"sound/Stub 32X/shmap.i"
+		include	"Clone Driver v2/Stub 32X/shmap.i"
 		phase sh.CS3
 		
 ; -----------------------------------------------------------------
@@ -744,6 +744,6 @@ Slave_GoToHere:
 ; RAM
 ; ---------------------------------------------------------------
 
-		include	"sound/Stub 32X/ram.asm"
+		include	"Clone Driver v2/Stub 32X/ram.asm"
 
 	dephase

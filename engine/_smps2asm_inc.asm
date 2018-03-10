@@ -31,10 +31,10 @@ nMaxPSG1			EQU nBb6
 nMaxPSG2			EQU nB6
 ; ---------------------------------------------------------------------------------------------
 
-	include "sound/SMPS2ASM - PSG Volume Envelope Equates.asm"
-	include "sound/SMPS2ASM - DAC Sample Equates.asm"
+	include "Clone Driver v2/SMPS2ASM - PSG Volume Envelope Equates.asm"
+	include "Clone Driver v2/SMPS2ASM - DAC Sample Equates.asm"
     if SMPS_EnablePWM
-	include "sound/SMPS2ASM - PWM Sample Equates.asm"
+	include "Clone Driver v2/SMPS2ASM - PWM Sample Equates.asm"
     endif
 
 ; ---------------------------------------------------------------------------------------------

@@ -42,65 +42,65 @@ ptr_musend
 ; ---------------------------------------------------------------------------
 ; Music data
 ; ---------------------------------------------------------------------------
-Music81:	include		"sound/music/81 - 2 Player Menu.asm"
+Music81:	include		"Clone Driver v2/music/81 - 2 Player Menu.asm"
 		even
-Music82:	include		"sound/music/82 - EHZ.asm"
+Music82:	include		"Clone Driver v2/music/82 - EHZ.asm"
 		even
-Music83:	include		"sound/music/83 - MCZ 2P.asm"
+Music83:	include		"Clone Driver v2/music/83 - MCZ 2P.asm"
 		even
-Music84:	include		"sound/music/84 - OOZ.asm"
+Music84:	include		"Clone Driver v2/music/84 - OOZ.asm"
 		even
-Music85:	include		"sound/music/85 - MTZ.asm"
+Music85:	include		"Clone Driver v2/music/85 - MTZ.asm"
 		even
-Music86:	include		"sound/music/86 - HTZ.asm"
+Music86:	include		"Clone Driver v2/music/86 - HTZ.asm"
 		even
-Music87:	include		"sound/music/87 - ARZ.asm"
+Music87:	include		"Clone Driver v2/music/87 - ARZ.asm"
 		even
-Music88:	include		"sound/music/88 - CNZ 2P.asm"
+Music88:	include		"Clone Driver v2/music/88 - CNZ 2P.asm"
 		even
-Music89:	include		"sound/music/89 - CNZ.asm"
+Music89:	include		"Clone Driver v2/music/89 - CNZ.asm"
 		even
-Music8A:	include		"sound/music/8A - DEZ.asm"
+Music8A:	include		"Clone Driver v2/music/8A - DEZ.asm"
 		even
-Music8B:	include		"sound/music/8B - MCZ.asm"
+Music8B:	include		"Clone Driver v2/music/8B - MCZ.asm"
 		even
-Music8C:	include		"sound/music/8C - EHZ 2P.asm"
+Music8C:	include		"Clone Driver v2/music/8C - EHZ 2P.asm"
 		even
-Music8D:	include		"sound/music/8D - SCZ.asm"
+Music8D:	include		"Clone Driver v2/music/8D - SCZ.asm"
 		even
-Music8E:	include		"sound/music/8E - CPZ.asm"
+Music8E:	include		"Clone Driver v2/music/8E - CPZ.asm"
 		even
-Music8F:	include		"sound/music/8F - WFZ.asm"
+Music8F:	include		"Clone Driver v2/music/8F - WFZ.asm"
 		even
-Music90:	include		"sound/music/90 - HPZ.asm"
+Music90:	include		"Clone Driver v2/music/90 - HPZ.asm"
 		even
-Music91:	include		"sound/music/91 - Options.asm"
+Music91:	include		"Clone Driver v2/music/91 - Options.asm"
 		even
-Music92:	include		"sound/music/92 - Special Stage.asm"
+Music92:	include		"Clone Driver v2/music/92 - Special Stage.asm"
 		even
-Music93:	include		"sound/music/93 - Boss.asm"
+Music93:	include		"Clone Driver v2/music/93 - Boss.asm"
 		even
-Music94:	include		"sound/music/94 - Final Boss.asm"
+Music94:	include		"Clone Driver v2/music/94 - Final Boss.asm"
 		even
-Music95:	include		"sound/music/95 - SWEET SWEET SWEET.asm"
+Music95:	include		"Clone Driver v2/music/95 - SWEET SWEET SWEET.asm"
 		even
-Music96:	include		"sound/music/96 - Super Sonic.asm"
+Music96:	include		"Clone Driver v2/music/96 - Super Sonic.asm"
 		even
-Music97:	include		"sound/music/97 - Invincible.asm"
+Music97:	include		"Clone Driver v2/music/97 - Invincible.asm"
 		even
-Music98:	include		"sound/music/98 - Extra Life.asm"
+Music98:	include		"Clone Driver v2/music/98 - Extra Life.asm"
 		even
-Music99:	include		"sound/music/99 - Title Screen.asm"
+Music99:	include		"Clone Driver v2/music/99 - Title Screen.asm"
 		even
-Music9A:	include		"sound/music/9A - End of Act.asm"
+Music9A:	include		"Clone Driver v2/music/9A - End of Act.asm"
 		even
-Music9B:	include		"sound/music/9B - Game Over.asm"
+Music9B:	include		"Clone Driver v2/music/9B - Game Over.asm"
 		even
-Music9C:	include		"sound/music/9C - Continue.asm"
+Music9C:	include		"Clone Driver v2/music/9C - Continue.asm"
 		even
-Music9D:	include		"sound/music/9D - Got Emerald.asm"
+Music9D:	include		"Clone Driver v2/music/9D - Got Emerald.asm"
 		even
-Music9E:	include		"sound/music/9E - Credits.asm"
+Music9E:	include		"Clone Driver v2/music/9E - Credits.asm"
 		even
-Music9F:	include		"sound/music/9F - Drowning.asm"
+Music9F:	include		"Clone Driver v2/music/9F - Drowning.asm"
 		even
