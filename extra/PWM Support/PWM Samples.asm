@@ -22,54 +22,54 @@ ptr_pwm14:	PWMSampleEntry	PWM_13, $00000000, $00000800
 ptr_pwm15:	PWMSampleEntry	PWM_13, $00000000, $000005FE
 ptr_pwm16:	PWMSampleEntry	PWM_15, $00000000, $00000800
 
-PWM_00:		binclude	"Clone Driver v2/PWM/ElectricKick.bin"
+PWM_00:		binclude	"Sonic-2-Clone-Driver-v2/PWM/ElectricKick.bin"
 PWM_00_End
 
-PWM_01:		binclude	"Clone Driver v2/PWM/ElectricSnare.bin"
+PWM_01:		binclude	"Sonic-2-Clone-Driver-v2/PWM/ElectricSnare.bin"
 PWM_01_End
 
-PWM_02:		binclude	"Clone Driver v2/PWM/SplashCymbal.bin"
+PWM_02:		binclude	"Sonic-2-Clone-Driver-v2/PWM/SplashCymbal.bin"
 PWM_02_End
 
-PWM_03:		binclude	"Clone Driver v2/PWM/RideBell.bin"
+PWM_03:		binclude	"Sonic-2-Clone-Driver-v2/PWM/RideBell.bin"
 PWM_03_End
 
-PWM_04:		binclude	"Clone Driver v2/PWM/Tom.bin"
+PWM_04:		binclude	"Sonic-2-Clone-Driver-v2/PWM/Tom.bin"
 PWM_04_End
 
-PWM_07:		binclude	"Clone Driver v2/PWM/ElectricHiHat.bin"
+PWM_07:		binclude	"Sonic-2-Clone-Driver-v2/PWM/ElectricHiHat.bin"
 PWM_07_End
 
-PWM_08:		binclude	"Clone Driver v2/PWM/CrashCymbal.bin"
+PWM_08:		binclude	"Sonic-2-Clone-Driver-v2/PWM/CrashCymbal.bin"
 PWM_08_End
 
-PWM_09:		binclude	"Clone Driver v2/PWM/Clap.bin"
+PWM_09:		binclude	"Sonic-2-Clone-Driver-v2/PWM/Clap.bin"
 PWM_09_End
 
-PWM_0A:		binclude	"Clone Driver v2/PWM/AcousticKick.bin"
+PWM_0A:		binclude	"Sonic-2-Clone-Driver-v2/PWM/AcousticKick.bin"
 PWM_0A_End
 
-PWM_0B:		binclude	"Clone Driver v2/PWM/AcousticSnare.bin"
+PWM_0B:		binclude	"Sonic-2-Clone-Driver-v2/PWM/AcousticSnare.bin"
 PWM_0B_End
 
-PWM_0C:		binclude	"Clone Driver v2/PWM/Bell.bin"
+PWM_0C:		binclude	"Sonic-2-Clone-Driver-v2/PWM/Bell.bin"
 PWM_0C_End
 
-PWM_0D:		binclude	"Clone Driver v2/PWM/FingersSnapping.bin"
+PWM_0D:		binclude	"Sonic-2-Clone-Driver-v2/PWM/FingersSnapping.bin"
 PWM_0D_End
 
-PWM_0E:		binclude	"Clone Driver v2/PWM/Cowbell.bin"
+PWM_0E:		binclude	"Sonic-2-Clone-Driver-v2/PWM/Cowbell.bin"
 PWM_0E_End
 
-PWM_0F:		binclude	"Clone Driver v2/PWM/Click.bin"
+PWM_0F:		binclude	"Sonic-2-Clone-Driver-v2/PWM/Click.bin"
 PWM_0F_End
 
-PWM_11:		binclude	"Clone Driver v2/PWM/Bongo.bin"
+PWM_11:		binclude	"Sonic-2-Clone-Driver-v2/PWM/Bongo.bin"
 PWM_11_End
 
-PWM_13:		binclude	"Clone Driver v2/PWM/Timpani.bin"
+PWM_13:		binclude	"Sonic-2-Clone-Driver-v2/PWM/Timpani.bin"
 PWM_13_End
 
-PWM_15:		binclude	"Clone Driver v2/PWM/Silence.bin"
+PWM_15:		binclude	"Sonic-2-Clone-Driver-v2/PWM/Silence.bin"
 PWM_15_End
 		even

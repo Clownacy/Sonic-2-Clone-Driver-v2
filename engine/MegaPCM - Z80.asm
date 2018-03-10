@@ -703,7 +703,7 @@ MegaPCM_dpcm	= 4
 MegaPCM_loop	= 2
 MegaPCM_pri	= 1
 
-	include "Clone Driver v2/MegaPCM - DAC Table.asm"
+	include "Sonic-2-Clone-Driver-v2/MegaPCM - DAC Table.asm"
 
 	if $ > MegaPCM_Stack
 		fatal "There's too much data before the stack! There should be less than \{MegaPCM_Stack}h bytes of data, but you're using \{$}h bytes!"

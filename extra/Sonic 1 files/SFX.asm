@@ -66,99 +66,99 @@ ptr_sndend
 ; ---------------------------------------------------------------------------
 ; SFX data
 ; ---------------------------------------------------------------------------
-SoundA0:	include	"Clone Driver v2/SFX/SndA0 - Jump.asm"
+SoundA0:	include	"Sonic-2-Clone-Driver-v2/SFX/SndA0 - Jump.asm"
 		even
-SoundA1:	include	"Clone Driver v2/SFX/SndA1 - Lamppost.asm"
+SoundA1:	include	"Sonic-2-Clone-Driver-v2/SFX/SndA1 - Lamppost.asm"
 		even
-SoundA2:	include	"Clone Driver v2/SFX/SndA2.asm"
+SoundA2:	include	"Sonic-2-Clone-Driver-v2/SFX/SndA2.asm"
 		even
-SoundA3:	include	"Clone Driver v2/SFX/SndA3 - Death.asm"
+SoundA3:	include	"Sonic-2-Clone-Driver-v2/SFX/SndA3 - Death.asm"
 		even
-SoundA4:	include	"Clone Driver v2/SFX/SndA4 - Skid.asm"
+SoundA4:	include	"Sonic-2-Clone-Driver-v2/SFX/SndA4 - Skid.asm"
 		even
-SoundA5:	include	"Clone Driver v2/SFX/SndA5.asm"
+SoundA5:	include	"Sonic-2-Clone-Driver-v2/SFX/SndA5.asm"
 		even
-SoundA6:	include	"Clone Driver v2/SFX/SndA6 - Hit Spikes.asm"
+SoundA6:	include	"Sonic-2-Clone-Driver-v2/SFX/SndA6 - Hit Spikes.asm"
 		even
-SoundA7:	include	"Clone Driver v2/SFX/SndA7 - Push Block.asm"
+SoundA7:	include	"Sonic-2-Clone-Driver-v2/SFX/SndA7 - Push Block.asm"
 		even
-SoundA8:	include	"Clone Driver v2/SFX/SndA8 - SS Goal.asm"
+SoundA8:	include	"Sonic-2-Clone-Driver-v2/SFX/SndA8 - SS Goal.asm"
 		even
-SoundA9:	include	"Clone Driver v2/SFX/SndA9 - SS Item.asm"
+SoundA9:	include	"Sonic-2-Clone-Driver-v2/SFX/SndA9 - SS Item.asm"
 		even
-SoundAA:	include	"Clone Driver v2/SFX/SndAA - Splash.asm"
+SoundAA:	include	"Sonic-2-Clone-Driver-v2/SFX/SndAA - Splash.asm"
 		even
-SoundAB:	include	"Clone Driver v2/SFX/SndAB.asm"
+SoundAB:	include	"Sonic-2-Clone-Driver-v2/SFX/SndAB.asm"
 		even
-SoundAC:	include	"Clone Driver v2/SFX/SndAC - Hit Boss.asm"
+SoundAC:	include	"Sonic-2-Clone-Driver-v2/SFX/SndAC - Hit Boss.asm"
 		even
-SoundAD:	include	"Clone Driver v2/SFX/SndAD - Get Bubble.asm"
+SoundAD:	include	"Sonic-2-Clone-Driver-v2/SFX/SndAD - Get Bubble.asm"
 		even
-SoundAE:	include	"Clone Driver v2/SFX/SndAE - Fireball.asm"
+SoundAE:	include	"Sonic-2-Clone-Driver-v2/SFX/SndAE - Fireball.asm"
 		even
-SoundAF:	include	"Clone Driver v2/SFX/SndAF - Shield.asm"
+SoundAF:	include	"Sonic-2-Clone-Driver-v2/SFX/SndAF - Shield.asm"
 		even
-SoundB0:	include	"Clone Driver v2/SFX/SndB0 - Saw.asm"
+SoundB0:	include	"Sonic-2-Clone-Driver-v2/SFX/SndB0 - Saw.asm"
 		even
-SoundB1:	include	"Clone Driver v2/SFX/SndB1 - Electric.asm"
+SoundB1:	include	"Sonic-2-Clone-Driver-v2/SFX/SndB1 - Electric.asm"
 		even
-SoundB2:	include	"Clone Driver v2/SFX/SndB2 - Drown Death.asm"
+SoundB2:	include	"Sonic-2-Clone-Driver-v2/SFX/SndB2 - Drown Death.asm"
 		even
-SoundB3:	include	"Clone Driver v2/SFX/SndB3 - Flamethrower.asm"
+SoundB3:	include	"Sonic-2-Clone-Driver-v2/SFX/SndB3 - Flamethrower.asm"
 		even
-SoundB4:	include	"Clone Driver v2/SFX/SndB4 - Bumper.asm"
+SoundB4:	include	"Sonic-2-Clone-Driver-v2/SFX/SndB4 - Bumper.asm"
 		even
-SoundB5:	include	"Clone Driver v2/SFX/SndB5 - Ring.asm"
+SoundB5:	include	"Sonic-2-Clone-Driver-v2/SFX/SndB5 - Ring.asm"
 		even
-SoundB6:	include	"Clone Driver v2/SFX/SndB6 - Spikes Move.asm"
+SoundB6:	include	"Sonic-2-Clone-Driver-v2/SFX/SndB6 - Spikes Move.asm"
 		even
-SoundB7:	include	"Clone Driver v2/SFX/SndB7 - Rumbling.asm"
+SoundB7:	include	"Sonic-2-Clone-Driver-v2/SFX/SndB7 - Rumbling.asm"
 		even
-SoundB8:	include	"Clone Driver v2/SFX/SndB8.asm"
+SoundB8:	include	"Sonic-2-Clone-Driver-v2/SFX/SndB8.asm"
 		even
-SoundB9:	include	"Clone Driver v2/SFX/SndB9 - Collapse.asm"
+SoundB9:	include	"Sonic-2-Clone-Driver-v2/SFX/SndB9 - Collapse.asm"
 		even
-SoundBA:	include	"Clone Driver v2/SFX/SndBA - SS Glass.asm"
+SoundBA:	include	"Sonic-2-Clone-Driver-v2/SFX/SndBA - SS Glass.asm"
 		even
-SoundBB:	include	"Clone Driver v2/SFX/SndBB - Door.asm"
+SoundBB:	include	"Sonic-2-Clone-Driver-v2/SFX/SndBB - Door.asm"
 		even
-SoundBC:	include	"Clone Driver v2/SFX/SndBC - Teleport.asm"
+SoundBC:	include	"Sonic-2-Clone-Driver-v2/SFX/SndBC - Teleport.asm"
 		even
-SoundBD:	include	"Clone Driver v2/SFX/SndBD - ChainStomp.asm"
+SoundBD:	include	"Sonic-2-Clone-Driver-v2/SFX/SndBD - ChainStomp.asm"
 		even
-SoundBE:	include	"Clone Driver v2/SFX/SndBE - Roll.asm"
+SoundBE:	include	"Sonic-2-Clone-Driver-v2/SFX/SndBE - Roll.asm"
 		even
-SoundBF:	include	"Clone Driver v2/SFX/SndBF - Get Continue.asm"
+SoundBF:	include	"Sonic-2-Clone-Driver-v2/SFX/SndBF - Get Continue.asm"
 		even
-SoundC0:	include	"Clone Driver v2/SFX/SndC0 - Basaran Flap.asm"
+SoundC0:	include	"Sonic-2-Clone-Driver-v2/SFX/SndC0 - Basaran Flap.asm"
 		even
-SoundC1:	include	"Clone Driver v2/SFX/SndC1 - Break Item.asm"
+SoundC1:	include	"Sonic-2-Clone-Driver-v2/SFX/SndC1 - Break Item.asm"
 		even
-SoundC2:	include	"Clone Driver v2/SFX/SndC2 - Drown Warning.asm"
+SoundC2:	include	"Sonic-2-Clone-Driver-v2/SFX/SndC2 - Drown Warning.asm"
 		even
-SoundC3:	include	"Clone Driver v2/SFX/SndC3 - Giant Ring.asm"
+SoundC3:	include	"Sonic-2-Clone-Driver-v2/SFX/SndC3 - Giant Ring.asm"
 		even
-SoundC4:	include	"Clone Driver v2/SFX/SndC4 - Bomb.asm"
+SoundC4:	include	"Sonic-2-Clone-Driver-v2/SFX/SndC4 - Bomb.asm"
 		even
-SoundC5:	include	"Clone Driver v2/SFX/SndC5 - Cash Register.asm"
+SoundC5:	include	"Sonic-2-Clone-Driver-v2/SFX/SndC5 - Cash Register.asm"
 		even
-SoundC6:	include	"Clone Driver v2/SFX/SndC6 - Ring Loss.asm"
+SoundC6:	include	"Sonic-2-Clone-Driver-v2/SFX/SndC6 - Ring Loss.asm"
 		even
-SoundC7:	include	"Clone Driver v2/SFX/SndC7 - Chain Rising.asm"
+SoundC7:	include	"Sonic-2-Clone-Driver-v2/SFX/SndC7 - Chain Rising.asm"
 		even
-SoundC8:	include	"Clone Driver v2/SFX/SndC8 - Burning.asm"
+SoundC8:	include	"Sonic-2-Clone-Driver-v2/SFX/SndC8 - Burning.asm"
 		even
-SoundC9:	include	"Clone Driver v2/SFX/SndC9 - Hidden Bonus.asm"
+SoundC9:	include	"Sonic-2-Clone-Driver-v2/SFX/SndC9 - Hidden Bonus.asm"
 		even
-SoundCA:	include	"Clone Driver v2/SFX/SndCA - Enter SS.asm"
+SoundCA:	include	"Sonic-2-Clone-Driver-v2/SFX/SndCA - Enter SS.asm"
 		even
-SoundCB:	include	"Clone Driver v2/SFX/SndCB - Wall Smash.asm"
+SoundCB:	include	"Sonic-2-Clone-Driver-v2/SFX/SndCB - Wall Smash.asm"
 		even
-SoundCC:	include	"Clone Driver v2/SFX/SndCC - Spring.asm"
+SoundCC:	include	"Sonic-2-Clone-Driver-v2/SFX/SndCC - Spring.asm"
 		even
-SoundCD:	include	"Clone Driver v2/SFX/SndCD - Switch.asm"
+SoundCD:	include	"Sonic-2-Clone-Driver-v2/SFX/SndCD - Switch.asm"
 		even
-SoundCE:	include	"Clone Driver v2/SFX/SndCE - Ring Left Speaker.asm"
+SoundCE:	include	"Sonic-2-Clone-Driver-v2/SFX/SndCE - Ring Left Speaker.asm"
 		even
-SoundCF:	include	"Clone Driver v2/SFX/SndCF - Signpost.asm"
+SoundCF:	include	"Sonic-2-Clone-Driver-v2/SFX/SndCF - Signpost.asm"
 		even

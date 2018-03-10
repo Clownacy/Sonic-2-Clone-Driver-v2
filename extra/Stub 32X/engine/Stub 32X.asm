@@ -5,7 +5,7 @@
 
 SH2_Start:
 		save
-		include	"Clone Driver v2/engine/Stub 32X/code.asm"
+		include	"Sonic-2-Clone-Driver-v2/engine/Stub 32X/code.asm"
 		restore
 		padding off ; unfortunately our flags got reset so we have to set them again...
 SH2_End:
