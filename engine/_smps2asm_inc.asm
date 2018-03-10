@@ -396,7 +396,7 @@ smpsLoop macro index,loops,loc
 ; F8xxxx - Call pattern at xxxx, saving return point
 smpsCall macro loc
 	dc.b	$FF,$16
-	dc.w	loc-(*+1)
+	dc.w	loc-(*+2)
 	endm
 ; ---------------------------------------------------------------------------------------------
 ; Alter Volume

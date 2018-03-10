@@ -624,7 +624,7 @@ ptr_flgend
 ; ---------------------------------------------------------------------------
 ; Sound_E1: PlaySega:
 PlaySegaSound:
-	move.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
+	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 	SMPS_stopZ80
 	SMPS_waitZ80
 
@@ -859,7 +859,7 @@ Sound_PlayBGM:
 	dbf	d7,.bgm_pwmloadloop
 
 .bgm_pwmdone:
-	endif
+    endif
 
 	lea	SMPS_RAM.v_sfx_track_ram(a6),a1
 	moveq	#SMPS_SFX_TRACK_COUNT-1,d7	; 6 SFX tracks
@@ -2490,8 +2490,6 @@ cfJumpReturn:
 	moveq	#0,d0
 	move.b	SMPS_Track.StackPointer(a5),d0	; Track stack pointer
 	movea.l	(a5,d0.w),a4			; Set track return address
-	clr.l	(a5,d0.w)			; Set 'popped' value to zero
-	addq.w	#2,a4				; Skip jump target address from gosub flag
 	addq.b	#4,SMPS_Track.StackPointer(a5)	; Actually 'pop' value
 	rts
 ; ===========================================================================
@@ -2805,17 +2803,13 @@ SendVoiceTL:
 	moveq	#0,d0
 	move.b	SMPS_Track.VoiceIndex(a5),d0		; Current voice
 	movea.l	SMPS_Track.VoicePtr(a5),a1
-; loc_72CD8:
-.gotvoiceptr:
 	; Multiply d0 by 25 (size of FM voice)
 	adda.w	d0,a1
 	lsl.w	#3,d0
 	adda.w	d0,a1
 	adda.w	d0,a1
 	adda.w	d0,a1
-; loc_72CE6:
-.gotvoice:
-	lea	5(a1),a1			; Want TL (was '21(a0)' in original driver)
+	addq.w	#5,a1			; Want TL (was '21(a0)' in original driver)
 	move.b	SMPS_Track.Volume(a5),d3	; Get track volume attenuation
 	bmi.s	.locret				; If negative, stop
 
@@ -2827,7 +2821,6 @@ SendVoiceTL:
 	move.b	(a1)+,d1
 	bpl.s	.senttl
 	add.b	d3,d1			; Include additional attenuation
-	blo.s	.senttl
 	bsr.w	WriteFMIorII
 ; loc_72D12:
 .senttl:
@@ -3005,11 +2998,16 @@ cfRepeatAtPos:
 ; ===========================================================================
 ; loc_72E52:
 cfJumpToGosub:
+	move.b	(a4)+,-(sp)
+	move.w	(sp)+,d1
+	move.b	(a4)+,d1
+
 	subq.b	#4,SMPS_Track.StackPointer(a5)	; Add space for another target
 	moveq	#0,d0
 	move.b	SMPS_Track.StackPointer(a5),d0	; Current stack pointer
-	move.l	a4,(a5,d0.w)			; Put in current address (*before* target for jump!)
-	bra.s	cfJumpTo
+	move.l	a4,(a5,d0.w)			; Put in current address (after target for jump!)
+	adda.w	d1,a4		; Add to current position
+	rts
 ; ===========================================================================
 
 ; Clownacy | Since I reintroduced cfSendFMI, this flag is pointless
@@ -3035,7 +3033,7 @@ cfSilenceStopTrack:
 ; Has one parameter, the index (1-based) of the DAC sample to play.
 ;
 cfPlayDACSample:
-	move.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
+	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 	SMPS_stopZ80
 	SMPS_waitZ80
 	move.b	(a4)+,(SMPS_z80_ram+MegaPCM_DAC_Number).l
