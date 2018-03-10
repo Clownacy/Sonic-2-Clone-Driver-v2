@@ -41,4 +41,4 @@ Name_End:	label *
 ; DAC Samples Files
 ; ---------------------------------------------------------------
 
-	include "Clone Driver v2/Sonic 2 Clone Driver v2 - DAC Samples.asm"
+	include "Clone Driver v2/DAC Samples.asm"

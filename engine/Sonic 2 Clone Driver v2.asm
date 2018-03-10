@@ -3140,29 +3140,29 @@ cfChanFMCommand:
 ; ---------------------------------------------------------------------------
 ; Music 'include's and pointers
 ; ---------------------------------------------------------------------------
-	include "Clone Driver v2/Sonic 2 Clone Driver v2 - Music.asm"
+	include "Clone Driver v2/Music.asm"
 
 ; ---------------------------------------------------------------------------
 ; SFX 'include's and pointers
 ; ---------------------------------------------------------------------------
-	include "Clone Driver v2/Sonic 2 Clone Driver v2 - SFX.asm"
+	include "Clone Driver v2/SFX.asm"
 
 ; ---------------------------------------------------------------------------
 ; Special SFX 'include's and pointers
 ; ---------------------------------------------------------------------------
     if SMPS_EnableSpecSFX
-	include "Clone Driver v2/Sonic 2 Clone Driver v2 - Special SFX.asm"
+	include "Clone Driver v2/Special SFX.asm"
     endif
 ; ---------------------------------------------------------------------------
 ; FM Universal Voice Bank
 ; ---------------------------------------------------------------------------
     if SMPS_EnableUniversalVoiceBank
-	include "Clone Driver v2/Sonic 2 Clone Driver v2 - FM Universal Voice Bank.asm"
+	include "Clone Driver v2/FM Universal Voice Bank.asm"
     endif
 ; ---------------------------------------------------------------------------
 ; PSG volume envelopes 'include's and pointers
 ; ---------------------------------------------------------------------------
-	include "Clone Driver v2/Sonic 2 Clone Driver v2 - PSG Volume Envelopes.asm"
+	include "Clone Driver v2/PSG Volume Envelopes.asm"
 
 ; ---------------------------------------------------------------------------
 ; Vladikcomper's Mega PCM DAC driver
