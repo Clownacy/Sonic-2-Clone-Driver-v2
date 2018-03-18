@@ -206,10 +206,9 @@ DACUpdateSample:
 
 	; From Vladikcomper:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	SMPS_stopZ80
-	SMPS_waitZ80
+	SMPS_stopZ80_safe
 	move.b	d0,(SMPS_z80_ram+MegaPCM_DAC_Number).l
-	SMPS_startZ80
+	SMPS_startZ80_safe
 
 locret_71CAA:
 	rts
@@ -469,10 +468,9 @@ DoPauseMusic:
 	; From Vladikcomper:
 	; "Playing sample $7F executes pause command."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	SMPS_stopZ80
-	SMPS_waitZ80
+	SMPS_stopZ80_safe
 	move.b  #$7F,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; pause DAC
-	SMPS_startZ80
+	SMPS_startZ80_safe
 
 .locret:
 	rts
@@ -501,10 +499,9 @@ DoUnpauseMusic:
 	; From Vladikcomper:
 	; "Playing sample $00 cancels pause mode."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	SMPS_stopZ80
-	SMPS_waitZ80
+	SMPS_stopZ80_safe
 	clr.b  (SMPS_z80_ram+MegaPCM_DAC_Number).l	; unpause DAC
-	SMPS_startZ80
+	SMPS_startZ80_safe
 
 	rts
 
@@ -625,15 +622,14 @@ ptr_flgend
 ; Sound_E1: PlaySega:
 PlaySegaSound:
 	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
-	SMPS_stopZ80
-	SMPS_waitZ80
+	SMPS_stopZ80_safe
 
 	; This is a DAC SFX: set to full volume
 	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
 	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
 
 	move.b	#dSega_S2,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; Queue Sega PCM
-	SMPS_startZ80
+	SMPS_startZ80_safe
 	    if SMPS_IdlingSegaSound
 		move.w	#$11,d1
 ; loc_71FC0:
@@ -1617,10 +1613,9 @@ StopAllSound:
 	; From Vladikcomper:
 	; "Playing sample $80 forces to stop playback."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	SMPS_stopZ80
-	SMPS_waitZ80
+	SMPS_stopZ80_safe
 	move.b  #$80,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; stop DAC playback
-	SMPS_startZ80
+	SMPS_startZ80_safe
 
     if SMPS_EnablePWM
 	bsr.w	PWMSilenceAll
@@ -1845,11 +1840,10 @@ SetDACVolume:
 	ori.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 
 WriteDACVolume:
-	SMPS_stopZ80
-	SMPS_waitZ80
+	SMPS_stopZ80_safe
 	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
 	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
-	SMPS_startZ80
+	SMPS_startZ80_safe
 	rts
 ; End of function SetDACVolume
 
@@ -1942,8 +1936,7 @@ WriteFMIorII:
 
 ; sub_7272E:
 WriteFMI:
-	SMPS_stopZ80
-	SMPS_waitZ80
+	SMPS_stopZ80_safe
 	tst.b	(Z80_RAM+MegaPCM_Busy_Flag).l
 	bne.s	.delayForZ80
 	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
@@ -1953,12 +1946,12 @@ WriteFMI:
 	move.b	d1,SMPS_ym2612_d0-SMPS_ym2612_a0(a0)		; ym2612_d0	; 8(1/1)
 	SMPS_waitYM				; 28(6/0)
 	move.b	#$2A,SMPS_ym2612_a0-SMPS_ym2612_a0(a0)	; ym2612_a0	; 12(2/1)
-	SMPS_startZ80				; Total: 40(7/3) + 84(18/0)
+	SMPS_startZ80_safe			; Total: 40(7/3) + 84(18/0)
 	rts
 ; End of function WriteFMI
 
 .delayForZ80:
-	SMPS_startZ80
+	SMPS_startZ80_safe
 	bra.s	WriteFMI
 
 ; ===========================================================================
@@ -1971,8 +1964,7 @@ WriteFMIIPart:
 
 ; sub_72764:
 WriteFMII:
-	SMPS_stopZ80
-	SMPS_waitZ80
+	SMPS_stopZ80_safe
 	tst.b	(Z80_RAM+MegaPCM_Busy_Flag).l
 	bne.s	.delayForZ80
 	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
@@ -1982,12 +1974,12 @@ WriteFMII:
 	move.b	d1,SMPS_ym2612_d1-SMPS_ym2612_a0(a0)		; ym2612_d1	; 8(1/1)
 	SMPS_waitYM				; 28(6/0)
 	move.b	#$2A,SMPS_ym2612_a0-SMPS_ym2612_a0(a0)	; ym2612_a0	; 16(3/1)
-	SMPS_startZ80				; Total: 44(8/3) + 84(18/0)
+	SMPS_startZ80_safe				; Total: 44(8/3) + 84(18/0)
 	rts
 ; End of function WriteFMII
 
 .delayForZ80:
-	SMPS_startZ80
+	SMPS_startZ80_safe
 	bra.s	WriteFMII
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -3034,13 +3026,12 @@ cfSilenceStopTrack:
 ;
 cfPlayDACSample:
 	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
-	SMPS_stopZ80
-	SMPS_waitZ80
+	SMPS_stopZ80_safe
 	move.b	(a4)+,(SMPS_z80_ram+MegaPCM_DAC_Number).l
 	; This is a DAC SFX: set to full volume
 	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
 	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
-	SMPS_startZ80
+	SMPS_startZ80_safe
 	rts
 ; ===========================================================================
 ; Plays another song or SFX.

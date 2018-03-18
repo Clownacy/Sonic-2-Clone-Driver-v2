@@ -47,7 +47,7 @@ SMPS_startZ80 macro
 ; stop the Z80
 ; ---------------------------------------------------------------------------
 SMPS_stopZ80_safe macro
-	move.w	sr,(Clone_Driver_RAM+SMPS_RAM.Saved_SR).w
+	move.w	sr,-(sp)
 	move.w	#$2700,sr	; mask off interrupts
 	SMPS_stopZ80
 	SMPS_waitZ80
@@ -58,7 +58,7 @@ SMPS_stopZ80_safe macro
 ; ---------------------------------------------------------------------------
 SMPS_startZ80_safe macro
 	SMPS_startZ80
-	move.w	(Clone_Driver_RAM+SMPS_RAM.Saved_SR).w,sr
+	move.w	(sp)+,sr
 	endm
 
 ; ---------------------------------------------------------------------------

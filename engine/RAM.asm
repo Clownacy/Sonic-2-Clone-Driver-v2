@@ -188,8 +188,6 @@ f_continuous_sfx		= 4
 	v_spindash_pitch:	ds.b 1
     endif
 
-	Saved_SR:		ds.b 2
-
 	SMPS_running_flag:	ds.b 1
 SMPS_RAM ENDSTRUCT
 
