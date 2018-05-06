@@ -2708,18 +2708,18 @@ cfStopSpecialFM4:
 ; ===========================================================================
 ; loc_72C26:
 cfSetVoice:
-	moveq	#0,d0
-	move.b	(a4)+,d0				; Get new voice
-	move.b	d0,SMPS_Track.VoiceIndex(a5)		; Store it
+	move.b	(a4)+,SMPS_Track.VoiceIndex(a5)		; Store new voice
 	tst.b	SMPS_Track.VoiceControl(a5)		; Is this a PSG track?
 	bmi.s	locret_72CAA
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding this track?
 	bne.s	locret_72CAA				; Return if yes
 	bsr.w	FMSilenceChannel
+	moveq	#0,d0
 	move.b	SMPS_Track.VoiceIndex(a5),d0		; Get new voice ID again
 
 cfSetVoiceCont:
 	movea.l	SMPS_Track.VoicePtr(a5),a1		; SFX track voice pointer
+
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 ; sub_72C4E:
