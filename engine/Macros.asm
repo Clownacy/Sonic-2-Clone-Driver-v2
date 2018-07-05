@@ -62,16 +62,29 @@ SMPS_startZ80_safe macro
 	endm
 
 ; ---------------------------------------------------------------------------
-; macros to wait for when the YM2612 isn't busy
+; Macros to wait for when the YM2612 isn't busy.
+;
+; Might as well document this a little:
+; When you write to the YM2612's data ports, it takes 2 YM cycles
+; for the BUSY flag to set itself. A YM-cycle takes 6 cycles on the
+; 68k, so we wait 12 cycles before checking the flag.
+;
+; The BUSY flag is seemingly hardcoded to last 32 YM cycles, or 192
+; 68k cycles, so theoretically I could just burn a bunch of cycles
+; here with ineffective instructions, but I think checking the flag
+; would let me be a bit more precise (I don't know exactly *when* in
+; the 12-cycle instruction the YM2612 is actually written to).
 ; ---------------------------------------------------------------------------
+SMPS_delayYM macro target
+	nop		; 4(1/0)
+	nop		; 4(1/0)
+	nop		; 4(1/0)
+	endm
+
 SMPS_waitYM macro target
-	nop		; 4(1/0) ; Gotta give the YM2612 some time to read
-	nop		; 4(1/0)
-	nop		; 4(1/0)
-	; If you're gonna overclock your 68k, you may need to pad this out with more 'nop's to avoid missed writes
 .loop:	tst.b	(a0)	; 8(2/0)
 	bmi.s	.loop	; 10(2/0) | 8(1/0)
-	endm	; optimal cycle count: 28(6/0)
+	endm
 
 ; ---------------------------------------------------------------------------
 ; pause music

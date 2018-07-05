@@ -1899,7 +1899,6 @@ WriteFMIorII:
 
 ; List of cycle counts from various revisions of WriteFMI (Write cycles + 'wait for YM' cycles)
 
-
 ; (SMPS 68k Type 1a)
 ;  Michael Jackson's Moonwalker:
 ;	32(6/2) + 68(14/0)
@@ -1912,8 +1911,6 @@ WriteFMIorII:
 ;	32(6/2) + 80(17/0) (Interestingly, this uses the Type 1a version, with some nops, so is this an *early* Type 1b driver?)
 ;  Mega PCM standard:
 ;	52(10/3) + 102(21/0)
-;  Sonic 2 Clone Driver v2:
-;	40(7/3) + 84(18/0)
 ;  Golden Axe 2:
 ;	32(6/2) + 44(9/0)
 ;  Nekketsu Koukou Dodgeball Bu Soccer Hen MD:
@@ -1939,14 +1936,14 @@ WriteFMI:
 	SMPS_stopZ80_safe
 	tst.b	(Z80_RAM+MegaPCM_Busy_Flag).l
 	bne.s	.delayForZ80
-	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
-	SMPS_waitYM				; 28(6/0)
-	move.b	d0,SMPS_ym2612_a0-SMPS_ym2612_a0(a0)	; ym2612_a0	; 8(1/1)
-	SMPS_waitYM				; 28(6/0)
-	move.b	d1,SMPS_ym2612_d0-SMPS_ym2612_a0(a0)		; ym2612_d0	; 8(1/1)
-	SMPS_waitYM				; 28(6/0)
-	move.b	#$2A,SMPS_ym2612_a0-SMPS_ym2612_a0(a0)	; ym2612_a0	; 12(2/1)
-	SMPS_startZ80_safe			; Total: 40(7/3) + 84(18/0)
+	lea	(SMPS_ym2612_a0).l,a0			; 12(3/0)
+	SMPS_waitYM
+	move.b	d0,(a0)					; 8(1/1)
+	move.b	d1,SMPS_ym2612_d0-SMPS_ym2612_a0(a0)	; 12(2/1)
+	SMPS_delayYM
+	SMPS_waitYM
+	move.b	#$2A,(a0)				; 12(2/1)
+	SMPS_startZ80_safe
 	rts
 ; End of function WriteFMI
 
@@ -1967,14 +1964,14 @@ WriteFMII:
 	SMPS_stopZ80_safe
 	tst.b	(Z80_RAM+MegaPCM_Busy_Flag).l
 	bne.s	.delayForZ80
-	lea	(SMPS_ym2612_a0).l,a0		; 12(3/0)
-	SMPS_waitYM				; 28(6/0)
-	move.b	d0,SMPS_ym2612_a1-SMPS_ym2612_a0(a0)	; ym2612_a1	; 8(1/1)
-	SMPS_waitYM				; 28(6/0)
-	move.b	d1,SMPS_ym2612_d1-SMPS_ym2612_a0(a0)		; ym2612_d1	; 8(1/1)
-	SMPS_waitYM				; 28(6/0)
-	move.b	#$2A,SMPS_ym2612_a0-SMPS_ym2612_a0(a0)	; ym2612_a0	; 16(3/1)
-	SMPS_startZ80_safe				; Total: 44(8/3) + 84(18/0)
+	lea	(SMPS_ym2612_a0).l,a0			; 12(3/0)
+	SMPS_waitYM
+	move.b	d0,SMPS_ym2612_a1-SMPS_ym2612_a0(a0)	; 12(2/1)
+	move.b	d1,SMPS_ym2612_d1-SMPS_ym2612_a0(a0)	; 12(2/1)
+	SMPS_delayYM
+	SMPS_waitYM
+	move.b	#$2A,(a0)				; 12(2/1)
+	SMPS_startZ80_safe
 	rts
 ; End of function WriteFMII
 
