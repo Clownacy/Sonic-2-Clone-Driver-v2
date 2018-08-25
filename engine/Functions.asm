@@ -64,6 +64,9 @@ SMPS_QueueSound3:
 ; ---------------------------------------------------------------------------
 ; Play a DAC sample
 ;
+; Actual DAC samples start at $81.
+; Using $80 will stop the currently-playing sample.
+;
 ; d0 = Sample ID
 ; ---------------------------------------------------------------------------
 SMPS_PlayDACSample:
