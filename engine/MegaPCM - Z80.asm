@@ -54,8 +54,6 @@ MegaPCM_e_pos	equ	6	; end offset (in last bank)
 ; ---------------------------------------------------------------
 
 	di				; disable interrupts
-;	di				; Clownacy | Aren't these redundant?
-;	di				; Might as well save the space and cycles
 
 	; Setup variables
 	ld	sp,MegaPCM_Stack		; init SP
@@ -89,12 +87,12 @@ MegaPCM_Idle_WaitDAC:
 MegaPCM_LoadDAC:
 	sub	81h			; subtract 81h from DAC number
 	jr	c,MegaPCM_Idle_WaitDAC	; if a = 80h, branch
-	ld	b,0h			; Clownacy | Moved this here so it can be used to clear the other areas quicker
-	ld	(hl),b			; reset DAC number in RAM	; Clownacy | Now uses reg b (faster and smaller)
+	ld	b,0h
+	ld	(hl),b			; reset DAC number in RAM
 
 	; Load DAC table entry
 	ld	ix,MegaPCM_DAC_Table	; ix = DAC Table
-	ld	h,b			; Clownacy | Now uses reg b (faster and smaller)
+	ld	h,b
 	ld	l,a			; hl = DAC
 	add	hl,hl			; hl = DAC*2
 	add	hl,hl			; hl = DAC*4
@@ -323,11 +321,11 @@ MegaPCM_Int_Normal:
 
 MegaPCM_Int_NoOverride:
 	cp	80h			; stop flag?
-	jr	z,MegaPCM_StopDAC	; if yes, branch	; Clownacy | jp -> jr
+	jr	z,MegaPCM_StopDAC	; if yes, branch
 	jp	m,MegaPCM_PauseDAC	; if < 80h, branch
 	xor	a			; a = 0
 	ld	(MegaPCM_DAC_Number),a	; clear DAC number to prevent later ints
-	jr	MegaPCM_Event_SoundProc	; Clownacy | (jp -> jr)
+	jr	MegaPCM_Event_SoundProc
 
 ; ---------------------------------------------------------------
 ; Code to wait while playback is paused
@@ -341,7 +339,7 @@ MegaPCM_PauseDAC:
 	jr	nz,-			; if not, branch
 
 	call	MegaPCM_SetupDAC	; setup YM for playback
-	jr	MegaPCM_Event_SoundProc	; go on playing	; Clownacy | (jp -> jr)
+	jr	MegaPCM_Event_SoundProc	; go on playing
 
 ; ---------------------------------------------------------------
 ; Stop DAC playback and get back to idle loop
@@ -428,7 +426,7 @@ MegaPCM_LoadBank:
 	xor	a	; a = 0
     endif
 	ld	(de), a	; A23
-.volume:	; Clownacy | Modified by SetupVolume
+.volume:	; Modified by SetupVolume
 	ld	d,MegaPCM_VolumeTbls>>8		; high byte of volume table pointer
 	exx
 	ret
@@ -460,7 +458,7 @@ MegaPCM_Init_PCM:
 	ld	h,(ix+MegaPCM_s_pos+1)		;
 	ld	l,(ix+MegaPCM_s_pos)		; hl = Start offset
 	set	7,h				; make it 8000h-based if it's not (perverts memory damage if playing corrupted slots)
-.volume:	; Clownacy | Modified by SetupVolume
+.volume:	; Modified by SetupVolume
 	ld	d,MegaPCM_VolumeTbls>>8		; high byte of volume table pointer
 	ld	(iy+0),2Ah			; YM => prepare to fetch DAC bytes
 
@@ -471,10 +469,10 @@ MegaPCM_Init_PCM:
 MegaPCM_Process_PCM:
 
 	; Read sample's byte and send it to DAC with pitching
-	ld	e,(hl)			; 7	; Clownacy | get PCM byte, de = pointer to volume data
+	ld	e,(hl)			; 7	; get PCM byte, de = pointer to volume data
 	ld	b,c			; 4	; b = Pitch
 	djnz	$			; 8/13+	; wait until pitch zero
-	ld	a,(de)			; 7	; Clownacy | get volume-adjusted PCM byte
+	ld	a,(de)			; 7	; get volume-adjusted PCM byte
 	ld	(MegaPCM_YM_Port0_Data),a	; 13	; write to DAC
 	; Cycles: 39
 
@@ -563,8 +561,8 @@ MegaPCM_Process_DPCM:
 	djnz	$			; 8/13+	; wait until pitch zero
 	ld	b,a			; 4	; b = DAC Value
 	exx				; 4
-	ld	e,a			; 4	; Clownacy | get address of volume-adjusted PCM byte
-	ld	a,(de)			; 7	; Clownacy | get volume-adjusted PCM byte
+	ld	e,a			; 4	; get address of volume-adjusted PCM byte
+	ld	a,(de)			; 7	; get volume-adjusted PCM byte
 	ld	(MegaPCM_YM_Port0_Data),a	; 13	; write to DAC
 	exx				; 4
 	; Cycles: 74
@@ -576,8 +574,8 @@ MegaPCM_Process_DPCM:
 	djnz	$			; 8/13+	; wait until pitch zero
 	ld	b,a			; 4	; b = DAC Value
 	exx				; 4
-	ld	e,a			; 4	; Clownacy | get address of volume-adjusted PCM byte
-	ld	a,(de)			; 7	; Clownacy | get volume-adjusted PCM byte
+	ld	e,a			; 4	; get address of volume-adjusted PCM byte
+	ld	a,(de)			; 7	; get volume-adjusted PCM byte
 	ld	(MegaPCM_YM_Port0_Data),a	; 13	; write to DAC
 	exx				; 4
 	; Cycles: 63
