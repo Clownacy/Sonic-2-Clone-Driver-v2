@@ -1,11 +1,10 @@
-#include <sstream>
-#include <string.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h> // for unlink
 
-#include "FW_KENSC/kosinski.h"
-
-using namespace std;
+#include "clownlzss/kosinski.h"
 
 const char* codeFileName = NULL;
 const char* romFileName = NULL;
@@ -44,7 +43,7 @@ int main(int argc, char *argv[])
 
 	if(codeFileName && romFileName)
 	{
-		printf("\ns2p2bin: generating %s from %s...", romFileName, codeFileName);
+		printf("\ns2p2bin: generating %s from %s", romFileName, codeFileName);
 		
 		FILE* from = fopen(codeFileName, "rb");
 		if(from)
@@ -58,7 +57,7 @@ int main(int argc, char *argv[])
 				if(built)
 				{
 					editShareFile();
-					printf("\n...done");
+					printf(" ... done.");
 				}
 				else
 				{
@@ -158,20 +157,15 @@ bool buildRom(FILE* from, FILE* to)
 
 		if(cpuType == 0x51 && start == 0) // 0x51 is the type for Z80 family (0x01 is for 68000)
 		{
-			// Kosinski-compressed Z80 segment
-			std::stringstream in(std::ios::in|std::ios::out|std::ios::binary);
-			std::stringstream out(std::ios::in|std::ios::out|std::ios::binary);
-
-			for (int i=0; i < length; ++i)
-				in.put(fgetc(from));
-
-			kosinski::encode(in, out);
-
-			compressedLength = out.tellp();
-			out.seekg(0);
-			for (int i=0; i < compressedLength; ++i)
-				fputc(out.get(), to);
-
+			// Kosinski compressed Z80 segment
+			start = lastStart + lastLength;
+			int srcStart = ftell(from);
+			unsigned char uncompressed_buffer[length];
+			fread(uncompressed_buffer, length, 1, from);
+			unsigned char *compressed_buffer = KosinskiCompress(uncompressed_buffer, length, &compressedLength);
+			fwrite(compressed_buffer, 1, compressedLength, to);
+			free(compressed_buffer);
+			fseek(from, srcStart + length, SEEK_SET);
 			lastSegmentCompressed = true;
 			continue;
 		}
@@ -189,7 +183,9 @@ bool buildRom(FILE* from, FILE* to)
 				return false;
 			}
 			else
-				printf("\nCompressed driver size: 0x%X", compressedLength);
+			{
+				printf("\nCompressed DAC driver size: 0x%X", compressedLength);
+			}
 		}
 
 		lastStart = start;
