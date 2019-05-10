@@ -185,7 +185,7 @@ bool buildRom(FILE* from, FILE* to)
 		{
 			if(start < ftell(to))
 			{
-				printf("\nERROR: Compressed DAC driver might not fit.\nPlease increase your value of Size_of_Mega_PCM_guess (found in 'Sonic 2 Clone Driver v2 - Compatibility.asm') to at least $%X and try again.", compressedLength);
+				printf("\nERROR: Compressed DAC driver might not fit.\nPlease increase your value of Size_of_Mega_PCM_guess (found in 'Sonic 2 Clone Driver v2/Settings.asm') to at least $%X and try again.", compressedLength);
 				return false;
 			}
 			else
