@@ -1,12 +1,13 @@
 #include "memory_stream.h"
 
+#ifndef __cplusplus
 #include <stdbool.h>
+#endif
 #include <stddef.h>
-#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct MemoryStream
+struct MemoryStream
 {
 	unsigned char *buffer;
 	size_t position;
@@ -14,7 +15,7 @@ typedef struct MemoryStream
 	size_t size;
 	size_t growth;
 	bool free_buffer_when_destroyed;
-} MemoryStream;
+};
 
 static void ResizeIfNeeded(MemoryStream *memory_stream, size_t minimum_needed_size)
 {
@@ -75,18 +76,18 @@ size_t MemoryStream_GetPosition(MemoryStream *memory_stream)
 	return memory_stream->position;
 }
 
-void MemoryStream_SetPosition(MemoryStream *memory_stream, intmax_t offset, enum MemoryStream_Origin origin)
+void MemoryStream_SetPosition(MemoryStream *memory_stream, ptrdiff_t offset, enum MemoryStream_Origin origin)
 {
 	switch (origin)
 	{
 		case MEMORYSTREAM_START:
-			memory_stream->position = offset;
+			memory_stream->position = (size_t)offset;
 			break;
 		case MEMORYSTREAM_CURRENT:
-			memory_stream->position += offset;
+			memory_stream->position = (size_t)(memory_stream->position + offset);
 			break;
 		case MEMORYSTREAM_END:
-			memory_stream->position = memory_stream->end + offset;
+			memory_stream->position = (size_t)(memory_stream->end + offset);
 			break;
 	}
 }

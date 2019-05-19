@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <unistd.h> // for unlink
 
 #include "clownlzss/kosinski.h"
@@ -84,7 +85,12 @@ void editShareFile()
 		if(share)
 		{
 			fseek(share, 0, SEEK_SET);
-			fprintf(share, "comp_z80_size 0x%X ", compressedLength);
+			#ifdef __MINGW32__
+			#define FPRINTF __mingw_fprintf
+			#else
+			#define FPRINTF fprintf
+			#endif
+			FPRINTF(share, "comp_z80_size 0x%zX ", compressedLength);
 			fclose(share);
 		}
 	}
@@ -145,13 +151,13 @@ bool buildRom(FILE* from, FILE* to)
 
 		if(start < 0)
 		{
-			printf("\nERROR: negative start address ($%X).", start), start = 0;
+			printf("\nERROR: negative start address ($%lX).", start), start = 0;
 			return false;
 		}
 
 		if(cpuType == 0x51 && start != 0 && lastSegmentCompressed)
 		{
-			printf("\nERROR: The compressed Z80 code (MegaPCM - Z80.asm) must all be in one segment. That means no ORG/ALIGN/CNOP/EVEN or memory reservation commands in the Z80 code and the size must be < 65535 bytes. The offending new segment starts at address $%X relative to the start of the Z80 code.", start);
+			printf("\nERROR: The compressed Z80 code (MegaPCM - Z80.asm) must all be in one segment. That means no ORG/ALIGN/CNOP/EVEN or memory reservation commands in the Z80 code and the size must be < 65535 bytes. The offending new segment starts at address $%lX relative to the start of the Z80 code.", start);
 			return false;
 		}
 
@@ -160,9 +166,10 @@ bool buildRom(FILE* from, FILE* to)
 			// Kosinski compressed Z80 segment
 			start = lastStart + lastLength;
 			int srcStart = ftell(from);
-			unsigned char uncompressed_buffer[length];
+			unsigned char *uncompressed_buffer = malloc(length);
 			fread(uncompressed_buffer, length, 1, from);
 			unsigned char *compressed_buffer = KosinskiCompress(uncompressed_buffer, length, &compressedLength);
+			free(uncompressed_buffer);
 			fwrite(compressed_buffer, 1, compressedLength, to);
 			free(compressed_buffer);
 			fseek(from, srcStart + length, SEEK_SET);
@@ -179,7 +186,12 @@ bool buildRom(FILE* from, FILE* to)
 		{
 			if(start < ftell(to))
 			{
-				printf("\nERROR: Compressed DAC driver might not fit.\nPlease increase your value of Size_of_Mega_PCM_guess (found in 'Sonic 2 Clone Driver v2/Settings.asm') to at least $%X and try again.", compressedLength);
+				#ifdef __MINGW32__
+				#define PRINTF __mingw_printf
+				#else
+				#define PRINTF printf
+				#endif
+				PRINTF("\nERROR: Compressed DAC driver might not fit.\nPlease increase your value of Size_of_Mega_PCM_guess (found in 'Sonic 2 Clone Driver v2/Settings.asm') to at least $%zX and try again.", compressedLength);
 				return false;
 			}
 			else
