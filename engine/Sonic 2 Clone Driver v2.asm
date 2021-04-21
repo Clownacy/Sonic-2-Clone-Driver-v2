@@ -2757,6 +2757,8 @@ SetVoice:
 	move.b	(a1)+,d1
 	bpl.s	+
 	add.b	d5,d1			; Include additional attenuation
+	bcc.s	+
+	moveq	#$7F,d1			; Clamp the volume attenuation on overflow
 +
 	bsr.w	WriteFMIorII
 	addq.b	#4,d3			; Next operator
@@ -2810,6 +2812,10 @@ SendVoiceTL:
 	move.b	(a1)+,d1
 	bpl.s	.senttl
 	add.b	d3,d1			; Include additional attenuation
+	bcc.s	.sendtl
+	moveq	#$7F,d1			; Clamp the volume attenuation on overflow
+
+.sendtl:
 	bsr.w	WriteFMIorII
 ; loc_72D12:
 .senttl:
