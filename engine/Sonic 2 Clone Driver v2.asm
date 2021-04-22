@@ -2555,8 +2555,8 @@ cfFadeInToPrevious:
 	moveq	#$28,d6
 	sub.b	SMPS_RAM.variables.v_fadein_counter(a6),d6	; If fade already in progress, this adjusts track volume accordingly
 	lea	SMPS_RAM.v_music_dac_track(a6),a5
-	btst	#7,SMPS_Track.PlaybackControl(a5)	; Is track playing?
-	beq.s	.fadefm					; Branch if not
+	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
+	bpl.s	.fadefm					; Branch if not
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
 	move.b	d6,d0
 	add.b	d0,d0
