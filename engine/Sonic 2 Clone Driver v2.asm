@@ -199,15 +199,24 @@ DACDoNext:
 DACUpdateSample:
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
 	bne.s	locret_71CAA				; Return if yes
-	moveq	#0,d0
-	move.b	SMPS_Track.SavedDAC(a5),d0	; Get sample
-	cmpi.b	#$80,d0				; Is it a rest?
+	move.b	SMPS_Track.SavedDAC(a5),d2	; Get sample
+	cmpi.b	#$80,d2				; Is it a rest?
 	beq.s	locret_71CAA			; Return if yes
+
+	; Enable DAC, muting FM6 (Mega PCM already does this, so this code has been commented-out)
+	;moveq	#$2B,d0					; DAC enable/disable register
+	;move.b	#$80,d1					; Enable DAC
+	;bsr.w	WriteFMI
+
+	; Update DAC's panning (the panning may have been changed by the FM6 track)
+	move.b	#$B6,d0				; Register for FM6/DAC AMS/FMS/Panning
+	move.b	SMPS_Track.AMSFMSPan(a5),d1	; Value to send
+	bsr.w	WriteFMII
 
 	; From Vladikcomper:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80_safe
-	move.b	d0,(SMPS_z80_ram+MegaPCM_DAC_Number).l
+	move.b	d2,(SMPS_z80_ram+MegaPCM_DAC_Number).l
 	SMPS_startZ80_safe
 
 locret_71CAA:
@@ -1678,10 +1687,6 @@ InitMusicPlayback:
 	; Reset DAC volume
 	moveq	#0|((MegaPCM_VolumeTbls&$F000)>>8),d0	; Clownacy | Reset DAC volume to maximum
 	bsr.w	WriteDACVolume
-	; Also reset DAC pan
-	move.b	#$B6,d0			; Register for AMS/FMS/Panning on FM6 (DAC)
-	move.b	#$C0,d1			; Value to send
-	bsr.w	WriteFMIorII
 
 	; InitMusicPlayback, and Sound_PlayBGM for that matter,
 	; don't do a very good job of setting up the music tracks.
@@ -1855,11 +1860,16 @@ FMNoteOn:
 	bne.s	locret_726FC				; Return if so
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
 	bne.s	locret_726FC				; Return if so
+	; If this is FM6, then disable DAC so FM6 can play
 	cmpi.b	#6,SMPS_Track.VoiceControl(a5)		; If this FM6?
 	bne.s	.notfm6					; If not, branch
 	moveq	#$2B,d0					; DAC enable/disable register
 	moveq	#0,d1					; Disable DAC (letting FM6 run)
-	bsr.w	WriteFMI
+	bsr.s	WriteFMI
+	; Update FM6's panning (the panning may have been changed by the DAC track)
+	move.b	#$B6,d0				; Register for FM6/DAC AMS/FMS/Panning
+	move.b	SMPS_Track.AMSFMSPan(a5),d1	; Value to send
+	bsr.w	WriteFMII
 .notfm6:
 	moveq	#$28,d0				; Note on/off register
 	move.b	SMPS_Track.VoiceControl(a5),d1	; Get channel bits
