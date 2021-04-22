@@ -203,6 +203,10 @@ DACUpdateSample:
 	cmpi.b	#$80,d2				; Is it a rest?
 	beq.s	locret_71CAA			; Return if yes
 
+	bclr	#6,SMPS_RAM.v_music_dac_track.PlaybackControl(a6)
+	beq.s	.dac_already_enabled					; If FM6 track already overridden, don't bother doing it all again
+	bset	#6,SMPS_RAM.v_music_fm6_track.PlaybackControl(a6)	; Mark FM6 track as overridden
+
 	; Enable DAC, muting FM6 (Mega PCM already does this, so this code has been commented-out)
 	;moveq	#$2B,d0					; DAC enable/disable register
 	;move.b	#$80,d1					; Enable DAC
@@ -213,6 +217,7 @@ DACUpdateSample:
 	move.b	SMPS_Track.AMSFMSPan(a5),d1	; Value to send
 	bsr.w	WriteFMII
 
+.dac_already_enabled:
 	; From Vladikcomper:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80_safe
@@ -1862,7 +1867,11 @@ FMNoteOn:
 	bne.s	locret_726FC				; Return if so
 	; If this is FM6, then disable DAC so FM6 can play
 	cmpi.b	#6,SMPS_Track.VoiceControl(a5)		; If this FM6?
-	bne.s	.notfm6					; If not, branch
+	bne.s	.do_not_disable_dac			; If not, branch
+	bclr	#6,SMPS_RAM.v_music_fm6_track.PlaybackControl(a6)
+	beq.s	.do_not_disable_dac					; If DAC track already overridden, don't bother doing it all again
+	bset	#6,SMPS_RAM.v_music_dac_track.PlaybackControl(a6)	; Mark DAC track as overridden
+	; Disable DAC channel
 	moveq	#$2B,d0					; DAC enable/disable register
 	moveq	#0,d1					; Disable DAC (letting FM6 run)
 	bsr.s	WriteFMI
@@ -1870,7 +1879,7 @@ FMNoteOn:
 	move.b	#$B6,d0				; Register for FM6/DAC AMS/FMS/Panning
 	move.b	SMPS_Track.AMSFMSPan(a5),d1	; Value to send
 	bsr.w	WriteFMII
-.notfm6:
+.do_not_disable_dac:
 	moveq	#$28,d0				; Note on/off register
 	move.b	SMPS_Track.VoiceControl(a5),d1	; Get channel bits
 	ori.b	#$F0,d1				; Note on on all operators
@@ -2469,6 +2478,8 @@ cfPanningAMSFMS:
 	or.b	d0,d1					; Mask in new value
 	move.b	d1,SMPS_Track.AMSFMSPan(a5)		; Store value
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overriden by sfx?
+	bne.s	locret_72AEA				; Return if yes
+	btst	#6,SMPS_Track.PlaybackControl(a5)	; Is track being overriden by other track (FM6/DAC)?
 	bne.s	locret_72AEA				; Return if yes
 	move.b	#$B4,d0					; Command to set AMS/FMS/panning
 	bra.w	WriteFMIorII
