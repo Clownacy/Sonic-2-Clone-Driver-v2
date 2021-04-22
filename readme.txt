@@ -1,7 +1,14 @@
 Clownacy's Sonic 2 Clone Driver v2 (v2.7)
 
-This is a heavily-modified version of Sonic 1's SMPS sound driver (which itself is a modified SMPS 68k Type 1b), designed to work as a replacement for Sonic 2's SMPS sound driver (improved Z80 port of Sonic 1's driver). This driver retains the SMPS 68k Type 1b base, and so it operates on the 68k.
-It is outfitted with many of the features found in Sonic 2's driver, along with some features from other drivers, including Sonic 3's, Sonic & Knuckles', Sonic 3D Blast's, and Knuckles' Chaotix's sound driver (all modified SMPS Z80 Type 2). While designed for Sonic 2, this driver can be installed in a Sonic 1 disassembly. Files and instructions for this are provided in the driver's threads on Sonic Retro and SSRG (Sonic Stuff Research Group). Links are available at the bottom of the README.
+This is a heavily-modified version of Sonic 1's SMPS sound driver (which itself is a modified SMPS 68k Type 1b),
+designed to work as a replacement for Sonic 2's SMPS sound driver (improved Z80 port of Sonic 1's driver). This driver
+retains the SMPS 68k Type 1b base, and so it operates on the 68k.
+
+It is outfitted with many of the features found in Sonic 2's driver, along with some features from other drivers,
+including Sonic 3's, Sonic & Knuckles', Sonic 3D Blast's, and Knuckles' Chaotix's sound driver (all modified
+SMPS Z80 Type 2 DAC). While designed for Sonic 2, this driver can be installed in a Sonic 1 disassembly. Files and
+instructions for this are provided in the driver's threads on Sonic Retro and SSRG (Sonic Stuff Research Group).
+Links are available at the bottom of the README.
 
 The following games and disassemblies are officially supported:
 - Sonic 1 Git disassembly
