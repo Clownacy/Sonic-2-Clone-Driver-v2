@@ -24,15 +24,14 @@ http://john.ccac.rwth-aachen.de:8000/as/
 
 
 Credits:
-Contributors to the sound driver disassemblies
-Valley Bell - General help, fixes for some bugs, SMPS Research Pack, inspiration
+Valley Bell - General help, fixes for some bugs, SMPS Research Pack, his Sonic 2 Recreation driver was the inspiration for this driver
 Shobiz - Ported Spin Dash rev code
 MarkeyJester - DAC fade-in fix, along with pointing out several other bugs in S1's driver
 Cinossu - S1SMPS2ASM, the basis of SMPS2ASM
-Flamewing - SMPS2ASM core; pointing out S3K's additional PSG frequencies
-Vladikcomper - Mega PCM, a fix involving interupts
+Flamewing - SMPS2ASM core, pointing out S3K's additional PSG frequencies
+Vladikcomper - Mega PCM, a fix involving 68k interrupts
 Gardeguey - SH2 code used as the basis of the 'Stub SH2' program
-Clownacy - Go read the changelog =P
+Clownacy - Everything else
 
 More information at:
 http://forums.sonicretro.org/index.php?showtopic=32801
