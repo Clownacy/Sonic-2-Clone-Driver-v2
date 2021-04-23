@@ -635,6 +635,10 @@ ptr_flgend
 ; ---------------------------------------------------------------------------
 ; Sound_E1: PlaySega:
 PlaySegaSound:
+	move.b	#$B6,d0		; Register for FM6/DAC AMS/FMS/Panning
+	move.b	#$C0,d1		; Left and right
+	bsr.w	WriteFMII
+
 	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 	SMPS_stopZ80_safe
 
