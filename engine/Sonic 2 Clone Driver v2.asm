@@ -645,15 +645,16 @@ PlaySegaSound:
 	move.b	#$C0,d1
 	bsr.w	WriteFMII
 
+	; Set DAC to full volume
 	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 
 	SMPS_stopZ80_safe
 
-	; This is a DAC SFX: set to full volume
 	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
 	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
 
-	move.b	#dSega_S2,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; Queue Sega PCM
+	; Queue Sega PCM
+	move.b	#dSega_S2,(SMPS_z80_ram+MegaPCM_DAC_Number).l
 
 	SMPS_startZ80_safe
 
@@ -1008,8 +1009,6 @@ PlaySFX_SpinDashRev:
 	bset	#f_spindash_lastsound,SMPS_RAM.bitfield1(a6)	; Set flag
 	move.b	#60,SMPS_RAM.v_spindash_timer(a6)		; Set timer
 	bra.s	Sound_PlaySFX.play_sfx
-
-.sfx_notspindashrev:
     endif
 
 ; ---------------------------------------------------------------------------
