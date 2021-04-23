@@ -648,18 +648,18 @@ PlaySegaSound:
 
 	move.b	#dSega_S2,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; Queue Sega PCM
 	SMPS_startZ80_safe
-	    if SMPS_IdlingSegaSound
-		move.w	#$11,d1
+    if SMPS_IdlingSegaSound
+	moveq	#$11,d1
 ; loc_71FC0:
 .busyloop_outer:
-		move.w	#-1,d0
+	move.w	#-1,d0
 ; loc_71FC4:
 .busyloop:
-		nop
-		dbf	d0,.busyloop
+	nop
+	dbf	d0,.busyloop
 
-		dbf	d1,.busyloop_outer
-	    endif
+	dbf	d1,.busyloop_outer
+    endif
 
 	addq.w	#4,sp				; Tamper return value so we don't return to caller
 	rts
