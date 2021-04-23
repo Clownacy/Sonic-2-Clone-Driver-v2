@@ -207,10 +207,10 @@ DACUpdateSample:
 	beq.s	.dac_already_enabled					; If FM6 track already overridden, don't bother doing it all again
 	bset	#6,SMPS_RAM.v_music_fm6_track.PlaybackControl(a6)	; Mark FM6 track as overridden
 
-	; Enable DAC, muting FM6 (Mega PCM already does this, so this code has been commented-out)
-	;moveq	#$2B,d0					; DAC enable/disable register
-	;move.b	#$80,d1					; Enable DAC
-	;bsr.w	WriteFMI
+	; Enable DAC, muting FM6
+	moveq	#$2B,d0					; DAC enable/disable register
+	move.b	#$80,d1					; Enable DAC
+	bsr.w	WriteFMI
 
 	; Update DAC's panning (the panning may have been changed by the FM6 track)
 	move.b	#$B6,d0				; Register for FM6/DAC AMS/FMS/Panning
