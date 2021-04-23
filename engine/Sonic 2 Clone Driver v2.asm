@@ -636,8 +636,8 @@ ptr_flgend
 ; Sound_E1: PlaySega:
 PlaySegaSound:
 	; Enable DAC
-	moveq	#$2B,d0		; Register for FM6/DAC AMS/FMS/Panning
-	move.b	#$80,d1		; Left and right
+	moveq	#$2B,d0
+	move.b	#$80,d1
 	bsr.w	WriteFMI
 
 	; Force L/R panning
@@ -646,6 +646,7 @@ PlaySegaSound:
 	bsr.w	WriteFMII
 
 	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
+
 	SMPS_stopZ80_safe
 
 	; This is a DAC SFX: set to full volume
@@ -653,9 +654,12 @@ PlaySegaSound:
 	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
 
 	move.b	#dSega_S2,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; Queue Sega PCM
+
 	SMPS_startZ80_safe
+
     if SMPS_IdlingSegaSound
-	moveq	#$11,d1
+	; Waste cycles until the Sega sound finishes playing
+	move.w	#$11,d1
 ; loc_71FC0:
 .busyloop_outer:
 	move.w	#-1,d0
