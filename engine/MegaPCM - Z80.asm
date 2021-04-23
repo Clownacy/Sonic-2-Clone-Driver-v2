@@ -16,13 +16,12 @@
 
 ; Memory variables
 
-MegaPCM_Stack		equ	0DFEh
+MegaPCM_Stack		equ	0DFFh
 MegaPCM_Ptr_InitPlayback equ	MegaPCM_Event_InitPlayback+1	; Init Playback event pointer
 MegaPCM_Ptr_SoundProc	equ	MegaPCM_Event_SoundProc+1	; Sound process event pointer
 MegaPCM_Ptr_Interrupt	equ	MegaPCM_Event_Interrupt+1	; Sound interrupt event pointer
 MegaPCM_Ptr_EndPlayback	equ	MegaPCM_Event_EndPlayback+1	; End playback event pointer
 MegaPCM_DAC_Number	equ	0DFFh				; Number of DAC sample to play ($81-based)
-MegaPCM_Busy_Flag	equ	0DFEh				; Set if the driver is in the middle of a YM2612 operation
 
 ; Look-up tables
 
@@ -117,37 +116,6 @@ MegaPCM_LoadDAC:
 	djnz	-
 
 	jp	MegaPCM_Event_InitPlayback	; launch 'InitPlayback' event
-
-; ---------------------------------------------------------------
-; Setup YM to playback DAC
-; ---------------------------------------------------------------
-
-MegaPCM_WaitForYM2612:
-	bit	7,(iy+0)
-	jr	nz,MegaPCM_WaitForYM2612
-	ret
-
-; ---------------------------------------------------------------
-; Setup YM to playback DAC
-; ---------------------------------------------------------------
-
-MegaPCM_SetupDAC:
-	call	MegaPCM_WaitForYM2612
-	ld	a,1
-	ld	(MegaPCM_Busy_Flag),a
-	ld	(iy+0),2Bh		;
-	ld	(iy+1),80h		; YM => Enable DAC
-	ld	a,(ix+MegaPCM_flags)		; load flags
-	and	0C0h			; are pan bits set?
-	jr	z,+			; if not, branch
-	ld	(iy+2),0B6h		;
-	ld	(iy+3),a		; YM => Set Pan
-+
-	xor	a
-	ld	(MegaPCM_Busy_Flag),a
-	call	MegaPCM_WaitForYM2612
-	ld	(iy+0),2Ah		; setup YM to fetch DAC bytes
-	ret
 
 ; ---------------------------------------------------------------
 ; Generate tables used by driver
@@ -338,7 +306,6 @@ MegaPCM_PauseDAC:
 	or	a			; is byte zero?
 	jr	nz,-			; if not, branch
 
-	call	MegaPCM_SetupDAC	; setup YM for playback
 	jr	MegaPCM_Event_SoundProc	; go on playing
 
 ; ---------------------------------------------------------------
@@ -452,7 +419,6 @@ MegaPCM_LoadBank:
 MegaPCM_Reload_PCM:
 
 MegaPCM_Init_PCM:
-	call	MegaPCM_SetupDAC
 	call	MegaPCM_InitBankSwitching
 	ld	c,(ix+MegaPCM_pitch)		; c  = pitch
 	ld	h,(ix+MegaPCM_s_pos+1)		;
@@ -539,7 +505,6 @@ MegaPCM_Process_PCM_idle:
 MegaPCM_Reload_DPCM:
 
 MegaPCM_Init_DPCM:
-	call	MegaPCM_SetupDAC
 	call	MegaPCM_InitBankSwitching
 	ld	c,(ix+MegaPCM_pitch)	; c  = pitch
 	ld	d,(ix+MegaPCM_s_pos+1)	;
@@ -693,9 +658,6 @@ DAC_Entry macro vPitch,vOffset,vFlags
 ; ---------------------------------------------------------------
 
 ; flags
-MegaPCM_panLR	= 0C0h
-MegaPCM_panL	= 80h
-MegaPCM_panR	= 40h
 MegaPCM_pcm	= 0
 MegaPCM_dpcm	= 4
 MegaPCM_loop	= 2

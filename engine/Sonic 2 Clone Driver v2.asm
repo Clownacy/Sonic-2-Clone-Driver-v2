@@ -1947,8 +1947,6 @@ WriteFMIorII:
 ; sub_7272E:
 WriteFMI:
 	SMPS_stopZ80_safe
-	tst.b	(Z80_RAM+MegaPCM_Busy_Flag).l
-	bne.s	.delayForZ80
 	lea	(SMPS_ym2612_a0).l,a0			; 12(3/0)
 	SMPS_waitYM
 	move.b	d0,(a0)					; 8(1/1)
@@ -1960,9 +1958,6 @@ WriteFMI:
 	rts
 ; End of function WriteFMI
 
-.delayForZ80:
-	SMPS_startZ80_safe
-	bra.s	WriteFMI
 
 ; ===========================================================================
 ; loc_7275A:
@@ -1975,8 +1970,6 @@ WriteFMIIPart:
 ; sub_72764:
 WriteFMII:
 	SMPS_stopZ80_safe
-	tst.b	(Z80_RAM+MegaPCM_Busy_Flag).l
-	bne.s	.delayForZ80
 	lea	(SMPS_ym2612_a0).l,a0			; 12(3/0)
 	SMPS_waitYM
 	move.b	d0,SMPS_ym2612_a1-SMPS_ym2612_a0(a0)	; 12(2/1)
@@ -1988,9 +1981,6 @@ WriteFMII:
 	rts
 ; End of function WriteFMII
 
-.delayForZ80:
-	SMPS_startZ80_safe
-	bra.s	WriteFMII
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
