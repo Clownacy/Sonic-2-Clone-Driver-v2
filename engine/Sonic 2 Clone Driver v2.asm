@@ -832,6 +832,10 @@ Sound_PlayBGM:
 	dbf	d7,.bmg_fmloadloop
 ; loc_72114:
 .bgm_fmdone:
+	; Mark *both* DAC and FM6 as overridden, so they properly configure the YM2612 when given the chance to
+	bset	#6,SMPS_RAM.v_music_dac_track.PlaybackControl(a6)
+	bset	#6,SMPS_RAM.v_music_fm6_track.PlaybackControl(a6)
+
 	moveq	#0,d7
 	move.b	2+1(a3),d7	; Load number of PSG tracks
 	beq.s	.bgm_psgdone	; Branch if zero
