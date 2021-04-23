@@ -1966,7 +1966,7 @@ WriteFMI:
 ; ===========================================================================
 ; loc_7275A:
 WriteFMIIPart:
-	bclr	#4,d2				; Clear DAC indicator
+	andi.b	#~(1<<4),d2				; Clear DAC indicator
 	or.b	d2,d0				; Add in to destination register
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
