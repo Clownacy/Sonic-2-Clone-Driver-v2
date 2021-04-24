@@ -510,6 +510,20 @@ DoUnpauseMusic:
 	bsr.s	RestoreFMTrackVoices
     endif
 
+	; Apply DAC panning if necessary (RestoreFMTrackVoices reapplied FM6's panning)
+	lea	SMPS_RAM.v_music_dac_track(a6),a5
+
+	tst.b	SMPS_Track.PlaybackControl(a5)
+	bpl.s	.no_dac					; Skip if DAC track not playing
+	btst	#2,SMPS_Track.PlaybackControl(a5)
+	bne.s	.no_dac					; Skip if DAC track is being overridden by SFX
+	btst	#6,SMPS_Track.PlaybackControl(a5)
+	bne.s	.no_dac					; Skip if DAC track is being overridden by other track (FM6/DAC)?
+	move.b	#$B6,d0					; Register for FM6/DAC AMS/FMS/Panning
+	move.b	SMPS_Track.AMSFMSPan(a5),d1		; Value to send
+	bsr.w	WriteFMII
+.no_dac:
+
 	; From Vladikcomper:
 	; "Playing sample $00 cancels pause mode."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
