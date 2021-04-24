@@ -2230,11 +2230,11 @@ PSGSendVolume:
 locret_7298A:
 	rts
 ; ===========================================================================
-; loc_7298C:
+; loc_7298C: PSGCheckNoteFill:
 PSGCheckNoteFill:
-	tst.b	SMPS_Track.NoteTimeoutMaster(a5)	; Is note fill on?
+	tst.b	SMPS_Track.NoteTimeoutMaster(a5)	; Is note timeout on?
 	beq.s	PSGSendVolume			; Branch if not
-	tst.b	SMPS_Track.NoteTimeout(a5)	; Has note fill timeout expired?
+	tst.b	SMPS_Track.NoteTimeout(a5)	; Has note timeout expired?
 	bne.s	PSGSendVolume			; Branch if not
 	rts
 ; End of function SetPSGVolume
@@ -2429,13 +2429,13 @@ coordflagLookup:
 	dc.w	cfStopTrack-coordflagLookup
     endif
 ; ===========================================================================
-	dc.w	cfNoteFill-coordflagLookup		; $FF, $08	Clownacy | Was $E8
+	dc.w	cfNoteTimeout-coordflagLookup		; $FF, $08	Clownacy | Was $E8
 ; ===========================================================================
 	dc.w	cfChangeTransposition-coordflagLookup	; $FF, $09	Clownacy | Was $E9
 ; ===========================================================================
 	dc.w	cfSetTempo-coordflagLookup		; $FF, $0A	Clownacy | Was $EA
 ; ===========================================================================
-	dc.w	cfSetTempoMod-coordflagLookup		; $FF, $0B	Clownacy | Was $EB
+	dc.w	cfSetTempoDividerAll-coordflagLookup	; $FF, $0B	Clownacy | Was $EB
 ; ===========================================================================
 	dc.w	cfChangePSGVolume-coordflagLookup	; $FF, $0C	Clownacy | Was $EC
 ; ===========================================================================
@@ -2471,7 +2471,7 @@ coordflagLookup:
 ; ===========================================================================
 	dc.w	cfSetVolume-coordflagLookup		; $FF, $1C	Clownacy | Brand new
 ; ===========================================================================
-	dc.w	cfNoteFillS3K-coordflagLookup		; $FF, $1D	Clownacy | Brand new
+	dc.w	cfNoteTimeoutS3K-coordflagLookup	; $FF, $1D	Clownacy | Brand new
 ; ===========================================================================
 	dc.w	cfLoopContinuousSFX-coordflagLookup	; $FF, $1E	Clownacy | Brand new
 ; ===========================================================================
@@ -2657,7 +2657,8 @@ cfHoldNote:
 	bset	#4,SMPS_Track.PlaybackControl(a5)	; Set 'do not attack next note' bit
 	rts
 ; ===========================================================================
-cfNoteFillS3K:	; Ported from S3K
+; cfNoteFillS3K:
+cfNoteTimeoutS3K:	; Ported from S3K
 ; S3K's zComputeNoteDuration
 	moveq	#0,d0
 	moveq	#0,d1
@@ -2668,8 +2669,8 @@ cfNoteFillS3K:	; Ported from S3K
 	move.b	d1,SMPS_Track.NoteTimeoutMaster(a5)	; Note fill master
 	rts
 ; ===========================================================================
-; loc_72BB4:
-cfNoteFill:
+; loc_72BB4: cfNoteFill:
+cfNoteTimeout:
 	move.b	(a4)+,d0
 	move.b	d0,SMPS_Track.NoteTimeout(a5)	; Note fill timeout
 	move.b	d0,SMPS_Track.NoteTimeoutMaster(a5)	; Note fill master
@@ -2688,8 +2689,8 @@ cfSetTempo:
 	move.b	d0,SMPS_RAM.variables.v_main_tempo_timeout(a6)	; And reset timeout (!)
 	rts
 ; ===========================================================================
-; loc_72BD0:
-cfSetTempoMod:
+; loc_72BD0: cfSetTempoMod:
+cfSetTempoDividerAll:
 	move.b	(a4)+,d0			; Get new tempo divider
 	lea	SMPS_RAM.v_music_track_ram(a6),a0
 	moveq	#SMPS_Track.len,d1
