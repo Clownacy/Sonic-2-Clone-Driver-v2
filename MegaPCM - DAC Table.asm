@@ -112,7 +112,7 @@ ptr_dacD6:	DAC_Entry	 9687, IntroKickS3D,	MegaPCM_dpcm	; $D6	- Intro Kick
 	if SMPS_S3DACSamples
 		; Sonic 3
 ptr_dacD7:	DAC_Entry	 8492, EchoedClapHitS3,	MegaPCM_dpcm	; $D7	- Echoed Clap Hit (S3)
-ptr_dacD8:	DAC_Entry	 6490, EchoedClapHitS3,	MegaPCM_dpcm	; $D8	- Lower Echoed Clap Hit(S3)	; Clownacy | Good golly, we're close to reaching Mega PCM's limit...
+ptr_dacD8:	DAC_Entry	 6490, EchoedClapHitS3,	MegaPCM_dpcm	; $D8	- Lower Echoed Clap Hit(S3)
 	endif
 
 	if SMPS_SCDACSamples
@@ -123,7 +123,7 @@ ptr_dacDB:	DAC_Entry	13610, TimTom,		MegaPCM_dpcm	; $DB	- Hi Timpani/Tom (SC)
 ptr_dacDC:	DAC_Entry	11363, TimTom,		MegaPCM_dpcm	; $DC	- Mid Timpani/Tom (SC)
 ptr_dacDD:	DAC_Entry	10497, TimTom,		MegaPCM_dpcm	; $DD	- Low Timpani/Tom (SC)
 ptr_dacDE:	DAC_Entry	13610, LetsGo,		MegaPCM_dpcm	; $DE	- "Let's Go!"
-ptr_dacDF:	DAC_Entry	13610, Hey,		MegaPCM_dpcm	; $DF	- "Hey!"	; Clownacy | X_X Extending the DAC range is going to take some creativity...
+ptr_dacDF:	DAC_Entry	13610, Hey,		MegaPCM_dpcm	; $DF	- "Hey!"
 	endif
 
 ptr_dacE0:	DAC_Entry	16270, SegaPCM,		MegaPCM_pcm	; $E0	- Sega!
