@@ -24,9 +24,9 @@ SMPS_Track STRUCT DOTS
 	StackPointer:		ds.b 1		; All tracks
 	DurationTimeout:	ds.b 1		; All tracks
 	SavedDuration:		ds.b 1		; All tracks
-	NoteFillTimeout:	ds.b 1		; FM/PSG only
+	NoteTimeout:		ds.b 1		; FM/PSG only
 
-	NoteFillMaster:		;ds.b 1		; FM/PSG only
+	NoteTimeoutMaster:	;ds.b 1		; FM/PSG only
 	ModulationPtr:		ds.l 1		; FM/PSG only
 
 	ModulationWait:		ds.b 1		; FM/PSG only
@@ -166,7 +166,7 @@ SMPS_RAM STRUCT DOTS
 	SMPS_RAM_even
 	variables_backup:	SMPS_RAM_Variables
 
-	f_stopmusic:		ds.b 1	; flag set to stop music when paused
+	f_pause:		ds.b 1
 
 	bitfield1:		ds.b 1
 v_ring_speaker			= 0	; which speaker the "ring" sound is played in (0 = right; 1 = left)

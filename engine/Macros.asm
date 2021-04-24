@@ -90,14 +90,14 @@ SMPS_waitYM macro target
 ; pause music
 ; ---------------------------------------------------------------------------
 SMPS_PauseMusic macro
-	move.b	#1,(Clone_Driver_RAM+SMPS_RAM.f_stopmusic).w
+	move.b	#1,(Clone_Driver_RAM+SMPS_RAM.f_pause).w
 	endm
 
 ; ---------------------------------------------------------------------------
 ; unpause music
 ; ---------------------------------------------------------------------------
 SMPS_UnpauseMusic macro
-	move.b	#$80,(Clone_Driver_RAM+SMPS_RAM.f_stopmusic).w
+	move.b	#$80,(Clone_Driver_RAM+SMPS_RAM.f_pause).w
 	endm
 
 ; ---------------------------------------------------------------------------

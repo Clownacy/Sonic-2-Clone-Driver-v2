@@ -20,8 +20,8 @@ SMPS_UpdateDriver:
 	lea	(Clone_Driver_RAM).w,a6
     endif
 
-	tst.b	SMPS_RAM.f_stopmusic(a6)	; Is music paused?
-	bne.w	DoPauseMusic			; If yes, branch
+	tst.b	SMPS_RAM.f_pause(a6)
+	bne.w	HandlePause
 
 	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)
 	beq.s	.skipfadeout
@@ -237,14 +237,14 @@ FMUpdateTrack:
 	bne.s	.notegoing			; Branch if it hasn't expired
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
 	bsr.s	FMDoNext
-	bsr.w	NoteFillUpdate
+	bsr.w	NoteTimeoutUpdate
 	bsr.w	DoModulation
 	bsr.w	FMPrepareNote
 	bra.w	FMNoteOn
 ; ===========================================================================
 ; loc_71CE0:
 .notegoing:
-	bsr.w	NoteFillUpdate
+	bsr.w	NoteTimeoutUpdate
 	bsr.w	DoModulation
 	bcs.w	FMUpdateFreq
 	rts
@@ -344,7 +344,7 @@ FinishTrackUpdate:
 	move.b	SMPS_Track.SavedDuration(a5),SMPS_Track.DurationTimeout(a5) ; Reset note timeout
 	btst	#4,SMPS_Track.PlaybackControl(a5)		; Is track set to not attack note?
 	bne.s	locret_71D9C				; If so, branch
-	move.b	SMPS_Track.NoteFillMaster(a5),SMPS_Track.NoteFillTimeout(a5) ; Reset note fill timeout
+	move.b	SMPS_Track.NoteTimeoutMaster(a5),SMPS_Track.NoteTimeout(a5) ; Reset note fill timeout
 	; Clownacy | We only want VolEnvIndex clearing on PSG tracks, now.
 	; Non-PSG tracks use the RAM for something else.
 	tst.b	SMPS_Track.VoiceControl(a5)			; Is this a psg track?
@@ -369,18 +369,18 @@ locret_71D9C:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 ; Clownacy | Nicely optimised
-; sub_71D9E:
-NoteFillUpdate:
-	tst.b	SMPS_Track.NoteFillTimeout(a5)	; Is note fill on?
+; sub_71D9E: NoteFillUpdate:
+NoteTimeoutUpdate:
+	tst.b	SMPS_Track.NoteTimeout(a5)	; Is note fill on?
 	beq.s	locret_71D9C			; If not, return
-	subq.b	#1,SMPS_Track.NoteFillTimeout(a5)	; Update note fill timeout
+	subq.b	#1,SMPS_Track.NoteTimeout(a5)	; Update note fill timeout
 	bne.s	locret_71D9C			; Return if it hasn't expired
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Put track at rest
 	addq.w	#4,sp				; Do not return to caller
 	tst.b	SMPS_Track.VoiceControl(a5)		; Is this a psg track?
 	bmi.w	PSGNoteOff			; If yes, branch
 	bra.w	FMNoteOff
-; End of function NoteFillUpdate
+; End of function NoteTimeoutUpdate
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -468,12 +468,12 @@ locret_71E48:
 ; End of function FMPrepareNote
 
 ; ===========================================================================
-; loc_71E50: PauseMusic:
-DoPauseMusic:
-	bmi.s	DoUnpauseMusic		; Branch if music is being unpaused
-	cmpi.b	#2,SMPS_RAM.f_stopmusic(a6)
+; loc_71E50: PauseMusic: DoPauseMusic:
+HandlePause:
+	bmi.s	HandleUnpause		; Branch if music is being unpaused
+	cmpi.b	#2,SMPS_RAM.f_pause(a6)
 	beq.s	.locret
-	move.b	#2,SMPS_RAM.f_stopmusic(a6)
+	move.b	#2,SMPS_RAM.f_pause(a6)
 	bsr.w	FMSilenceAll
 	bsr.w	PSGSilenceAll
     if SMPS_EnablePWM
@@ -489,9 +489,9 @@ DoPauseMusic:
 .locret:
 	rts
 ; ===========================================================================
-; loc_71E94: .unpausemusic: UnpauseMusic:
-DoUnpauseMusic:
-	clr.b	SMPS_RAM.f_stopmusic(a6)
+; loc_71E94: .unpausemusic: UnpauseMusic: DoUnpauseMusic:
+HandleUnpause:
+	clr.b	SMPS_RAM.f_pause(a6)
 
 	; Resume music FM channels
 	lea	SMPS_RAM.v_music_fm_tracks(a6),a5
@@ -2021,14 +2021,14 @@ PSGUpdateTrack:
 	bne.s	.notegoing
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack note' flag
 	bsr.s	PSGDoNext
-	bsr.w	NoteFillUpdate
+	bsr.w	NoteTimeoutUpdate
 	bsr.w	DoModulation
 	bsr.w	PSGDoNoteOn
 	bra.w	PSGDoVolFX
 ; ===========================================================================
 ; loc_72866:
 .notegoing:
-	bsr.w	NoteFillUpdate
+	bsr.w	NoteTimeoutUpdate
 	bsr.w	PSGUpdateVolFX
 	bsr.w	DoModulation
 	bcs.w	PSGUpdateFreq
@@ -2232,9 +2232,9 @@ locret_7298A:
 ; ===========================================================================
 ; loc_7298C:
 PSGCheckNoteFill:
-	tst.b	SMPS_Track.NoteFillMaster(a5)	; Is note fill on?
+	tst.b	SMPS_Track.NoteTimeoutMaster(a5)	; Is note fill on?
 	beq.s	PSGSendVolume			; Branch if not
-	tst.b	SMPS_Track.NoteFillTimeout(a5)	; Has note fill timeout expired?
+	tst.b	SMPS_Track.NoteTimeout(a5)	; Has note fill timeout expired?
 	bne.s	PSGSendVolume			; Branch if not
 	rts
 ; End of function SetPSGVolume
@@ -2664,15 +2664,15 @@ cfNoteFillS3K:	; Ported from S3K
 	move.b	(a4)+,d1				; Get parameter
 	move.b	SMPS_Track.TempoDivider(a5),d0		; Get tempo divider for this track
 	mulu.w	d0,d1					; Multiply the parameter by tempo divider
-	move.b	d1,SMPS_Track.NoteFillTimeout(a5)	; Note fill timeout
-	move.b	d1,SMPS_Track.NoteFillMaster(a5)	; Note fill master
+	move.b	d1,SMPS_Track.NoteTimeout(a5)	; Note fill timeout
+	move.b	d1,SMPS_Track.NoteTimeoutMaster(a5)	; Note fill master
 	rts
 ; ===========================================================================
 ; loc_72BB4:
 cfNoteFill:
 	move.b	(a4)+,d0
-	move.b	d0,SMPS_Track.NoteFillTimeout(a5)	; Note fill timeout
-	move.b	d0,SMPS_Track.NoteFillMaster(a5)	; Note fill master
+	move.b	d0,SMPS_Track.NoteTimeout(a5)	; Note fill timeout
+	move.b	d0,SMPS_Track.NoteTimeoutMaster(a5)	; Note fill master
 	rts
 ; ===========================================================================
 ; loc_72BBE: cfAddKey:
