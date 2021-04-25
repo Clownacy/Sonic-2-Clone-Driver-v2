@@ -351,10 +351,15 @@ FinishTrackUpdate:
 	bpl.s	.notpsg					; If not, branch
 	clr.b	SMPS_Track.VolEnvIndex(a5)		; Reset PSG volume envelope index
 .notpsg:
+    if SMPS_EnableModulationEnvelopes
+	cmpi.b	#$81, SMPS_Track.ModulationCtrl(a5)	; SMPS Z80 modulation mode?
+	bne.s	.notz80mode				; If not, skip this next check
+    else
 	btst	#3,SMPS_Track.PlaybackControl(a5)	; Is modulation on?
 	beq.s	locret_71D9C				; If not, return
 	btst	#5,SMPS_Track.PlaybackControl(a5)	; SMPS Z80 modulation mode?
 	beq.s	.notz80mode				; If not, skip this next check
+    endif
 	; This check is needed by S&K's credits music
 	btst	#4,SMPS_Track.PlaybackControl(a5)	; Is note being held?
 	bne.s	locret_71D9C				; If yes, return
@@ -395,17 +400,24 @@ NoteTimeoutUpdate:
 DoModulation:
 	; Clownacy | (From S2) Corrects modulation during rests (can be heard in ARZ's theme, as beeping right after the song loops)
 	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track at rest?
-	bne.s	.locret					; Return if so
+	bne.s	DoModulation_SMPS68kMode.locret		; Return if so
 
-	; 2021/04/24 This function has been modified to support both the SMPS 68k and SMPS Z80 modulation algorithms
-
+    if SMPS_EnableModulationEnvelopes
+	move.b	SMPS_Track.ModulationCtrl(a5),d0
+	beq.s	DoModulation_SMPS68kMode.locret
+	cmpi.b	#$80,d0
+	beq.s	DoModulation_SMPS68kMode
+	cmpi.b	#$81,d0
+	beq.s	DoModulation_SMPS68kMode
+	bra.w	DoModulationEnvelope
+    else
 	btst	#3,SMPS_Track.PlaybackControl(a5)	; Is modulation active?
-	beq.s	.locret					; Return if not
-
+	beq.s	DoModulation_SMPS68kMode.locret		; Return if not
 	btst	#5,SMPS_Track.PlaybackControl(a5)	; Is SMPS Z80 modulation mode active?
 	bne.s	DoModulation_SMPSZ80Mode		; Go do that if so
+    endif
 
-;DoModulation_SMPS68kMode:
+DoModulation_SMPS68kMode:
 	tst.b	SMPS_Track.ModulationWait(a5)		; Has modulation wait expired?
 	beq.s	.waitdone				; If yes, branch
 	subq.b	#1,SMPS_Track.ModulationWait(a5)	; Update wait timeout
@@ -470,6 +482,12 @@ DoModulation_SMPSZ80Mode:
 	rts
 ; End of function DoModulation
 
+    if SMPS_EnableModulationEnvelopes
+ DoModulationEnvelope:
+	
+	rts
+    endif
+
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -484,7 +502,11 @@ FMUpdateFreq:
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
 	bne.s	locret_71E48			; Return if so
 	move.w	SMPS_Track.Freq(a5),d6		; Get current note frequency
+    if SMPS_EnableModulationEnvelopes
+	tst.b	SMPS_Track.ModulationCtrl(a5)
+    else
 	btst	#3,SMPS_Track.PlaybackControl(a5)
+    endif
 	beq.s	.no_modulation
 	add.w	SMPS_Track.ModulationVal(a5),d6
 
@@ -2166,7 +2188,11 @@ PSGUpdateFreq:
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
 	bne.s	.locret					; Return if yes
 	move.w	SMPS_Track.Freq(a5),d6		; Get current note frequency
+    if SMPS_EnableModulationEnvelopes
+	tst.b	SMPS_Track.ModulationCtrl(a5)
+    else
 	btst	#3,SMPS_Track.PlaybackControl(a5)
+    endif
 	beq.s	.no_modulation
 	add.w	SMPS_Track.ModulationVal(a5),d6
 
@@ -2484,7 +2510,11 @@ coordflagLookup:
 ; ===========================================================================
 	dc.w	cfModulationSMPS68k-coordflagLookup	; $FF, $0E	Clownacy | Was $F0
 ; ===========================================================================
+    if SMPS_EnableModulationEnvelopes
+	dc.w	cfSetModulation-coordflagLookup		; $FF, $0F	Clownacy | Brand new
+    else
 	dc.w	cfEnableModulation-coordflagLookup	; $FF, $0F	Clownacy | Was $F1
+    endif
 ; ===========================================================================
 	dc.w	cfStopTrack-coordflagLookup		; $FF, $10	Clownacy | Was $F2
 ; ===========================================================================
@@ -2913,8 +2943,12 @@ SendVoiceTL:
 ; ===========================================================================
 
 cfModulationSMPSZ80:
+    if SMPS_EnableModulationEnvelopes
+	move.b	#$81,SMPS_Track.ModulationCtrl(a5)	; Enable SMPS Z80 modulation mode
+    else
 	bset	#5,SMPS_Track.PlaybackControl(a5)	; Enable SMPS Z80 modulation mode
 	bset	#3,SMPS_Track.PlaybackControl(a5)	; Turn on modulation
+    endif
 	move.w	a4,SMPS_Track.ModulationPtr+2(a5)	; Save pointer to modulation data
 	move.l	a4,d0
 	swap	d0
@@ -2926,7 +2960,11 @@ cfModulationSMPSZ80:
 
 ; loc_72D30: cfModulation:
 cfModulationSMPS68k:
+    if SMPS_EnableModulationEnvelopes
+	move.b	#$80,SMPS_Track.ModulationCtrl(a5)	; Turn on modulation
+    else
 	bset	#3,SMPS_Track.PlaybackControl(a5)	; Turn on modulation
+    endif
 	move.w	a4,SMPS_Track.ModulationPtr+2(a5)	; Save pointer to modulation data
 	move.l	a4,d0
 	swap	d0
@@ -2940,10 +2978,16 @@ cfModulationSMPS68k:
 	clr.w	SMPS_Track.ModulationVal(a5)		; Total accumulated modulation frequency change
 	rts
 ; ===========================================================================
+    if SMPS_EnableModulationEnvelopes
+cfSetModulation:
+	move.b	(a4)+,SMPS_Track.ModulationCtrl(a5)
+	rts
+    else
 ; loc_72D52:
 cfEnableModulation:
 	bset	#3,SMPS_Track.PlaybackControl(a5)	; Turn on modulation
 	rts
+    endif
 ; ===========================================================================
 ; loc_72D58:
 cfStopTrack:
@@ -3052,7 +3096,11 @@ cfSetPSGNoise:
 ; ===========================================================================
 ; loc_72E20:
 cfDisableModulation:
+    if SMPS_EnableModulationEnvelopes
+	bclr	#7,SMPS_Track.ModulationCtrl(a5)	; Disable modulation
+    else
 	bclr	#3,SMPS_Track.PlaybackControl(a5)	; Disable modulation
+    endif
 	rts
 ; ===========================================================================
 ; loc_72E26:

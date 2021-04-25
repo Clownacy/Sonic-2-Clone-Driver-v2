@@ -31,6 +31,9 @@ SMPS_EnableUniversalVoiceBank	= 0
 SMPS_EnablePlaySoundLocal	= 1
 ;	| If 1, SMPS_PlaySoundLocal is included
 ;
+SMPS_EnableModulationEnvelopes	= 0
+;	| If 1, modulation envelope support is included
+;
 SMPS_IsOn32X	= 0
 ;	| If 1, DAC driver is made compatible with the 32X
 ;

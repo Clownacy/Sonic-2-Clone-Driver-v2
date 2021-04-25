@@ -29,8 +29,18 @@ SMPS_Track STRUCT DOTS
 	NoteTimeoutMaster:	;ds.b 1		; FM/PSG only
 	ModulationPtr:		ds.l 1		; FM/PSG only
 
+    if SMPS_EnableModulationEnvelopes
+	ModulationCtrl:		ds.b 1		; FM/PSG only
+
+	ModEnvIndex:			;ds.b 1		; FM only
+    endif
 	ModulationWait:		ds.b 1		; FM/PSG only
+
+    if SMPS_EnableModulationEnvelopes
+	ModEnvSens:		;ds.b 1		; FM only
+    endif
 	ModulationSpeed:	ds.b 1		; FM/PSG only
+
 	ModulationDelta:	ds.b 1		; FM/PSG only
 	ModulationSteps:	ds.b 1		; FM/PSG only
 	ModulationVal:		ds.w 1		; FM/PSG only
