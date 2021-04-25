@@ -237,7 +237,6 @@ FMUpdateTrack:
 	bne.s	.notegoing			; Branch if it hasn't expired
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
 	bsr.s	FMDoNext
-	bsr.w	NoteTimeoutUpdate
 	bsr.w	DoModulation
 	bsr.w	FMPrepareNote
 	bra.w	FMNoteOn
@@ -2160,7 +2159,6 @@ PSGUpdateTrack:
 	bne.s	.notegoing
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack note' flag
 	bsr.s	PSGDoNext
-	bsr.w	NoteTimeoutUpdate
 	bsr.w	DoModulation
 	bsr.w	PSGDoNoteOn
 	bra.w	PSGDoVolFX
