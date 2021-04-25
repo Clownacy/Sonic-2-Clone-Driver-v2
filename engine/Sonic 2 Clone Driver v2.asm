@@ -342,24 +342,30 @@ FinishTrackUpdate:
 	swap	d0
 	move.b	d0,SMPS_Track.DataPointer+1(a5)		; Store new track position
 	move.b	SMPS_Track.SavedDuration(a5),SMPS_Track.DurationTimeout(a5) ; Reset note timeout
-	btst	#4,SMPS_Track.PlaybackControl(a5)		; Is track set to not attack note?
+	btst	#4,SMPS_Track.PlaybackControl(a5)	; Is track set to not attack note?
 	bne.s	locret_71D9C				; If so, branch
 	move.b	SMPS_Track.NoteTimeoutMaster(a5),SMPS_Track.NoteTimeout(a5) ; Reset note fill timeout
 	; Clownacy | We only want VolEnvIndex clearing on PSG tracks, now.
 	; Non-PSG tracks use the RAM for something else.
-	tst.b	SMPS_Track.VoiceControl(a5)			; Is this a psg track?
+	tst.b	SMPS_Track.VoiceControl(a5)		; Is this a psg track?
 	bpl.s	.notpsg					; If not, branch
-	clr.b	SMPS_Track.VolEnvIndex(a5)			; Reset PSG volume envelope index
+	clr.b	SMPS_Track.VolEnvIndex(a5)		; Reset PSG volume envelope index
 .notpsg:
-	btst	#3,SMPS_Track.PlaybackControl(a5)		; Is modulation on?
+	btst	#3,SMPS_Track.PlaybackControl(a5)	; Is modulation on?
 	beq.s	locret_71D9C				; If not, return
+	btst	#5,SMPS_Track.PlaybackControl(a5)	; SMPS Z80 modulation mode?
+	beq.s	.notz80mode				; If not, skip this next check
+	; This check is needed by S&K's credits music
+	btst	#4,SMPS_Track.PlaybackControl(a5)	; Is note being held?
+	bne.s	locret_71D9C				; If yes, return
+.notz80mode:
 	movea.l	SMPS_Track.ModulationPtr(a5),a0		; Modulation data pointer
-	move.b	(a0)+,SMPS_Track.ModulationWait(a5)		; Reset wait
+	move.b	(a0)+,SMPS_Track.ModulationWait(a5)	; Reset wait
 	move.b	(a0)+,SMPS_Track.ModulationSpeed(a5)	; Reset speed
 	move.b	(a0)+,SMPS_Track.ModulationDelta(a5)	; Reset delta
 	move.b	(a0)+,d0				; Get steps
 	lsr.b	#1,d0					; Halve them
-	move.b	d0,SMPS_Track.ModulationSteps(a5)		; Then store
+	move.b	d0,SMPS_Track.ModulationSteps(a5)	; Then store
 	clr.w	SMPS_Track.ModulationVal(a5)		; Reset frequency change
 locret_71D9C:
 	rts
@@ -389,12 +395,19 @@ NoteTimeoutUpdate:
 DoModulation:
 	; Clownacy | (From S2) Corrects modulation during rests (can be heard in ARZ's theme, as beeping right after the song loops)
 	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track at rest?
-	bne.s	.locret				; Return if so
+	bne.s	.locret					; Return if so
+
+	; 2021/04/24 This function has been modified to support both the SMPS 68k and SMPS Z80 modulation algorithms
 
 	btst	#3,SMPS_Track.PlaybackControl(a5)	; Is modulation active?
-	beq.s	.locret				; Return if not
-	tst.b	SMPS_Track.ModulationWait(a5)	; Has modulation wait expired?
-	beq.s	.waitdone			; If yes, branch
+	beq.s	.locret					; Return if not
+
+	btst	#5,SMPS_Track.PlaybackControl(a5)	; Is SMPS Z80 modulation mode active?
+	bne.s	DoModulation_SMPSZ80Mode		; Go do that if so
+
+;DoModulation_SMPS68kMode:
+	tst.b	SMPS_Track.ModulationWait(a5)		; Has modulation wait expired?
+	beq.s	.waitdone				; If yes, branch
 	subq.b	#1,SMPS_Track.ModulationWait(a5)	; Update wait timeout
 ; locret_71E16:
 .locret:
@@ -404,12 +417,7 @@ DoModulation:
 ; loc_71DDA:
 .waitdone:
 	subq.b	#1,SMPS_Track.ModulationSpeed(a5)	; Update speed
-	beq.s	.updatemodulation		; If it expired, want to update modulation
-	move.b	#0,ccr
-	rts
-; ===========================================================================
-; loc_71DE2:
-.updatemodulation:
+	bne.s	.locret					; If it expired, want to update modulation
 	movea.l	SMPS_Track.ModulationPtr(a5),a0		; Get modulation data
 	move.b	1(a0),SMPS_Track.ModulationSpeed(a5)	; Restore modulation speed
 	tst.b	SMPS_Track.ModulationSteps(a5)		; Check number of steps
@@ -426,6 +434,39 @@ DoModulation:
 	ext.w	d6
 	add.w	d6,SMPS_Track.ModulationVal(a5)
 	move.b	#1,ccr
+	rts
+
+; ===========================================================================
+DoModulation_SMPSZ80Mode:
+	btst	#4,SMPS_Track.PlaybackControl(a5)
+	bne.s	.locret					; Do not perform modulation if note is being held
+
+	subq.b	#1,SMPS_Track.ModulationWait(a5)	; Has modulation wait expired?
+	bne.s	.locret					; If not, branch
+	addq.b	#1,SMPS_Track.ModulationWait(a5)	; Increase it back to 1 for next frame
+	movea.l	SMPS_Track.ModulationPtr(a5),a0		; Get modulation data
+	subq.b	#1,SMPS_Track.ModulationSpeed(a5)	; Update speed
+	bne.s	.mod_sustain				; If it expired, want to update modulation
+	move.b	1(a0),SMPS_Track.ModulationSpeed(a5)	; Restore modulation speed
+	move.b	SMPS_Track.ModulationDelta(a5),d6	; Get modulation delta
+	ext.w	d6
+	add.w	d6,SMPS_Track.ModulationVal(a5)
+	bsr.s	.dostep
+	move.b	#1,ccr
+	rts
+
+.mod_sustain:
+	bsr.s	.dostep
+.locret:
+	move.b	#0,ccr
+	rts
+
+.dostep:
+	subq.b	#1,SMPS_Track.ModulationSteps(a5)	; Check number of steps
+	bne.s	.dostep_locret				; If nonzero, branch
+	move.b	3(a0),SMPS_Track.ModulationSteps(a5)	; Restore from modulation data
+	neg.b	SMPS_Track.ModulationDelta(a5)		; Negate modulation delta
+.dostep_locret:
 	rts
 ; End of function DoModulation
 
@@ -2441,7 +2482,7 @@ coordflagLookup:
 ; ===========================================================================
 	dc.w	cfSetVoice-coordflagLookup		; $FF, $0D	Clownacy | Was $EF
 ; ===========================================================================
-	dc.w	cfModulation-coordflagLookup		; $FF, $0E	Clownacy | Was $F0
+	dc.w	cfModulationSMPS68k-coordflagLookup	; $FF, $0E	Clownacy | Was $F0
 ; ===========================================================================
 	dc.w	cfEnableModulation-coordflagLookup	; $FF, $0F	Clownacy | Was $F1
 ; ===========================================================================
@@ -2482,6 +2523,8 @@ coordflagLookup:
     endif
 ; ===========================================================================
 	dc.w	cfSendFMI-coordflagLookup		; $FF, $20	Clownacy | Brand new
+; ===========================================================================
+	dc.w	cfModulationSMPSZ80-coordflagLookup	; $FF, $21	Clownacy | Brand new
 ; ===========================================================================
 ; loc_72ACC:
 cfPanningAMSFMS:
@@ -2868,8 +2911,21 @@ SendVoiceTL:
 ; End of function SendVoiceTL
 
 ; ===========================================================================
-; loc_72D30:
-cfModulation:
+
+cfModulationSMPSZ80:
+	bset	#5,SMPS_Track.PlaybackControl(a5)	; Enable SMPS Z80 modulation mode
+	bset	#3,SMPS_Track.PlaybackControl(a5)	; Turn on modulation
+	move.w	a4,SMPS_Track.ModulationPtr+2(a5)	; Save pointer to modulation data
+	move.l	a4,d0
+	swap	d0
+	move.b	d0,SMPS_Track.ModulationPtr+1(a5)	; Save pointer to modulation data
+	; Notably, unlike SMPS 68k modulation, the data is not actually copied
+	; (that's saved for zDoModulation/FinishTrackUpdate)
+	addq.w	#4,a4
+	rts
+
+; loc_72D30: cfModulation:
+cfModulationSMPS68k:
 	bset	#3,SMPS_Track.PlaybackControl(a5)	; Turn on modulation
 	move.w	a4,SMPS_Track.ModulationPtr+2(a5)	; Save pointer to modulation data
 	move.l	a4,d0
