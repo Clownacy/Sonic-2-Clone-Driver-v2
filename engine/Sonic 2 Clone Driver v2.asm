@@ -496,35 +496,18 @@ DoModulation_SMPSZ80Mode:
 	moveq	#0,d3
 	move.b	SMPS_Track.ModEnvIndex(a5),d3
 
-.process_byte:
+.process_next_byte:
 	move.b	(a0,d3.w),d0
 	bpl.s	.not_a_command
-	cmpi.b	#$82,d0
-	beq.s	.set_index
 	cmpi.b	#$80,d0
 	beq.s	.reset_index
+	; In SMPS 68k Type 2, $81 holds the note, and $83 stops the note
+	cmpi.b	#$82,d0
+	beq.s	.set_index
+	cmpi.b	#$83,d0
+	beq.s	.hold_note
 	cmpi.b	#$84,d0
-	beq.s	.set_multiplier
-	bhi.s	.not_a_command
-
-	move.b	d3,SMPS_Track.ModEnvIndex(a5)
-
-	move.b	#0,ccr
-	rts
-
-.set_index:
-	move.b	1(a0,d3.w),d3
-	bra.s	.process_byte
-
-.reset_index:
-	clr.b	d3
-	bra.s	.process_byte
-
-.set_multiplier:
-	move.b	1(a0,d3.w),d0
-	add.b	d0,SMPS_Track.ModEnvSens(a5)
-	addq.b	#2,d3
-	bra.s	.process_byte
+	beq.s	.change_multiplier
 
 .not_a_command:
 	ext.w	d0
@@ -540,8 +523,28 @@ DoModulation_SMPSZ80Mode:
 
 	move.b	d3,SMPS_Track.ModEnvIndex(a5)
 
-	move.b	#1,ccr
+	move.b	#1,ccr	; Update the note frequency
 	rts
+
+.reset_index:
+	clr.b	d3
+	bra.s	.process_next_byte
+
+.hold_note:
+	move.b	d3,SMPS_Track.ModEnvIndex(a5)
+
+	move.b	#0,ccr	; Do not update the note frequency
+	rts
+
+.set_index:
+	move.b	1(a0,d3.w),d3
+	bra.s	.process_next_byte
+
+.change_multiplier:
+	move.b	1(a0,d3.w),d0
+	add.b	d0,SMPS_Track.ModEnvSens(a5)
+	addq.b	#2,d3
+	bra.s	.process_next_byte
 
 ModEnvPointers:
 	dc.l	ModEnv_00
@@ -552,6 +555,7 @@ ModEnvPointers:
 	dc.l	ModEnv_05
 	dc.l	ModEnv_06
 	dc.l	ModEnv_07
+
 ModEnv_01:	dc.b    0
 ModEnv_00:	dc.b    1,   2,   1,   0,  -1,  -2,  -3,  -4,  -3,  -2,  -1, $83
 ModEnv_02:	dc.b    0,   0,   0,   0, $13, $26, $39, $4C, $5F, $72, $7F, $72, $83
