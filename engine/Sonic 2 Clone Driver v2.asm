@@ -3170,11 +3170,11 @@ cfSetVolume:
 	not.b	d0				; Invert bits
 	tst.b	SMPS_Track.VoiceControl(a5)	; Is this a psg track?
 	bpl.s	.FMVolume			; If not, branch
-	andi.b	#$F0,d0
+	andi.b	#$78,d0
 	move.b	d0,SMPS_Track.Volume(a5)	; Write volume
 	rts
 .FMVolume:
-	bchg	#7,d0				; Retain sign bit
+	andi.b	#$7F,d0				; Retain sign bit
 	move.b	d0,SMPS_Track.Volume(a5)	; Write volume
 	bra.w	SendVoiceTL
 ; ===========================================================================
