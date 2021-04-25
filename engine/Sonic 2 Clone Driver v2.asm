@@ -2624,6 +2624,10 @@ cfFadeInToPrevious:
 
 	movea.l	a3,a5
 
+	; Mark *both* DAC and FM6 as overridden, so they properly configure the YM2612 when given the chance to
+	bset	#6,SMPS_RAM.v_music_dac_track.PlaybackControl(a6)
+	bset	#6,SMPS_RAM.v_music_fm6_track.PlaybackControl(a6)
+
 	bset	#f_fadeinflag,SMPS_RAM.variables.bitfield2(a6)
 	move.b	#$28,SMPS_RAM.variables.v_fadein_counter(a6)	; Fade-in delay
 	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
