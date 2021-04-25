@@ -31,8 +31,9 @@ SMPS_Track STRUCT DOTS
 
     if SMPS_EnableModulationEnvelopes
 	ModulationCtrl:		ds.b 1		; FM/PSG only
+				ds.b 1		; padding to ensure an even address
 
-	ModEnvIndex:			;ds.b 1		; FM only
+	ModEnvIndex:		;ds.b 1		; FM only
     endif
 	ModulationWait:		ds.b 1		; FM/PSG only
 

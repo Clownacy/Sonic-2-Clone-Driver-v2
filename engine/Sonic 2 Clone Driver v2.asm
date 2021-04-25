@@ -352,7 +352,7 @@ FinishTrackUpdate:
 	clr.b	SMPS_Track.VolEnvIndex(a5)		; Reset PSG volume envelope index
 .notpsg:
     if SMPS_EnableModulationEnvelopes
-	cmpi.b	#$81, SMPS_Track.ModulationCtrl(a5)	; SMPS Z80 modulation mode?
+	cmpi.b	#$81,SMPS_Track.ModulationCtrl(a5)	; SMPS Z80 modulation mode?
 	bne.s	.notz80mode				; If not, skip this next check
     else
 	btst	#3,SMPS_Track.PlaybackControl(a5)	; Is modulation on?
@@ -408,7 +408,7 @@ DoModulation:
 	cmpi.b	#$80,d0
 	beq.s	DoModulation_SMPS68kMode
 	cmpi.b	#$81,d0
-	beq.s	DoModulation_SMPS68kMode
+	beq.s	DoModulation_SMPSZ80Mode
 	bra.w	DoModulationEnvelope
     else
 	btst	#3,SMPS_Track.PlaybackControl(a5)	; Is modulation active?
@@ -484,7 +484,7 @@ DoModulation_SMPSZ80Mode:
 
     if SMPS_EnableModulationEnvelopes
  DoModulationEnvelope:
-	
+	move.b	#1,ccr
 	rts
     endif
 

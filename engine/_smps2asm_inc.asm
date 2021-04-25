@@ -356,8 +356,20 @@ smpsModSet macro wait,speed,change,step
 	endm
 
 ; Turn on Modulation
-smpsModOn macro
-	dc.b	$FF,$0F
+smpsModOn macro type
+	if SMPS_EnableModulationEnvelopes
+		if "type"<>""
+			dc.b	$FF,$0F,type
+		else
+			dc.b	$FF,$0F,$80
+		endif
+	else
+		if "type"<>""
+			fatal "Go set SMPS_EnableModulationEnvelopes to 1"
+		else
+			dc.b	$FF,$0F
+		endif
+	endif
 	endm
 
 ; F2 - End of channel
@@ -422,6 +434,15 @@ smpsPlaySound macro index
 ; Set note values to xx-$40
 smpsSetNote macro val
 	dc.b	$FF,$1B,val
+	endm
+
+; Set Modulation
+smpsModChange macro val
+	if SMPS_EnableModulationEnvelopes
+		dc.b	$FF,$0F,val
+	else
+		fatal "Go set SMPS_EnableModulationEnvelopes to 1"
+	endif
 	endm
 
 ; FCxxxx - Jump to xxxx
