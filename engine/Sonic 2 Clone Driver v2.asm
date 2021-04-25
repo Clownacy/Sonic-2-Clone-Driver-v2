@@ -352,6 +352,11 @@ FinishTrackUpdate:
 	clr.b	SMPS_Track.VolEnvIndex(a5)		; Reset PSG volume envelope index
 .notpsg:
     if SMPS_EnableModulationEnvelopes
+	clr.b	SMPS_Track.ModEnvIndex(a5)
+	clr.b	SMPS_Track.ModEnvSens(a5)
+
+	btst	#7,SMPS_Track.ModulationCtrl(a5)	; Is modulation on?
+	beq.s	locret_71D9C				; If not, return
 	cmpi.b	#$81,SMPS_Track.ModulationCtrl(a5)	; SMPS Z80 modulation mode?
 	bne.s	.notz80mode				; If not, skip this next check
     else
@@ -403,6 +408,7 @@ DoModulation:
 	bne.s	DoModulation_SMPS68kMode.locret		; Return if so
 
     if SMPS_EnableModulationEnvelopes
+	moveq	#0,d0
 	move.b	SMPS_Track.ModulationCtrl(a5),d0
 	beq.s	DoModulation_SMPS68kMode.locret
 	cmpi.b	#$80,d0
@@ -484,8 +490,86 @@ DoModulation_SMPSZ80Mode:
 
     if SMPS_EnableModulationEnvelopes
  DoModulationEnvelope:
+	add.w	d0,d0
+	add.w	d0,d0
+	movea.l	ModEnvPointers-4(pc,d0.w),a0
+
+	moveq	#0,d3
+	move.b	SMPS_Track.ModEnvIndex(a5),d3
+
+.loop:
+	move.b	(a0,d3.w),d0
+	bpl.s	.volume
+	cmpi.b	#$82,d0
+	beq.s	.set_index
+	cmpi.b	#$80,d0
+	beq.s	.reset
+	cmpi.b	#$84,d0
+	beq.s	.set_multiplier
+	bhi.s	.volume
+
+	move.b	d3,SMPS_Track.ModEnvIndex(a5)
+
+	bset	#0,SMPS_Track.PlaybackControl(a5)	; Set 'sustain frequency' bit
+	move.b	#0,ccr
+	rts
+
+.set_index:
+	move.b	1(a0,d3.w),d3
+	bra.s	.loop
+
+.reset:
+	clr.b	d3
+	bra.s	.loop
+
+.set_multiplier:
+	move.b	1(a0,d3.w),d0
+	add.b	d0,SMPS_Track.ModEnvSens(a5)
+	addq.b	#2,d3
+	bra.s	.loop
+
+.volume:
+	ext.w	d0
+
+	; TODO - mulu.w
+	moveq	#0,d2
+	move.b	SMPS_Track.ModEnvSens(a5),d2
+
+	moveq	#0,d1
+.sens_loop:
+	add.w	d0,d1
+	dbf	d2,.sens_loop
+
+	move.w	d1,SMPS_Track.ModulationVal(a5)
+
+	addq.b	#1,d3
+
+	move.b	d3,SMPS_Track.ModEnvIndex(a5)
+
 	move.b	#1,ccr
 	rts
+
+ModEnvPointers:
+	dc.l	ModEnv_00
+	dc.l	ModEnv_01
+	dc.l	ModEnv_02
+	dc.l	ModEnv_03
+	dc.l	ModEnv_04
+	dc.l	ModEnv_05
+	dc.l	ModEnv_06
+	dc.l	ModEnv_07
+ModEnv_01:	dc.b    0
+ModEnv_00:	dc.b    1,   2,   1,   0,  -1,  -2,  -3,  -4,  -3,  -2,  -1, $83
+ModEnv_02:	dc.b    0,   0,   0,   0, $13, $26, $39, $4C, $5F, $72, $7F, $72, $83
+ModEnv_03:	dc.b    1,   2,   3,   2,   1,   0,  -1,  -2,  -3,  -2,  -1,   0, $82,   0
+ModEnv_04:	dc.b    0,   0,   1,   3,   1,   0,  -1,  -3,  -1,   0, $82,   2
+ModEnv_05:	dc.b    0,   0,   0,   0,   0, $0A, $14, $1E, $14, $0A,   0, $F6, $EC, $E2, $EC, $F6
+		dc.b  $82,   4
+ModEnv_06:	dc.b    0,   0,   0,   0, $16, $2C, $42, $2C, $16,   0, $EA, $D4, $BE, $D4, $EA, $82
+		dc.b    3
+ModEnv_07:	dc.b    1,   2,   3,   4,   3,   2,   1,   0, $FF, $FE, $FD, $FC, $FD, $FE, $FF,   0
+		dc.b  $82,   1
+	even
     endif
 
 

@@ -361,7 +361,11 @@ smpsModOn macro type
 		if "type"<>""
 			dc.b	$FF,$0F,type
 		else
-			dc.b	$FF,$0F,$80
+			if SourceDriver>=3
+				dc.b	$FF,$0F,$81	; SMPS Z80 modulation mode
+			else
+				dc.b	$FF,$0F,$80	; SMPS 68k modulation mode
+			endif
 		endif
 	else
 		if "type"<>""
