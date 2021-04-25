@@ -497,16 +497,16 @@ DoModulation_SMPSZ80Mode:
 	moveq	#0,d3
 	move.b	SMPS_Track.ModEnvIndex(a5),d3
 
-.loop:
+.process_byte:
 	move.b	(a0,d3.w),d0
-	bpl.s	.volume
+	bpl.s	.not_a_command
 	cmpi.b	#$82,d0
 	beq.s	.set_index
 	cmpi.b	#$80,d0
-	beq.s	.reset
+	beq.s	.reset_index
 	cmpi.b	#$84,d0
 	beq.s	.set_multiplier
-	bhi.s	.volume
+	bhi.s	.not_a_command
 
 	move.b	d3,SMPS_Track.ModEnvIndex(a5)
 
@@ -515,31 +515,27 @@ DoModulation_SMPSZ80Mode:
 
 .set_index:
 	move.b	1(a0,d3.w),d3
-	bra.s	.loop
+	bra.s	.process_byte
 
-.reset:
+.reset_index:
 	clr.b	d3
-	bra.s	.loop
+	bra.s	.process_byte
 
 .set_multiplier:
 	move.b	1(a0,d3.w),d0
 	add.b	d0,SMPS_Track.ModEnvSens(a5)
 	addq.b	#2,d3
-	bra.s	.loop
+	bra.s	.process_byte
 
-.volume:
+.not_a_command:
 	ext.w	d0
 
-	; TODO - mulu.w
 	moveq	#0,d2
 	move.b	SMPS_Track.ModEnvSens(a5),d2
+	addq.b	#1,d2
 
-	moveq	#0,d1
-.sens_loop:
-	add.w	d0,d1
-	dbf	d2,.sens_loop
-
-	move.w	d1,SMPS_Track.ModulationVal(a5)
+	mulu.w	d2,d0
+	move.w	d0,SMPS_Track.ModulationVal(a5)
 
 	addq.b	#1,d3
 
@@ -562,12 +558,9 @@ ModEnv_00:	dc.b    1,   2,   1,   0,  -1,  -2,  -3,  -4,  -3,  -2,  -1, $83
 ModEnv_02:	dc.b    0,   0,   0,   0, $13, $26, $39, $4C, $5F, $72, $7F, $72, $83
 ModEnv_03:	dc.b    1,   2,   3,   2,   1,   0,  -1,  -2,  -3,  -2,  -1,   0, $82,   0
 ModEnv_04:	dc.b    0,   0,   1,   3,   1,   0,  -1,  -3,  -1,   0, $82,   2
-ModEnv_05:	dc.b    0,   0,   0,   0,   0, $0A, $14, $1E, $14, $0A,   0, $F6, $EC, $E2, $EC, $F6
-		dc.b  $82,   4
-ModEnv_06:	dc.b    0,   0,   0,   0, $16, $2C, $42, $2C, $16,   0, $EA, $D4, $BE, $D4, $EA, $82
-		dc.b    3
-ModEnv_07:	dc.b    1,   2,   3,   4,   3,   2,   1,   0, $FF, $FE, $FD, $FC, $FD, $FE, $FF,   0
-		dc.b  $82,   1
+ModEnv_05:	dc.b    0,   0,   0,   0,   0,  10,  20,  30,  20,  10,   0, -10, -20, -30, -20, -10, $82,   4
+ModEnv_06:	dc.b    0,   0,   0,   0,  22,  44,  66,  44,  22,   0, -22, -44, -66, -44, -22, $82,   3
+ModEnv_07:	dc.b    1,   2,   3,   4,   3,   2,   1,   0,  -1,  -2,  -3,  -4,  -3,  -2,  -1,   0, $82,   1
 	even
     endif
 
