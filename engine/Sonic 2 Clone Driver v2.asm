@@ -510,7 +510,6 @@ DoModulation_SMPSZ80Mode:
 
 	move.b	d3,SMPS_Track.ModEnvIndex(a5)
 
-	bset	#0,SMPS_Track.PlaybackControl(a5)	; Set 'sustain frequency' bit
 	move.b	#0,ccr
 	rts
 
