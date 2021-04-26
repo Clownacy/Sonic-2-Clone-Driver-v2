@@ -722,40 +722,43 @@ RestoreFMTrackVoices:
 CycleSoundQueue:
 	lea	(SoundIndex).l,a0
 	lea	SMPS_RAM.variables.queue(a6),a1		; Load music track number
-	move.b	SMPS_RAM.variables.v_sndprio(a6),d3	; Get priority of currently playing SFX
 	moveq	#SMPS_Queue.len-1,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
-	moveq	#0,d0
 ; loc_71F12:
 .inputloop:
+	moveq	#0,d0
 	move.b	(a1),d0			; Move track number to d0
-	move.w	d0,d7
 	clr.b	(a1)+			; Clear entry
 	cmpi.b	#MusID__First,d0	; Make it into 0-based index
-	blo.s	.nextinput		; If negative (i.e., it was $80 or lower), branch
+	blo.s	.next_queue
+
+	move.w	d0,d7
+
 	cmpi.b	#SndID__End,d0		; Is it a special command?
-	bhs.s	PlaySoundID		; If so, branch
+	bhs.s	.skip_priority		; If so, branch
 	subi.b	#SndID__First,d0	; Subtract first SFX index
-	blo.s	PlaySoundID		; If it was music, branch
+	bcs.s	.skip_priority		; If it was music, branch
+
 	add.w	d0,d0
 	add.w	d0,d0
-	move.b	(a0,d0.w),d2		; Get sound type
-	cmp.b	d3,d2			; Is it a lower priority sound?
-	blo.s	.lowerpriority		; Branch if yes
-	move.b	d2,d3			; Store new priority
-	movem.l	d0-a6,-(sp)
+	move.b	(a0,d0.w),d2		; Get sound priority
+
+	cmp.b	SMPS_RAM.variables.v_sndprio(a6),d2
+	blo.s	.next_queue
+
+	tst.b	d2			; We don't want to change sound priority if it is negative
+	bmi.s	.do_not_store_priority
+	move.b	d2,SMPS_RAM.variables.v_sndprio(a6)	; Set new sound priority
+.do_not_store_priority:
+
+.skip_priority:
+	movem.l	a0/a1/d4,-(sp)
 	bsr.s	PlaySoundID
-	movem.l	(sp)+,d0-a6
+	movem.l	(sp)+,a0/a1/d4
 
-.lowerpriority:
-	tst.b	d3			; We don't want to change sound priority if it is negative
-	bmi.s	.locret
-	move.b	d3,SMPS_RAM.variables.v_sndprio(a6)	; Set new sound priority
-.locret:
-	rts
-
-; loc_71F3E:
-.nextinput:
+.next_queue:
 	dbf	d4,.inputloop
+
+.locret:
 	rts
 ; End of function CycleSoundQueue
 
