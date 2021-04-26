@@ -469,6 +469,41 @@ DoModulation_SMPSZ80Mode:
 	rts
 ; End of function DoModulation
 
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+; sub_71E18:
+FMPrepareNote:
+	tst.w	SMPS_Track.Freq(a5)			; Freq is 0 when resting
+	bne.s	FMUpdateFreq.skip_modulation_check
+	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
+locret_71E48:
+	rts
+
+; loc_71E24:
+FMUpdateFreq:
+    if SMPS_EnableModulationEnvelopes
+	tst.b	SMPS_Track.ModulationCtrl(a5)
+    else
+	btst	#3,SMPS_Track.PlaybackControl(a5)
+    endif
+	beq.s	locret_71E48
+
+.skip_modulation_check:
+	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track resting?
+	bne.s	locret_71E48			; Return if so
+	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
+	bne.s	locret_71E48			; Return if so
+	bsr.w	DoModulationEnvelope
+	move.w	d6,-(sp)
+	move.b	(sp)+,d1
+	move.b	#$A4,d0		; Register for upper 6 bits of frequency
+	bsr.w	WriteFMIorII
+	move.b	d6,d1
+	move.b	#$A0,d0		; Register for lower 8 bits of frequency
+	bra.w	WriteFMIorII
+; End of function FMPrepareNote
+
  DoModulationEnvelope:
 	moveq	#0,d6
     if SMPS_EnableModulationEnvelopes
@@ -597,41 +632,6 @@ ModEnv_07:	dc.b    $84, 1,   1,   2,   3,   4,   3,   2,   1,   0,  -1,  -2,  -3
 
 	rts
     endif
-
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-; sub_71E18:
-FMPrepareNote:
-	tst.w	SMPS_Track.Freq(a5)			; Freq is 0 when resting
-	bne.s	FMUpdateFreq.skip_modulation_check
-	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
-locret_71E48:
-	rts
-
-; loc_71E24:
-FMUpdateFreq:
-    if SMPS_EnableModulationEnvelopes
-	tst.b	SMPS_Track.ModulationCtrl(a5)
-    else
-	btst	#3,SMPS_Track.PlaybackControl(a5)
-    endif
-	beq.s	locret_71E48
-
-.skip_modulation_check:
-	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track resting?
-	bne.s	locret_71E48			; Return if so
-	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
-	bne.s	locret_71E48			; Return if so
-	bsr.w	DoModulationEnvelope
-	move.w	d6,-(sp)
-	move.b	(sp)+,d1
-	move.b	#$A4,d0		; Register for upper 6 bits of frequency
-	bsr.w	WriteFMIorII
-	move.b	d6,d1
-	move.b	#$A0,d0		; Register for lower 8 bits of frequency
-	bra.w	WriteFMIorII
-; End of function FMPrepareNote
 
 ; ===========================================================================
 ; loc_71E50: PauseMusic: DoPauseMusic:
