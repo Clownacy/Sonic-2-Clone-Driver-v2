@@ -2360,7 +2360,7 @@ PSGSendVolume:
 	; Clownacy | This correction is present elsewhere in S1's driver, but just having
 	; a single copy here saves space and eliminates the few instances where the correction
 	; isn't performed
-	tst.b	d6				; Is volume $10 or higher?
+	tst.b	d6				; Is volume $10<<3 or higher?
 	bpl.s	+				; Branch if not
 	moveq	#$1F,d6				; Limit to silence and fall through
 	bra.s	++
@@ -2405,9 +2405,6 @@ VolEnvHold:
 ; ===========================================================================
 
 VolEnvOff:	; For compatibility with S3K
-	; Decrement volume envelope index to before flag and last volume update (PSG volume will still update on subsequent frame)
-	; TODO: This might be redundant (why update volume if A. it's meant to be mute, and B. the update is ignored because it's at rest)
-	subq.b	#2,SMPS_Track.VolEnvIndex(a5)
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
 ;	bra.s	PSGNoteOff
 
