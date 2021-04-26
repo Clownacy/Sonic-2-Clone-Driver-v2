@@ -2817,15 +2817,15 @@ cfNoteTimeoutS3K:	; Ported from S3K
 	move.b	(a4)+,d1				; Get parameter
 	move.b	SMPS_Track.TempoDivider(a5),d0		; Get tempo divider for this track
 	mulu.w	d0,d1					; Multiply the parameter by tempo divider
-	move.b	d1,SMPS_Track.NoteTimeout(a5)	; Note fill timeout
-	move.b	d1,SMPS_Track.NoteTimeoutMaster(a5)	; Note fill master
+	move.b	d1,SMPS_Track.NoteTimeout(a5)		; Note timeout
+	move.b	d1,SMPS_Track.NoteTimeoutMaster(a5)	; Note timeout master
 	rts
 ; ===========================================================================
 ; loc_72BB4: cfNoteFill:
 cfNoteTimeout:
 	move.b	(a4)+,d0
-	move.b	d0,SMPS_Track.NoteTimeout(a5)	; Note fill timeout
-	move.b	d0,SMPS_Track.NoteTimeoutMaster(a5)	; Note fill master
+	move.b	d0,SMPS_Track.NoteTimeout(a5)		; Note timeout
+	move.b	d0,SMPS_Track.NoteTimeoutMaster(a5)	; Note timeout master
 	rts
 ; ===========================================================================
 ; loc_72BBE: cfAddKey:
@@ -3350,9 +3350,9 @@ cfSendFMI:
 ; Has 2 parameter bytes: a 1-byte register selector and a 1-byte register data.
 ;
 cfChanFMCommand:
-	move.b	(a4)+,d0				; Get YM2612 register selector
-	move.b	(a4)+,d1				; Get YM2612 register data
-	bra.w	WriteFMIorII				; Send it to YM2612
+	move.b	(a4)+,d0	; Get YM2612 register selector
+	move.b	(a4)+,d1	; Get YM2612 register data
+	bra.w	WriteFMIorII	; Send it to YM2612
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Music 'include's and pointers
