@@ -234,18 +234,24 @@ locret_71CAA:
 ; sub_71CCA:
 FMUpdateTrack:
 	subq.b	#1,SMPS_Track.DurationTimeout(a5)	; Update duration timeout
-	bne.s	.notegoing			; Branch if it hasn't expired
+	bne.s	.notegoing				; Branch if it hasn't expired
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
 	bsr.s	FMDoNext
+	btst	#1,SMPS_Track.PlaybackControl(a5)	; If resting, return
+	bne.s	.locret
 	bsr.w	DoModulation
 	bsr.w	FMPrepareNote
 	bra.w	FMNoteOn
 ; ===========================================================================
 ; loc_71CE0:
 .notegoing:
+	btst	#1,SMPS_Track.PlaybackControl(a5)	; If resting, return
+	bne.s	.locret
 	bsr.w	NoteTimeoutUpdate
 	bsr.w	DoModulation
 	bra.w	FMUpdateFreq
+.locret:
+	rts
 ; End of function FMUpdateTrack
 
 
@@ -401,10 +407,6 @@ NoteTimeoutUpdate:
 
 ; sub_71DC6:
 DoModulation:
-	; Clownacy | (From S2) Corrects modulation during rests (can be heard in ARZ's theme, as beeping right after the song loops)
-	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track at rest?
-	bne.s	.locret					; Return if so
-
     if SMPS_EnableModulationEnvelopes
 	tst.b	SMPS_Track.ModulationCtrl(a5)		; Is modulation active?
 	bpl.s	.locret					; Return if not
@@ -472,14 +474,6 @@ DoModulation_SMPSZ80Mode:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-; sub_71E18:
-FMPrepareNote:
-	tst.w	SMPS_Track.Freq(a5)			; Freq is 0 when resting
-	bne.s	FMUpdateFreq.skip_modulation_check
-	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
-locret_71E48:
-	rts
-
 ; loc_71E24:
 FMUpdateFreq:
     if SMPS_EnableModulationEnvelopes
@@ -487,13 +481,14 @@ FMUpdateFreq:
     else
 	btst	#3,SMPS_Track.PlaybackControl(a5)
     endif
-	beq.s	locret_71E48
+	beq.s	FMPrepareNote.locret	; If modulation is not enabled, return
 
-.skip_modulation_check:
+; sub_71E18:
+FMPrepareNote:
 	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track resting?
-	bne.s	locret_71E48				; Return if so
+	bne.s	.locret					; Return if so
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
-	bne.s	locret_71E48				; Return if so
+	bne.s	.locret					; Return if so
 	bsr.s	DoModulationEnvelope
 	move.w	d6,-(sp)
 	move.b	(sp)+,d1
@@ -502,7 +497,12 @@ FMUpdateFreq:
 	move.b	d6,d1
 	move.b	#$A0,d0		; Register for lower 8 bits of frequency
 	bra.w	WriteFMIorII
+.locret:
+	rts
 ; End of function FMPrepareNote
+
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
  DoModulationEnvelope:
 	moveq	#0,d6					; This is the frequency accumulator
@@ -2046,8 +2046,6 @@ WriteDACVolume:
 
 ; loc_726E2:
 FMNoteOn:
-	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track resting?
-	bne.s	locret_726FC				; Return if so
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
 	bne.s	locret_726FC				; Return if so
 	; If this is FM6, then disable DAC so FM6 can play
@@ -2181,16 +2179,22 @@ PSGUpdateTrack:
 	bne.s	.notegoing
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack note' flag
 	bsr.s	PSGDoNext
+	btst	#1,SMPS_Track.PlaybackControl(a5)	; If resting, return
+	bne.s	.locret
 	bsr.w	DoModulation
 	bsr.w	PSGDoNoteOn
 	bra.w	PSGDoVolFX
 ; ===========================================================================
 ; loc_72866:
 .notegoing:
+	btst	#1,SMPS_Track.PlaybackControl(a5)	; If resting, return
+	bne.s	.locret
 	bsr.w	NoteTimeoutUpdate
 	bsr.w	PSGUpdateVolFX
 	bsr.w	DoModulation
 	bra.w	PSGUpdateFreq
+.locret:
+	rts
 ; End of function PSGUpdateTrack
 
 
@@ -2267,17 +2271,6 @@ PSGFrequencies:
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
-; sub_728DC:
-PSGDoNoteOn:
-	tst.w	SMPS_Track.Freq(a5)			; Freq is 0 when resting
-	bne.s	PSGUpdateFreq.skip_modulation_check
-	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
-	rts
-; End of function PSGDoNoteOn
-
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
 ; sub_728E2:
 PSGUpdateFreq:
     if SMPS_EnableModulationEnvelopes
@@ -2285,11 +2278,9 @@ PSGUpdateFreq:
     else
 	btst	#3,SMPS_Track.PlaybackControl(a5)
     endif
-	beq.s	.locret
-
-.skip_modulation_check:
-	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track at rest?
-	bne.s	.locret					; Return if yes
+	beq.s	PSGDoNoteOn.locret
+; sub_728DC:
+PSGDoNoteOn:
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
 	bne.s	.locret					; Return if yes
 	bsr.w	DoModulationEnvelope
@@ -2318,7 +2309,7 @@ PSGUpdateFreq:
 ; sub_72926:
 PSGUpdateVolFX:
 	tst.b	SMPS_Track.VoiceIndex(a5)	; Test PSG tone
-	beq.s	PSGUpdateFreq.locret		; Return if it is zero
+	beq.s	PSGDoNoteOn.locret		; Return if it is zero
 ; loc_7292E:
 PSGDoVolFX:
 	move.b	SMPS_Track.Volume(a5),d6	; Get volume
