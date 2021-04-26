@@ -429,7 +429,7 @@ smpsPlaySound macro index
 
 ; Set note values to xx-$40
 smpsSetNote macro val
-	dc.b	$FF,$1B,val
+	dc.b	$FF,$1B,(val-$40)&$FF
 	endm
 
 ; Set Modulation
