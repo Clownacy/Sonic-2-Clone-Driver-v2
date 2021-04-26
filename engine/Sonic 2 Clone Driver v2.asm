@@ -245,8 +245,7 @@ FMUpdateTrack:
 .notegoing:
 	bsr.w	NoteTimeoutUpdate
 	bsr.w	DoModulation
-	bcs.w	FMUpdateFreq
-	rts
+	bra.w	FMUpdateFreq
 ; End of function FMUpdateTrack
 
 
@@ -354,10 +353,10 @@ FinishTrackUpdate:
 	clr.b	SMPS_Track.ModEnvIndex(a5)
 	clr.b	SMPS_Track.ModEnvSens(a5)
 
-	btst	#7,SMPS_Track.ModulationCtrl(a5)	; Is modulation on?
-	beq.s	locret_71D9C				; If not, return
-	cmpi.b	#$81,SMPS_Track.ModulationCtrl(a5)	; SMPS Z80 modulation mode?
-	bne.s	.notz80mode				; If not, skip this next check
+	tst.b	SMPS_Track.ModulationCtrl(a5)		; Is modulation on?
+	bpl.s	locret_71D9C				; If not, return
+	btst	#6,SMPS_Track.ModulationCtrl(a5)	; SMPS Z80 modulation mode?
+	beq.s	.notz80mode				; If not, skip this next check
     else
 	btst	#3,SMPS_Track.PlaybackControl(a5)	; Is modulation on?
 	beq.s	locret_71D9C				; If not, return
@@ -404,31 +403,26 @@ NoteTimeoutUpdate:
 DoModulation:
 	; Clownacy | (From S2) Corrects modulation during rests (can be heard in ARZ's theme, as beeping right after the song loops)
 	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track at rest?
-	bne.s	DoModulation_SMPS68kMode.locret		; Return if so
+	bne.s	.locret					; Return if so
 
     if SMPS_EnableModulationEnvelopes
-	moveq	#0,d0
-	move.b	SMPS_Track.ModulationCtrl(a5),d0
-	beq.s	DoModulation_SMPS68kMode.locret
-	cmpi.b	#$80,d0
-	beq.s	DoModulation_SMPS68kMode
-	cmpi.b	#$81,d0
-	beq.s	DoModulation_SMPSZ80Mode
-	bra.w	DoModulationEnvelope
+	tst.b	SMPS_Track.ModulationCtrl(a5)		; Is modulation active?
+	bpl.s	.locret					; Return if not
+	btst	#6,SMPS_Track.ModulationCtrl(a5)	; Is SMPS Z80 modulation mode active?
+	bne.s	DoModulation_SMPSZ80Mode		; Go do that if so
     else
 	btst	#3,SMPS_Track.PlaybackControl(a5)	; Is modulation active?
-	beq.s	DoModulation_SMPS68kMode.locret		; Return if not
+	beq.s	.locret					; Return if not
 	btst	#5,SMPS_Track.PlaybackControl(a5)	; Is SMPS Z80 modulation mode active?
 	bne.s	DoModulation_SMPSZ80Mode		; Go do that if so
     endif
 
-DoModulation_SMPS68kMode:
+;DoModulation_SMPS68kMode:
 	tst.b	SMPS_Track.ModulationWait(a5)		; Has modulation wait expired?
 	beq.s	.waitdone				; If yes, branch
 	subq.b	#1,SMPS_Track.ModulationWait(a5)	; Update wait timeout
 ; locret_71E16:
 .locret:
-	move.b	#0,ccr
 	rts
 ; ===========================================================================
 ; loc_71DDA:
@@ -441,7 +435,6 @@ DoModulation_SMPS68kMode:
 	bne.s	.calcfreq				; If nonzero, branch
 	move.b	3(a0),SMPS_Track.ModulationSteps(a5)	; Restore from modulation data
 	neg.b	SMPS_Track.ModulationDelta(a5)		; Negate modulation delta
-	move.b	#0,ccr
 	rts
 ; ===========================================================================
 ; loc_71DFE:
@@ -450,7 +443,6 @@ DoModulation_SMPS68kMode:
 	move.b	SMPS_Track.ModulationDelta(a5),d6	; Get modulation delta
 	ext.w	d6
 	add.w	d6,SMPS_Track.ModulationVal(a5)
-	move.b	#1,ccr
 	rts
 
 ; ===========================================================================
@@ -468,27 +460,21 @@ DoModulation_SMPSZ80Mode:
 	move.b	SMPS_Track.ModulationDelta(a5),d6	; Get modulation delta
 	ext.w	d6
 	add.w	d6,SMPS_Track.ModulationVal(a5)
-	bsr.s	.dostep
-	move.b	#1,ccr
-	rts
-
 .mod_sustain:
-	bsr.s	.dostep
-.locret:
-	move.b	#0,ccr
-	rts
-
-.dostep:
 	subq.b	#1,SMPS_Track.ModulationSteps(a5)	; Check number of steps
-	bne.s	.dostep_locret				; If nonzero, branch
+	bne.s	.locret				; If nonzero, branch
 	move.b	3(a0),SMPS_Track.ModulationSteps(a5)	; Restore from modulation data
 	neg.b	SMPS_Track.ModulationDelta(a5)		; Negate modulation delta
-.dostep_locret:
+.locret:
 	rts
 ; End of function DoModulation
 
-    if SMPS_EnableModulationEnvelopes
  DoModulationEnvelope:
+	moveq	#0,d6
+    if SMPS_EnableModulationEnvelopes
+	move.b	SMPS_Track.ModulationCtrl(a5),d0
+	andi.w	#$3F,d0
+	beq.s	.apply_frequency
 	add.w	d0,d0
 	add.w	d0,d0
 	movea.l	ModEnvPointers-4(pc,d0.w),a0
@@ -497,53 +483,80 @@ DoModulation_SMPSZ80Mode:
 	move.b	SMPS_Track.ModEnvIndex(a5),d3
 
 .process_next_byte:
-	move.b	(a0,d3.w),d0
+	move.b	(a0,d3.w),d6
 	bpl.s	.not_a_command
-	cmpi.b	#$80,d0
+	cmpi.b	#$80,d6
 	beq.s	.reset_index
-	; In SMPS 68k Type 2, $81 holds the note, and $83 stops the note
-	cmpi.b	#$82,d0
-	beq.s	.set_index
-	cmpi.b	#$83,d0
+	cmpi.b	#$81,d6
 	beq.s	.hold_note
-	cmpi.b	#$84,d0
+	cmpi.b	#$82,d6
+	beq.s	.set_index
+	cmpi.b	#$83,d6
+	beq.s	.stop_note
+	cmpi.b	#$84,d6
 	beq.s	.change_multiplier
 
 .not_a_command:
-	ext.w	d0
-
-	moveq	#0,d2
-	move.b	SMPS_Track.ModEnvSens(a5),d2
-	addq.b	#1,d2
-
-	mulu.w	d2,d0
-	move.w	d0,SMPS_Track.ModulationVal(a5)
-
 	addq.b	#1,d3
-
 	move.b	d3,SMPS_Track.ModEnvIndex(a5)
 
-	move.b	#1,ccr	; Update the note frequency
+	; Multiply the envelope value by the sensitivity multiplier
+	ext.w	d6
+
+	moveq	#0,d0
+	move.b	SMPS_Track.ModEnvSens(a5),d0
+	;addq.b	#1,d0	; SMPS Z80 behaviour: SMPS 68k is stupid
+
+	mulu.w	d0,d6
+
+.apply_frequency:
+    endif
+	; Add detune
+	move.b	SMPS_Track.Detune(a5),d0
+	ext.w	d0
+	add.w	d0,d6
+
+	; Add frequency
+	add.w	SMPS_Track.Freq(a5),d6
+
+	; Add custom modulation
+    if SMPS_EnableModulationEnvelopes
+	tst.b	SMPS_Track.ModulationCtrl(a5)
+	bpl.s	.no_modulation
+    else
+	btst	#3,SMPS_Track.PlaybackControl(a5)
+	beq.s	.no_modulation
+    endif
+	add.w	SMPS_Track.ModulationVal(a5),d6
+
+.no_modulation:
 	rts
 
+    if SMPS_EnableModulationEnvelopes
 .reset_index:
 	clr.b	d3
 	bra.s	.process_next_byte
 
 .hold_note:
-	move.b	d3,SMPS_Track.ModEnvIndex(a5)
-
-	move.b	#0,ccr	; Do not update the note frequency
-	rts
+	subq.b	#1,d3	; Go back a byte, to avoid an infinite loop
+	bra.s	.process_next_byte
 
 .set_index:
 	move.b	1(a0,d3.w),d3
 	bra.s	.process_next_byte
 
+.stop_note:
+	; Set track at rest
+	bset	#1,SMPS_Track.PlaybackControl(a5)
+	; End the note
+	tst.b	SMPS_Track.VoiceControl(a5)
+	bpl.w	FMNoteOff
+	bra.w	PSGNoteOff
+
 .change_multiplier:
 	move.b	1(a0,d3.w),d0
 	add.b	d0,SMPS_Track.ModEnvSens(a5)
-	addq.b	#2,d3
+	addq.b	#2,d3	; Advance past $84 and its data byte
 	bra.s	.process_next_byte
 
 ModEnvPointers:
@@ -556,15 +569,33 @@ ModEnvPointers:
 	dc.l	ModEnv_06
 	dc.l	ModEnv_07
 
+; These have been converted to SMPS 68k format:
+; * The 'hold note' command has been changed from $83 to $81
+; * The sensitivity multiplier needs explicitly setting to 1 with an $84 command
 ModEnv_01:	dc.b    0
-ModEnv_00:	dc.b    1,   2,   1,   0,  -1,  -2,  -3,  -4,  -3,  -2,  -1, $83
-ModEnv_02:	dc.b    0,   0,   0,   0, $13, $26, $39, $4C, $5F, $72, $7F, $72, $83
-ModEnv_03:	dc.b    1,   2,   3,   2,   1,   0,  -1,  -2,  -3,  -2,  -1,   0, $82,   0
-ModEnv_04:	dc.b    0,   0,   1,   3,   1,   0,  -1,  -3,  -1,   0, $82,   2
-ModEnv_05:	dc.b    0,   0,   0,   0,   0,  10,  20,  30,  20,  10,   0, -10, -20, -30, -20, -10, $82,   4
-ModEnv_06:	dc.b    0,   0,   0,   0,  22,  44,  66,  44,  22,   0, -22, -44, -66, -44, -22, $82,   3
-ModEnv_07:	dc.b    1,   2,   3,   4,   3,   2,   1,   0,  -1,  -2,  -3,  -4,  -3,  -2,  -1,   0, $82,   1
+ModEnv_00:	dc.b    $84, 1,   1,   2,   1,   0,  -1,  -2,  -3,  -4,  -3,  -2,  -1, $81
+ModEnv_02:	dc.b    $84, 1,   0,   0,   0,   0, $13, $26, $39, $4C, $5F, $72, $7F, $72, $81
+ModEnv_03:	dc.b    $84, 1,   1,   2,   3,   2,   1,   0,  -1,  -2,  -3,  -2,  -1,   0, $82,   2
+ModEnv_04:	dc.b    $84, 1,   0,   0,   1,   3,   1,   0,  -1,  -3,  -1,   0, $82,   4
+ModEnv_05:	dc.b    $84, 1,   0,   0,   0,   0,   0,  10,  20,  30,  20,  10,   0, -10, -20, -30, -20, -10, $82,   6
+ModEnv_06:	dc.b    $84, 1,   0,   0,   0,   0,  22,  44,  66,  44,  22,   0, -22, -44, -66, -44, -22, $82,   5
+ModEnv_07:	dc.b    $84, 1,   1,   2,   3,   4,   3,   2,   1,   0,  -1,  -2,  -3,  -4,  -3,  -2,  -1,   0, $82,   3
 	even
+    else
+	; Get frequency
+	move.w	SMPS_Track.Freq(a5),d6
+
+	; Add custom modulation
+	beq.s	.no_modulation
+	add.w	SMPS_Track.ModulationVal(a5),d6
+
+.no_modulation:
+	; Add detune
+	move.b	SMPS_Track.Detune(a5),d0
+	ext.w	d0
+	add.w	d0,d6
+
+	rts
     endif
 
 
@@ -572,27 +603,27 @@ ModEnv_07:	dc.b    1,   2,   3,   4,   3,   2,   1,   0,  -1,  -2,  -3,  -4,  -3
 
 ; sub_71E18:
 FMPrepareNote:
-	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track resting?
-	bne.s	locret_71E48			; Return if so
-	tst.w	SMPS_Track.Freq(a5)		; Get current note frequency
-	beq.s	FMSetRest			; Branch if zero
+	tst.w	SMPS_Track.Freq(a5)			; Freq is 0 when resting
+	bne.s	FMUpdateFreq.skip_modulation_check
+	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
+locret_71E48:
+	rts
+
 ; loc_71E24:
 FMUpdateFreq:
-	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
-	bne.s	locret_71E48			; Return if so
-	move.w	SMPS_Track.Freq(a5),d6		; Get current note frequency
     if SMPS_EnableModulationEnvelopes
 	tst.b	SMPS_Track.ModulationCtrl(a5)
     else
 	btst	#3,SMPS_Track.PlaybackControl(a5)
     endif
-	beq.s	.no_modulation
-	add.w	SMPS_Track.ModulationVal(a5),d6
+	beq.s	locret_71E48
 
-.no_modulation:
-	move.b	SMPS_Track.Detune(a5),d0		; Get detune value
-	ext.w	d0
-	add.w	d0,d6				; Add note frequency
+.skip_modulation_check:
+	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track resting?
+	bne.s	locret_71E48			; Return if so
+	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
+	bne.s	locret_71E48			; Return if so
+	bsr.w	DoModulationEnvelope
 	move.w	d6,-(sp)
 	move.b	(sp)+,d1
 	move.b	#$A4,d0		; Register for upper 6 bits of frequency
@@ -600,13 +631,6 @@ FMUpdateFreq:
 	move.b	d6,d1
 	move.b	#$A0,d0		; Register for lower 8 bits of frequency
 	bra.w	WriteFMIorII
-; ===========================================================================
-; loc_71E4A:
-FMSetRest:
-	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
-
-locret_71E48:
-	rts
 ; End of function FMPrepareNote
 
 ; ===========================================================================
@@ -2172,8 +2196,7 @@ PSGUpdateTrack:
 	bsr.w	NoteTimeoutUpdate
 	bsr.w	PSGUpdateVolFX
 	bsr.w	DoModulation
-	bcs.w	PSGUpdateFreq
-	rts
+	bra.w	PSGUpdateFreq
 ; End of function PSGUpdateTrack
 
 
@@ -2252,10 +2275,10 @@ PSGFrequencies:
 
 ; sub_728DC:
 PSGDoNoteOn:
-	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track at rest?
-	bne.s	PSGUpdateFreq.locret			; Return if yes
-	tst.w	SMPS_Track.Freq(a5)	; Get note frequency
-	bmi.s	PSGSetRest		; If invalid, branch
+	tst.w	SMPS_Track.Freq(a5)			; Freq is 0 when resting
+	bne.s	PSGUpdateFreq.skip_modulation_check
+	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
+	rts
 ; End of function PSGDoNoteOn
 
 
@@ -2263,21 +2286,19 @@ PSGDoNoteOn:
 
 ; sub_728E2:
 PSGUpdateFreq:
-	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
-	bne.s	.locret					; Return if yes
-	move.w	SMPS_Track.Freq(a5),d6		; Get current note frequency
     if SMPS_EnableModulationEnvelopes
 	tst.b	SMPS_Track.ModulationCtrl(a5)
     else
 	btst	#3,SMPS_Track.PlaybackControl(a5)
     endif
-	beq.s	.no_modulation
-	add.w	SMPS_Track.ModulationVal(a5),d6
+	beq.s	.locret
 
-.no_modulation:
-	move.b	SMPS_Track.Detune(a5),d0		; Get detune value
-	ext.w	d0
-	add.w	d0,d6					; Add to frequency
+.skip_modulation_check:
+	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track at rest?
+	bne.s	.locret					; Return if yes
+	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
+	bne.s	.locret					; Return if yes
+	bsr.w	DoModulationEnvelope
 	move.b	SMPS_Track.VoiceControl(a5),d0		; Get channel bits
 	cmpi.b	#$E0,d0					; Is it a noise channel?
 	bne.s	.notnoise				; Branch if not
@@ -2297,19 +2318,13 @@ PSGUpdateFreq:
 ; End of function PSGUpdateFreq
 
 ; ===========================================================================
-; loc_72920:
-PSGSetRest:
-	bset	#1,SMPS_Track.PlaybackControl(a5)
-
-locret_72924:
-	rts
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 ; sub_72926:
 PSGUpdateVolFX:
 	tst.b	SMPS_Track.VoiceIndex(a5)	; Test PSG tone
-	beq.s	locret_72924			; Return if it is zero
+	beq.s	PSGUpdateFreq.locret		; Return if it is zero
 ; loc_7292E:
 PSGDoVolFX:
 	move.b	SMPS_Track.Volume(a5),d6	; Get volume
@@ -3024,7 +3039,8 @@ SendVoiceTL:
 
 cfModulationSMPSZ80:
     if SMPS_EnableModulationEnvelopes
-	move.b	#$81,SMPS_Track.ModulationCtrl(a5)	; Enable SMPS Z80 modulation mode
+	bset	#6,SMPS_Track.ModulationCtrl(a5)	; Enable SMPS Z80 modulation mode
+	bset	#7,SMPS_Track.ModulationCtrl(a5)	; Turn on modulation
     else
 	bset	#5,SMPS_Track.PlaybackControl(a5)	; Enable SMPS Z80 modulation mode
 	bset	#3,SMPS_Track.PlaybackControl(a5)	; Turn on modulation
@@ -3041,7 +3057,7 @@ cfModulationSMPSZ80:
 ; loc_72D30: cfModulation:
 cfModulationSMPS68k:
     if SMPS_EnableModulationEnvelopes
-	move.b	#$80,SMPS_Track.ModulationCtrl(a5)	; Turn on modulation
+	bset	#7,SMPS_Track.ModulationCtrl(a5)	; Turn on modulation
     else
 	bset	#3,SMPS_Track.PlaybackControl(a5)	; Turn on modulation
     endif
