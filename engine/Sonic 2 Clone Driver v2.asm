@@ -844,7 +844,6 @@ PlaySegaSound:
 	dbf	d1,.busyloop_outer
     endif
 
-	addq.w	#4,sp			; Tamper return value so we don't return to caller
 	rts
 
 ; ===========================================================================
