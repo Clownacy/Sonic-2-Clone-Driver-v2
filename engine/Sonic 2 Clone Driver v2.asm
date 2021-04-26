@@ -58,8 +58,6 @@ SMPS_UpdateDriver:
 	bset	#f_doubleupdate,SMPS_RAM.variables.bitfield2(a6)	; ...and then set the double-update flag
 
 .updatemusictracks:
-	bsr.w	TempoWait
-
 	lea	SMPS_RAM.v_music_dac_track(a6),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is DAC track playing?
 	bpl.s	.dacdone				; Branch if not
@@ -100,6 +98,11 @@ SMPS_UpdateDriver:
 .bgmpwmnext:
 	dbf	d7,.bgmpwmloop
     endif
+
+	; This has been moved to after the UpdateTrack calls to prevent
+	; tracks being delayed on their first frame of playback, causing
+	; hanging notes.
+	bsr.w	TempoWait
 
 	bclr	#f_doubleupdate,SMPS_RAM.variables.bitfield2(a6)	; Clear double-update flag
 	bne.s	.updatemusictracks					; Was the flag set? If so, double-update
@@ -977,8 +980,6 @@ Sound_PlayBGM:
 	moveq	#SMPS_Track.len,d6
 	moveq	#1,d5			; Note duration for first "note"
 
-	move.b	#$82,d3			; Initial PlaybackControl value
-
 	moveq	#0,d7			; Clownacy | Hey, look! It's the 'moveq	#0,d7' that the other Play_X's were missing!
 	move.b	2+0(a3),d7		; Load number of FM+DAC tracks
 	beq.w	.bgm_fmdone		; Branch if zero
@@ -987,9 +988,7 @@ Sound_PlayBGM:
 	lea	SMPS_RAM.v_music_fmdac_tracks(a6),a1
 ; loc_72098:
 .bmg_fmloadloop:
-	; Clownacy | (From S2) Now sets 'track at rest' bit to prevent hanging notes
-	move.b	d3,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
-
+	bset	#7,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' bit
 	move.b	d4,SMPS_Track.TempoDivider(a1)
 	move.b	d6,SMPS_Track.StackPointer(a1)		; Set "gosub" (coord flag F8h) stack init value
 	move.b	d1,SMPS_Track.AMSFMSPan(a1)		; Set AMS/FMS/Panning
@@ -1018,9 +1017,7 @@ Sound_PlayBGM:
 	lea	SMPS_RAM.v_music_psg_tracks(a6),a1
 ; loc_72126:
 .bgm_psgloadloop:
-	; Clownacy | (From S2) Now sets 'track at rest' bit to prevent hanging notes
-	move.b	d3,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
-
+	bset	#7,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' bit
 	move.b	d4,SMPS_Track.TempoDivider(a1)
 	move.b	d6,SMPS_Track.StackPointer(a1)		; Set "gosub" (coord flag F8h) stack init value
 	move.b	d5,SMPS_Track.DurationTimeout(a1)	; Set duration of first "note"
@@ -1051,7 +1048,7 @@ Sound_PlayBGM:
 	lea	SMPS_RAM.v_music_pwm_tracks(a6),a1
 
 .bgm_pwmloadloop:
-	move.b	d3,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' and 'track at rest' bits
+	bset	#7,SMPS_Track.PlaybackControl(a1)	; Initial playback control: set 'track playing' bit
 	move.b	d4,SMPS_Track.TempoDivider(a1)
 	move.b	d6,SMPS_Track.StackPointer(a1)		; Set "gosub" (coord flag F8h) stack init value
 	move.b	d5,SMPS_Track.DurationTimeout(a1)	; Set duration of first "note"
