@@ -616,21 +616,6 @@ ModEnv_05:	dc.b    $84, 1,   0,   0,   0,   0,   0,  10,  20,  30,  20,  10,   0
 ModEnv_06:	dc.b    $84, 1,   0,   0,   0,   0,  22,  44,  66,  44,  22,   0, -22, -44, -66, -44, -22, $82,   5
 ModEnv_07:	dc.b    $84, 1,   1,   2,   3,   4,   3,   2,   1,   0,  -1,  -2,  -3,  -4,  -3,  -2,  -1,   0, $82,   3
 	even
-    else
-	; Get frequency
-	move.w	SMPS_Track.Freq(a5),d6
-
-	; Add custom modulation
-	beq.s	.no_modulation
-	add.w	SMPS_Track.ModulationVal(a5),d6
-
-.no_modulation:
-	; Add detune
-	move.b	SMPS_Track.Detune(a5),d0
-	ext.w	d0
-	add.w	d0,d6
-
-	rts
     endif
 
 ; ===========================================================================
