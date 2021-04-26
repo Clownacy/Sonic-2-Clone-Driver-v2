@@ -733,6 +733,7 @@ CycleSoundQueue:
 
 	move.w	d0,d7
 
+	; TODO - Handle special SFX
 	cmpi.b	#SndID__End,d0		; Is it a special command?
 	bhs.s	.skip_priority		; If so, branch
 	subi.b	#SndID__First,d0	; Subtract first SFX index
