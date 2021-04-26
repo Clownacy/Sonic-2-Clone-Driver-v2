@@ -485,8 +485,6 @@ FMUpdateFreq:
 
 ; sub_71E18:
 FMPrepareNote:
-	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track resting?
-	bne.s	.locret					; Return if so
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
 	bne.s	.locret					; Return if so
 	bsr.s	DoModulationEnvelope
