@@ -2588,11 +2588,7 @@ coordflagLookup:
 ; ===========================================================================
 	dc.w	cfModulationSMPS68k-coordflagLookup	; $FF, $0E	Clownacy | Was $F0
 ; ===========================================================================
-    if SMPS_EnableModulationEnvelopes
-	dc.w	cfSetModulation-coordflagLookup		; $FF, $0F	Clownacy | Brand new
-    else
 	dc.w	cfEnableModulation-coordflagLookup	; $FF, $0F	Clownacy | Was $F1
-    endif
 ; ===========================================================================
 	dc.w	cfStopTrack-coordflagLookup		; $FF, $10	Clownacy | Was $F2
 ; ===========================================================================
@@ -2633,6 +2629,12 @@ coordflagLookup:
 	dc.w	cfSendFMI-coordflagLookup		; $FF, $20	Clownacy | Brand new
 ; ===========================================================================
 	dc.w	cfModulationSMPSZ80-coordflagLookup	; $FF, $21	Clownacy | Brand new
+; ===========================================================================
+    if SMPS_EnableModulationEnvelopes
+	dc.w	cfSetModulation-coordflagLookup		; $FF, $22	Clownacy | Brand new
+    else
+	dc.w	locret_72AEA-coordflagLookup
+    endif
 ; ===========================================================================
 ; loc_72ACC:
 cfPanningAMSFMS:
@@ -3056,14 +3058,18 @@ cfModulationSMPS68k:
 	clr.w	SMPS_Track.ModulationVal(a5)		; Total accumulated modulation frequency change
 	rts
 ; ===========================================================================
+; loc_72D52:
+cfEnableModulation:
+    if SMPS_EnableModulationEnvelopes
+	bset	#7,SMPS_Track.ModulationCtrl(a5)	; Turn on modulation
+    else
+	bset	#3,SMPS_Track.PlaybackControl(a5)	; Turn on modulation
+    endif
+	rts
+; ===========================================================================
     if SMPS_EnableModulationEnvelopes
 cfSetModulation:
 	move.b	(a4)+,SMPS_Track.ModulationCtrl(a5)
-	rts
-    else
-; loc_72D52:
-cfEnableModulation:
-	bset	#3,SMPS_Track.PlaybackControl(a5)	; Turn on modulation
 	rts
     endif
 ; ===========================================================================

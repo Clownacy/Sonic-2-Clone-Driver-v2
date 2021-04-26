@@ -348,31 +348,23 @@ smpsFMvoice macro voice,songID
 ; F0wwxxyyzz - Modulation - ww: wait time - xx: modulation speed - yy: change per step - zz: number of steps
 smpsModSet macro wait,speed,change,step
 	if SourceDriver>=3
-		dc.b	$FF,$21
+		dc.b	$FF,$21	; SMPS Z80 modulation mode
 	else
-		dc.b	$FF,$0E
+		dc.b	$FF,$0E	; SMPS 68k modulation mode
 	endif
 	dc.b	wait,speed,change,step
 	endm
 
 ; Turn on Modulation
 smpsModOn macro type
-	if SMPS_EnableModulationEnvelopes
-		if "type"<>""
-			dc.b	$FF,$0F,type
+	if "type"<>""
+		if SMPS_EnableModulationEnvelopes
+			dc.b	$FF,$22,type
 		else
-			if SourceDriver>=3
-				dc.b	$FF,$0F,$81	; SMPS Z80 modulation mode
-			else
-				dc.b	$FF,$0F,$80	; SMPS 68k modulation mode
-			endif
+			fatal "Go set SMPS_EnableModulationEnvelopes to 1"
 		endif
 	else
-		if "type"<>""
-			fatal "Go set SMPS_EnableModulationEnvelopes to 1"
-		else
-			dc.b	$FF,$0F
-		endif
+		dc.b	$FF,$0F
 	endif
 	endm
 
@@ -443,7 +435,7 @@ smpsSetNote macro val
 ; Set Modulation
 smpsModChange macro val
 	if SMPS_EnableModulationEnvelopes
-		dc.b	$FF,$0F,val
+		dc.b	$FF,$22,val
 	else
 		fatal "Go set SMPS_EnableModulationEnvelopes to 1"
 	endif
