@@ -1029,7 +1029,11 @@ Sound_PlayBGM:
 	move.b	d0,SMPS_Track.DataPointer+1(a1)		; Store track pointer
 	move.b	(a4)+,SMPS_Track.Transpose(a1)		; Load PSG modifier
 	move.b	(a4)+,SMPS_Track.Volume(a1)		; Load PSG modifier
+    if SMPS_EnableModulationEnvelopes
+	move.b	(a4)+,SMPS_Track.ModulationCtrl(a1)	; Load modulation
+    else
 	addq.w	#1,a4					; Skip redundant byte (SMPS2ASM calls this 'mod', and SMPS 68k Type 2 actually does use it for modulation ($A(a5)))
+    endif
 	move.b	(a4)+,SMPS_Track.VoiceIndex(a1)		; Initial PSG tone
 	adda.w	d6,a1
 	dbf	d7,.bgm_psgloadloop
