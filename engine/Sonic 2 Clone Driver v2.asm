@@ -491,10 +491,10 @@ FMUpdateFreq:
 
 .skip_modulation_check:
 	btst	#1,SMPS_Track.PlaybackControl(a5)	; Is track resting?
-	bne.s	locret_71E48			; Return if so
+	bne.s	locret_71E48				; Return if so
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
-	bne.s	locret_71E48			; Return if so
-	bsr.w	DoModulationEnvelope
+	bne.s	locret_71E48				; Return if so
+	bsr.s	DoModulationEnvelope
 	move.w	d6,-(sp)
 	move.b	(sp)+,d1
 	move.b	#$A4,d0		; Register for upper 6 bits of frequency
@@ -505,21 +505,25 @@ FMUpdateFreq:
 ; End of function FMPrepareNote
 
  DoModulationEnvelope:
-	moveq	#0,d6
+	moveq	#0,d6					; This is the frequency accumulator
     if SMPS_EnableModulationEnvelopes
 	move.b	SMPS_Track.ModulationCtrl(a5),d0
-	andi.w	#$3F,d0
-	beq.s	.apply_frequency
+	andi.w	#$3F,d0					; The upper two bits are used by custom modulation, not modulation envelopes
+	beq.s	.apply_frequency			; Skip modulation envelope logic if they're not being used
+	; Obtain pointer to modulation envelope
 	add.w	d0,d0
 	add.w	d0,d0
 	movea.l	ModEnvPointers-4(pc,d0.w),a0
 
+	; Get the track's current index into the envelope
 	moveq	#0,d3
 	move.b	SMPS_Track.ModEnvIndex(a5),d3
 
 .process_next_byte:
+	; Get next byte from envelope
 	move.b	(a0,d3.w),d6
 	bpl.s	.not_a_command
+	; Command bytes
 	cmpi.b	#$80,d6
 	beq.s	.reset_index
 	cmpi.b	#$81,d6
@@ -532,6 +536,7 @@ FMUpdateFreq:
 	beq.s	.change_multiplier
 
 .not_a_command:
+	; We're finished for now: increment the envelope index and write it back to track memory
 	addq.b	#1,d3
 	move.b	d3,SMPS_Track.ModEnvIndex(a5)
 
@@ -565,18 +570,22 @@ FMUpdateFreq:
 	add.w	SMPS_Track.ModulationVal(a5),d6
 
 .no_modulation:
+	; d6 is returned by this subroutine, holding the final frequency value
 	rts
 
     if SMPS_EnableModulationEnvelopes
 .reset_index:
+	; Go back to the beginning of the envelope
 	clr.b	d3
 	bra.s	.process_next_byte
 
 .hold_note:
-	subq.b	#1,d3	; Go back a byte, to avoid an infinite loop
+	; Go back to the previous byte (if the previous byte isn't a frequency modifier then we're in huge trouble)
+	subq.b	#1,d3
 	bra.s	.process_next_byte
 
 .set_index:
+	; Go to an arbitrary location in the envelope
 	move.b	1(a0,d3.w),d3
 	bra.s	.process_next_byte
 
