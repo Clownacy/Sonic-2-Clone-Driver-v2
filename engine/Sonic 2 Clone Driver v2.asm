@@ -452,9 +452,6 @@ DoModulation:
 
 ; ===========================================================================
 DoModulation_SMPSZ80Mode:
-	btst	#4,SMPS_Track.PlaybackControl(a5)
-	bne.s	.locret					; Do not perform modulation if note is being held
-
 	subq.b	#1,SMPS_Track.ModulationWait(a5)	; Has modulation wait expired?
 	bne.s	.locret					; If not, branch
 	addq.b	#1,SMPS_Track.ModulationWait(a5)	; Increase it back to 1 for next frame
