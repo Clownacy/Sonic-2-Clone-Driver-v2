@@ -648,7 +648,7 @@ DAC_Entry macro vPitch,vOffset,vFlags
 		db	((((((3579545*10)/vPitch)-(116*10))/13)+5)/10)+1		; 01h	- Pitch (PCM-converted)
 	endif
 	db	zmake68kBank(vOffset)		; 02h	- Start Bank
-	db	zmake68kBank(vOffset_End)	; 03h	- End Bank
+	db	zmake68kBank(vOffset_End-1)	; 03h	- End Bank
 	dw	zmake68kPtr(vOffset)		; 04h	- Start Offset (in Start bank)
 	dw	zmake68kPtr(vOffset_End-1)	; 06h	- End Offset (in End bank)
 	endm
