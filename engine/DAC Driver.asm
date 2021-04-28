@@ -51,7 +51,7 @@ DoIteration macro pSample2,pWriteByte
 	ld	hl,zMuteSample		; 10 ; Point to a single silent sample
 	ld	a,80h			; 7
 .sample_not_done:
-	; Total: 21 best, 71 worst
+	; Total: 21 best, 78 worst
 
 	exx				; 4
 
