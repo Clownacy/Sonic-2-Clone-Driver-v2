@@ -224,11 +224,11 @@ zSample2AccumulatorRemainder = $+1
 	xor	a
 	ld	(zRequestFlag),a
 
-	ld	a,(zRequestSample2)
+	ld	a,(zRequestSample1)
 	sub	81h
 	jr	c,.no_sample_1
 
-	ld	(zRequestSample2),a
+	ld	(zRequestSample1),a
 
 	ex	de,hl
 	ld	d,0
@@ -254,11 +254,11 @@ zSample2AccumulatorRemainder = $+1
 	ld	(zSample1Bank),a
 
 .no_sample_1:
-	ld	a,(zRequestSample1)
+	ld	a,(zRequestSample2)
 	sub	81h
 	jr	c,.no_sample_2
 
-	ld	(zRequestSample1),a
+	ld	(zRequestSample2),a
 
 	ex	de,hl
 	ld	d,0
