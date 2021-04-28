@@ -20,7 +20,7 @@ zmake68kPtr  function addr,zROMWindow+(addr&7FFFh)
 zmake68kBank function addr,(((addr&0FF8000h)/zROMWindow))
 
 ; The number of samples to batch at once
-zBatchSize:	equ 15
+zBatchSize:	equ 18
 
 ; B   - 80h
 ; C   - Sample advance remainder
@@ -317,11 +317,11 @@ zMuteSample:
 ; Target
 ;3579545 / 223 = 16052
 ; Current speed
-;(3579545 * 32) / (485 + (390 * 16)) = 17033
+;(3579545 * 18 * 2) / (485 + (390 * 18)) = 17170
 
 PCMEntry macro pSampleRate,pStart
 	dw	zmake68kPtr(pStart)			; Pointer into bank
-	dw	(pSampleRate*100h)/17033		; Playback increment (8.8 format)
+	dw	(pSampleRate*100h)/17170		; Playback increment (8.8 format)
 	db	zmake68kBank(pStart)			; Bank value
     endm
 
