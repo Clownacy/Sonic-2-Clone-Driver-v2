@@ -205,7 +205,6 @@ zEntryPoint:
 	ld	de,zYM2612_D0
 
 	exx
-	ld	b,(zSampleLookup>>8)&0FFh ; This won't be constant in the future
 	ld	de,zMixBuffer+(100h-zBatchSize)&0FFh ; Lag behind the mixer so not to read unfinished samples
 	exx
 
@@ -244,13 +243,15 @@ zSample1AdvanceQuotient = $+1
 	exx			; 4
 zSample1MixPointer = $+1
 	ld	hl,zMixBuffer	; 10 ; Mix buffer address
+zSample1Volume = $+1
+	ld	b,zSampleLookup>>8	; 7
 	exx			; 4
 
 	ex	af,af'		; 4
 zSample1AccumulatorRemainder = $+1
 	ld	a,0		; 7 ; Sample advance accumulator remainder
 	ex	af,af'		; 4
-	; Total: 60
+	; Total: 67
 
 	; Process sample 1
     rept zBatchSize
@@ -292,13 +293,15 @@ zSample2AdvanceQuotient = $+1
 	exx			; 4
 zSample2MixPointer = $+1
 	ld	hl,zMixBuffer	; 10 ; Mix buffer address
+zSample2Volume = $+1
+	ld	b,zSampleLookup>>8	; 7
 	exx			; 4
 
 	ex	af,af'		; 4
 zSample2AccumulatorRemainder = $+1
 	ld	a,0		; 7 ; Sample advance accumulator remainder
 	ex	af,af'		; 4
-	; Total: 60
+	; Total: 67
 
 	; Process sample 2
     rept zBatchSize

@@ -74,9 +74,7 @@ SMPS_PlayDACSample:
 	st.b	(SMPS_z80_ram+zRequestFlag).l
 	move.b	d0,(SMPS_z80_ram+zRequestSample2).l
 	; This is a DAC SFX: set to full volume
-;	move.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
-;	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
-;	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
+	move.b	#zSampleLookup>>8,(SMPS_z80_ram+zSample2Volume).l
 	SMPS_startZ80_safe
 	rts
 ; End of function SMPS_PlayDACSample

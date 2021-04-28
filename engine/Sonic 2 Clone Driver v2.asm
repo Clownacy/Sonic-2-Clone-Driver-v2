@@ -822,13 +822,10 @@ PlaySegaSound:
 	move.b	#$C0,d1
 	bsr.w	WriteFMII
 
-	; Set DAC to full volume
-;	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
-
 	SMPS_stopZ80_safe
 
-;	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
-;	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
+	; Set DAC to full volume
+	move.b	#zSampleLookup>>8,(SMPS_z80_ram+zSample1Volume).l
 
 	; Queue Sega PCM
 	st.b	(SMPS_z80_ram+zRequestFlag).l
@@ -1877,7 +1874,7 @@ InitMusicPlayback:
 	move.l	d6,SMPS_RAM.variables.queue(a6)
 
 	; Reset DAC volume
-;	moveq	#0|((MegaPCM_VolumeTbls&$F000)>>8),d0	; Clownacy | Reset DAC volume to maximum
+	moveq	#zSampleLookup>>8,d0	; Clownacy | Reset DAC volume to maximum
 	bsr.w	WriteDACVolume
 
 	; InitMusicPlayback, and Sound_PlayBGM for that matter,
@@ -2034,13 +2031,12 @@ SetDACVolume:
 	moveq	#$F<<3,d0	; cap at maximum value (minimum volume)
 +
 	lsr.b	#3,d0
-;	ori.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
+	ori.b	#zSampleLookup>>8,d0
 
 WriteDACVolume:
-;	SMPS_stopZ80_safe
-;	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
-;	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
-;	SMPS_startZ80_safe
+	SMPS_stopZ80_safe
+	move.b	d0,(SMPS_z80_ram+zSample1Volume).l
+	SMPS_startZ80_safe
 	rts
 ; End of function SetDACVolume
 
@@ -3252,14 +3248,12 @@ cfSilenceStopTrack:
 ; Has one parameter, the index (1-based) of the DAC sample to play.
 ;
 cfPlayDACSample:
-;	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 	SMPS_stopZ80_safe
 	st.b	(SMPS_z80_ram+zRequestFlag).l
 	move.b	(a4)+,(SMPS_z80_ram+zRequestSample1).l
 	; This is a DAC SFX: set to full volume
-;	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
-;	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
-;	SMPS_startZ80_safe
+	move.b	#zSampleLookup>>8,(SMPS_z80_ram+zSample1Volume).l
+	SMPS_startZ80_safe
 	rts
 ; ===========================================================================
 ; Plays another song or SFX.
