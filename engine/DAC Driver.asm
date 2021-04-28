@@ -3,11 +3,13 @@
 	CPU Z80
 	listing purecode
 
-zMixBuffer:		equ 0F00h	; 100h bytes long
-zRequestFlag:		equ 0EFFh	; A flag to say when samples are pending
-zRequestSample1:	equ 0EFEh	; The ID of the sample to play on channel 1
-zRequestSample2:	equ 0EFDh	; The ID of the sample to play on channel 2
-zVariablesStart:	equ 0EF0h	; Safety net to catch code overlapping variables
+zMixBuffer:		equ 0000h	; 100h bytes long - yes, it overwrites the driver's init code (it's not like it will be needed after startup)
+zSampleLookup:		equ 1000h
+zRequestFlag:		equ 0FFFh	; A flag to say when samples are pending
+zRequestSample1:	equ 0FFEh	; The ID of the sample to play on channel 1
+zRequestSample2:	equ 0FFDh	; The ID of the sample to play on channel 2
+zVariablesStart:	equ 0FFDh	; Safety net to catch code overlapping variables
+
 
 zYM2612_A0:	equ 4000h
 zYM2612_D0:	equ 4001h
@@ -120,11 +122,85 @@ DoIteration macro pSample2,pWriteByte
 
 ;Z80Driver_Start:
 zEntryPoint:
-	di
-	di
-	im	1
+	; This code exists *inside* zMixBuffer, and will be overwritten by it
 
-	; Set up registers for later (these never change)
+	; Disable interrupts because we don't need them, and set the interrupt mode to a sane value
+	di
+	di	; Pretty much every Z80 driver does this twice or more and I don't know why
+	im	1	; Setting this to anything else is bad (breaks certain early models of Mega Drive)
+
+	ld	sp,100h	; The end of zMixBuffer
+
+	; Let's build the sample lookup table. This table handles volume
+	; control and converting the samples from unsigned to signed.
+
+	; First, we construct the 80h-0FFh values of each volume level
+	ld	iy,MegaPCM_Volume_DeltaArray
+	ld	de,zSampleLookup+80h
+	ld	b,10h		; Volume level counter
+
+-	push	bc
+	ld	hl,0000h	; Volume accumulator (this is 0000h instead of 8000h so that unsigned->signed conversion is achieved)
+	ld	b,80h		; Index counter
+
+-	push	bc
+
+	; Send volume value to LUT
+	ex	de,hl
+	ld	(hl),d
+	inc	hl
+	ex	de,hl
+	; Get delta, and add it to accumulator
+	ld	c,(iy+0)
+	ld	b,(iy+1)
+	add	hl,bc
+
+	pop	bc
+	djnz	-
+
+	; Next delta
+	inc	iy
+	inc	iy
+	; Next volume LUT
+	ld	bc,80h
+	ex	de,hl
+	add	hl,bc
+	ex	de,hl
+
+	pop	bc
+	djnz	--
+
+	; Now we make the 00h-7Fh values (we cheat, and just invert the 80h-0FFh values)
+	ld	hl,zSampleLookup+80h	; hl = source
+	ld	b,10h		; Volume level counter
+
+-	push	bc
+	ld	d,h
+	ld	e,l		; de = destination
+	ld	b,80h		; Index counter
+
+-	dec	de
+	ld	a,(hl)	; Get value
+	cpl	a	; Invert it
+	ld	(de),a	; Send it
+	inc	hl
+	djnz	-
+
+	; Next volume LUT
+	ld	bc,80h
+	add	hl,bc
+
+	pop	bc
+	djnz	--
+
+	; Clear the four bytes the stack was using, so the DAC doesn't play garbage data
+	ld	c,b	; c and b are 0 now
+	push	bc
+	push	bc
+
+	; We are now done constructing the sample lookup table
+
+	; Set up some registers for later (these never change)
 	ld	b,80h
 	ld	de,zYM2612_D0
 
@@ -133,6 +209,16 @@ zEntryPoint:
 	ld	de,zMixBuffer+(100h-zBatchSize)&0FFh ; Lag behind the mixer so not to read unfinished samples
 	exx
 
+	jp	zPCMLoop
+
+MegaPCM_Volume_DeltaArray:
+	dw	100h*100h/100h, 0F0h*0F0h/100h, 0E0h*0E0h/100h, 0D0h*0D0h/100h
+	dw	0C0h*0C0h/100h, 0B0h*0B0h/100h, 0A0h*0A0h/100h, 090h*090h/100h
+	dw	080h*080h/100h, 070h*070h/100h, 060h*060h/100h, 050h*050h/100h
+	dw	040h*040h/100h, 030h*030h/100h, 020h*020h/100h, 010h*010h/100h
+
+
+	align 100h
 zPCMLoop:
 	; Bankswitch to sample 1
 zSample1Bank = $+1
@@ -452,26 +538,6 @@ ptr_dacDF:	PCMEntry	13610, Hey		; $DF	- "Hey!"
 
 ptr_dacE0:	PCMEntry	16270, SegaPCM		; $E0	- Sega!
 
-; This converts samples from unsigned to signed (for mixing).
-; It will also handle volume levels in the future.
-	align 100h
-zSampleLookup:
-	db	 80h, 81h, 82h, 83h, 84h, 85h, 86h, 87h, 88h, 89h, 8Ah, 8Bh, 8Ch, 8Dh, 8Eh, 8Fh
-	db	 90h, 91h, 92h, 93h, 94h, 95h, 96h, 97h, 98h, 99h, 9Ah, 9Bh, 9Ch, 9Dh, 9Eh, 9Fh
-	db	0A0h,0A1h,0A2h,0A3h,0A4h,0A5h,0A6h,0A7h,0A8h,0A9h,0AAh,0ABh,0ACh,0ADh,0AEh,0AFh
-	db	0B0h,0B1h,0B2h,0B3h,0B4h,0B5h,0B6h,0B7h,0B8h,0B9h,0BAh,0BBh,0BCh,0BDh,0BEh,0BFh
-	db	0C0h,0C1h,0C2h,0C3h,0C4h,0C5h,0C6h,0C7h,0C8h,0C9h,0CAh,0CBh,0CCh,0CDh,0CEh,0CFh
-	db	0D0h,0D1h,0D2h,0D3h,0D4h,0D5h,0D6h,0D7h,0D8h,0D9h,0DAh,0DBh,0DCh,0DDh,0DEh,0DFh
-	db	0E0h,0E1h,0E2h,0E3h,0E4h,0E5h,0E6h,0E7h,0E8h,0E9h,0EAh,0EBh,0ECh,0EDh,0EEh,0EFh
-	db	0F0h,0F1h,0F2h,0F3h,0F4h,0F5h,0F6h,0F7h,0F8h,0F9h,0FAh,0FBh,0FCh,0FDh,0FEh,0FFh
-	db	 00h, 01h, 02h, 03h, 04h, 05h, 06h, 07h, 08h, 09h, 0Ah, 0Bh, 0Ch, 0Dh, 0Eh, 0Fh
-	db	 10h, 11h, 12h, 13h, 14h, 15h, 16h, 17h, 18h, 19h, 1Ah, 1Bh, 1Ch, 1Dh, 1Eh, 1Fh
-	db	 20h, 21h, 22h, 23h, 24h, 25h, 26h, 27h, 28h, 29h, 2Ah, 2Bh, 2Ch, 2Dh, 2Eh, 2Fh
-	db	 30h, 31h, 32h, 33h, 34h, 35h, 36h, 37h, 38h, 39h, 3Ah, 3Bh, 3Ch, 3Dh, 3Eh, 3Fh
-	db	 40h, 41h, 42h, 43h, 44h, 45h, 46h, 47h, 48h, 49h, 4Ah, 4Bh, 4Ch, 4Dh, 4Eh, 4Fh
-	db	 50h, 51h, 52h, 53h, 54h, 55h, 56h, 57h, 58h, 59h, 5Ah, 5Bh, 5Ch, 5Dh, 5Eh, 5Fh
-	db	 60h, 61h, 62h, 63h, 64h, 65h, 66h, 67h, 68h, 69h, 6Ah, 6Bh, 6Ch, 6Dh, 6Eh, 6Fh
-	db	 70h, 71h, 72h, 73h, 74h, 75h, 76h, 77h, 78h, 79h, 7Ah, 7Bh, 7Ch, 7Dh, 7Eh, 7Fh
 
 
 
