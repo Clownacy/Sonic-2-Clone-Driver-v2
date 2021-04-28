@@ -400,17 +400,17 @@ zSample2AccumulatorRemainder = $+1
 zMuteSample:
 	db	80h	; The transistors that make up this particular byte of memory are going to hate me so much
 
-; Formula: 108 + 60 + ((78 + 100) * a) + 61 + 108 + 60 + ((95 + 117) * a) + 61 + 27
-; 485 + (390 * a)
+; Formula: 108 + 67 + ((78 + 100) * a) + 61 + 108 + 67 + ((95 + 117) * a) + 61 + 27
+; 499 + (390 * a)
 
 ; Target
 ;3579545 / 223 = 16052
 ; Current speed
-;(3579545 * 18 * 2) / (485 + (390 * 18)) = 17170
+;(3579545 * 18 * 2) / (499 + (390 * 18)) = 17138
 
 PCMEntry macro pSampleRate,pStart
 	dw	zmake68kPtr(pStart)			; Pointer into bank
-	dw	(pSampleRate*100h)/17170		; Playback increment (8.8 format)
+	dw	(pSampleRate*100h)/17138		; Playback increment (8.8 format)
 	db	zmake68kBank(pStart)			; Bank value
     endm
 
