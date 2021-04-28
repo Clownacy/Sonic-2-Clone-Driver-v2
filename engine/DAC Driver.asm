@@ -38,7 +38,11 @@ DoIteration macro pSample2,pWriteByte
 	ld	a,(hl)			; 7
 	or	a			; 4
 	jp	nz,.sample_not_done	; 10
-	; Mute sample
+	; Total: 21
+
+	; If we've reached the end of the sample, then mute the channel
+
+	; Set the sample incrementers to 0
 	ld	c,a			; 4
 	ld	sp,0			; 10
     if pSample2=1
@@ -48,18 +52,21 @@ DoIteration macro pSample2,pWriteByte
 	ld	(zSample1AdvanceRemainder),a	; 13
 	ld	(zSample1AdvanceQuotient),a	; 13
     endif
-	ld	hl,zMuteSample		; 10 ; Point to a single silent sample
+	; Point to a single silent sample
+	ld	hl,zMuteSample		; 10
+	; Set the current value to silence, to prevent audio popping
 	ld	a,80h			; 7
+	; Total: 57
+
 .sample_not_done:
-	; Total: 21 best, 78 worst
 
 	exx				; 4
 
-	; Convert sample to signed (will perform volume adjustment
-	; in the future as well) and write it to the mix buffer
+	; Convert sample to signed (will perform volume adjustment in the future as well)
 	ld	c,a			; 4
 	ld	a,(bc)			; 7
 	; Total: 11
+
     if pSample2=1
 	; Perform mixing and clamping
 	add	a,(hl)			; 7
@@ -69,24 +76,29 @@ DoIteration macro pSample2,pWriteByte
 .no_overflow:
 	; Total: 17 best, 28 worse
     endif
+
+	; Write sample to mix buffer
 	ld	(hl),a			; 7
 	inc	l			; 4
 	; Total: 11
 
     if pWriteByte=1
-	; Write byte from mix buffer to DAC
+	; Read sample from mix buffer
 	ld	a,(de)			; 7
 	inc	e			; 4
-	exx				; 4
-	xor	b			; 4
-	ld	(de),a			; 7
-	; Total: 26
-    else
-    	exx				; 4
-	; Total: 4
+	; Total: 11
     endif
 
-	; Increment to next sample value
+	exx				; 4
+
+    if pWriteByte=1
+	; Convert sample to unsigned and send it to DAC
+	xor	b			; 4
+	ld	(de),a			; 7
+	; Total: 11
+    endif
+
+	; Increment pointer to next sample value
 	; (performs nearest-neighbour resampling)
 	ex	af,af'			; 4
 	add	a,c			; 4
@@ -154,6 +166,7 @@ zSample1AccumulatorRemainder = $+1
 	ex	af,af'		; 4
 	; Total: 60
 
+	; Process sample 1
     rept zBatchSize
 	DoIteration 0,0 ; 78
 	DoIteration 0,1 ; 100 - Write occurs around 62 cycles in
@@ -201,6 +214,7 @@ zSample2AccumulatorRemainder = $+1
 	ex	af,af'		; 4
 	; Total: 60
 
+	; Process sample 2
     rept zBatchSize
 	DoIteration 1,0 ; 95
 	DoIteration 1,1 ; 117 - Write occurs around 79 cycles in
@@ -216,6 +230,7 @@ zSample2AccumulatorRemainder = $+1
 	ex	af,af'				; 4
 	; Total: 61
 
+	; Loop if there aren't any commands to process
 	ld	a,(zRequestFlag)	; 13
 	or	a			; 4
 	jp	z,zPCMLoop		; 10
@@ -224,12 +239,14 @@ zSample2AccumulatorRemainder = $+1
 	xor	a
 	ld	(zRequestFlag),a
 
+	; Check if we need to play a new sample on channel 1
 	ld	a,(zRequestSample1)
 	sub	81h
 	jr	c,.no_sample_1
 
 	ld	(zRequestSample1),a
 
+	; Get pointer to PCM metadata
 	ex	de,hl
 	ld	d,0
 	ld	e,a
@@ -241,6 +258,7 @@ zSample2AccumulatorRemainder = $+1
 	add	ix,de
 	ex	de,hl
 
+	; Initialise channel 1 for this new sample
 	ld	l,(ix+0)
 	ld	h,(ix+1)
 	ld	(zSample1Pointer),hl
@@ -254,12 +272,14 @@ zSample2AccumulatorRemainder = $+1
 	ld	(zSample1Bank),a
 
 .no_sample_1:
+	; Check if we need to play a new sample on channel 2
 	ld	a,(zRequestSample2)
 	sub	81h
 	jr	c,.no_sample_2
 
 	ld	(zRequestSample2),a
 
+	; Get pointer to PCM metadata
 	ex	de,hl
 	ld	d,0
 	ld	e,a
@@ -271,6 +291,7 @@ zSample2AccumulatorRemainder = $+1
 	add	ix,de
 	ex	de,hl
 
+	; Initialise channel 1 for this new sample
 	ld	l,(ix+0)
 	ld	h,(ix+1)
 	ld	(zSample2Pointer),hl
