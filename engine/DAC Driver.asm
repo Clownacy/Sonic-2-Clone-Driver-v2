@@ -22,9 +22,9 @@ zmake68kBank function addr,(((addr&0FF8000h)/zROMWindow))
 ; The number of samples to batch at once
 zBatchSize:	equ 15
 
-; B   - Unused
+; B   - 80h
 ; C   - Sample advance remainder
-; DE  - Sample length
+; DE  - YM2612 port D0
 ; HL  - Sample pointer
 ; SP  - Sample advance quotient
 
@@ -36,6 +36,21 @@ zBatchSize:	equ 15
 DoIteration macro pSample2,pWriteByte
 	; Read byte from cartridge
 	ld	a,(hl)			; 7
+	or	a			; 4
+	jp	nz,.sample_not_done	; 10
+	; Mute sample
+	ld	c,a			; 4
+	ld	sp,0			; 10
+    if pSample2=1
+	ld	(zSample2AdvanceRemainder),a	; 13
+	ld	(zSample2AdvanceQuotient),a	; 13
+    else
+	ld	(zSample1AdvanceRemainder),a	; 13
+	ld	(zSample1AdvanceQuotient),a	; 13
+    endif
+	ld	hl,zMuteSample		; 10 ; Point to a single silent sample
+.sample_not_done:
+	; Total: 21 best, 71 worst
 
 	exx				; 4
 
@@ -60,32 +75,15 @@ DoIteration macro pSample2,pWriteByte
     if pWriteByte=1
 	; Write byte from mix buffer to DAC
 	ld	a,(de)			; 7
-	xor	80h			; 7
-	ld	(zYM2612_D0),a		; 13
 	inc	e			; 4
-	; Total: 31
-    endif
-
 	exx				; 4
-
-	; Decrement remaining bytes in sample
-	dec	de			; 6
-	ld	a,d			; 4
-	or	e			; 4
-	jp	nz,.sample_not_done	; 10
-	; Mute sample
-	ld	c,a
-	ld	sp,0
-    if pSample2=1
-	ld	(zSample2AdvanceRemainder),a
-	ld	(zSample2AdvanceQuotient),a
+	xor	b			; 4
+	ld	(de),a			; 7
+	; Total: 26
     else
-	ld	(zSample1AdvanceRemainder),a
-	ld	(zSample1AdvanceQuotient),a
+    	exx				; 4
+	; Total: 4
     endif
-	ld	hl,zMuteSample	; Point to a single silent sample
-.sample_not_done:
-	; Total: 24
 
 	; Increment to next sample value
 	; (performs nearest-neighbour resampling)
@@ -96,14 +94,14 @@ DoIteration macro pSample2,pWriteByte
 	; Total 27
     endm
 	; So...
-	; mix = 0, write_byte = 0 - 88
-	; mix = 0, write_byte = 1 - 112 - Write occurs around 47 cycles in
-	; mix = 1, write_byte = 0 - 107
-	; mix = 1, write_byte = 1 - 136 - Write occurs around 64 cycles in
-	;DoIteration 0,0 ; 88
-	;DoIteration 0,1 ; 112 - Write occurs around 47 cycles in
-	;DoIteration 1,0 ; 107
-	;DoIteration 1,1 ; 136 - Write occurs around 64 cycles in
+	; mix = 0, write_byte = 0 - 78
+	; mix = 0, write_byte = 1 - 100 - Write occurs around 62 cycles in
+	; mix = 1, write_byte = 0 - 95
+	; mix = 1, write_byte = 1 - 117 - Write occurs around 79 cycles in
+	;DoIteration 0,0 ; 78
+	;DoIteration 0,1 ; 100 - Write occurs around 62 cycles in
+	;DoIteration 1,0 ; 95
+	;DoIteration 1,1 ; 117 - Write occurs around 79 cycles in
 
 
 
@@ -113,9 +111,13 @@ zEntryPoint:
 	di
 	im	1
 
+	; Set up registers for later (these never change)
+	ld	b,80h
+	ld	de,zYM2612_D0
+
 	exx
-	ld	b,(zSampleLookup>>8)&0FFh
-	ld	de,zMixBuffer+(100h-zBatchSize)&0FFh
+	ld	b,(zSampleLookup>>8)&0FFh ; This won't be constant in the future
+	ld	de,zMixBuffer+(100h-zBatchSize)&0FFh ; Lag behind the mixer so not to read unfinished samples
 	exx
 
 zPCMLoop:
@@ -135,8 +137,6 @@ zSample1Bank = $+1
 	; Bootstrap sample 1
 zSample1Pointer = $+1
 	ld	hl,zMuteSample	; 10 ; Sample address
-zSample1Remaining = $+1
-	ld	de,0		; 10 ; Bytes remaining
 zSample1AdvanceRemainder = $+1
 	ld	c,0		; 7  ; Sample advance remainder
 zSample1AdvanceQuotient = $+1
@@ -151,30 +151,22 @@ zSample1MixPointer = $+1
 zSample1AccumulatorRemainder = $+1
 	ld	a,0		; 7 ; Sample advance accumulator remainder
 	ex	af,af'		; 4
-	; Total: 70
-
-	; Current: 178
+	; Total: 60
 
     rept zBatchSize
-	DoIteration 0,0 ; 88
-	DoIteration 0,1 ; 112 - Write occurs around 47 cycles in
+	DoIteration 0,0 ; 78
+	DoIteration 0,1 ; 100 - Write occurs around 62 cycles in
     endm
-
-	; Current: 3378
-
-	; Cycles spare: N/A
 
 	; Save sample 1 data
 	ld	(zSample1Pointer),hl		; 16
-	ex	hl,de				; 4
-	ld	(zSample1Remaining),hl		; 16
 	exx					; 4
 	ld	(zSample1MixPointer),hl		; 16
 	exx					; 4
 	ex	af,af'				; 4
 	ld	(zSample1AccumulatorRemainder),a	; 13
 	ex	af,af'				; 4
-	; Total: 81
+	; Total: 61
 
 	; Bankswitch to sample 2
 zSample2Bank = $+1
@@ -192,8 +184,6 @@ zSample2Bank = $+1
 	; Bootstrap sample 2
 zSample2Pointer = $+1
 	ld	hl,zMuteSample	; 10 ; Sample address
-zSample2Remaining = $+1
-	ld	de,0		; 10 ; Bytes remaining
 zSample2AdvanceRemainder = $+1
 	ld	c,0		; 7  ; Sample advance remainder
 zSample2AdvanceQuotient = $+1
@@ -208,30 +198,22 @@ zSample2MixPointer = $+1
 zSample2AccumulatorRemainder = $+1
 	ld	a,0		; 7 ; Sample advance accumulator remainder
 	ex	af,af'		; 4
-	; Total: 70
-
-	; Current: 3637
+	; Total: 60
 
     rept zBatchSize
-	DoIteration 1,0 ; 107
-	DoIteration 1,1 ; 136 - Write occurs around 64 cycles in
+	DoIteration 1,0 ; 95
+	DoIteration 1,1 ; 117 - Write occurs around 79 cycles in
     endm
-
-	; Current: 7525
 
 	; Save sample 2 data
 	ld	(zSample2Pointer),hl		; 16
-	ex	hl,de				; 4
-	ld	(zSample2Remaining),hl		; 16
 	exx					; 4
 	ld	(zSample2MixPointer),hl		; 16
 	exx					; 4
 	ex	af,af'				; 4
 	ld	(zSample2AccumulatorRemainder),a	; 13
 	ex	af,af'				; 4
-	; Total: 81
-
-	; Current 7606
+	; Total: 61
 
 	ld	a,(zRequestFlag)	; 13
 	or	a			; 4
@@ -259,16 +241,13 @@ zSample2AccumulatorRemainder = $+1
 	ld	l,(ix+0)
 	ld	h,(ix+1)
 	ld	(zSample1Pointer),hl
-	ld	l,(ix+2)
-	ld	h,(ix+3)
-	ld	(zSample1Remaining),hl
-	ld	a,(ix+4)
+	ld	a,(ix+2)
 	ld	(zSample1AdvanceRemainder),a
-	ld	a,(ix+5)
+	ld	a,(ix+3)
 	ld	(zSample1AdvanceQuotient),a
 	xor	a
 	ld	(zSample1AccumulatorRemainder),a
-	ld	a,(ix+6)
+	ld	a,(ix+4)
 	ld	(zSample1Bank),a
 
 .no_sample_1:
@@ -286,20 +265,18 @@ zSample2AccumulatorRemainder = $+1
 	ex	de,hl
 	ld	ix,zPCM_Table
 	add	ix,de
+	ex	de,hl
 
 	ld	l,(ix+0)
 	ld	h,(ix+1)
 	ld	(zSample2Pointer),hl
-	ld	l,(ix+2)
-	ld	h,(ix+3)
-	ld	(zSample2Remaining),hl
-	ld	a,(ix+4)
+	ld	a,(ix+2)
 	ld	(zSample2AdvanceRemainder),a
-	ld	a,(ix+5)
+	ld	a,(ix+3)
 	ld	(zSample2AdvanceQuotient),a
 	xor	a
 	ld	(zSample2AccumulatorRemainder),a
-	ld	a,(ix+6)
+	ld	a,(ix+4)
 	ld	(zSample2Bank),a
 
 .no_sample_2:
@@ -309,25 +286,21 @@ zSample2AccumulatorRemainder = $+1
 zMuteSample:
 	db	80h	; The transistors that make up this particular byte of memory are going to hate me so much
 
-; Formula: 108 + 70 + (88 + 112 * a) + 81 + 108 + 70 + ((107 + 136) * a) + 81
-; 518 + (443 * a)
+; Formula: 108 + 60 + ((78 + 100) * a) + 61 + 108 + 60 + ((95 + 117) * a) + 61 + 27
+; 485 + (390 * a)
 
 ; Target
 ;3579545 / 223 = 16052
 ; Current speed
-;(3579545 * 32) / (545 + (443 * 16)) = 15007
-; Other speeds
-;(3579545 * 8) / (518 + (443 * 4)) = 12505
-;(3579545 * 16) / (518 + (443 * 8)) = 14010
-;(3579545 * 32) / (518 + (443 * 16)) = 15060
-;(3579545 * 64) / (518 + (443 * 32)) = 15591
-;(3579545 * 128) / (518 + (443 * 64)) = 15871
+;(3579545 * 32) / (485 + (390 * 16)) = 17033
 
 PCMEntry macro pSampleRate,pStart,junk
 	dw	zmake68kPtr(pStart)			; Pointer into bank
-	dw	((pStart_End-pStart)*15007)/pSampleRate	; Iterations until the end of the sample data is reached
-	dw	(pSampleRate*100h)/15007		; Playback increment (8.8 format)
+;	dw	((pStart_End-pStart)*15007)/pSampleRate	; Iterations until the end of the sample data is reached
+	dw	(pSampleRate*100h)/17033		; Playback increment (8.8 format)
 	db	zmake68kBank(pStart)			; Bank value
+	db	0 ; Padding
+	db	0 ; Padding
 	db	0 ; Padding
     endm
 
