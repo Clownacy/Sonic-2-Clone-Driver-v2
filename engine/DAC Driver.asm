@@ -229,14 +229,16 @@ zSample2AccumulatorRemainder = $+1
 
 	ld	(zRequestSample2),a
 
-	ld	h,0
-	ld	l,a
-	add	hl,hl
-	add	hl,hl
-	add	hl,hl
 	ex	de,hl
+	ld	d,0
+	ld	e,a
 	ld	ix,zPCM_Table
 	add	ix,de
+	add	ix,de
+	add	ix,de
+	add	ix,de
+	add	ix,de
+	ex	de,hl
 
 	ld	l,(ix+0)
 	ld	h,(ix+1)
@@ -257,13 +259,14 @@ zSample2AccumulatorRemainder = $+1
 
 	ld	(zRequestSample1),a
 
-	ld	h,0
-	ld	l,a
-	add	hl,hl
-	add	hl,hl
-	add	hl,hl
 	ex	de,hl
+	ld	d,0
+	ld	e,a
 	ld	ix,zPCM_Table
+	add	ix,de
+	add	ix,de
+	add	ix,de
+	add	ix,de
 	add	ix,de
 	ex	de,hl
 
@@ -296,12 +299,8 @@ zMuteSample:
 
 PCMEntry macro pSampleRate,pStart,junk
 	dw	zmake68kPtr(pStart)			; Pointer into bank
-;	dw	((pStart_End-pStart)*15007)/pSampleRate	; Iterations until the end of the sample data is reached
 	dw	(pSampleRate*100h)/17033		; Playback increment (8.8 format)
 	db	zmake68kBank(pStart)			; Bank value
-	db	0 ; Padding
-	db	0 ; Padding
-	db	0 ; Padding
     endm
 
 

@@ -1,6 +1,6 @@
 ; DAC Equates
 offset :=	zPCM_Table
-ptrsize :=	8
+ptrsize :=	5
 idstart :=	$81
 
 	if SMPS_S1DACSamples||SMPS_S2DACSamples
