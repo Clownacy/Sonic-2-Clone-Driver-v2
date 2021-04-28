@@ -6,8 +6,8 @@ SMPS_LoadDACDriver:
 	SMPS_stopZ80
 	SMPS_resetZ80
 
-	; load Mega PCM (Kosinski-compressed)
-	lea	(MegaPCM).l,a0	; source
+	; load DAC driver (Kosinski-compressed)
+	lea	(DACDriver).l,a0	; source
 	lea	(SMPS_z80_ram).l,a1	; destination
 	bsr.w	KosDec
 
@@ -71,11 +71,12 @@ SMPS_QueueSound3:
 ; ---------------------------------------------------------------------------
 SMPS_PlayDACSample:
 	SMPS_stopZ80_safe
-	move.b  d0,(SMPS_z80_ram+MegaPCM_DAC_Number).l
+	st.b	(SMPS_z80_ram+zRequestFlag).l
+	move.b	d0,(SMPS_z80_ram+zRequestSample2).l
 	; This is a DAC SFX: set to full volume
-	move.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
-	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
-	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
+;	move.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
+;	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
+;	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
 	SMPS_startZ80_safe
 	rts
 ; End of function SMPS_PlayDACSample

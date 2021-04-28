@@ -224,7 +224,8 @@ DACUpdateSample:
 	; From Vladikcomper:
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80_safe
-	move.b	d2,(SMPS_z80_ram+MegaPCM_DAC_Number).l
+	st.b	(SMPS_z80_ram+zRequestFlag).l
+	move.b	d2,(SMPS_z80_ram+zRequestSample1).l
 	SMPS_startZ80_safe
 
 locret_71CAA:
@@ -640,9 +641,9 @@ HandlePause:
 	; From Vladikcomper:
 	; "Playing sample $7F executes pause command."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	SMPS_stopZ80_safe
-	move.b  #$7F,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; pause DAC
-	SMPS_startZ80_safe
+;	SMPS_stopZ80_safe
+;	move.b  #$7F,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; pause DAC
+;	SMPS_startZ80_safe
 
 .locret:
 	rts
@@ -685,9 +686,9 @@ HandleUnpause:
 	; From Vladikcomper:
 	; "Playing sample $00 cancels pause mode."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	SMPS_stopZ80_safe
-	clr.b  (SMPS_z80_ram+MegaPCM_DAC_Number).l	; unpause DAC
-	SMPS_startZ80_safe
+;	SMPS_stopZ80_safe
+;	clr.b  (SMPS_z80_ram+MegaPCM_DAC_Number).l	; unpause DAC
+;	SMPS_startZ80_safe
 
 	rts
 
@@ -822,15 +823,16 @@ PlaySegaSound:
 	bsr.w	WriteFMII
 
 	; Set DAC to full volume
-	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
+;	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 
 	SMPS_stopZ80_safe
 
-	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
-	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
+;	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
+;	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
 
 	; Queue Sega PCM
-	move.b	#dSega_S2,(SMPS_z80_ram+MegaPCM_DAC_Number).l
+	st.b	(SMPS_z80_ram+zRequestFlag).l
+	move.b	#dSega_S2,(SMPS_z80_ram+zRequestSample1).l
 
 	SMPS_startZ80_safe
 
@@ -1812,9 +1814,9 @@ StopAllSound:
 	; From Vladikcomper:
 	; "Playing sample $80 forces to stop playback."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-	SMPS_stopZ80_safe
-	move.b  #$80,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; stop DAC playback
-	SMPS_startZ80_safe
+;	SMPS_stopZ80_safe
+;	move.b  #$80,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; stop DAC playback
+;	SMPS_startZ80_safe
 
     if SMPS_EnablePWM
 	bsr.w	PWMSilenceAll
@@ -1875,7 +1877,7 @@ InitMusicPlayback:
 	move.l	d6,SMPS_RAM.variables.queue(a6)
 
 	; Reset DAC volume
-	moveq	#0|((MegaPCM_VolumeTbls&$F000)>>8),d0	; Clownacy | Reset DAC volume to maximum
+;	moveq	#0|((MegaPCM_VolumeTbls&$F000)>>8),d0	; Clownacy | Reset DAC volume to maximum
 	bsr.w	WriteDACVolume
 
 	; InitMusicPlayback, and Sound_PlayBGM for that matter,
@@ -2032,13 +2034,13 @@ SetDACVolume:
 	moveq	#$F<<3,d0	; cap at maximum value (minimum volume)
 +
 	lsr.b	#3,d0
-	ori.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
+;	ori.b	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 
 WriteDACVolume:
-	SMPS_stopZ80_safe
-	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
-	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
-	SMPS_startZ80_safe
+;	SMPS_stopZ80_safe
+;	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
+;	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
+;	SMPS_startZ80_safe
 	rts
 ; End of function SetDACVolume
 
@@ -3250,13 +3252,14 @@ cfSilenceStopTrack:
 ; Has one parameter, the index (1-based) of the DAC sample to play.
 ;
 cfPlayDACSample:
-	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
+;	moveq	#(MegaPCM_VolumeTbls&$F000)>>8,d0
 	SMPS_stopZ80_safe
-	move.b	(a4)+,(SMPS_z80_ram+MegaPCM_DAC_Number).l
+	st.b	(SMPS_z80_ram+zRequestFlag).l
+	move.b	(a4)+,(SMPS_z80_ram+zRequestSample1).l
 	; This is a DAC SFX: set to full volume
-	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
-	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
-	SMPS_startZ80_safe
+;	move.b	d0,(SMPS_z80_ram+MegaPCM_LoadBank.volume+1).l
+;	move.b	d0,(SMPS_z80_ram+MegaPCM_Init_PCM.volume+1).l
+;	SMPS_startZ80_safe
 	rts
 ; ===========================================================================
 ; Plays another song or SFX.
@@ -3379,9 +3382,21 @@ cfChanFMCommand:
 	include "Sonic-2-Clone-Driver-v2/PSG Volume Envelopes.asm"
 
 ; ---------------------------------------------------------------------------
+; DAC samples
+; ---------------------------------------------------------------------------
+	include "Sonic-2-Clone-Driver-v2/DAC Samples.asm"	
+
+; ---------------------------------------------------------------------------
+; DAC driver
+; ---------------------------------------------------------------------------
+DACDriver:
+	include "Sonic-2-Clone-Driver-v2/engine/DAC Driver.asm"
+	!org (DACDriver+Size_of_DAC_driver_guess)
+
+; ---------------------------------------------------------------------------
 ; Vladikcomper's Mega PCM DAC driver
 ; ---------------------------------------------------------------------------
-	include	"Sonic-2-Clone-Driver-v2/engine/MegaPCM - 68k.asm"
+;	include	"Sonic-2-Clone-Driver-v2/engine/MegaPCM - 68k.asm"
 
 	dc.b	$43,$6C,$6F,$77,$6E,$61,$63,$79
 	even

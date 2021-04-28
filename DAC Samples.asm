@@ -2,89 +2,96 @@
 ; DAC Samples Files
 ; ---------------------------------------------------------------
 
-;			| Filename	| Extension	| Folder (if any)
-	IncludeDAC	SegaPCM,	pcm
+IncludeDAC macro Path,{INTLABEL}
+__LABEL__ label *
+	binclude Path
+__LABEL___End label *
+;Name:		label *
+;Name_End:	label *
+	endm
+
+SegaPCM		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/SegaPCM.pcm"
 
     if SMPS_S1DACSamples||SMPS_S2DACSamples
-	IncludeDAC	Kick,		dpcm,		Sonic 1 & 2
-	IncludeDAC	Snare,		dpcm,		Sonic 1 & 2
-	IncludeDAC	Timpani,	dpcm,		Sonic 1 & 2
+Kick		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 1 & 2/Kick.pcm"
+Snare		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 1 & 2/Snare.pcm"
+Timpani		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 1 & 2/Timpani.pcm"
     endif
 
     if SMPS_S2DACSamples
-	IncludeDAC	Clap,		dpcm,		Sonic 1 & 2
-	IncludeDAC	Scratch,	dpcm,		Sonic 1 & 2
-	IncludeDAC	Tom,		dpcm,		Sonic 1 & 2
-	IncludeDAC	Bongo,		dpcm,		Sonic 1 & 2
+Clap		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 1 & 2/Clap.pcm"
+Scratch		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 1 & 2/Scratch.pcm"
+Tom		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 1 & 2/Tom.pcm"
+Bongo		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 1 & 2/Bongo.pcm"
     endif
 
     if SMPS_S3DACSamples||SMPS_SKDACSamples||SMPS_S3DDACSamples
-	IncludeDAC	SnareS3,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	TomS3,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	KickS3,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	MuffledSnare,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	CrashCymbal,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	RideCymbal,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	MetalHit,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	MetalHit2,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	MetalHit3,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	ClapS3,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	ElectricTom,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	SnareS32,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	TimpaniS3,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	SnareS33,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	Click,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	PowerKick,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	QuickGlassCrash,dpcm,		Sonic 3 & K & 3D
+SnareS3		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/SnareS3.pcm"
+TomS3		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/TomS3.pcm"
+KickS3		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/KickS3.pcm"
+MuffledSnare	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/MuffledSnare.pcm"
+CrashCymbal	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/CrashCymbal.pcm"
+RideCymbal	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/RideCymbal.pcm"
+MetalHit	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/MetalHit.pcm"
+MetalHit2	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/MetalHit2.pcm"
+MetalHit3	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/MetalHit3.pcm"
+ClapS3		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/ClapS3.pcm"
+ElectricTom	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/ElectricTom.pcm"
+SnareS32	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/SnareS32.pcm"
+TimpaniS3	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/TimpaniS3.pcm"
+SnareS33	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/SnareS33.pcm"
+Click		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/Click.pcm"
+PowerKick	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/PowerKick.pcm"
+QuickGlassCrash	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/QuickGlassCrash.pcm"
     endif
 
     if SMPS_S3DACSamples||SMPS_SKDACSamples
-	IncludeDAC	GlassCrashSnare,dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	GlassCrash,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	GlassCrashKick,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	QuietGlassCrash,dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	SnareKick,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	KickBass,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	ComeOn,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	DanceSnare,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	LooseKick,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	LooseKick2,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	Woo,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	Go,		dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	SnareGo,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	PowerTom,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	WoodBlock,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	HitDrum,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	MetalCrashHit,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	EchoedClapHit,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	HipHopHitKick,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	HipHopPowerKick,dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	BassHey,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	DanceStyleKick,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	HipHopHitKick2,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	RevFadingWind,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	ScratchS3,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	LooseSnareNoise,dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	PowerKick2,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	CrashNoiseWoo,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	QuickHit,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	KickHey,	dpcm,		Sonic 3 & K & 3D
+GlassCrashSnare	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/GlassCrashSnare.pcm"
+GlassCrash	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/GlassCrash.pcm"
+GlassCrashKick	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/GlassCrashKick.pcm"
+QuietGlassCrash	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/QuietGlassCrash.pcm"
+SnareKick	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/SnareKick.pcm"
+KickBass	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/KickBass.pcm"
+ComeOn		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/ComeOn.pcm"
+DanceSnare	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/DanceSnare.pcm"
+LooseKick	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/LooseKick.pcm"
+LooseKick2	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/LooseKick2.pcm"
+Woo		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/Woo.pcm"
+Go		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/Go.pcm"
+SnareGo		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/SnareGo.pcm"
+PowerTom	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/PowerTom.pcm"
+WoodBlock	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/WoodBlock.pcm"
+HitDrum		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/HitDrum.pcm"
+MetalCrashHit	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/MetalCrashHit.pcm"
+EchoedClapHit	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/EchoedClapHit.pcm"
+HipHopHitKick	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/HipHopHitKick.pcm"
+HipHopPowerKick	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/HipHopPowerKick.pcm"
+BassHey		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/BassHey.pcm"
+DanceStyleKick	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/DanceStyleKick.pcm"
+HipHopHitKick2	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/HipHopHitKick2.pcm"
+RevFadingWind	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/RevFadingWind.pcm"
+ScratchS3	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/ScratchS3.pcm"
+LooseSnareNoise	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/LooseSnareNoise.pcm"
+PowerKick2	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/PowerKick2.pcm"
+CrashNoiseWoo	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/CrashNoiseWoo.pcm"
+QuickHit	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/QuickHit.pcm"
+KickHey		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/KickHey.pcm"
     endif
 
     if SMPS_S3DDACSamples
-	IncludeDAC	MetalCrashS3D,	dpcm,		Sonic 3 & K & 3D
-	IncludeDAC	IntroKickS3D,	dpcm,		Sonic 3 & K & 3D
+MetalCrashS3D	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/MetalCrashS3D.pcm"
+IntroKickS3D	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/IntroKickS3D.pcm"
     endif
 
     if SMPS_S3DACSamples
-	IncludeDAC	EchoedClapHitS3,dpcm,		Sonic 3 & K & 3D
+EchoedClapHitS3	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/EchoedClapHitS3.pcm"
     endif
 
     if SMPS_SCDACSamples
-	IncludeDAC	Beat,		dpcm,		Sonic Crackers
-	IncludeDAC	SnareSC,	dpcm,		Sonic Crackers
-	IncludeDAC	TimTom,		dpcm,		Sonic Crackers
-	IncludeDAC	LetsGo,		dpcm,		Sonic Crackers
-	IncludeDAC	Hey,		dpcm,		Sonic Crackers
+Beat		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Crackers/Beat.pcm"
+SnareSC		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Crackers/SnareSC.pcm"
+TimTom		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Crackers/TimTom.pcm"
+LetsGo		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Crackers/LetsGo.pcm"
+Hey		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Crackers/Hey.pcm"
     endif
 	even
