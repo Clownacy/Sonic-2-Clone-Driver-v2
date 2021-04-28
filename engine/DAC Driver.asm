@@ -135,7 +135,7 @@ zEntryPoint:
 	; control and converting the samples from unsigned to signed.
 
 	; First, we construct the 80h-0FFh values of each volume level
-	ld	iy,MegaPCM_Volume_DeltaArray
+	ld	iy,zVolumeDeltas
 	ld	de,zSampleLookup+80h
 	ld	b,10h		; Volume level counter
 
@@ -193,7 +193,7 @@ zEntryPoint:
 	pop	bc
 	djnz	--
 
-	; Clear the four bytes the stack was using, so the DAC doesn't play garbage data
+	; Clear the four bytes the stack was using, so the DAC doesn't play garbage data briefly on startup
 	ld	c,b	; c and b are 0 now
 	push	bc
 	push	bc
@@ -210,7 +210,11 @@ zEntryPoint:
 
 	jp	zPCMLoop
 
-MegaPCM_Volume_DeltaArray:
+zVolumeDeltas:
+	; Non-linear volume curve (logarithmic?).
+	; Fun fact: if you remove the unsigned->signed conversion, and make this delta table linear,
+	; then the generated table will exactly match the one from SMPS 32X's DAC driver. Indeed, that
+	; table is what this code was originally designed to produce: I've just modified it since.
 	dw	100h*100h/100h, 0F0h*0F0h/100h, 0E0h*0E0h/100h, 0D0h*0D0h/100h
 	dw	0C0h*0C0h/100h, 0B0h*0B0h/100h, 0A0h*0A0h/100h, 090h*090h/100h
 	dw	080h*080h/100h, 070h*070h/100h, 060h*060h/100h, 050h*050h/100h
