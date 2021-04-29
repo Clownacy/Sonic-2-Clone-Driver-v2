@@ -384,7 +384,7 @@ zSample2AccumulatorRemainder = $+1
 	add	ix,de
 	ex	de,hl
 
-	; Initialise channel 1 for this new sample
+	; Initialise channel 2 for this new sample
 	ld	l,(ix+0)
 	ld	h,(ix+1)
 	ld	(zSample2Pointer),hl
