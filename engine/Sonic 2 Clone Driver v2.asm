@@ -687,9 +687,11 @@ HandlePause:
 	bsr.w	PWMSilenceAll
     endif
 
+	moveq	#$02,d0	; 'Stop PCM channel' command
 	SMPS_stopZ80_safe
 	st.b	(SMPS_z80_ram+zRequestFlag).l
-	move.b  #$02,(SMPS_z80_ram+zRequestSample1).l	; pause DAC
+	move.b  d0,(SMPS_z80_ram+zRequestSample1).l	; Pause PCM channel 1
+	move.b  d0,(SMPS_z80_ram+zRequestSample2).l	; Pause PCM channel 2
 	SMPS_startZ80_safe
 
 .locret:
@@ -730,9 +732,11 @@ HandleUnpause:
 	bsr.w	WriteFMII
 .no_dac:
 
+	moveq	#$01,d0
 	SMPS_stopZ80_safe
 	st.b	(SMPS_z80_ram+zRequestFlag).l
-	move.b  #$01,(SMPS_z80_ram+zRequestSample1).l	; unpause DAC
+	move.b  d0,(SMPS_z80_ram+zRequestSample1).l	; Unpause PCM channel 1
+	move.b  d0,(SMPS_z80_ram+zRequestSample2).l	; Unpause PCM channel 2
 	SMPS_startZ80_safe
 
 	rts
@@ -1857,9 +1861,11 @@ StopAllSound:
 	move.b	d0,(a0)+
     endif
 
+	moveq	#$02,d0
 	SMPS_stopZ80_safe
 	st.b	(SMPS_z80_ram+zRequestFlag).l
-	move.b	#$02,(SMPS_z80_ram+zRequestSample1).l	; stop DAC playback
+	move.b	d0,(SMPS_z80_ram+zRequestSample1).l	; Stop PCM channel 1
+	move.b	d0,(SMPS_z80_ram+zRequestSample2).l	; Stop PCM channel 2
 	SMPS_startZ80_safe
 
     if SMPS_EnablePWM
