@@ -689,7 +689,7 @@ HandlePause:
 
 	SMPS_stopZ80_safe
 	st.b	(SMPS_z80_ram+zRequestFlag).l
-	move.b  #$03,(SMPS_z80_ram+zRequestSample1).l	; pause DAC
+	move.b  #$02,(SMPS_z80_ram+zRequestSample1).l	; pause DAC
 	SMPS_startZ80_safe
 
 .locret:
@@ -732,7 +732,7 @@ HandleUnpause:
 
 	SMPS_stopZ80_safe
 	st.b	(SMPS_z80_ram+zRequestFlag).l
-	move.b  #$04,(SMPS_z80_ram+zRequestSample1).l	; unpause DAC
+	move.b  #$03,(SMPS_z80_ram+zRequestSample1).l	; unpause DAC
 	SMPS_startZ80_safe
 
 	rts

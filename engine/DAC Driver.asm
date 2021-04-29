@@ -366,7 +366,6 @@ zDoCommand:
 zCommands:
 	jr	.play_sample
 	jr	.stop_channel
-	jr	.pause_channel
 	jr	.resume_channel
 
 .play_sample:
@@ -401,17 +400,6 @@ zCommands:
 	ret
 
 .stop_channel:
-	; Point channel to silent sample
-	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode+1),zMuteSample&0FFh
-	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode),(zMuteSample>>8)&0FFh
-
-	; Stop the channel from advancing past said sample
-	ld	(ix+zSample1AdvanceQuotient-zSample1SelfModifiedCode),0
-	ld	(ix+zSample1AdvanceRemainder-zSample1SelfModifiedCode),0
-
-	ret
-
-.pause_channel:
 	; Back-up the channel state to the unused bytes of the request struct
 	ld	a,(ix+zSample1Pointer-zSample1SelfModifiedCode+1)
 	inc	hl
