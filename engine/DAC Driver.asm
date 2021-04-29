@@ -396,12 +396,21 @@ zCommands:
 	ld	(ix+zSample1Bank-zSample1SelfModifiedCode),a
 
 	; Clear advance accumulator remainder
-	xor	a
-	ld	(ix+zSample1AccumulatorRemainder-zSample1SelfModifiedCode),a
+	ld	(ix+zSample1AccumulatorRemainder-zSample1SelfModifiedCode),0
 
 	ret
 
 .stop_channel:
+	; Point channel to silent sample
+	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode+1),zMuteSample&0FFh
+	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode),(zMuteSample>>8)&0FFh
+
+	; Stop the channel from advancing past said sample
+	ld	(ix+zSample1AdvanceQuotient-zSample1SelfModifiedCode),0
+	ld	(ix+zSample1AdvanceRemainder-zSample1SelfModifiedCode),0
+
+	ret
+
 .pause_channel:
 .resume_channel:
 

@@ -1863,9 +1863,10 @@ StopAllSound:
 	; From Vladikcomper:
 	; "Playing sample $80 forces to stop playback."
 	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-;	SMPS_stopZ80_safe
-;	move.b  #$80,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; stop DAC playback
-;	SMPS_startZ80_safe
+	SMPS_stopZ80_safe
+	st.b	(SMPS_z80_ram+zRequestFlag).l
+	move.b	#$02,(SMPS_z80_ram+zRequestSample1).l	; stop DAC playback
+	SMPS_startZ80_safe
 
     if SMPS_EnablePWM
 	bsr.w	PWMSilenceAll
