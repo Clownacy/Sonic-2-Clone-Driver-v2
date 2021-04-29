@@ -122,7 +122,6 @@ DoIteration macro pSample2,pWriteByte
 
 
 
-;Z80Driver_Start:
 zEntryPoint:
 	; This code exists *inside* zMixBuffer, and will be overwritten by it
 
@@ -337,14 +336,14 @@ zSample2AccumulatorRemainder = $+1
 
 	ld	sp,zStack
 
-	; Check if we need to play a new sample on channel 1
+	; Check if there's a command for channel 1 waiting
 	ld	ix,zSample1SelfModifiedCode
 	ld	hl,zRequestSample1
 	ld	a,(hl)
 	or	a
 	call	nz,zDoCommand
 
-	; Check if we need to play a new sample on channel 2
+	; Check if there's a command for channel 2 waiting
 	ld	ix,zSample2SelfModifiedCode
 	ld	hl,zRequestSample2
 	ld	a,(hl)
@@ -361,12 +360,9 @@ zDoCommand:
 	ld	(.jump_offset),a
 .jump_offset = $+1
 	jr	$
-
-; Command functions
-zCommands:
-	jr	.play_sample
-	jr	.stop_channel
-	jr	.resume_channel
+	jr	.play_sample	; 01h
+	jr	.stop_channel	; 02h
+	jr	.resume_channel	; 03h
 
 .play_sample:
 	; Copy address low byte

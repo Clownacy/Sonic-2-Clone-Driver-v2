@@ -1857,9 +1857,6 @@ StopAllSound:
 	move.b	d0,(a0)+
     endif
 
-	; From Vladikcomper:
-	; "Playing sample $80 forces to stop playback."
-	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
 	SMPS_stopZ80_safe
 	st.b	(SMPS_z80_ram+zRequestFlag).l
 	move.b	#$02,(SMPS_z80_ram+zRequestSample1).l	; stop DAC playback
