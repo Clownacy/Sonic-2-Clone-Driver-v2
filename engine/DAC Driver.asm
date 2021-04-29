@@ -367,7 +367,7 @@ zDoCommand:
 	; Copy address high byte
 	inc	hl
 	ld	a,(hl)
-	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode+1),a
+	ld	(ix+zSample1Pointer+1-zSample1SelfModifiedCode),a
 
 	; Copy address low byte
 	inc	hl
@@ -399,7 +399,7 @@ zDoCommand:
 	; by a 'play sample' command, allowing the stopped sample to be resumed
 
 	; Copy address high byte
-	ld	a,(ix+zSample1Pointer-zSample1SelfModifiedCode+1)
+	ld	a,(ix+zSample1Pointer+1-zSample1SelfModifiedCode)
 	inc	hl
 	ld	(hl),a
 
@@ -411,7 +411,7 @@ zDoCommand:
 	; Now stop the channel
 
 	; Point channel to silent sample
-	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode+1),zMuteSample&0FFh
+	ld	(ix+zSample1Pointer+1-zSample1SelfModifiedCode),zMuteSample&0FFh
 	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode),(zMuteSample>>8)&0FFh
 
 	; Stop the channel from advancing past said sample
