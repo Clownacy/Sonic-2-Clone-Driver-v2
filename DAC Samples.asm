@@ -5,10 +5,7 @@
 IncludeDAC macro Path,{INTLABEL}
 __LABEL__ label *
 	binclude Path
-__LABEL___End label *
-	dc.b	0,0,0,0 ; This should be good enough
-;Name:		label *
-;Name_End:	label *
+	dc.b	0,0,0,0 ; 0 marks the end of the sample - four is more than enough (one or two should be fine)
 	endm
 
 SegaPCM		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/SegaPCM.pcm"
