@@ -412,8 +412,54 @@ zCommands:
 	ret
 
 .pause_channel:
-.resume_channel:
+	; Back-up the channel state to the unused bytes of the request struct
+	ld	a,(ix+zSample1Pointer-zSample1SelfModifiedCode+1)
+	inc	hl
+	ld	(hl),a
 
+	ld	a,(ix+zSample1Pointer-zSample1SelfModifiedCode)
+	inc	hl
+	ld	(hl),a
+
+	ld	a,(ix+zSample1AdvanceQuotient-zSample1SelfModifiedCode)
+	inc	hl
+	ld	(hl),a
+
+	ld	a,(ix+zSample1AdvanceRemainder-zSample1SelfModifiedCode)
+	inc	hl
+	ld	(hl),a
+
+	; Now stop the channel
+
+	; Point channel to silent sample
+	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode+1),zMuteSample&0FFh
+	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode),(zMuteSample>>8)&0FFh
+
+	; Stop the channel from advancing past said sample
+	ld	(ix+zSample1AdvanceQuotient-zSample1SelfModifiedCode),0
+	ld	(ix+zSample1AdvanceRemainder-zSample1SelfModifiedCode),0
+
+	ret
+
+.resume_channel:
+	; Restore the channel state from the unused bytes of the request struct
+	inc	hl
+	ld	a,(hl)
+	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode+1),a
+
+	inc	hl
+	ld	a,(hl)
+	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode),a
+
+	inc	hl
+	ld	a,(hl)
+	ld	(ix+zSample1AdvanceQuotient-zSample1SelfModifiedCode),a
+
+	inc	hl
+	ld	a,(hl)
+	ld	(ix+zSample1AdvanceRemainder-zSample1SelfModifiedCode),a
+
+	ret
 
 zSample1Ended:
 	; Set the sample incrementers to 0

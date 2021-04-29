@@ -686,12 +686,11 @@ HandlePause:
     if SMPS_EnablePWM
 	bsr.w	PWMSilenceAll
     endif
-	; From Vladikcomper:
-	; "Playing sample $7F executes pause command."
-	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-;	SMPS_stopZ80_safe
-;	move.b  #$7F,(SMPS_z80_ram+MegaPCM_DAC_Number).l	; pause DAC
-;	SMPS_startZ80_safe
+
+	SMPS_stopZ80_safe
+	st.b	(SMPS_z80_ram+zRequestFlag).l
+	move.b  #$03,(SMPS_z80_ram+zRequestSample1).l	; pause DAC
+	SMPS_startZ80_safe
 
 .locret:
 	rts
@@ -731,12 +730,10 @@ HandleUnpause:
 	bsr.w	WriteFMII
 .no_dac:
 
-	; From Vladikcomper:
-	; "Playing sample $00 cancels pause mode."
-	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
-;	SMPS_stopZ80_safe
-;	clr.b  (SMPS_z80_ram+MegaPCM_DAC_Number).l	; unpause DAC
-;	SMPS_startZ80_safe
+	SMPS_stopZ80_safe
+	st.b	(SMPS_z80_ram+zRequestFlag).l
+	move.b  #$04,(SMPS_z80_ram+zRequestSample1).l	; unpause DAC
+	SMPS_startZ80_safe
 
 	rts
 
