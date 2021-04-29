@@ -8,7 +8,8 @@ zSampleLookup:		equ 1000h
 zRequestFlag:		equ 0FFFh	; A flag to say when samples are pending
 zRequestSample1:	equ 0FFEh	; The ID of the sample to play on channel 1
 zRequestSample2:	equ 0FFDh	; The ID of the sample to play on channel 2
-zVariablesStart:	equ 0FFDh	; Safety net to catch code overlapping variables
+zStack:			equ 0FF0h
+zVariablesStart:	equ 0FE0h	; Safety net to catch code overlapping variables
 
 
 zYM2612_A0:	equ 4000h
@@ -22,7 +23,7 @@ zmake68kPtr  function addr,zROMWindow+(addr&7FFFh)
 zmake68kBank function addr,(((addr&0FF8000h)/zROMWindow))
 
 ; The number of samples to batch at once
-zBatchSize:	equ 18
+zBatchSize:	equ 24
 
 ; B   - 80h
 ; C   - Sample advance remainder
@@ -43,22 +44,13 @@ DoIteration macro pSample2,pWriteByte
 	; Total: 21
 
 	; If we've reached the end of the sample, then mute the channel
-
-	; Set the sample incrementers to 0
-	ld	c,a			; 4
-	ld	sp,0			; 10
+	ld	sp,zStack
     if pSample2=1
-	ld	(zSample2AdvanceRemainder),a	; 13
-	ld	(zSample2AdvanceQuotient),a	; 13
+	call	zSample2Ended
     else
-	ld	(zSample1AdvanceRemainder),a	; 13
-	ld	(zSample1AdvanceQuotient),a	; 13
+	call	zSample1Ended
     endif
-	; Point to a single silent sample
-	ld	hl,zMuteSample		; 10
-	; Set the current value to silence, to prevent audio popping
-	ld	a,80h			; 7
-	; Total: 57
+	ld	sp,0
 
 .sample_not_done:
 
@@ -129,7 +121,7 @@ zEntryPoint:
 	di	; Pretty much every Z80 driver does this twice or more and I don't know why
 	im	1	; Setting this to anything else is bad (breaks certain early models of Mega Drive)
 
-	ld	sp,100h	; The end of zMixBuffer
+	ld	sp,zStack
 
 	; Let's build the sample lookup table. This table handles volume
 	; control and converting the samples from unsigned to signed.
@@ -192,11 +184,6 @@ zEntryPoint:
 
 	pop	bc
 	djnz	--
-
-	; Clear the four bytes the stack was using, so the DAC doesn't play garbage data briefly on startup
-	ld	c,b	; c and b are 0 now
-	push	bc
-	push	bc
 
 	; We are now done constructing the sample lookup table
 
@@ -400,6 +387,27 @@ zSample2AccumulatorRemainder = $+1
 .no_sample_2:
 	jp	zPCMLoop
 
+zSample1Ended:
+	; Set the sample incrementers to 0
+	ld	c,a			; 4
+	ld	(zSample1AdvanceRemainder),a	; 13
+	ld	(zSample1AdvanceQuotient),a	; 13
+	; Point to a single silent sample
+	ld	hl,zMuteSample		; 10
+	; Set the current value to silence, to prevent audio popping
+	ld	a,80h			; 7
+	ret
+
+zSample2Ended:
+	; Set the sample incrementers to 0
+	ld	c,a			; 4
+	ld	(zSample2AdvanceRemainder),a	; 13
+	ld	(zSample2AdvanceQuotient),a	; 13
+	; Point to a single silent sample
+	ld	hl,zMuteSample		; 10
+	; Set the current value to silence, to prevent audio popping
+	ld	a,80h			; 7
+	ret
 
 zMuteSample:
 	db	80h	; The transistors that make up this particular byte of memory are going to hate me so much
