@@ -6,8 +6,8 @@
 zMixBuffer:		equ 0000h	; 100h bytes long - yes, it overwrites the driver's init code (it's not like it will be needed after startup)
 zSampleLookup:		equ 1000h
 zRequestFlag:		equ 0FFFh	; A flag to say when samples are pending
-zRequestSample1:	equ 0FFEh	; The ID of the sample to play on channel 1
-zRequestSample2:	equ 0FFDh	; The ID of the sample to play on channel 2
+zRequestSample1:	equ 0FF0h	; 6 bytes long
+zRequestSample2:	equ 0FF6h	; 6 bytes long
 zStack:			equ 0FF0h
 zVariablesStart:	equ 0FE0h	; Safety net to catch code overlapping variables
 
@@ -220,6 +220,7 @@ zVolumeDeltas:
 
 	align 100h
 zPCMLoop:
+zSample1SelfModifiedCode:
 	; Bankswitch to sample 1
 zSample1Bank = $+1
 	ld	a,0			; 7
@@ -270,6 +271,7 @@ zSample1AccumulatorRemainder = $+1
 	ex	af,af'				; 4
 	; Total: 61
 
+zSample2SelfModifiedCode:
 	; Bankswitch to sample 2
 zSample2Bank = $+1
 	ld	a,0			; 7
@@ -326,76 +328,83 @@ zSample2AccumulatorRemainder = $+1
 	jp	z,zPCMLoop		; 10
 	; Total: 27
 
+	;;;;;;;;;;;;;;;;;;;
+	; COMMAND HANDLER ;
+	;;;;;;;;;;;;;;;;;;;
+
 	xor	a
 	ld	(zRequestFlag),a
 
+	ld	sp,zStack
+
 	; Check if we need to play a new sample on channel 1
-	ld	a,(zRequestSample1)
-	sub	81h
-	jr	c,.no_sample_1
+	ld	ix,zSample1SelfModifiedCode
+	ld	hl,zRequestSample1
+	ld	a,(hl)
+	or	a
+	call	nz,zDoCommand
 
-	ld	(zRequestSample1),a
-
-	; Get pointer to PCM metadata
-	ex	de,hl
-	ld	d,0
-	ld	e,a
-	ld	ix,zPCMMetadataTable
-	add	ix,de
-	add	ix,de
-	add	ix,de
-	add	ix,de
-	add	ix,de
-	ex	de,hl
-
-	; Initialise channel 1 for this new sample
-	ld	l,(ix+0)
-	ld	h,(ix+1)
-	ld	(zSample1Pointer),hl
-	ld	a,(ix+2)
-	ld	(zSample1AdvanceRemainder),a
-	ld	a,(ix+3)
-	ld	(zSample1AdvanceQuotient),a
-	xor	a
-	ld	(zSample1AccumulatorRemainder),a
-	ld	a,(ix+4)
-	ld	(zSample1Bank),a
-
-.no_sample_1:
 	; Check if we need to play a new sample on channel 2
-	ld	a,(zRequestSample2)
-	sub	81h
-	jr	c,.no_sample_2
+	ld	ix,zSample2SelfModifiedCode
+	ld	hl,zRequestSample2
+	ld	a,(hl)
+	or	a
+	call	nz,zDoCommand
 
-	ld	(zRequestSample2),a
-
-	; Get pointer to PCM metadata
-	ex	de,hl
-	ld	d,0
-	ld	e,a
-	ld	ix,zPCMMetadataTable
-	add	ix,de
-	add	ix,de
-	add	ix,de
-	add	ix,de
-	add	ix,de
-	ex	de,hl
-
-	; Initialise channel 2 for this new sample
-	ld	l,(ix+0)
-	ld	h,(ix+1)
-	ld	(zSample2Pointer),hl
-	ld	a,(ix+2)
-	ld	(zSample2AdvanceRemainder),a
-	ld	a,(ix+3)
-	ld	(zSample2AdvanceQuotient),a
-	xor	a
-	ld	(zSample2AccumulatorRemainder),a
-	ld	a,(ix+4)
-	ld	(zSample2Bank),a
-
-.no_sample_2:
 	jp	zPCMLoop
+
+zDoCommand:
+	ld	(hl),0
+
+	dec	a
+	add	a,a
+	ld	(.jump_offset),a
+.jump_offset = $+1
+	jr	$
+
+; Command functions
+zCommands:
+	jr	.play_sample
+	jr	.stop_channel
+	jr	.pause_channel
+	jr	.resume_channel
+
+.play_sample:
+	; Copy address low byte
+	inc	hl
+	ld	a,(hl)
+	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode+1),a
+
+	; Copy address high byte
+	inc	hl
+	ld	a,(hl)
+	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode),a
+
+	; Copy advance remainder
+	inc	hl
+	ld	a,(hl)
+	ld	(ix+zSample1AdvanceQuotient-zSample1SelfModifiedCode),a
+
+	; Copy advance quotient
+	inc	hl
+	ld	a,(hl)
+	ld	(ix+zSample1AdvanceRemainder-zSample1SelfModifiedCode),a
+
+	; Copy Bank
+	inc	hl
+	ld	a,(hl)
+	ld	(ix+zSample1Bank-zSample1SelfModifiedCode),a
+
+	; Clear advance accumulator remainder
+	xor	a
+	ld	(ix+zSample1AccumulatorRemainder-zSample1SelfModifiedCode),a
+
+	ret
+
+.stop_channel:
+.pause_channel:
+.resume_channel:
+
 
 zSample1Ended:
 	; Set the sample incrementers to 0
@@ -454,13 +463,6 @@ zMuteSample:
 ; Current speed
 ;(3579545 * 16 * 2) / (499 + (430 * 16)) = 15523
 
-zPCMEntry macro pSampleRate,pStart
-	dw	zmake68kPtr(pStart)			; Pointer into bank
-	dw	(pSampleRate*100h)/15523		; Playback increment (8.8 format)
-	db	zmake68kBank(pStart)			; Bank value
-    endm
-
-	include "Sonic-2-Clone-Driver-v2/DAC Metadata.asm"
 
 
 

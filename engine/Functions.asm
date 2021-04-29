@@ -70,12 +70,30 @@ SMPS_QueueSound3:
 ; d0 = Sample ID
 ; ---------------------------------------------------------------------------
 SMPS_PlayDACSample:
+	cmpi.b	#$80,d0
+	bne.s	.play_sample
+
 	SMPS_stopZ80_safe
 	st.b	(SMPS_z80_ram+zRequestFlag).l
-	move.b	d0,(SMPS_z80_ram+zRequestSample2).l
+	move.b	#$02,(SMPS_z80_ram+zRequestSample2).l	; $02 is the 'stop sample' command
+	SMPS_startZ80_safe
+	
+	rts
+
+.play_sample:
+	movem.l	a0/a1,-(sp)
+
+	; Prepare to send DAC request
+	jsr	(GetDACSampleMetadata).l
+	lea	(SMPS_z80_ram+zRequestSample2).l,a1
+
+	SMPS_stopZ80_safe
+	jsr	(SendDACSampleRequest).l
 	; This is a DAC SFX: set to full volume
 	move.b	#zSampleLookup>>8,(SMPS_z80_ram+zSample2Volume).l
 	SMPS_startZ80_safe
+
+	movem.l	(sp)+,a0/a1
 	rts
 ; End of function SMPS_PlayDACSample
 

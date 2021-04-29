@@ -1,5 +1,5 @@
 ; DAC Equates
-offset :=	zPCMMetadataTable
+offset :=	DACMetadataTable
 ptrsize :=	5
 idstart :=	$81
 

@@ -221,16 +221,64 @@ DACUpdateSample:
 	bsr.w	WriteFMII
 
 .dac_already_enabled:
-	; From Vladikcomper:
-	; "We need the Z80 to be stopped before this command executes and to be started directly afterwards."
+	; Prepare to send DAC request
+	move.b	d2,d0
+	bsr.s	GetDACSampleMetadata
+	lea	(SMPS_z80_ram+zRequestSample1).l,a1
+
 	SMPS_stopZ80_safe
-	st.b	(SMPS_z80_ram+zRequestFlag).l
-	move.b	d2,(SMPS_z80_ram+zRequestSample1).l
+	bsr.s	SendDACSampleRequest
 	SMPS_startZ80_safe
 
 locret_71CAA:
 	rts
 ; End of function DACUpdateSample
+
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+SetDACVolume:
+	move.b	SMPS_Track.Volume(a5),d0
+	bpl.s	+		; $7F is the last valid volume
+	moveq	#$F<<3,d0	; cap at maximum value (minimum volume)
++
+	lsr.b	#3,d0
+	ori.b	#zSampleLookup>>8,d0
+
+WriteDACVolume:
+	SMPS_stopZ80_safe
+	move.b	d0,(SMPS_z80_ram+zSample1Volume).l
+	SMPS_startZ80_safe
+	rts
+; End of function SetDACVolume
+
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+GetDACSampleMetadata:
+	; Get pointer to requested sample's metadata
+	andi.w	#$FF,d0
+	subi.w	#$81,d0
+	lea	(DACMetadataTable).l,a0
+	adda.w	d0,a0
+	add.w	d0,d0
+	add.w	d0,d0
+	adda.w	d0,a0
+	rts
+
+SendDACSampleRequest:
+	; 'Play sample' command value
+	move.b	#$01,(a1)+
+	; Copy the sample's metadata
+	move.b	(a0)+,(a1)+
+	move.b	(a0)+,(a1)+
+	move.b	(a0)+,(a1)+
+	move.b	(a0)+,(a1)+
+	move.b	(a0),(a1)
+	st.b	(SMPS_z80_ram+zRequestFlag).l
+
+	rts
+; End of function SetDACVolume
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
@@ -822,14 +870,18 @@ PlaySegaSound:
 	move.b	#$C0,d1
 	bsr.w	WriteFMII
 
+	; Prepare to send DAC request
+	move.b	#dSega_S2,d0
+	bsr.w	GetDACSampleMetadata
+	lea	(SMPS_z80_ram+zRequestSample1).l,a1
+
 	SMPS_stopZ80_safe
+
+	; Queue Sega PCM
+	bsr.w	SendDACSampleRequest
 
 	; Set DAC to full volume
 	move.b	#zSampleLookup>>8,(SMPS_z80_ram+zSample1Volume).l
-
-	; Queue Sega PCM
-	st.b	(SMPS_z80_ram+zRequestFlag).l
-	move.b	#dSega_S2,(SMPS_z80_ram+zRequestSample1).l
 
 	SMPS_startZ80_safe
 
@@ -2022,23 +2074,6 @@ DoFadeIn:
 .locret:
 	rts
 ; End of function DoFadeIn
-
-; ===========================================================================
-
-SetDACVolume:
-	move.b	SMPS_Track.Volume(a5),d0
-	bpl.s	+		; $7F is the last valid volume
-	moveq	#$F<<3,d0	; cap at maximum value (minimum volume)
-+
-	lsr.b	#3,d0
-	ori.b	#zSampleLookup>>8,d0
-
-WriteDACVolume:
-	SMPS_stopZ80_safe
-	move.b	d0,(SMPS_z80_ram+zSample1Volume).l
-	SMPS_startZ80_safe
-	rts
-; End of function SetDACVolume
 
 ; ===========================================================================
 
@@ -3245,12 +3280,16 @@ cfSilenceStopTrack:
 ; ===========================================================================
 ; Sets a new DAC sample for play.
 ;
-; Has one parameter, the index (1-based) of the DAC sample to play.
+; Has one parameter, the index (1-based) of the DAC sample to play. (TODO - Wait, these are meant to be 1-based?)
 ;
 cfPlayDACSample:
+	; Prepare to send DAC request
+	move.b	(a4)+,d0
+	bsr.w	GetDACSampleMetadata
+	lea	(SMPS_z80_ram+zRequestSample1).l,a1
+
 	SMPS_stopZ80_safe
-	st.b	(SMPS_z80_ram+zRequestFlag).l
-	move.b	(a4)+,(SMPS_z80_ram+zRequestSample1).l
+	bsr.w	SendDACSampleRequest
 	; This is a DAC SFX: set to full volume
 	move.b	#zSampleLookup>>8,(SMPS_z80_ram+zSample1Volume).l
 	SMPS_startZ80_safe
