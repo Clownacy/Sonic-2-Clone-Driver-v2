@@ -56,7 +56,7 @@ DoIteration macro pSample2,pWriteByte
 
 	exx				; 4
 
-	; Convert sample to signed (will perform volume adjustment in the future as well)
+	; Convert sample to signed and perform volume adjustment
 	ld	c,a			; 4
 	ld	a,(bc)			; 7
 	; Total: 11
