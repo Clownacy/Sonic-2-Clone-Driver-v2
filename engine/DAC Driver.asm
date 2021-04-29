@@ -23,7 +23,7 @@ zmake68kPtr  function addr,zROMWindow+(addr&7FFFh)
 zmake68kBank function addr,(((addr&0FF8000h)/zROMWindow))
 
 ; The number of samples to batch at once
-zBatchSize:	equ 24
+zBatchSize:	equ 16
 
 ; B   - 80h
 ; C   - Sample advance remainder
@@ -97,8 +97,18 @@ DoIteration macro pSample2,pWriteByte
 	ex	af,af'			; 4
 	add	a,c			; 4
 	adc	hl,sp			; 15
+	jp	nc,.no_bankswitch	; 10
+	ld	sp,zStack
+    if pSample2=1
+	call	zSample2NextBank
+	ld	sp,(zSample2AdvanceQuotient)
+    else
+	call	zSample1NextBank
+	ld	sp,(zSample1AdvanceQuotient)
+    endif
+.no_bankswitch:
 	ex	af,af'			; 4
-	; Total 27
+	; Total 37
     endm
 	; So...
 	; mix = 0, write_byte = 0 - 78
@@ -389,40 +399,64 @@ zSample2AccumulatorRemainder = $+1
 
 zSample1Ended:
 	; Set the sample incrementers to 0
-	ld	c,a			; 4
-	ld	(zSample1AdvanceRemainder),a	; 13
-	ld	(zSample1AdvanceQuotient),a	; 13
-	; Point to a single silent sample
-	ld	hl,zMuteSample		; 10
-	; Set the current value to silence, to prevent audio popping
-	ld	a,80h			; 7
-	ret
+	ld	(zSample1AdvanceRemainder),a
+	ld	(zSample1AdvanceQuotient),a
+	jr	zSample2Ended.go
 
 zSample2Ended:
 	; Set the sample incrementers to 0
-	ld	c,a			; 4
-	ld	(zSample2AdvanceRemainder),a	; 13
-	ld	(zSample2AdvanceQuotient),a	; 13
+	ld	(zSample2AdvanceRemainder),a
+	ld	(zSample2AdvanceQuotient),a
+.go:
+	ld	c,a
 	; Point to a single silent sample
-	ld	hl,zMuteSample		; 10
+	ld	hl,zMuteSample
 	; Set the current value to silence, to prevent audio popping
-	ld	a,80h			; 7
+	ld	a,80h
+	ret
+
+zSample1NextBank:
+	ex	af,af'
+	push	hl
+	ld	hl,zSample1Bank
+	jr	zSample2NextBank.go
+
+zSample2NextBank:
+	ex	af,af'
+	push	hl
+	; Grab bank value and increment it
+	ld	hl,zSample2Bank
+.go:
+	inc	(hl)
+	ld	a,(hl)
+	; Switch to the new bank
+	ld	hl,zBankRegister	; 10
+	ld	(hl),a			; 7
+    rept 7
+	rra				; 4
+	ld	(hl),a			; 7
+    endm
+	ld	(hl),l			; 7
+	pop	hl
+	; HL has wrapped around to 0000h, so bump it back to the 68k window
+	set	7,h
+	ex	af,af'
 	ret
 
 zMuteSample:
 	db	80h	; The transistors that make up this particular byte of memory are going to hate me so much
 
-; Formula: 108 + 67 + ((78 + 100) * a) + 61 + 108 + 67 + ((95 + 117) * a) + 61 + 27
-; 499 + (390 * a)
+; Formula: 108 + 67 + ((88 + 110) * a) + 61 + 108 + 67 + ((105 + 127) * a) + 61 + 27
+; 499 + (430 * a)
 
 ; Target
 ;3579545 / 223 = 16052
 ; Current speed
-;(3579545 * 18 * 2) / (499 + (390 * 18)) = 17138
+;(3579545 * 16 * 2) / (499 + (430 * 16)) = 15523
 
 zPCMEntry macro pSampleRate,pStart
 	dw	zmake68kPtr(pStart)			; Pointer into bank
-	dw	(pSampleRate*100h)/17138		; Playback increment (8.8 format)
+	dw	(pSampleRate*100h)/15523		; Playback increment (8.8 format)
 	db	zmake68kBank(pStart)			; Bank value
     endm
 
