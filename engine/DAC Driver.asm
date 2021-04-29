@@ -362,25 +362,24 @@ zDoCommand:
 	jr	$
 	jr	.play_sample	; 01h
 	jr	.stop_channel	; 02h
-	jr	.resume_channel	; 03h
 
 .play_sample:
-	; Copy address low byte
+	; Copy address high byte
 	inc	hl
 	ld	a,(hl)
 	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode+1),a
 
-	; Copy address high byte
+	; Copy address low byte
 	inc	hl
 	ld	a,(hl)
 	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode),a
 
-	; Copy advance remainder
+	; Copy advance quotient
 	inc	hl
 	ld	a,(hl)
 	ld	(ix+zSample1AdvanceQuotient-zSample1SelfModifiedCode),a
 
-	; Copy advance quotient
+	; Copy advance remainder
 	inc	hl
 	ld	a,(hl)
 	ld	(ix+zSample1AdvanceRemainder-zSample1SelfModifiedCode),a
@@ -396,20 +395,16 @@ zDoCommand:
 	ret
 
 .stop_channel:
-	; Back-up the channel state to the unused bytes of the request struct
+	; Back-up the channel state to the request struct, allowing them to be resubmitted
+	; by a 'play sample' command, allowing the stopped sample to be resumed
+
+	; Copy address high byte
 	ld	a,(ix+zSample1Pointer-zSample1SelfModifiedCode+1)
 	inc	hl
 	ld	(hl),a
 
+	; Copy address low byte
 	ld	a,(ix+zSample1Pointer-zSample1SelfModifiedCode)
-	inc	hl
-	ld	(hl),a
-
-	ld	a,(ix+zSample1AdvanceQuotient-zSample1SelfModifiedCode)
-	inc	hl
-	ld	(hl),a
-
-	ld	a,(ix+zSample1AdvanceRemainder-zSample1SelfModifiedCode)
 	inc	hl
 	ld	(hl),a
 
@@ -422,26 +417,6 @@ zDoCommand:
 	; Stop the channel from advancing past said sample
 	ld	(ix+zSample1AdvanceQuotient-zSample1SelfModifiedCode),0
 	ld	(ix+zSample1AdvanceRemainder-zSample1SelfModifiedCode),0
-
-	ret
-
-.resume_channel:
-	; Restore the channel state from the unused bytes of the request struct
-	inc	hl
-	ld	a,(hl)
-	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode+1),a
-
-	inc	hl
-	ld	a,(hl)
-	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode),a
-
-	inc	hl
-	ld	a,(hl)
-	ld	(ix+zSample1AdvanceQuotient-zSample1SelfModifiedCode),a
-
-	inc	hl
-	ld	a,(hl)
-	ld	(ix+zSample1AdvanceRemainder-zSample1SelfModifiedCode),a
 
 	ret
 
