@@ -220,10 +220,10 @@ EchoedClapHitS3	IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic 3 & K & 3D/EchoedC
     endif
 
     if SMPS_SCDACSamples
-Beat		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Crackers/Beat.pcm"
-SnareSC		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Crackers/SnareSC.pcm"
-TimTom		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Crackers/TimTom.pcm"
-LetsGo		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Crackers/LetsGo.pcm"
-Hey		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Crackers/Hey.pcm"
+Beat		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic Crackers/Beat.pcm"
+SnareSC		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic Crackers/SnareSC.pcm"
+TimTom		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic Crackers/TimTom.pcm"
+LetsGo		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic Crackers/LetsGo.pcm"
+Hey		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/Sonic Crackers/Hey.pcm"
     endif
 	even
