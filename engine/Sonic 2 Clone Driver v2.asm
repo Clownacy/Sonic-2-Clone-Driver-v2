@@ -224,7 +224,7 @@ DACUpdateSample:
 	; Prepare to send DAC request
 	move.b	d2,d0
 	bsr.s	GetDACSampleMetadata
-	lea	(SMPS_z80_ram+zRequestSample1).l,a1
+	lea	(SMPS_z80_ram+zRequestChannel1).l,a1
 
 	SMPS_stopZ80_safe
 	bsr.s	SendDACSampleRequest
@@ -690,8 +690,8 @@ HandlePause:
 	moveq	#$02,d0	; 'Stop PCM channel' command
 	SMPS_stopZ80_safe
 	st.b	(SMPS_z80_ram+zRequestFlag).l
-	move.b  d0,(SMPS_z80_ram+zRequestSample1).l	; Pause PCM channel 1
-	move.b  d0,(SMPS_z80_ram+zRequestSample2).l	; Pause PCM channel 2
+	move.b  d0,(SMPS_z80_ram+zRequestChannel1).l	; Pause PCM channel 1
+	move.b  d0,(SMPS_z80_ram+zRequestChannel2).l	; Pause PCM channel 2
 	SMPS_startZ80_safe
 
 .locret:
@@ -735,8 +735,8 @@ HandleUnpause:
 	moveq	#$01,d0
 	SMPS_stopZ80_safe
 	st.b	(SMPS_z80_ram+zRequestFlag).l
-	move.b  d0,(SMPS_z80_ram+zRequestSample1).l	; Unpause PCM channel 1
-	move.b  d0,(SMPS_z80_ram+zRequestSample2).l	; Unpause PCM channel 2
+	move.b  d0,(SMPS_z80_ram+zRequestChannel1).l	; Unpause PCM channel 1
+	move.b  d0,(SMPS_z80_ram+zRequestChannel2).l	; Unpause PCM channel 2
 	SMPS_startZ80_safe
 
 	rts
@@ -874,7 +874,7 @@ PlaySegaSound:
 	; Prepare to send DAC request
 	move.b	#dSega_S2,d0
 	bsr.w	GetDACSampleMetadata
-	lea	(SMPS_z80_ram+zRequestSample1).l,a1
+	lea	(SMPS_z80_ram+zRequestChannel1).l,a1
 
 	SMPS_stopZ80_safe
 
@@ -1864,8 +1864,8 @@ StopAllSound:
 	moveq	#$02,d0
 	SMPS_stopZ80_safe
 	st.b	(SMPS_z80_ram+zRequestFlag).l
-	move.b	d0,(SMPS_z80_ram+zRequestSample1).l	; Stop PCM channel 1
-	move.b	d0,(SMPS_z80_ram+zRequestSample2).l	; Stop PCM channel 2
+	move.b	d0,(SMPS_z80_ram+zRequestChannel1).l	; Stop PCM channel 1
+	move.b	d0,(SMPS_z80_ram+zRequestChannel2).l	; Stop PCM channel 2
 	SMPS_startZ80_safe
 
     if SMPS_EnablePWM
@@ -3287,7 +3287,7 @@ cfPlayDACSample:
 	; Prepare to send DAC request
 	move.b	(a4)+,d0
 	bsr.w	GetDACSampleMetadata
-	lea	(SMPS_z80_ram+zRequestSample2).l,a1
+	lea	(SMPS_z80_ram+zRequestChannel2).l,a1
 
 	SMPS_stopZ80_safe
 	bsr.w	SendDACSampleRequest

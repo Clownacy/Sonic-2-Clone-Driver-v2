@@ -6,8 +6,8 @@
 zMixBuffer:		equ 0000h	; 100h bytes long - yes, it overwrites the driver's init code (it's not like it will be needed after startup)
 zSampleLookup:		equ 1000h
 zRequestFlag:		equ 0FFFh	; A flag to say when samples are pending
-zRequestSample1:	equ 0FF0h	; 6 bytes long
-zRequestSample2:	equ 0FF6h	; 6 bytes long
+zRequestChannel1:	equ 0FF0h	; 6 bytes long
+zRequestChannel2:	equ 0FF6h	; 6 bytes long
 zStack:			equ 0FF0h
 zVariablesStart:	equ 0FE0h	; Safety net to catch code overlapping variables
 
@@ -338,14 +338,14 @@ zSample2AccumulatorRemainder = $+1
 
 	; Check if there's a command for channel 1 waiting
 	ld	ix,zSample1SelfModifiedCode
-	ld	hl,zRequestSample1
+	ld	hl,zRequestChannel1
 	ld	a,(hl)
 	or	a
 	call	nz,zDoCommand
 
 	; Check if there's a command for channel 2 waiting
 	ld	ix,zSample2SelfModifiedCode
-	ld	hl,zRequestSample2
+	ld	hl,zRequestChannel2
 	ld	a,(hl)
 	or	a
 	call	nz,zDoCommand

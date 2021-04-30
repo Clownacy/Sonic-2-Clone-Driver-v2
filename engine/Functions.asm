@@ -75,7 +75,7 @@ SMPS_PlayDACSample:
 
 	SMPS_stopZ80_safe
 	st.b	(SMPS_z80_ram+zRequestFlag).l
-	move.b	#$02,(SMPS_z80_ram+zRequestSample2).l	; $02 is the 'stop sample' command
+	move.b	#$02,(SMPS_z80_ram+zRequestChannel2).l	; $02 is the 'stop sample' command
 	SMPS_startZ80_safe
 	
 	rts
@@ -85,7 +85,7 @@ SMPS_PlayDACSample:
 
 	; Prepare to send DAC request
 	jsr	(GetDACSampleMetadata).l
-	lea	(SMPS_z80_ram+zRequestSample2).l,a1
+	lea	(SMPS_z80_ram+zRequestChannel2).l,a1
 
 	SMPS_stopZ80_safe
 	jsr	(SendDACSampleRequest).l
