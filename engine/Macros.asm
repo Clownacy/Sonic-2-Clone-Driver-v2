@@ -87,16 +87,16 @@ SMPS_waitYM macro target
 	endm
 
 ; ---------------------------------------------------------------------------
-; pause music
+; Pauses the driver: music, SFX, everything
 ; ---------------------------------------------------------------------------
-SMPS_PauseMusic macro
+SMPS_Pause macro
 	move.b	#1,(Clone_Driver_RAM+SMPS_RAM.f_pause).w
 	endm
 
 ; ---------------------------------------------------------------------------
-; unpause music
+; Unpauses the driver
 ; ---------------------------------------------------------------------------
-SMPS_UnpauseMusic macro
+SMPS_Unpause macro
 	move.b	#$80,(Clone_Driver_RAM+SMPS_RAM.f_pause).w
 	endm
 
