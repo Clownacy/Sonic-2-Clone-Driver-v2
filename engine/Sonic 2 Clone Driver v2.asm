@@ -3287,12 +3287,12 @@ cfPlayDACSample:
 	; Prepare to send DAC request
 	move.b	(a4)+,d0
 	bsr.w	GetDACSampleMetadata
-	lea	(SMPS_z80_ram+zRequestChannel2).l,a1
+	lea	(SMPS_z80_ram+zRequestChannel1).l,a1
 
 	SMPS_stopZ80_safe
 	bsr.w	SendDACSampleRequest
 	; This is a DAC SFX: set to full volume
-	move.b	#zSampleLookup>>8,(SMPS_z80_ram+zSample2Volume).l
+	move.b	#zSampleLookup>>8,(SMPS_z80_ram+zSample1Volume).l
 	SMPS_startZ80_safe
 	rts
 ; ===========================================================================
