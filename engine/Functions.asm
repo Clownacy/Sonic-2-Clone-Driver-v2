@@ -1,5 +1,5 @@
 ; ---------------------------------------------------------------------------
-; Load DAC driver (Mega PCM)
+; Load DAC driver (custom two-channel driver)
 ; ---------------------------------------------------------------------------
 ; SoundDriverLoad: JmpTo_SoundDriverLoad 
 SMPS_LoadDACDriver:
