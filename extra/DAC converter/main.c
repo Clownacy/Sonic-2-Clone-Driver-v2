@@ -5,6 +5,8 @@
 
 int main(int argc, char **argv)
 {
+	int exit_value = EXIT_SUCCESS;
+
 	if (argc < 2)
 	{
 		fputs("This tool converts PCM samples to the format required by Clownacy's DAC driver.\n"
@@ -21,7 +23,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		char *in_filename = argv[1];
+		const char *in_filename = argv[1];
 		char *out_filename;
 
 		if (argc < 3)
@@ -34,10 +36,10 @@ int main(int argc, char **argv)
 			if (out_filename == NULL)
 				exit(EXIT_FAILURE); // Screw this
 
-			char *path_separator1 = strrchr(in_filename, '/');
-			char *path_separator2 = strrchr(in_filename, '\\');
+			const char *path_separator1 = strrchr(in_filename, '/');
+			const char *path_separator2 = strrchr(in_filename, '\\');
 
-			char *file_extension = path_separator1 > path_separator2 ? path_separator1 : path_separator2;
+			const char *file_extension = path_separator1 > path_separator2 ? path_separator1 : path_separator2;
 
 			if (file_extension == NULL)
 				file_extension = in_filename;
@@ -64,6 +66,7 @@ int main(int argc, char **argv)
 		if (in_file == NULL)
 		{
 			fprintf(stderr, "Error! Could not open input file \"%s\"\n", in_filename);
+			exit_value = EXIT_FAILURE;
 		}
 		else
 		{
@@ -72,6 +75,7 @@ int main(int argc, char **argv)
 			if (out_file == NULL)
 			{
 				fprintf(stderr, "Error! Could not open output file \"%s\"\n", out_filename);
+				exit_value = EXIT_FAILURE;
 			}
 			else
 			{
@@ -94,5 +98,5 @@ int main(int argc, char **argv)
 			free(out_filename);
 	}
 
-	return EXIT_SUCCESS;
+	return exit_value;
 }
