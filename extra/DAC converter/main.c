@@ -4,15 +4,21 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef DPCM_MODE
+ #define TARGET_FORMAT "DPCM"
+#else
+ #define TARGET_FORMAT "PCM"
+#endif
+
 int main(int argc, char **argv)
 {
 	int exit_value = EXIT_SUCCESS;
 
 	if (argc < 2)
 	{
-		fputs("This tool converts PCM samples to the format required by Clownacy's DAC driver.\n"
+		fputs("This tool converts " TARGET_FORMAT " samples to the format required by Clownacy's DAC driver.\n"
 		      "\n"
-		      "Drag and drop your PCM files onto this program and converted copies will be\n"
+		      "Drag and drop your " TARGET_FORMAT " files onto this program and converted copies will be\n"
 		      "created.\n"
 		      "\n"
 		      "You can also use the command line: pass the input filenames as arguments, and if\n"
@@ -65,13 +71,14 @@ int main(int argc, char **argv)
 			{
 				const char *in_filename = argv[i];
 
-				if (in_filename[0] != '-' && strcmp(in_filename, out_filename))
+				if (in_filename[0] != '-' && (!out_filename_defined || strcmp(in_filename, out_filename)))
 				{
-					// If output filename is undefined, then set it to the input filename with " (converted)" appended to it
+					// If output filename is undefined, then set it to the input filename with
+					//  " (converted)" appended to it, and the file extension changed to '.pcm'.
 					if (!out_filename_defined)
 					{
 						// String-processing in C is HELL
-						const char suffix[] = " (converted)";
+						const char suffix[] = " (converted).pcm";
 
 						out_filename = malloc(strlen(in_filename) + sizeof(suffix));
 
@@ -96,10 +103,7 @@ int main(int argc, char **argv)
 						memcpy(filename_pointer, in_filename, file_extension - in_filename);
 						filename_pointer += file_extension - in_filename;
 
-						memcpy(filename_pointer, suffix, sizeof(suffix) - 1);
-						filename_pointer += sizeof(suffix) - 1;
-
-						strcpy(filename_pointer, file_extension);
+						memcpy(filename_pointer, suffix, sizeof(suffix));
 					}
 
 					FILE *in_file = fopen(in_filename, "rb");
@@ -120,6 +124,24 @@ int main(int argc, char **argv)
 						}
 						else
 						{
+						#ifdef DPCM_MODE
+							unsigned char accumulator = 0x80;
+
+							int byte;
+							while ((byte = fgetc(in_file)) != EOF)
+							{
+								const signed char delta_array[] = {0, 1, 2, 4, 8, 0x10, 0x20, 0x40, -0x80, -1, -2, -4, -8, -0x10, -0x20, -0x40};
+
+								const unsigned char nibble1 = (byte >> 8) & 0xF;
+								const unsigned char nibble2 = byte & 0xF;
+
+								accumulator += delta_array[nibble1];
+								fputc(accumulator == 0 ? 1 : accumulator, out_file);
+
+								accumulator += delta_array[nibble2];
+								fputc(accumulator == 0 ? 1 : accumulator, out_file);
+							}
+						#else
 							int byte;
 							while ((byte = fgetc(in_file)) != EOF)
 							{
@@ -128,6 +150,7 @@ int main(int argc, char **argv)
 
 								fputc(byte, out_file);
 							}
+						#endif
 
 							fclose(out_file);
 						}
