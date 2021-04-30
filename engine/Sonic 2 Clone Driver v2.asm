@@ -872,7 +872,7 @@ PlaySegaSound:
 	bsr.w	WriteFMII
 
 	; Prepare to send DAC request
-	move.b	#dSega_S2,d0
+	move.b	#dSega,d0
 	bsr.w	GetDACSampleMetadata
 	lea	(SMPS_z80_ram+zRequestChannel1).l,a1
 
