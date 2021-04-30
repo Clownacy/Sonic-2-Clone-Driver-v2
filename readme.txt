@@ -45,7 +45,6 @@ Flamewing
 - Pointing out S3K's additional PSG frequencies
 
 Vladikcomper
-- Mega PCM
 - A fix involving 68k interrupts
 
 Gardeguey
