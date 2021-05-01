@@ -49,15 +49,59 @@ SMPS_UpdateDriver:
 	; system, the drowning theme would play at 50fps speed, or 'PAL speed'
 	; this code is part of that feature's replication
 	btst	#6,(Graphics_Flags).w					; is this a PAL console?
-	beq.s	.updatemusictracks					; if not, branch
+	beq.s	.skip_double_update					; if not, branch
 	btst	#f_force_pal_tempo,SMPS_RAM.variables.bitfield2(a6)	; is this song forced to play slow on PAL consoles?
-	bne.s	.updatemusictracks					; if so, skip the double-update
+	bne.s	.skip_double_update					; if so, skip the double-update
 	subq.b	#1,SMPS_RAM.variables.v_pal_audio_countdown(a6)		; subtract 1 from the PAL countdown
-	bne.s	.updatemusictracks					; if the PAL countdown is not 0, we are not ready to double-update, branch
+	bne.s	.skip_double_update					; if the PAL countdown is not 0, we are not ready to double-update, branch
 	move.b	#5,SMPS_RAM.variables.v_pal_audio_countdown(a6)		; if the countdown is now at 0, reset the counter...
-	bset	#f_doubleupdate,SMPS_RAM.variables.bitfield2(a6)	; ...and then set the double-update flag
+	bsr.s	UpdateMusic
+.skip_double_update:
+	bsr.s	UpdateMusic
 
-.updatemusictracks:
+;.updatesfxtracks:
+	moveq	#SMPS_SFX_FM_TRACK_COUNT-1,d7	; SFX only has access to 3 FM tracks
+; loc_71C04:
+.sfxfmloop:
+	lea	SMPS_Track.len(a5),a5
+	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
+	bpl.s	.sfxfmnext			; Branch if not
+	bsr.w	FMUpdateTrack
+; loc_71C10:
+.sfxfmnext:
+	dbf	d7,.sfxfmloop
+
+	moveq	#SMPS_SFX_PSG_TRACK_COUNT-1,d7	; SFX only has access to 3 PSG tracks
+; loc_71C16:
+.sfxpsgloop:
+	lea	SMPS_Track.len(a5),a5
+	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
+	bpl.s	.sfxpsgnext			; Branch of not
+	bsr.w	PSGUpdateTrack
+; loc_71C22:
+.sfxpsgnext:
+	dbf	d7,.sfxpsgloop
+
+    if SMPS_EnableSpecSFX
+	lea	SMPS_Track.len(a5),a5
+	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
+	bpl.s	.specfmdone			; Branch if not
+	bsr.w	FMUpdateTrack
+; loc_71C38:
+.specfmdone:
+	lea	SMPS_Track.len(a5),a5
+	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing
+	bpl.s	.locret				; Branch if not
+	bra.w	PSGUpdateTrack
+.locret:
+    endif
+	rts
+; End of function UpdateMusic
+
+
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+UpdateMusic:
 	lea	SMPS_RAM.v_music_dac_track(a6),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is DAC track playing?
 	bpl.s	.dacdone				; Branch if not
@@ -102,48 +146,7 @@ SMPS_UpdateDriver:
 	; This has been moved to after the UpdateTrack calls to prevent
 	; tracks being delayed on their first frame of playback, causing
 	; hanging notes.
-	bsr.w	TempoWait
-
-	bclr	#f_doubleupdate,SMPS_RAM.variables.bitfield2(a6)	; Clear double-update flag
-	bne.s	.updatemusictracks					; Was the flag set? If so, double-update
-
-;.updatesfxtracks:
-	moveq	#SMPS_SFX_FM_TRACK_COUNT-1,d7	; SFX only has access to 3 FM tracks
-; loc_71C04:
-.sfxfmloop:
-	lea	SMPS_Track.len(a5),a5
-	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
-	bpl.s	.sfxfmnext			; Branch if not
-	bsr.w	FMUpdateTrack
-; loc_71C10:
-.sfxfmnext:
-	dbf	d7,.sfxfmloop
-
-	moveq	#SMPS_SFX_PSG_TRACK_COUNT-1,d7	; SFX only has access to 3 PSG tracks
-; loc_71C16:
-.sfxpsgloop:
-	lea	SMPS_Track.len(a5),a5
-	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
-	bpl.s	.sfxpsgnext			; Branch of not
-	bsr.w	PSGUpdateTrack
-; loc_71C22:
-.sfxpsgnext:
-	dbf	d7,.sfxpsgloop
-
-    if SMPS_EnableSpecSFX
-	lea	SMPS_Track.len(a5),a5
-	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
-	bpl.s	.specfmdone			; Branch if not
-	bsr.w	FMUpdateTrack
-; loc_71C38:
-.specfmdone:
-	lea	SMPS_Track.len(a5),a5
-	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing
-	bpl.s	.locret				; Branch if not
-	bra.w	PSGUpdateTrack
-.locret:
-    endif
-	rts
+	bra.w	TempoWait
 ; End of function UpdateMusic
 
 
