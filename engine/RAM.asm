@@ -29,22 +29,24 @@ SMPS_Track STRUCT DOTS
 	NoteTimeoutMaster:	;ds.b 1		; FM/PSG only
 	ModulationPtr:		ds.l 1		; FM/PSG only
 
-    if SMPS_EnableModulationEnvelopes
-	ModulationCtrl:		ds.b 1		; FM/PSG only
-	ModEnvIndex:		ds.b 1		; FM/PSG only
-	ModEnvSens:		ds.b 1		; FM/PSG only
-				ds.b 1		; padding to ensure an even address
-    endif
-
 	ModulationWait:		ds.b 1		; FM/PSG only
 	ModulationSpeed:	ds.b 1		; FM/PSG only
 	ModulationDelta:	ds.b 1		; FM/PSG only
 	ModulationSteps:	ds.b 1		; FM/PSG only
 	ModulationVal:		ds.w 1		; FM/PSG only
-	Detune:			ds.b 1		; FM/PSG only
-	PSGNoise:		ds.b 1		; PSG only
 
-	VoicePtr:		ds.l 1		; This used to be FM SFX only (well, technically all SFX tracks), but now music and Special SFX use it too
+    if SMPS_EnableModulationEnvelopes
+	ModulationCtrl:		ds.b 1		; FM/PSG only
+	ModEnvIndex:		ds.b 1		; FM/PSG only
+	ModEnvSens:		ds.b 1		; FM/PSG only
+    else
+				ds.b 1		; padding to ensure an even address
+    endif
+
+	Detune:			ds.b 1		; FM/PSG only
+
+	PSGNoise:		;ds.b 1		; PSG only
+	VoicePtr:		ds.l 1		; FM only - This used to be FM SFX only (well, technically all SFX tracks), but now music and Special SFX use it too
 
 	LoopCounters:		ds.l 3		; All tracks
 	GoSubStack:				; All tracks
