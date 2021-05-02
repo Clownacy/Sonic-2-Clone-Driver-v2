@@ -8,6 +8,8 @@ zSampleLookup:		equ 1000h
 zRequestFlag:		equ 0FFFh	; A flag to say when samples are pending
 zRequestChannel1:	equ 0FF0h	; 6 bytes long
 zRequestChannel2:	equ 0FF6h	; 6 bytes long
+zSample1Bank:		equ 0FFCh
+zSample2Bank:		equ 0FFDh
 zStack:			equ 0FF0h
 zVariablesStart:	equ 0FE0h	; Safety net to catch code overlapping variables
 
@@ -16,7 +18,7 @@ zYM2612_A0:	equ 4000h
 zYM2612_D0:	equ 4001h
 zYM2612_A1:	equ 4002h
 zYM2612_D1:	equ 4003h
-zBankRegister:	equ 6000h
+zBankRegister:	equ 6001h
 zROMWindow:	equ 8000h
 
 zmake68kPtr  function addr,zROMWindow+(addr&7FFFh)
@@ -228,17 +230,12 @@ zVolumeDeltas:
 zPCMLoop:
 zSample1SelfModifiedCode:
 	; Bankswitch to sample 1
-zSample1Bank = $+1
-	ld	a,0			; 7
-
 	ld	hl,zBankRegister	; 10
-	ld	(hl),a			; 7
-    rept 7
-	rra				; 4
-	ld	(hl),a			; 7
+zSample1Bankswitch:
+    rept 9
+	ld	(hl),h			; 7
     endm
-	ld	(hl),l			; 7
-	; Total: 108
+	; Total: 73
 
 	; Bootstrap sample 1
 zSample1Pointer = $+1
@@ -281,17 +278,12 @@ zSample1AccumulatorRemainder = $+1
 
 zSample2SelfModifiedCode:
 	; Bankswitch to sample 2
-zSample2Bank = $+1
-	ld	a,0			; 7
-
 	ld	hl,zBankRegister	; 10
-	ld	(hl),a			; 7
-    rept 7
-	rra				; 4
-	ld	(hl),a			; 7
+zSample2Bankswitch:
+    rept 9
+	ld	(hl),h			; 7
     endm
-	ld	(hl),l			; 7
-	; Total: 108
+	; Total: 73
 
 	; Bootstrap sample 2
 zSample2Pointer = $+1
@@ -347,8 +339,12 @@ zSample2AccumulatorRemainder = $+1
 
 	ld	sp,zStack
 
+	push	bc
+	push	de
+
 	; Check if there's a command for channel 1 waiting
 	ld	ix,zSample1SelfModifiedCode
+	ld	de,zSample1Bank
 	ld	hl,zRequestChannel1
 	ld	a,(hl)
 	or	a
@@ -356,10 +352,14 @@ zSample2AccumulatorRemainder = $+1
 
 	; Check if there's a command for channel 2 waiting
 	ld	ix,zSample2SelfModifiedCode
+	ld	de,zSample2Bank
 	ld	hl,zRequestChannel2
 	ld	a,(hl)
 	or	a
 	call	nz,zDoCommand
+
+	pop	de
+	pop	bc
 
 	jp	zPCMLoop
 
@@ -395,15 +395,15 @@ zDoCommand:
 	ld	a,(hl)
 	ld	(ix+zSample1AdvanceRemainder-zSample1SelfModifiedCode),a
 
-	; Copy Bank
-	inc	hl
-	ld	a,(hl)
-	ld	(ix+zSample1Bank-zSample1SelfModifiedCode),a
-
 	; Clear advance accumulator remainder
 	ld	(ix+zSample1AccumulatorRemainder-zSample1SelfModifiedCode),0
 
-	ret
+	; Copy bank
+	inc	hl
+	ld	a,(hl)
+	ld	(de),a
+
+	jr	zChangeBankswitch
 
 .stop_channel:
 	; Back-up the channel state to the request struct, allowing them to be resubmitted
@@ -453,6 +453,7 @@ zSample1NextBank:
 	ex	af,af'
 	push	hl
 	ld	hl,zSample1Bank
+	ld	ix,zSample1SelfModifiedCode
 	jr	zSample2NextBank.go
 
 zSample2NextBank:
@@ -460,33 +461,52 @@ zSample2NextBank:
 	push	hl
 	; Grab bank value and increment it
 	ld	hl,zSample2Bank
+	ld	ix,zSample2SelfModifiedCode
 .go:
+	push	bc
 	inc	(hl)
 	ld	a,(hl)
+	call	zChangeBankswitch
 	; Switch to the new bank
+	ld	a,(hl)
 	ld	hl,zBankRegister	; 10
 	ld	(hl),a			; 7
-    rept 7
+	ld	b,7
+.loop:
 	rra				; 4
 	ld	(hl),a			; 7
-    endm
+	djnz	.loop
+
 	ld	(hl),l			; 7
+	pop	bc
 	pop	hl
 	; HL has wrapped around to 0000h, so bump it back to the 68k window
 	set	7,h
 	ex	af,af'
 	ret
 
+zChangeBankswitch:
+	ld	b,8
+.loop:
+	ld	(ix+zSample1Bankswitch-zSample1SelfModifiedCode),74h	; ld (hl),h
+	rrca
+	jr	nc,.skip
+	ld	(ix+zSample1Bankswitch-zSample1SelfModifiedCode),75h	; ld (hl),l
+.skip:
+	inc	ix
+	djnz	.loop
+	ret
+
 zMuteSample:
 	db	80h	; The transistors that make up this particular byte of memory are going to hate me so much
 
-; Formula: 108 + 67 + ((74 + 96) * (a - 1)) + (74 + 110) + 61 + 108 + 67 + ((91 + 113) * (a - 1)) + (91 + 127) + 61 + 27
-; 901 + (374 * a - 1)
+; Formula: 73 + 67 + ((74 + 96) * (a - 1)) + (74 + 110) + 61 + 73 + 67 + ((91 + 113) * (a - 1)) + (91 + 127) + 61 + 27
+; 831 + (374 * a - 1)
 
 ; Target
 ;3579545 / 223 = 16052
 ; Current speed
-;(3579545 * 16 * 2) / (901 + (374 * 15)) = 17593
+;(3579545 * 16 * 2) / (831 + (374 * 15)) = 17784
 
 
 
