@@ -430,8 +430,9 @@ zDoCommand:
 	ld	(ix+zSample1Pointer-zSample1SelfModifiedCode),(zMuteSample>>8)&0FFh
 
 	; Stop the channel from advancing past said sample
-	ld	(ix+zSample1AdvanceQuotient-zSample1SelfModifiedCode),0
-	ld	(ix+zSample1AdvanceRemainder-zSample1SelfModifiedCode),0
+	xor	a
+	ld	(ix+zSample1AdvanceQuotient-zSample1SelfModifiedCode),a
+	ld	(ix+zSample1AdvanceRemainder-zSample1SelfModifiedCode),a
 
 	ret
 
