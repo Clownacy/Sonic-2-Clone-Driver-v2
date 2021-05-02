@@ -346,17 +346,13 @@ zSample2AccumulatorRemainder = $+1
 	ld	ix,zSample1SelfModifiedCode
 	ld	de,zSample1Bank
 	ld	hl,zRequestChannel1
-	ld	a,(hl)
-	or	a
-	call	nz,zDoCommand
+	call	zDoCommand
 
 	; Check if there's a command for channel 2 waiting
 	ld	ix,zSample2SelfModifiedCode
 	ld	de,zSample2Bank
 	ld	hl,zRequestChannel2
-	ld	a,(hl)
-	or	a
-	call	nz,zDoCommand
+	call	zDoCommand
 
 	pop	de
 	pop	bc
@@ -364,6 +360,9 @@ zSample2AccumulatorRemainder = $+1
 	jp	zPCMLoop
 
 zDoCommand:
+	ld	a,(hl)
+	or	a
+	ret	z
 	ld	(hl),0
 
 	dec	a
