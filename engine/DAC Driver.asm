@@ -475,11 +475,10 @@ zSample2NextBank:
 	; Switch to the new bank
 	ld	a,(hl)
 	ld	hl,zBankRegister
-	ld	(hl),a
-	ld	b,7
+	ld	b,8
 .loop:
-	rra
 	ld	(hl),a
+	rra
 	djnz	.loop
 
 	ld	(hl),l
