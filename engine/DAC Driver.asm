@@ -180,7 +180,7 @@ zEntryPoint:
 -	push	bc
 	ld	d,h
 	ld	e,l		; de = destination
-	ld	b,80h		; Index counter
+	ld	b,80h-1		; Index counter
 
 -	dec	de
 	ld	a,(hl)	; Get value
@@ -189,15 +189,14 @@ zEntryPoint:
 	inc	hl
 	djnz	-
 
+	; Skip the value at index 00h, leaving it as 0 (silence).
+	; This is because 00h in the PCM data marks the end of the sample, and when it's
+	; interpreted as a sample, it needs to be silent to prevent strange sounds.
+	inc	hl
+
 	; Next volume LUT
 	ld	bc,80h
 	add	hl,bc
-
-	; Set the values at index 00h to 0 (silence). This is because 00h in the PCM
-	; data marks the end of the sample, and when it's interpreted as a sample, it
-	; needs to be silent to prevent strange sounds.
-	xor	a
-	ld	(de),a
 
 	pop	bc
 	djnz	--
