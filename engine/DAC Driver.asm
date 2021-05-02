@@ -495,7 +495,7 @@ zChangeBankswitch:
 	ld	(ix+zSample1Bankswitch-zSample1SelfModifiedCode),74h	; ld (hl),h
 	rrca
 	jr	nc,.skip
-	ld	(ix+zSample1Bankswitch-zSample1SelfModifiedCode),75h	; ld (hl),l
+	inc	(ix+zSample1Bankswitch-zSample1SelfModifiedCode)	; ld (hl),l
 .skip:
 	inc	ix
 	djnz	.loop
