@@ -36,7 +36,7 @@ zBatchSize:	equ 16
 ; DE' - Mixer read pointer
 ; HL' - Mixer write pointer
 
-DoIteration macro pSample2,pWriteByte,pCheckForEnd
+zDoIteration macro pSample2,pWriteByte,pCheckForEnd
 	; Read byte from cartridge
 	ld	a,(hl)			; 7
     if pCheckForEnd=1
@@ -113,14 +113,14 @@ DoIteration macro pSample2,pWriteByte,pCheckForEnd
 	; Total 37
     endm
 	; So...
-	;DoIteration 0,0,0 ; 74
-	;DoIteration 0,1,0 ; 96 - Write occurs around 48 cycles in
-	;DoIteration 0,0,1 ; 88
-	;DoIteration 0,1,1 ; 110 - Write occurs around 62 cycles in
-	;DoIteration 1,0,0 ; 91
-	;DoIteration 1,1,0 ; 113 - Write occurs around 65 cycles in
-	;DoIteration 1,0,1 ; 105
-	;DoIteration 1,1,1 ; 127 - Write occurs around 79 cycles in
+	;zDoIteration 0,0,0 ; 74
+	;zDoIteration 0,1,0 ; 96 - Write occurs around 48 cycles in
+	;zDoIteration 0,0,1 ; 88
+	;zDoIteration 0,1,1 ; 110 - Write occurs around 62 cycles in
+	;zDoIteration 1,0,0 ; 91
+	;zDoIteration 1,1,0 ; 113 - Write occurs around 65 cycles in
+	;zDoIteration 1,0,1 ; 105
+	;zDoIteration 1,1,1 ; 127 - Write occurs around 79 cycles in
 
 
 
@@ -264,11 +264,11 @@ zSample1AccumulatorRemainder = $+1
 
 	; Process sample 1
     rept zBatchSize-1
-	DoIteration 0,0,0 ; 64
-	DoIteration 0,1,0 ; 86 - Write occurs around 48 cycles in
+	zDoIteration 0,0,0 ; 64
+	zDoIteration 0,1,0 ; 86 - Write occurs around 48 cycles in
     endm
-	DoIteration 0,0,0 ; 64
-	DoIteration 0,1,1 ; 100 - Write occurs around 62 cycles in
+	zDoIteration 0,0,0 ; 64
+	zDoIteration 0,1,1 ; 100 - Write occurs around 62 cycles in
 
 	; Save sample 1 data
 	ld	(zSample1Pointer),hl		; 16
@@ -317,11 +317,11 @@ zSample2AccumulatorRemainder = $+1
 
 	; Process sample 2
     rept zBatchSize-1
-	DoIteration 1,0,0 ; 81
-	DoIteration 1,1,0 ; 103 - Write occurs around 65 cycles in
+	zDoIteration 1,0,0 ; 81
+	zDoIteration 1,1,0 ; 103 - Write occurs around 65 cycles in
     endm
-	DoIteration 1,0,0 ; 81
-	DoIteration 1,1,1 ; 117 - Write occurs around 79 cycles in
+	zDoIteration 1,0,0 ; 81
+	zDoIteration 1,1,1 ; 117 - Write occurs around 79 cycles in
 
 	; Save sample 2 data
 	ld	(zSample2Pointer),hl		; 16
