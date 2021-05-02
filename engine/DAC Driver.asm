@@ -474,15 +474,15 @@ zSample2NextBank:
 	call	zChangeBankswitch
 	; Switch to the new bank
 	ld	a,(hl)
-	ld	hl,zBankRegister	; 10
-	ld	(hl),a			; 7
+	ld	hl,zBankRegister
+	ld	(hl),a
 	ld	b,7
 .loop:
-	rra				; 4
-	ld	(hl),a			; 7
+	rra
+	ld	(hl),a
 	djnz	.loop
 
-	ld	(hl),l			; 7
+	ld	(hl),l
 	pop	bc
 	pop	hl
 	; HL has wrapped around to 0000h, so bump it back to the 68k window
