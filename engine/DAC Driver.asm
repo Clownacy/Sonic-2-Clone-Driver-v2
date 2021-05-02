@@ -361,11 +361,10 @@ zSample2AccumulatorRemainder = $+1
 
 zDoCommand:
 	ld	a,(hl)
-	or	a
-	ret	z
+	dec	a
+	ret	m
 	ld	(hl),0
 
-	dec	a
 	add	a,a
 	ld	(.jump_offset),a
 .jump_offset = $+1
