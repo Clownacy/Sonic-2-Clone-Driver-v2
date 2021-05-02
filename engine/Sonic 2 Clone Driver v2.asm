@@ -96,7 +96,7 @@ SMPS_UpdateDriver:
 .locret:
     endif
 	rts
-; End of function UpdateMusic
+; End of function SMPS_UpdateDriver
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
