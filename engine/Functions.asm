@@ -74,7 +74,7 @@ SMPS_PlayDACSample:
 	bne.s	.play_sample
 
 	SMPS_stopZ80_safe
-	st.b	(SMPS_z80_ram+zRequestFlag).l
+	move.b	#$37,(SMPS_z80_ram+zRequestFlag).l	; 'scf' instruction
 	move.b	#$02,(SMPS_z80_ram+zRequestChannel2).l	; $02 is the 'stop sample' command
 	SMPS_startZ80_safe
 	

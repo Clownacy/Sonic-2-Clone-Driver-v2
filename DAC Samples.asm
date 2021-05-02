@@ -4,7 +4,7 @@
 
 DACMetadata macro pSampleRate,pStart
 	dc.w	(pStart&$7FFF)|$8000		; Pointer into Z80->68k bank
-	dc.w	(pSampleRate*$100)/17784	; Playback increment (8.8 format) - 17784 is the output sample rate of the DAC driver
+	dc.w	(pSampleRate*$100)/17820	; Playback increment (8.8 format) - 17820 is the output sample rate of the DAC driver
 	dc.b	(pStart&$FF8000)/$8000		; Z80->68k bank index (TODO - tweak this to allow access to the 32X address range?)
     endm
 

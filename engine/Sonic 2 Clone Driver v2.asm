@@ -278,7 +278,7 @@ SendDACSampleRequest:
 	move.b	(a0)+,(a1)+
 	move.b	(a0)+,(a1)+
 	move.b	(a0),(a1)
-	st.b	(SMPS_z80_ram+zRequestFlag).l
+	move.b	#$37,(SMPS_z80_ram+zRequestFlag).l	; 'scf' instruction
 
 	rts
 ; End of function SetDACVolume
@@ -692,7 +692,7 @@ HandlePause:
 
 	moveq	#$02,d0	; 'Stop PCM channel' command
 	SMPS_stopZ80_safe
-	st.b	(SMPS_z80_ram+zRequestFlag).l
+	move.b	#$37,(SMPS_z80_ram+zRequestFlag).l	; 'scf' instruction
 	move.b  d0,(SMPS_z80_ram+zRequestChannel1).l	; Pause PCM channel 1
 	move.b  d0,(SMPS_z80_ram+zRequestChannel2).l	; Pause PCM channel 2
 	SMPS_startZ80_safe
@@ -737,7 +737,7 @@ HandleUnpause:
 
 	moveq	#$01,d0
 	SMPS_stopZ80_safe
-	st.b	(SMPS_z80_ram+zRequestFlag).l
+	move.b	#$37,(SMPS_z80_ram+zRequestFlag).l	; 'scf' instruction
 	move.b  d0,(SMPS_z80_ram+zRequestChannel1).l	; Unpause PCM channel 1
 	move.b  d0,(SMPS_z80_ram+zRequestChannel2).l	; Unpause PCM channel 2
 	SMPS_startZ80_safe
@@ -1866,7 +1866,7 @@ StopAllSound:
 
 	moveq	#$02,d0
 	SMPS_stopZ80_safe
-	st.b	(SMPS_z80_ram+zRequestFlag).l
+	move.b	#$37,(SMPS_z80_ram+zRequestFlag).l	; 'scf' instruction
 	move.b	d0,(SMPS_z80_ram+zRequestChannel1).l	; Stop PCM channel 1
 	move.b	d0,(SMPS_z80_ram+zRequestChannel2).l	; Stop PCM channel 2
 	SMPS_startZ80_safe

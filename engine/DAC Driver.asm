@@ -5,7 +5,6 @@
 
 zMixBuffer:		equ 0000h	; 100h bytes long - yes, it overwrites the driver's init code (it's not like it will be needed after startup)
 zSampleLookup:		equ 1000h
-zRequestFlag:		equ 0FFFh	; A flag to say when requests are pending
 zRequestChannel1:	equ 0FF0h	; 6 bytes long
 zRequestChannel2:	equ 0FF6h	; 6 bytes long
 zSample1Bank:		equ 0FFCh
@@ -325,16 +324,16 @@ zSample2AccumulatorRemainder = $+1
 	; Total: 61
 
 	; Loop if there aren't any commands to process
-	ld	a,(zRequestFlag)	; 13
-	or	a			; 4
-	jp	z,zPCMLoop		; 10
+zRequestFlag:
+	or	a			; 4  ; This instruction is self-modified code, and can also be a 'scf'
+	jp	nc,zPCMLoop		; 10
 	; Total: 27
 
 	;;;;;;;;;;;;;;;;;;;
 	; COMMAND HANDLER ;
 	;;;;;;;;;;;;;;;;;;;
 
-	xor	a
+	ld	a,0B7h	; or a
 	ld	(zRequestFlag),a
 
 	ld	sp,zStack
@@ -504,13 +503,13 @@ zChangeBankswitch:
 zMuteSample:
 	db	80h	; The transistors that make up this particular byte of memory are going to hate me so much
 
-; Formula: 73 + 67 + ((74 + 96) * (a - 1)) + (74 + 110) + 61 + 73 + 67 + ((91 + 113) * (a - 1)) + (91 + 127) + 61 + 27
-; 831 + (374 * a - 1)
+; Formula: 73 + 67 + ((74 + 96) * (a - 1)) + (74 + 110) + 61 + 73 + 67 + ((91 + 113) * (a - 1)) + (91 + 127) + 61 + 14
+; 818 + (374 * a - 1)
 
 ; Target
 ;3579545 / 223 = 16052
 ; Current speed
-;(3579545 * 16 * 2) / (831 + (374 * 15)) = 17784
+;(3579545 * 16 * 2) / (818 + (374 * 15)) = 17820
 
 
 
