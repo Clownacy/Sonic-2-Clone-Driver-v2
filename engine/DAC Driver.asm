@@ -417,6 +417,13 @@ zDoCommand:
 	inc	hl
 	ld	(hl),a
 
+	; Copy bank
+	ld	a,(de)
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	(hl),a
+
 	; Now stop the channel
 
 	; Point channel to silent sample
