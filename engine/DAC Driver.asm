@@ -451,7 +451,7 @@ zSample2Ended:
 	; Point to a single silent sample
 	ld	hl,zMuteSample
 	; Set the current value to silence, to prevent audio popping
-	ld	a,80h
+	ld	a,b	; b is 80h
 	ret
 
 zSample1NextBank:
