@@ -5,7 +5,7 @@
 
 zMixBuffer:		equ 0000h	; 100h bytes long - yes, it overwrites the driver's init code (it's not like it will be needed after startup)
 zSampleLookup:		equ 1000h
-zRequestFlag:		equ 0FFFh	; A flag to say when samples are pending
+zRequestFlag:		equ 0FFFh	; A flag to say when requests are pending
 zRequestChannel1:	equ 0FF0h	; 6 bytes long
 zRequestChannel2:	equ 0FF6h	; 6 bytes long
 zSample1Bank:		equ 0FFCh
