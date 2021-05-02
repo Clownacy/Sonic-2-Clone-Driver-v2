@@ -4,7 +4,7 @@
 
 DACMetadata macro pSampleRate,pStart
 	dc.w	(pStart&$7FFF)|$8000		; Pointer into Z80->68k bank
-	dc.w	(pSampleRate*$100)/15523	; Playback increment (8.8 format) - 15523 is the output sample rate of the DAC driver
+	dc.w	(pSampleRate*$100)/17593	; Playback increment (8.8 format) - 15523 is the output sample rate of the DAC driver
 	dc.b	(pStart&$FF8000)/$8000		; Z80->68k bank index (TODO - tweak this to allow access to the 32X address range?)
     endm
 
@@ -139,7 +139,9 @@ ptr_dacE0:	DACMetadata	16270, SegaPCM		; $E0	- Sega!
 IncludeDAC macro Path,{INTLABEL}
 __LABEL__ label *
 	binclude Path
-	dc.b	0,0,0,0 ; 0 marks the end of the sample - four is more than enough (one or two should be fine)
+    rept 16*3	; zBatchSize * 3
+	dc.b	0 ; 0 marks the end of the sample, but the DAC driver only checks every 16 iterations (multiply it by three for high playback speeds)
+    endm
 	endm
 
 SegaPCM		IncludeDAC "Sonic-2-Clone-Driver-v2/DAC/SegaPCM.pcm"

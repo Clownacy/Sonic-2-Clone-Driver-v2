@@ -36,12 +36,13 @@ zBatchSize:	equ 16
 ; DE' - Mixer read pointer
 ; HL' - Mixer write pointer
 
-DoIteration macro pSample2,pWriteByte
+DoIteration macro pSample2,pWriteByte,pCheckForEnd
 	; Read byte from cartridge
 	ld	a,(hl)			; 7
+    if pCheckForEnd=1
 	or	a			; 4
 	jp	nz,.sample_not_done	; 10
-	; Total: 21
+	; Total: 14
 
 	; If we've reached the end of the sample, then mute the channel
 	ld	sp,zStack
@@ -53,6 +54,7 @@ DoIteration macro pSample2,pWriteByte
 	ld	sp,0
 
 .sample_not_done:
+    endif
 
 	exx				; 4
 
@@ -111,14 +113,14 @@ DoIteration macro pSample2,pWriteByte
 	; Total 37
     endm
 	; So...
-	; mix = 0, write_byte = 0 - 78
-	; mix = 0, write_byte = 1 - 100 - Write occurs around 62 cycles in
-	; mix = 1, write_byte = 0 - 95
-	; mix = 1, write_byte = 1 - 117 - Write occurs around 79 cycles in
-	;DoIteration 0,0 ; 78
-	;DoIteration 0,1 ; 100 - Write occurs around 62 cycles in
-	;DoIteration 1,0 ; 95
-	;DoIteration 1,1 ; 117 - Write occurs around 79 cycles in
+	;DoIteration 0,0,0 ; 74
+	;DoIteration 0,1,0 ; 96 - Write occurs around 48 cycles in
+	;DoIteration 0,0,1 ; 88
+	;DoIteration 0,1,1 ; 110 - Write occurs around 62 cycles in
+	;DoIteration 1,0,0 ; 91
+	;DoIteration 1,1,0 ; 113 - Write occurs around 65 cycles in
+	;DoIteration 1,0,1 ; 105
+	;DoIteration 1,1,1 ; 127 - Write occurs around 79 cycles in
 
 
 
@@ -191,6 +193,12 @@ zEntryPoint:
 	ld	bc,80h
 	add	hl,bc
 
+	; Set the values at index 00h to 0 (silence). This is because 00h in the PCM
+	; data marks the end of the sample, and when it's interpreted as a sample, it
+	; needs to be silent to prevent strange sounds.
+	xor	a
+	ld	(de),a
+
 	pop	bc
 	djnz	--
 
@@ -255,10 +263,12 @@ zSample1AccumulatorRemainder = $+1
 	; Total: 67
 
 	; Process sample 1
-    rept zBatchSize
-	DoIteration 0,0 ; 78
-	DoIteration 0,1 ; 100 - Write occurs around 62 cycles in
+    rept zBatchSize-1
+	DoIteration 0,0,0 ; 64
+	DoIteration 0,1,0 ; 86 - Write occurs around 48 cycles in
     endm
+	DoIteration 0,0,0 ; 64
+	DoIteration 0,1,1 ; 100 - Write occurs around 62 cycles in
 
 	; Save sample 1 data
 	ld	(zSample1Pointer),hl		; 16
@@ -306,10 +316,12 @@ zSample2AccumulatorRemainder = $+1
 	; Total: 67
 
 	; Process sample 2
-    rept zBatchSize
-	DoIteration 1,0 ; 95
-	DoIteration 1,1 ; 117 - Write occurs around 79 cycles in
+    rept zBatchSize-1
+	DoIteration 1,0,0 ; 81
+	DoIteration 1,1,0 ; 103 - Write occurs around 65 cycles in
     endm
+	DoIteration 1,0,0 ; 81
+	DoIteration 1,1,1 ; 117 - Write occurs around 79 cycles in
 
 	; Save sample 2 data
 	ld	(zSample2Pointer),hl		; 16
@@ -469,13 +481,13 @@ zSample2NextBank:
 zMuteSample:
 	db	80h	; The transistors that make up this particular byte of memory are going to hate me so much
 
-; Formula: 108 + 67 + ((88 + 110) * a) + 61 + 108 + 67 + ((105 + 127) * a) + 61 + 27
-; 499 + (430 * a)
+; Formula: 108 + 67 + ((74 + 96) * (a - 1)) + (74 + 110) + 61 + 108 + 67 + ((91 + 113) * (a - 1)) + (91 + 127) + 61 + 27
+; 901 + (374 * a - 1)
 
 ; Target
 ;3579545 / 223 = 16052
 ; Current speed
-;(3579545 * 16 * 2) / (499 + (430 * 16)) = 15523
+;(3579545 * 16 * 2) / (901 + (374 * 15)) = 17593
 
 
 
