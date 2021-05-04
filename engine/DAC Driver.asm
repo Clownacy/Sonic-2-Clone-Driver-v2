@@ -24,7 +24,7 @@ zmake68kPtr  function addr,zROMWindow+(addr&7FFFh)
 zmake68kBank function addr,(((addr&0FF8000h)/zROMWindow))
 
 ; The number of samples to batch at once
-zBatchSize:	equ 16
+zBatchSize:	equ 32
 
 ; The number of cycles between zOutputSample macros
 zCyclesPerSample:	equ 177
@@ -317,7 +317,7 @@ zSample1Volume = $+1
 	; Total: 57
 
 	; Process sample 1
-    rept (zBatchSize*2)-1
+    rept zBatchSize-1
 	zDoIteration 0,0 ; 74
     endm
 	zDoIteration 0,1 ; 88
@@ -367,7 +367,7 @@ zSample2Volume = $+1
 	ld	b,zSampleLookup>>8	; 7
 
 	ld	a,l		; 4
-	sub	zBatchSize*2	; 7  ; Move back to start of this batch's mixer data
+	sub	zBatchSize	; 7  ; Move back to start of this batch's mixer data
 	ld	l,a		; 4
 	exx			; 4
 
@@ -376,7 +376,7 @@ zSample2Volume = $+1
 ;	zAddCycles 4,0 ; TODO - get rid of me soon
 
 	; Process sample 2
-    rept (zBatchSize*2)-1
+    rept zBatchSize-1
 	zDoIteration 1,0 ; 91
     endm
 	zDoIteration 1,1 ; 105
@@ -573,8 +573,8 @@ zChangeBankswitch:
 zMuteSample:
 	db	80h	; The transistors that make up this particular byte of memory are going to hate me so much
 
-zDriverSampleRate = (3579545 * zBatchSize * 2) / (zTotalCycles + zBatchSize * 2 * 30)	; 30 is the number of cycles per zOutputSample
-zActualCyclesPerSample = zTotalCycles / (zBatchSize * 2)
+zDriverSampleRate = (3579545 * zBatchSize) / (zTotalCycles + zBatchSize * 30)	; 30 is the number of cycles per zOutputSample
+zActualCyclesPerSample = zTotalCycles / zBatchSize
 
 	if MOMPASS==2
 		OUTRADIX 10
