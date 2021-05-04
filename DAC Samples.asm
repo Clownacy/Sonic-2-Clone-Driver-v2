@@ -139,8 +139,8 @@ ptr_dacE0:	DACMetadata	16270, SegaPCM		; $E0	- Sega!
 IncludeDAC macro Path,{INTLABEL}
 __LABEL__ label *
 	binclude Path
-    rept 16*3	; zBatchSize * 3
-	dc.b	0 ; 0 marks the end of the sample, but the DAC driver only checks every 16 iterations (multiply it by three for high playback speeds)
+    rept 16*2*2	; zBatchSize * 2 * 2
+	dc.b	0 ; 0 marks the end of the sample, but the DAC driver only checks every 32 iterations (multiply it by two for high playback speeds)
     endm
 	endm
 
