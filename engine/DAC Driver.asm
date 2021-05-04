@@ -547,7 +547,7 @@ zSample2NextBank:
 	rra
 	djnz	.loop
 
-	ld	(hl),l
+	ld	(hl),h
 	pop	bc
 	pop	hl
 	; HL has wrapped around to 0000h, so bump it back to the 68k window
