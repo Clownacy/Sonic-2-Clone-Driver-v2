@@ -110,7 +110,7 @@ zDoIteration macro pSample2,pCheckForEnd
     else
 	call	zSample1Ended
     endif
-	ld	sp,0
+	ld	sp,0	; Clear sample advance quotient
 
 .sample_not_done:
     endif
@@ -399,37 +399,46 @@ zRequestFlag:
 	; COMMAND HANDLER ;
 	;;;;;;;;;;;;;;;;;;;
 
+	; Effectively clear the "request flag"
 	ld	a,0B7h	; or a
 	ld	(zRequestFlag),a
 
+	; We need a working stack for some 'call' instructions
 	ld	sp,zStack
 
+	; Back up registers that we'll be overwriting
 	push	bc
 	push	de
 
-	; Check if there's a command for channel 1 waiting
+	; Process the waiting channel 1 command
 	ld	ix,zSample1SelfModifiedCode
 	ld	de,zSample1Bank
 	ld	hl,zRequestChannel1
 	call	zDoCommand
 
-	; Check if there's a command for channel 2 waiting
+	; Process the waiting channel 2 command
 	ld	ix,zSample2SelfModifiedCode
 	ld	de,zSample2Bank
 	ld	hl,zRequestChannel2
 	call	zDoCommand
 
+	; Restore registers
 	pop	de
 	pop	bc
 
+	; Return to the PCM playback loop
 	jp	zPCMLoop
 
 zDoCommand:
+	; Quit if there is no command waiting
 	ld	a,(hl)
 	dec	a
 	ret	m
+
+	; Clear command byte
 	ld	(hl),0
 
+	; Jump to the appropriate command handler
 	add	a,a
 	ld	(.jump_offset),a
 .jump_offset = $+1
@@ -438,6 +447,8 @@ zDoCommand:
 	jr	.stop_channel	; 02h
 
 .play_sample:
+	; Copy data from the request struct to the channel's state variables
+
 	; Copy address high byte
 	inc	hl
 	ld	a,(hl)
@@ -466,6 +477,7 @@ zDoCommand:
 	ld	a,(hl)
 	ld	(de),a
 
+	; Self-modify the bankswitch code to suit this new bank value
 	jr	zChangeBankswitch
 
 .stop_channel:
@@ -513,6 +525,7 @@ zSample2Ended:
 	ld	(zSample2AdvanceRemainder),a
 	ld	(zSample2AdvanceQuotient),a
 .go:
+	; Clear sample advance remainder
 	ld	c,a
 	; Point to a single silent sample
 	ld	hl,zMuteSample
@@ -536,6 +549,7 @@ zSample2NextBank:
 .go:
 	push	bc
 	inc	(hl)
+	; Self-modify the bankswitch code to suit the new bank value
 	ld	a,(hl)
 	call	zChangeBankswitch
 	; Switch to the new bank
@@ -548,6 +562,7 @@ zSample2NextBank:
 	djnz	.loop
 
 	ld	(hl),h
+	; Restore backed-up registers
 	pop	bc
 	pop	hl
 	; HL has wrapped around to 0000h, so bump it back to the 68k window
