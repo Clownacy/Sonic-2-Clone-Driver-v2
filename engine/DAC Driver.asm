@@ -91,9 +91,9 @@ zOutputSample macro pAltRegs
 ; Macro to read a single sample from ROM
 zDoIteration macro pSample2,pCheckForEnd
     if pCheckForEnd=1
-	zCheckOutputSample 0,15+14
+	zCheckOutputSample 0,7+14+4+4
     else
-	zCheckOutputSample 0,15
+	zCheckOutputSample 0,7+4+4
     endif
 
 	; Read byte from cartridge
@@ -121,9 +121,9 @@ zDoIteration macro pSample2,pCheckForEnd
 	ld	c,a			; 4
 
     if pSample2=1
-	zCheckOutputSample 1,31
+	zCheckOutputSample 1,7+17+7
     else
-	zCheckOutputSample 1,14
+	zCheckOutputSample 1,7+7
     endif
 
 	ld	a,(bc)			; 7
