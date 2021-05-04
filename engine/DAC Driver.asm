@@ -37,6 +37,32 @@ zBatchSize:	equ 16
 ; DE' - Mixer read pointer
 ; HL' - Mixer write pointer
 
+zNextSampleCycle := 0
+zTotalCycles := 0
+
+zAddCycles macro pCyclesToNextMacro, pAltRegs
+	; Get current delta to upcoming sample output
+zCurrentCycleDelta := zNextSampleCycle - zTotalCycles
+    if zCurrentCycleDelta < 0
+zCurrentCycleDelta := -zCurrentCycleDelta
+    endif
+
+	; Get next delta to upcoming sample output
+zNextCycleDelta := zNextSampleCycle - (zTotalCycles + pCyclesToNextMacro)
+    if zNextCycleDelta < 0
+zNextCycleDelta := -zNextCycleDelta
+    endif
+
+	; If the next delta is further than the current one,
+	; then output a sample now
+    if zCurrentCycleDelta < zNextCycleDelta
+zNextSampleCycle := zNextSampleCycle + 177	; Move onto the next sample output
+	zOutputSample pAltRegs
+    endif
+
+zTotalCycles := zTotalCycles + pCyclesToNextMacro
+    endm
+
 zOutputSample macro pAltRegs
     if pAltRegs=0
 	exx
@@ -68,9 +94,8 @@ zOutputSample macro pAltRegs
 ; 5 - 37 cycles (7+4+4+7+7+4+4)
 
 zDoIteration macro pSample2,pWriteByte,pCheckForEnd,pOutputIndex
-    if pOutputIndex=1
-	zOutputSample 0	; 0 cycles
-    endif
+	zAddCycles 15,0
+
 	; Read byte from cartridge
 	ld	a,(hl)			; 7
     if pCheckForEnd=1
@@ -95,8 +120,10 @@ zDoIteration macro pSample2,pWriteByte,pCheckForEnd,pOutputIndex
 	; Convert sample to signed and perform volume adjustment
 	ld	c,a			; 4
 
-    if pOutputIndex=2
-	zOutputSample 1	; 15 cycles
+    if pSample2=1
+	zAddCycles 31,1
+    else
+	zAddCycles 14,1
     endif
 
 	ld	a,(bc)			; 7
@@ -115,22 +142,16 @@ zDoIteration macro pSample2,pWriteByte,pCheckForEnd,pOutputIndex
 	; Write sample to mix buffer
 	ld	(hl),a			; 7
 
-    if pOutputIndex=3
-	zOutputSample 1	; 29 cycles
-    endif
+	zAddCycles 4,1
 
 	inc	l			; 4
 	; Total: 11
 
-    if pOutputIndex=4
-	zOutputSample 1	; 33 cycles
-    endif
+	zAddCycles 4,1
 
 	exx				; 4
 
-    if pOutputIndex=5
-	zOutputSample 0	; 37 cycles
-    endif
+	zAddCycles 37,0
 
 	; Increment pointer to next sample value
 	; (performs nearest-neighbour resampling)
@@ -261,6 +282,8 @@ zVolumeDeltas:
 
 	align 100h
 zPCMLoop:
+	zAddCycles 73+57,0
+
 zSample1SelfModifiedCode:
 	; Bankswitch to sample 1
 	ld	hl,zBankRegister	; 10
@@ -291,71 +314,12 @@ zSample1Volume = $+1
 	; Total: 57
 
 	; Process sample 1
-	; 130
+    rept (zBatchSize*2)-1
 	zDoIteration 0,0,0,5 ; 74
-	; 204
-	zDoIteration 0,0,0,0 ; 74
-	; 278
-	zDoIteration 0,0,0,0 ; 74
-	; 352
-	zDoIteration 0,0,0,1 ; 74
-	; 426
-	zDoIteration 0,0,0,0 ; 74
-	; 500
-	zDoIteration 0,0,0,3 ; 74
-	; 574
-	zDoIteration 0,0,0,0 ; 74
-	; 648
-	zDoIteration 0,0,0,0 ; 74
-	; 722
-	zDoIteration 0,0,0,1 ; 74
-	; 796
-	zDoIteration 0,0,0,0 ; 74
-	; 870
-	zDoIteration 0,0,0,2 ; 74
-	; 944
-	zDoIteration 0,0,0,0 ; 74
-	; 1018
-	zDoIteration 0,0,0,5 ; 74
-	; 1092
-	zDoIteration 0,0,0,0 ; 74
-	; 1166
-	zDoIteration 0,0,0,0 ; 74
-	; 1240
-	zDoIteration 0,0,0,1 ; 74
-	; 1314
-	zDoIteration 0,0,0,0 ; 74
-	; 1388
-	zDoIteration 0,0,0,3 ; 74
-	; 1462
-	zDoIteration 0,0,0,0 ; 74
-	; 1536
-	zDoIteration 0,0,0,0 ; 74
-	; 1610
-	zDoIteration 0,0,0,1 ; 74
-	; 1684
-	zDoIteration 0,0,0,0 ; 74
-	; 1758
-	zDoIteration 0,0,0,2 ; 74
-	; 1832
-	zDoIteration 0,0,0,0 ; 74
-	; 1906
-	zDoIteration 0,0,0,5 ; 74
-	; 1980
-	zDoIteration 0,0,0,0 ; 74
-	; 2054
-	zDoIteration 0,0,0,0 ; 74
-	; 2128
-	zDoIteration 0,0,0,1 ; 74
-	; 2202
-	zDoIteration 0,0,0,0 ; 74
-	; 2276
-	zDoIteration 0,0,0,3 ; 74
-	; 2350
-	zDoIteration 0,0,0,0 ; 74
-	; 2424
+    endm
 	zDoIteration 0,0,1,5 ; 88
-	; 2512
+
+	zAddCycles 37,0
 
 	; Save sample 1 data
 	ld	(zSample1Pointer),hl		; 16
@@ -363,6 +327,8 @@ zSample1Volume = $+1
 	ld	(zSample1AccumulatorRemainder),a	; 13
 	ex	af,af'				; 4
 	; Total: 37
+
+	zAddCycles 73+72,0
 
 	; 2549
 
@@ -386,7 +352,7 @@ zSample2AdvanceQuotient = $+1
 	ld	sp,0		; 10 ; Sample advance quotient
 
 	; 2649
-	;zOutputSample 0 ; Moved below until these offsets are un-hardcoded
+	;zAddCycles XXXX,0 ; Moved below until these offsets are un-hardcoded
 
 	ex	af,af'		; 4
 zSample2AccumulatorRemainder = $+1
@@ -404,74 +370,15 @@ zSample2Volume = $+1
 
 	; Total: 72
 
-	zOutputSample 0 ; TODO - get rid of me soon
+;	zAddCycles 4,0 ; TODO - get rid of me soon
 
 	; Process sample 2
-	; 2694
+    rept (zBatchSize*2)-1
 	zDoIteration 1,0,0,0 ; 91
-	; 2785
-	zDoIteration 1,0,0,3 ; 91
-	; 2876
-	zDoIteration 1,0,0,0 ; 91
-	; 2967
-	zDoIteration 1,0,0,3 ; 91
-	; 3058
-	zDoIteration 1,0,0,0 ; 91
-	; 3149
-	zDoIteration 1,0,0,3 ; 91
-	; 3240
-	zDoIteration 1,0,0,0 ; 91
-	; 3331
-	zDoIteration 1,0,0,3 ; 91
-	; 3422
-	zDoIteration 1,0,0,0 ; 91
-	; 3513
-	zDoIteration 1,0,0,2 ; 91
-	; 3604
-	zDoIteration 1,0,0,0 ; 91
-	; 3695
-	zDoIteration 1,0,0,2 ; 91
-	; 3786
-	zDoIteration 1,0,0,0 ; 91
-	; 3877
-	zDoIteration 1,0,0,2 ; 91
-	; 3968
-	zDoIteration 1,0,0,0 ; 91
-	; 4059
-	zDoIteration 1,0,0,2 ; 91
-	; 4150
-	zDoIteration 1,0,0,0 ; 91
-	; 4241
-	zDoIteration 1,0,0,1 ; 91
-	; 4332
-	zDoIteration 1,0,0,0 ; 91
-	; 4423
-	zDoIteration 1,0,0,1 ; 91
-	; 4514
-	zDoIteration 1,0,0,0 ; 91
-	; 4605
-	zDoIteration 1,0,0,1 ; 91
-	; 4696
-	zDoIteration 1,0,0,0 ; 91
-	; 4787
-	zDoIteration 1,0,0,1 ; 91
-	; 4878
-	zDoIteration 1,0,0,0 ; 91
-	; 4969
-	zDoIteration 1,0,0,1 ; 91
-	; 5060
-	zDoIteration 1,0,0,0 ; 91
-	; 5151
-	zDoIteration 1,0,0,1 ; 91
-	; 5242
-	zDoIteration 1,0,0,5 ; 91
-	; 5333
-	zDoIteration 1,0,0,0 ; 91
-	; 5424
-	zDoIteration 1,0,0,5 ; 91
-	; 5515
+    endm
 	zDoIteration 1,0,1,0 ; 105
-	; 5620
+
+	zAddCycles 37,0
 
 	; Save sample 2 data
 	ld	(zSample2Pointer),hl		; 16
@@ -480,7 +387,7 @@ zSample2Volume = $+1
 	ex	af,af'				; 4
 	; Total: 37
 
-	zOutputSample 0
+	zAddCycles 14,0
 
 	; Loop if there aren't any commands to process
 zRequestFlag:
