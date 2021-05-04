@@ -3419,16 +3419,16 @@ cfChanFMCommand:
 	include "Sonic-2-Clone-Driver-v2/PSG Volume Envelopes.asm"
 
 ; ---------------------------------------------------------------------------
-; DAC samples
-; ---------------------------------------------------------------------------
-	include "Sonic-2-Clone-Driver-v2/DAC Samples.asm"	
-
-; ---------------------------------------------------------------------------
 ; DAC driver
 ; ---------------------------------------------------------------------------
 DACDriver:
 	include "Sonic-2-Clone-Driver-v2/engine/DAC Driver.asm"
 	!org (DACDriver+Size_of_DAC_driver_guess)
+
+; ---------------------------------------------------------------------------
+; DAC samples
+; ---------------------------------------------------------------------------
+	include "Sonic-2-Clone-Driver-v2/DAC Samples.asm"
 
 	dc.b	$43,$6C,$6F,$77,$6E,$61,$63,$79
 	even
