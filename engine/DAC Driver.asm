@@ -26,6 +26,9 @@ zmake68kBank function addr,(((addr&0FF8000h)/zROMWindow))
 ; The number of samples to batch at once
 zBatchSize:	equ 16
 
+; The number of cycles between zOutputSample macros
+zCyclesPerSample:	equ 177
+
 ; B   - 80h
 ; C   - Sample advance remainder
 ; DE  - YM2612 port D0
@@ -36,10 +39,6 @@ zBatchSize:	equ 16
 ; BC' - Sample lookup table pointer
 ; DE' - Mixer read pointer
 ; HL' - Mixer write pointer
-
-zNextSampleCycle := 0
-zTotalCycles := 0
-zCyclesPerSample = 177
 
 ; This is a macro that inserts code to output a sample when a certain number
 ; of cycles have passed. The 'pCyclesToNextMacro' parameter is the number of
@@ -67,6 +66,7 @@ zNextSampleCycle := zNextSampleCycle + zCyclesPerSample	; Move onto the next sam
 zTotalCycles := zTotalCycles + pCyclesToNextMacro
     endm
 
+; Macro to output a single sample
 zOutputSample macro pAltRegs
     if pAltRegs=0
 	exx
@@ -75,28 +75,20 @@ zOutputSample macro pAltRegs
 	; Read sample from mix buffer
 	ld	a,(de)			; 7
 	inc	e			; 4
-	; Total: 11
 
 	exx				; 4
 
 	; Convert sample to unsigned and send it to DAC
 	xor	b			; 4
 	ld	(de),a			; 7
-	; Total: 11
 
     if pAltRegs=1
 	exx
     endif
+	; Total: 30 cycles
     endm
 
-; 1 - 0 cycles
-; pCheckForEnd adds 14 cycles from here on
-; 2 - 15 cycles (7+4+4)
-; pSample2 adds 17 cycles from here on
-; 3 - 29 cycles (7+4+4+7+7)
-; 4 - 33 cycles (7+4+4+7+7+4)
-; 5 - 37 cycles (7+4+4+7+7+4+4)
-
+; Macro to read a single sample from ROM
 zDoIteration macro pSample2,pCheckForEnd
     if pCheckForEnd=1
 	zAddCycles 15+14,0
@@ -180,10 +172,10 @@ zDoIteration macro pSample2,pCheckForEnd
 	; Total 37
     endm
 	; So...
-	;zDoIteration 0,0 ; 74
-	;zDoIteration 0,1 ; 88
-	;zDoIteration 1,0 ; 91
-	;zDoIteration 1,1 ; 105
+	;zDoIteration 0,0 ; 74 cycles
+	;zDoIteration 0,1 ; 88 cycles
+	;zDoIteration 1,0 ; 91 cycles
+	;zDoIteration 1,1 ; 105 cycles
 
 
 
@@ -290,6 +282,9 @@ zVolumeDeltas:
 
 	align 100h
 zPCMLoop:
+
+zNextSampleCycle := 0
+zTotalCycles := 0
 	zAddCycles 73+57,0
 
 zSample1SelfModifiedCode:
