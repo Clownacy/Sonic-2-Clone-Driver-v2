@@ -481,7 +481,7 @@ zDoCommand:
 	jr	zChangeBankswitch
 
 .stop_channel:
-	; Back-up the channel state to the request struct, allowing them to be resubmitted
+	; Back-up the channel state to the request struct, allowing it to be resubmitted
 	; by a 'play sample' command, allowing the stopped sample to be resumed
 
 	; Copy address high byte
