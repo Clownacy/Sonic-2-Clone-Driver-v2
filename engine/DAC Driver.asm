@@ -589,10 +589,32 @@ zDriverSampleRate = (3579545 * zBatchSize) / (zTotalCycles + zBatchSize * 30)	; 
 zActualCyclesPerSample = zTotalCycles / zBatchSize
 
 	if MOMPASS==2
+		; Make sure both channels' self-modified code is aligned
+		if zSample1Bankswitch - zSample1SelfModifiedCode <> zSample2Bankswitch - zSample2SelfModifiedCode
+			error "zSample1Bankswitch and zSample2Bankswitch are misaligned"
+		endif
+		if zSample1Pointer - zSample1SelfModifiedCode <> zSample2Pointer - zSample2SelfModifiedCode
+			error "zSample1Pointer and zSample2Pointer are misaligned"
+		endif
+		if zSample1AdvanceRemainder - zSample1SelfModifiedCode <> zSample2AdvanceRemainder - zSample2SelfModifiedCode
+			error "zSample1AdvanceRemainder and zSample2AdvanceRemainder are misaligned"
+		endif
+		if zSample1AdvanceQuotient - zSample1SelfModifiedCode <> zSample2AdvanceQuotient - zSample2SelfModifiedCode
+			error "zSample1AdvanceQuotient and zSample2AdvanceQuotient are misaligned"
+		endif
+		if zSample1AccumulatorRemainder - zSample1SelfModifiedCode <> zSample2AccumulatorRemainder - zSample2SelfModifiedCode
+			error "zSample1AccumulatorRemainder and zSample2AccumulatorRemainder are misaligned"
+		endif
+		if zSample1Volume - zSample1SelfModifiedCode <> zSample2Volume - zSample2SelfModifiedCode
+			error "zSample1Volume and zSample2Volume are misaligned"
+		endif
+
+		; Make sure the zCyclesPerSample value is correct
 		if zCyclesPerSample<>zActualCyclesPerSample
 			warning "You need to set zCyclesPerSample to \{zActualCyclesPerSample}h"
 		endif
 
+		; Make sure the driver's code isn't too big
 		if $ > zVariablesStart
 			fatal "The driver is too big; the maximum size it can take is \{zVariablesStart}h. It currently takes \{$}h bytes. You won't be able to use this thing."
 		;else
