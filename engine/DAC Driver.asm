@@ -39,7 +39,11 @@ zBatchSize:	equ 16
 
 zNextSampleCycle := 0
 zTotalCycles := 0
+zCyclesPerSample = 177
 
+; This is a macro that inserts code to output a sample when a certain number
+; of cycles have passed. The 'pCyclesToNextMacro' parameter is the number of
+; cycles until the next zAddCycles macro.
 zAddCycles macro pCyclesToNextMacro, pAltRegs
 	; Get current delta to upcoming sample output
 zCurrentCycleDelta := zNextSampleCycle - zTotalCycles
@@ -56,7 +60,7 @@ zNextCycleDelta := -zNextCycleDelta
 	; If the next delta is further than the current one,
 	; then output a sample now
     if zCurrentCycleDelta < zNextCycleDelta
-zNextSampleCycle := zNextSampleCycle + 177	; Move onto the next sample output
+zNextSampleCycle := zNextSampleCycle + zCyclesPerSample	; Move onto the next sample output
 	zOutputSample pAltRegs
     endif
 
@@ -94,7 +98,11 @@ zOutputSample macro pAltRegs
 ; 5 - 37 cycles (7+4+4+7+7+4+4)
 
 zDoIteration macro pSample2,pCheckForEnd
+    if pCheckForEnd=1
+	zAddCycles 15+14,0
+    else
 	zAddCycles 15,0
+    endif
 
 	; Read byte from cartridge
 	ld	a,(hl)			; 7
@@ -569,6 +577,17 @@ zChangeBankswitch:
 
 zMuteSample:
 	db	80h	; The transistors that make up this particular byte of memory are going to hate me so much
+
+zDriverSampleRate = (3579545 * zBatchSize * 2) / (zTotalCycles + zBatchSize * 2 * 30)
+zActualCyclesPerSample = 3579545 / ((3579545 * zBatchSize * 2) / zTotalCycles)
+
+	if MOMPASS==2
+		OUTRADIX 10
+		if zCyclesPerSample<>zActualCyclesPerSample
+			warning "You need to set zCyclesPerSample to \{zActualCyclesPerSample}"
+		endif
+		OUTRADIX 16
+	endif
 
 ; Formula: 73 + 57 + ((74 + 96) * (a - 1)) + (74 + 110) + 37 + 73 + 72 + ((91 + 113) * (a - 1)) + (91 + 127) + 37 + 14
 ; 765 + (374 * a - 1)
