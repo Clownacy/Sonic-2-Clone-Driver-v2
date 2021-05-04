@@ -27,7 +27,7 @@ zmake68kBank function addr,(((addr&0FF8000h)/zROMWindow))
 zBatchSize:	equ 32
 
 ; The number of cycles between zOutputSample macros
-zCyclesPerSample:	equ 177
+zCyclesPerSample:	equ 176
 
 ; B   - 80h
 ; C   - Sample advance remainder
@@ -57,7 +57,8 @@ zNextCycleDelta := -zNextCycleDelta
     endif
 
 	; If the sample is due closer to this macro than the next, then output a sample now
-    if zCurrentCycleDelta < zNextCycleDelta
+    if (zCurrentCycleDelta < zNextCycleDelta) && (zSamplesWritten < zBatchSize)
+zSamplesWritten := zSamplesWritten + 1
 zNextSampleCycle := zNextSampleCycle + zCyclesPerSample	; Move onto the next sample output
 	zOutputSample pAltRegs	; Output a sample
     endif
@@ -284,7 +285,8 @@ zPCMLoop:
 
 zNextSampleCycle := 0
 zTotalCycles := 0
-	zCheckOutputSample 0,73+57
+zSamplesWritten := 0
+	zCheckOutputSample 0,73+53
 
 zSample1SelfModifiedCode:
 	; Bankswitch to sample 1
@@ -303,7 +305,6 @@ zSample1AdvanceRemainder = $+1
 zSample1AdvanceQuotient = $+1
 	ld	sp,0		; 10 ; Sample advance quotient
 
-	ex	af,af'		; 4
 zSample1AccumulatorRemainder = $+1
 	ld	a,0		; 7 ; Sample advance accumulator remainder
 	ex	af,af'		; 4
@@ -313,7 +314,7 @@ zSample1Volume = $+1
 	ld	b,zSampleLookup>>8	; 7
 	exx			; 4
 
-	; Total: 57
+	; Total: 53
 
 	; Process sample 1
     rept zBatchSize-1
@@ -321,16 +322,15 @@ zSample1Volume = $+1
     endm
 	zDoIteration 0,1 ; 88
 
-	zCheckOutputSample 0,37
+	zCheckOutputSample 0,33
 
 	; Save sample 1 data
 	ld	(zSample1Pointer),hl		; 16
 	ex	af,af'				; 4
 	ld	(zSample1AccumulatorRemainder),a	; 13
-	ex	af,af'				; 4
-	; Total: 37
+	; Total: 33
 
-	zCheckOutputSample 0,73+72
+	zCheckOutputSample 0,73+68
 
 	; 2549
 
@@ -356,7 +356,6 @@ zSample2AdvanceQuotient = $+1
 	; 2649
 	;zCheckOutputSample 0,XXXX ; Moved below until these offsets are un-hardcoded
 
-	ex	af,af'		; 4
 zSample2AccumulatorRemainder = $+1
 	ld	a,0		; 7 ; Sample advance accumulator remainder
 	ex	af,af'		; 4
@@ -370,7 +369,7 @@ zSample2Volume = $+1
 	ld	l,a		; 4
 	exx			; 4
 
-	; Total: 72
+	; Total: 68
 
 ;	zCheckOutputSample 0,4 ; TODO - get rid of me soon
 
@@ -380,14 +379,13 @@ zSample2Volume = $+1
     endm
 	zDoIteration 1,1 ; 105
 
-	zCheckOutputSample 0,37
+	zCheckOutputSample 0,33
 
 	; Save sample 2 data
 	ld	(zSample2Pointer),hl		; 16
 	ex	af,af'				; 4
 	ld	(zSample2AccumulatorRemainder),a	; 13
-	ex	af,af'				; 4
-	; Total: 37
+	; Total: 33
 
 	zCheckOutputSample 0,14
 
