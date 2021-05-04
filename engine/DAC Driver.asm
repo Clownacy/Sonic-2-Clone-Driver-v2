@@ -37,7 +37,40 @@ zBatchSize:	equ 16
 ; DE' - Mixer read pointer
 ; HL' - Mixer write pointer
 
-zDoIteration macro pSample2,pWriteByte,pCheckForEnd
+zOutputSample macro pAltRegs
+    if pAltRegs=0
+	exx
+    endif
+
+	; Read sample from mix buffer
+	ld	a,(de)			; 7
+	inc	e			; 4
+	; Total: 11
+
+	exx				; 4
+
+	; Convert sample to unsigned and send it to DAC
+	xor	b			; 4
+	ld	(de),a			; 7
+	; Total: 11
+
+    if pAltRegs=1
+	exx
+    endif
+    endm
+
+; 1 - 0 cycles
+; pCheckForEnd adds 14 cycles from here on
+; 2 - 15 cycles (7+4+4)
+; pSample2 adds 17 cycles from here on
+; 3 - 29 cycles (7+4+4+7+7)
+; 4 - 33 cycles (7+4+4+7+7+4)
+; 5 - 37 cycles (7+4+4+7+7+4+4)
+
+zDoIteration macro pSample2,pWriteByte,pCheckForEnd,pOutputIndex
+    if pOutputIndex=1
+	zOutputSample 0	; 0 cycles
+    endif
 	; Read byte from cartridge
 	ld	a,(hl)			; 7
     if pCheckForEnd=1
@@ -61,6 +94,11 @@ zDoIteration macro pSample2,pWriteByte,pCheckForEnd
 
 	; Convert sample to signed and perform volume adjustment
 	ld	c,a			; 4
+
+    if pOutputIndex=2
+	zOutputSample 1	; 15 cycles
+    endif
+
 	ld	a,(bc)			; 7
 	; Total: 11
 
@@ -76,23 +114,22 @@ zDoIteration macro pSample2,pWriteByte,pCheckForEnd
 
 	; Write sample to mix buffer
 	ld	(hl),a			; 7
+
+    if pOutputIndex=3
+	zOutputSample 1	; 29 cycles
+    endif
+
 	inc	l			; 4
 	; Total: 11
 
-    if pWriteByte=1
-	; Read sample from mix buffer
-	ld	a,(de)			; 7
-	inc	e			; 4
-	; Total: 11
+    if pOutputIndex=4
+	zOutputSample 1	; 33 cycles
     endif
 
 	exx				; 4
 
-    if pWriteByte=1
-	; Convert sample to unsigned and send it to DAC
-	xor	b			; 4
-	ld	(de),a			; 7
-	; Total: 11
+    if pOutputIndex=5
+	zOutputSample 0	; 37 cycles
     endif
 
 	; Increment pointer to next sample value
@@ -115,13 +152,9 @@ zDoIteration macro pSample2,pWriteByte,pCheckForEnd
     endm
 	; So...
 	;zDoIteration 0,0,0 ; 74
-	;zDoIteration 0,1,0 ; 96 - Write occurs around 48 cycles in
 	;zDoIteration 0,0,1 ; 88
-	;zDoIteration 0,1,1 ; 110 - Write occurs around 62 cycles in
 	;zDoIteration 1,0,0 ; 91
-	;zDoIteration 1,1,0 ; 113 - Write occurs around 65 cycles in
 	;zDoIteration 1,0,1 ; 105
-	;zDoIteration 1,1,1 ; 127 - Write occurs around 79 cycles in
 
 
 
@@ -258,12 +291,71 @@ zSample1Volume = $+1
 	; Total: 57
 
 	; Process sample 1
-    rept zBatchSize-1
-	zDoIteration 0,0,0 ; 64
-	zDoIteration 0,1,0 ; 86 - Write occurs around 48 cycles in
-    endm
-	zDoIteration 0,0,0 ; 64
-	zDoIteration 0,1,1 ; 100 - Write occurs around 62 cycles in
+	; 130
+	zDoIteration 0,0,0,5 ; 74
+	; 204
+	zDoIteration 0,0,0,0 ; 74
+	; 278
+	zDoIteration 0,0,0,0 ; 74
+	; 352
+	zDoIteration 0,0,0,1 ; 74
+	; 426
+	zDoIteration 0,0,0,0 ; 74
+	; 500
+	zDoIteration 0,0,0,3 ; 74
+	; 574
+	zDoIteration 0,0,0,0 ; 74
+	; 648
+	zDoIteration 0,0,0,0 ; 74
+	; 722
+	zDoIteration 0,0,0,1 ; 74
+	; 796
+	zDoIteration 0,0,0,0 ; 74
+	; 870
+	zDoIteration 0,0,0,2 ; 74
+	; 944
+	zDoIteration 0,0,0,0 ; 74
+	; 1018
+	zDoIteration 0,0,0,5 ; 74
+	; 1092
+	zDoIteration 0,0,0,0 ; 74
+	; 1166
+	zDoIteration 0,0,0,0 ; 74
+	; 1240
+	zDoIteration 0,0,0,1 ; 74
+	; 1314
+	zDoIteration 0,0,0,0 ; 74
+	; 1388
+	zDoIteration 0,0,0,3 ; 74
+	; 1462
+	zDoIteration 0,0,0,0 ; 74
+	; 1536
+	zDoIteration 0,0,0,0 ; 74
+	; 1610
+	zDoIteration 0,0,0,1 ; 74
+	; 1684
+	zDoIteration 0,0,0,0 ; 74
+	; 1758
+	zDoIteration 0,0,0,2 ; 74
+	; 1832
+	zDoIteration 0,0,0,0 ; 74
+	; 1906
+	zDoIteration 0,0,0,5 ; 74
+	; 1980
+	zDoIteration 0,0,0,0 ; 74
+	; 2054
+	zDoIteration 0,0,0,0 ; 74
+	; 2128
+	zDoIteration 0,0,0,1 ; 74
+	; 2202
+	zDoIteration 0,0,0,0 ; 74
+	; 2276
+	zDoIteration 0,0,0,3 ; 74
+	; 2350
+	zDoIteration 0,0,0,0 ; 74
+	; 2424
+	zDoIteration 0,0,1,5 ; 88
+	; 2512
 
 	; Save sample 1 data
 	ld	(zSample1Pointer),hl		; 16
@@ -271,6 +363,8 @@ zSample1Volume = $+1
 	ld	(zSample1AccumulatorRemainder),a	; 13
 	ex	af,af'				; 4
 	; Total: 37
+
+	; 2549
 
 zSample2SelfModifiedCode:
 	; Bankswitch to sample 2
@@ -281,6 +375,8 @@ zSample2Bankswitch:
     endm
 	; Total: 73
 
+	; 2622
+
 	; Bootstrap sample 2
 zSample2Pointer = $+1
 	ld	hl,zMuteSample	; 10 ; Sample address
@@ -288,6 +384,9 @@ zSample2AdvanceRemainder = $+1
 	ld	c,0		; 7  ; Sample advance remainder
 zSample2AdvanceQuotient = $+1
 	ld	sp,0		; 10 ; Sample advance quotient
+
+	; 2649
+	zOutputSample 0
 
 	ex	af,af'		; 4
 zSample2AccumulatorRemainder = $+1
@@ -306,12 +405,71 @@ zSample2Volume = $+1
 	; Total: 72
 
 	; Process sample 2
-    rept zBatchSize-1
-	zDoIteration 1,0,0 ; 81
-	zDoIteration 1,1,0 ; 103 - Write occurs around 65 cycles in
-    endm
-	zDoIteration 1,0,0 ; 81
-	zDoIteration 1,1,1 ; 117 - Write occurs around 79 cycles in
+	; 2694
+	zDoIteration 1,0,0,0 ; 91
+	; 2785
+	zDoIteration 1,0,0,3 ; 91
+	; 2876
+	zDoIteration 1,0,0,0 ; 91
+	; 2967
+	zDoIteration 1,0,0,3 ; 91
+	; 3058
+	zDoIteration 1,0,0,0 ; 91
+	; 3149
+	zDoIteration 1,0,0,3 ; 91
+	; 3240
+	zDoIteration 1,0,0,0 ; 91
+	; 3331
+	zDoIteration 1,0,0,3 ; 91
+	; 3422
+	zDoIteration 1,0,0,0 ; 91
+	; 3513
+	zDoIteration 1,0,0,2 ; 91
+	; 3604
+	zDoIteration 1,0,0,0 ; 91
+	; 3695
+	zDoIteration 1,0,0,2 ; 91
+	; 3786
+	zDoIteration 1,0,0,0 ; 91
+	; 3877
+	zDoIteration 1,0,0,2 ; 91
+	; 3968
+	zDoIteration 1,0,0,0 ; 91
+	; 4059
+	zDoIteration 1,0,0,2 ; 91
+	; 4150
+	zDoIteration 1,0,0,0 ; 91
+	; 4241
+	zDoIteration 1,0,0,1 ; 91
+	; 4332
+	zDoIteration 1,0,0,0 ; 91
+	; 4423
+	zDoIteration 1,0,0,1 ; 91
+	; 4514
+	zDoIteration 1,0,0,0 ; 91
+	; 4605
+	zDoIteration 1,0,0,1 ; 91
+	; 4696
+	zDoIteration 1,0,0,0 ; 91
+	; 4787
+	zDoIteration 1,0,0,1 ; 91
+	; 4878
+	zDoIteration 1,0,0,0 ; 91
+	; 4969
+	zDoIteration 1,0,0,1 ; 91
+	; 5060
+	zDoIteration 1,0,0,0 ; 91
+	; 5151
+	zDoIteration 1,0,0,1 ; 91
+	; 5242
+	zDoIteration 1,0,0,5 ; 91
+	; 5333
+	zDoIteration 1,0,0,0 ; 91
+	; 5424
+	zDoIteration 1,0,0,5 ; 91
+	; 5515
+	zDoIteration 1,0,1,0 ; 105
+	; 5620
 
 	; Save sample 2 data
 	ld	(zSample2Pointer),hl		; 16
@@ -319,6 +477,8 @@ zSample2Volume = $+1
 	ld	(zSample2AccumulatorRemainder),a	; 13
 	ex	af,af'				; 4
 	; Total: 37
+
+	zOutputSample 0
 
 	; Loop if there aren't any commands to process
 zRequestFlag:
@@ -507,9 +667,11 @@ zMuteSample:
 ; Target
 ;3579545 / 223 = 16052
 ; Current speed
-;(3579545 * 16 * 2) / (765 + (374 * 15)) = 17968
+;(3579545 * 16 * 2) / (781 + (390 * 15)) = 17274
 
 
+;(3579545 * 16 * 2) / (721 + (330 * 15)) = 20198
+;3579545 / 20198 = 177 (177 cycles between outputs)
 
 
 
