@@ -210,6 +210,7 @@ zEntryPoint:
 
 	exx
 	ld	de,zMixBuffer+(100h-zBatchSize)&0FFh ; Lag behind the mixer so not to read unfinished samples
+	ld	hl,zMixBuffer	; Mix buffer address
 	exx
 
 	jp	zPCMLoop
@@ -244,18 +245,17 @@ zSample1AdvanceRemainder = $+1
 zSample1AdvanceQuotient = $+1
 	ld	sp,0		; 10 ; Sample advance quotient
 
-	exx			; 4
-zSample1MixPointer = $+1
-	ld	hl,zMixBuffer	; 10 ; Mix buffer address
-zSample1Volume = $+1
-	ld	b,zSampleLookup>>8	; 7
-	exx			; 4
-
 	ex	af,af'		; 4
 zSample1AccumulatorRemainder = $+1
 	ld	a,0		; 7 ; Sample advance accumulator remainder
 	ex	af,af'		; 4
-	; Total: 67
+
+	exx			; 4
+zSample1Volume = $+1
+	ld	b,zSampleLookup>>8	; 7
+	exx			; 4
+
+	; Total: 57
 
 	; Process sample 1
     rept zBatchSize-1
@@ -267,13 +267,10 @@ zSample1AccumulatorRemainder = $+1
 
 	; Save sample 1 data
 	ld	(zSample1Pointer),hl		; 16
-	exx					; 4
-	ld	(zSample1MixPointer),hl		; 16
-	exx					; 4
 	ex	af,af'				; 4
 	ld	(zSample1AccumulatorRemainder),a	; 13
 	ex	af,af'				; 4
-	; Total: 61
+	; Total: 37
 
 zSample2SelfModifiedCode:
 	; Bankswitch to sample 2
@@ -292,18 +289,21 @@ zSample2AdvanceRemainder = $+1
 zSample2AdvanceQuotient = $+1
 	ld	sp,0		; 10 ; Sample advance quotient
 
-	exx			; 4
-zSample2MixPointer = $+1
-	ld	hl,zMixBuffer	; 10 ; Mix buffer address
-zSample2Volume = $+1
-	ld	b,zSampleLookup>>8	; 7
-	exx			; 4
-
 	ex	af,af'		; 4
 zSample2AccumulatorRemainder = $+1
 	ld	a,0		; 7 ; Sample advance accumulator remainder
 	ex	af,af'		; 4
-	; Total: 67
+
+	exx			; 4
+zSample2Volume = $+1
+	ld	b,zSampleLookup>>8	; 7
+
+	ld	a,l		; 4
+	sub	zBatchSize*2	; 7  ; Move back to start of this batch's mixer data
+	ld	l,a		; 4
+	exx			; 4
+
+	; Total: 72
 
 	; Process sample 2
     rept zBatchSize-1
@@ -315,13 +315,10 @@ zSample2AccumulatorRemainder = $+1
 
 	; Save sample 2 data
 	ld	(zSample2Pointer),hl		; 16
-	exx					; 4
-	ld	(zSample2MixPointer),hl		; 16
-	exx					; 4
 	ex	af,af'				; 4
 	ld	(zSample2AccumulatorRemainder),a	; 13
 	ex	af,af'				; 4
-	; Total: 61
+	; Total: 37
 
 	; Loop if there aren't any commands to process
 zRequestFlag:
@@ -504,13 +501,13 @@ zChangeBankswitch:
 zMuteSample:
 	db	80h	; The transistors that make up this particular byte of memory are going to hate me so much
 
-; Formula: 73 + 67 + ((74 + 96) * (a - 1)) + (74 + 110) + 61 + 73 + 67 + ((91 + 113) * (a - 1)) + (91 + 127) + 61 + 14
-; 818 + (374 * a - 1)
+; Formula: 73 + 57 + ((74 + 96) * (a - 1)) + (74 + 110) + 37 + 73 + 72 + ((91 + 113) * (a - 1)) + (91 + 127) + 37 + 14
+; 765 + (374 * a - 1)
 
 ; Target
 ;3579545 / 223 = 16052
 ; Current speed
-;(3579545 * 16 * 2) / (818 + (374 * 15)) = 17820
+;(3579545 * 16 * 2) / (765 + (374 * 15)) = 17968
 
 
 
