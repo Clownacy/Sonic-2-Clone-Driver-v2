@@ -574,33 +574,14 @@ zDriverSampleRate = (3579545 * zBatchSize) / (zTotalCycles + zBatchSize * 30)	; 
 zActualCyclesPerSample = zTotalCycles / zBatchSize
 
 	if MOMPASS==2
-		OUTRADIX 10
 		if zCyclesPerSample<>zActualCyclesPerSample
-			warning "You need to set zCyclesPerSample to \{zActualCyclesPerSample}"
+			warning "You need to set zCyclesPerSample to \{zActualCyclesPerSample}h"
 		endif
-		OUTRADIX 16
-	endif
 
-; Formula: 73 + 57 + ((74 + 96) * (a - 1)) + (74 + 110) + 37 + 73 + 72 + ((91 + 113) * (a - 1)) + (91 + 127) + 37 + 14
-; 765 + (374 * a - 1)
-
-; Target
-;3579545 / 223 = 16052
-; Current speed
-;(3579545 * 16 * 2) / (781 + (390 * 15)) = 17274
-
-
-;(3579545 * 16 * 2) / (721 + (330 * 15)) = 20198
-;3579545 / 20198 = 177 (177 cycles between outputs)
-
-
-
-
-	if MOMPASS==2
 		if $ > zVariablesStart
 			fatal "The driver is too big; the maximum size it can take is \{zVariablesStart}h. It currently takes \{$}h bytes. You won't be able to use this thing."
-		else
-			message "Uncompressed driver size: \{$}h bytes."
+		;else
+			;message "Uncompressed driver size: \{$}h bytes."
 		endif
 	endif
 
