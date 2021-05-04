@@ -573,8 +573,8 @@ zChangeBankswitch:
 zMuteSample:
 	db	80h	; The transistors that make up this particular byte of memory are going to hate me so much
 
-zDriverSampleRate = (3579545 * zBatchSize * 2) / (zTotalCycles + zBatchSize * 2 * 30)
-zActualCyclesPerSample = 3579545 / ((3579545 * zBatchSize * 2) / zTotalCycles)
+zDriverSampleRate = (3579545 * zBatchSize * 2) / (zTotalCycles + zBatchSize * 2 * 30)	; 30 is the number of cycles per zOutputSample
+zActualCyclesPerSample = zTotalCycles / (zBatchSize * 2)
 
 	if MOMPASS==2
 		OUTRADIX 10
