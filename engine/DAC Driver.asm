@@ -42,25 +42,24 @@ zCyclesPerSample:	equ 177
 
 ; This is a macro that inserts code to output a sample when a certain number
 ; of cycles have passed. The 'pCyclesToNextMacro' parameter is the number of
-; cycles until the next zAddCycles macro.
-zAddCycles macro pCyclesToNextMacro, pAltRegs
-	; Get current delta to upcoming sample output
+; cycles until the next zCheckOutputSample macro.
+zCheckOutputSample macro pAltRegs,pCyclesToNextMacro
+	; Get the number of cycles until the next sample is due (relative to this macro)
 zCurrentCycleDelta := zNextSampleCycle - zTotalCycles
     if zCurrentCycleDelta < 0
 zCurrentCycleDelta := -zCurrentCycleDelta
     endif
 
-	; Get next delta to upcoming sample output
+	; Get the number of cycles until the next sample is due (relative to the next zCheckOutputSample macro)
 zNextCycleDelta := zNextSampleCycle - (zTotalCycles + pCyclesToNextMacro)
     if zNextCycleDelta < 0
 zNextCycleDelta := -zNextCycleDelta
     endif
 
-	; If the next delta is further than the current one,
-	; then output a sample now
+	; If the sample is due closer to this macro than the next, then output a sample now
     if zCurrentCycleDelta < zNextCycleDelta
 zNextSampleCycle := zNextSampleCycle + zCyclesPerSample	; Move onto the next sample output
-	zOutputSample pAltRegs
+	zOutputSample pAltRegs	; Output a sample
     endif
 
 zTotalCycles := zTotalCycles + pCyclesToNextMacro
@@ -91,9 +90,9 @@ zOutputSample macro pAltRegs
 ; Macro to read a single sample from ROM
 zDoIteration macro pSample2,pCheckForEnd
     if pCheckForEnd=1
-	zAddCycles 15+14,0
+	zCheckOutputSample 0,15+14
     else
-	zAddCycles 15,0
+	zCheckOutputSample 0,15
     endif
 
 	; Read byte from cartridge
@@ -121,9 +120,9 @@ zDoIteration macro pSample2,pCheckForEnd
 	ld	c,a			; 4
 
     if pSample2=1
-	zAddCycles 31,1
+	zCheckOutputSample 1,31
     else
-	zAddCycles 14,1
+	zCheckOutputSample 1,14
     endif
 
 	ld	a,(bc)			; 7
@@ -142,16 +141,16 @@ zDoIteration macro pSample2,pCheckForEnd
 	; Write sample to mix buffer
 	ld	(hl),a			; 7
 
-	zAddCycles 4,1
+	zCheckOutputSample 1,4
 
 	inc	l			; 4
 	; Total: 11
 
-	zAddCycles 4,1
+	zCheckOutputSample 1,4
 
 	exx				; 4
 
-	zAddCycles 37,0
+	zCheckOutputSample 0,37
 
 	; Increment pointer to next sample value
 	; (performs nearest-neighbour resampling)
@@ -285,7 +284,7 @@ zPCMLoop:
 
 zNextSampleCycle := 0
 zTotalCycles := 0
-	zAddCycles 73+57,0
+	zCheckOutputSample 0,73+57
 
 zSample1SelfModifiedCode:
 	; Bankswitch to sample 1
@@ -322,7 +321,7 @@ zSample1Volume = $+1
     endm
 	zDoIteration 0,1 ; 88
 
-	zAddCycles 37,0
+	zCheckOutputSample 0,37
 
 	; Save sample 1 data
 	ld	(zSample1Pointer),hl		; 16
@@ -331,7 +330,7 @@ zSample1Volume = $+1
 	ex	af,af'				; 4
 	; Total: 37
 
-	zAddCycles 73+72,0
+	zCheckOutputSample 0,73+72
 
 	; 2549
 
@@ -355,7 +354,7 @@ zSample2AdvanceQuotient = $+1
 	ld	sp,0		; 10 ; Sample advance quotient
 
 	; 2649
-	;zAddCycles XXXX,0 ; Moved below until these offsets are un-hardcoded
+	;zCheckOutputSample 0,XXXX ; Moved below until these offsets are un-hardcoded
 
 	ex	af,af'		; 4
 zSample2AccumulatorRemainder = $+1
@@ -373,7 +372,7 @@ zSample2Volume = $+1
 
 	; Total: 72
 
-;	zAddCycles 4,0 ; TODO - get rid of me soon
+;	zCheckOutputSample 0,4 ; TODO - get rid of me soon
 
 	; Process sample 2
     rept zBatchSize-1
@@ -381,7 +380,7 @@ zSample2Volume = $+1
     endm
 	zDoIteration 1,1 ; 105
 
-	zAddCycles 37,0
+	zCheckOutputSample 0,37
 
 	; Save sample 2 data
 	ld	(zSample2Pointer),hl		; 16
@@ -390,7 +389,7 @@ zSample2Volume = $+1
 	ex	af,af'				; 4
 	; Total: 37
 
-	zAddCycles 14,0
+	zCheckOutputSample 0,14
 
 	; Loop if there aren't any commands to process
 zRequestFlag:
