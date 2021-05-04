@@ -386,7 +386,7 @@ zSample2AdvanceQuotient = $+1
 	ld	sp,0		; 10 ; Sample advance quotient
 
 	; 2649
-	zOutputSample 0
+	;zOutputSample 0 ; Moved below until these offsets are un-hardcoded
 
 	ex	af,af'		; 4
 zSample2AccumulatorRemainder = $+1
@@ -403,6 +403,8 @@ zSample2Volume = $+1
 	exx			; 4
 
 	; Total: 72
+
+	zOutputSample 0 ; TODO - get rid of me soon
 
 	; Process sample 2
 	; 2694
