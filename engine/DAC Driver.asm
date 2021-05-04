@@ -93,7 +93,7 @@ zOutputSample macro pAltRegs
 ; 4 - 33 cycles (7+4+4+7+7+4)
 ; 5 - 37 cycles (7+4+4+7+7+4+4)
 
-zDoIteration macro pSample2,pWriteByte,pCheckForEnd,pOutputIndex
+zDoIteration macro pSample2,pCheckForEnd
 	zAddCycles 15,0
 
 	; Read byte from cartridge
@@ -172,10 +172,10 @@ zDoIteration macro pSample2,pWriteByte,pCheckForEnd,pOutputIndex
 	; Total 37
     endm
 	; So...
-	;zDoIteration 0,0,0 ; 74
-	;zDoIteration 0,0,1 ; 88
-	;zDoIteration 1,0,0 ; 91
-	;zDoIteration 1,0,1 ; 105
+	;zDoIteration 0,0 ; 74
+	;zDoIteration 0,1 ; 88
+	;zDoIteration 1,0 ; 91
+	;zDoIteration 1,1 ; 105
 
 
 
@@ -315,9 +315,9 @@ zSample1Volume = $+1
 
 	; Process sample 1
     rept (zBatchSize*2)-1
-	zDoIteration 0,0,0,5 ; 74
+	zDoIteration 0,0 ; 74
     endm
-	zDoIteration 0,0,1,5 ; 88
+	zDoIteration 0,1 ; 88
 
 	zAddCycles 37,0
 
@@ -374,9 +374,9 @@ zSample2Volume = $+1
 
 	; Process sample 2
     rept (zBatchSize*2)-1
-	zDoIteration 1,0,0,0 ; 91
+	zDoIteration 1,0 ; 91
     endm
-	zDoIteration 1,0,1,0 ; 105
+	zDoIteration 1,1 ; 105
 
 	zAddCycles 37,0
 
