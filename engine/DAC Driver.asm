@@ -69,7 +69,7 @@ zTotalCycles := zTotalCycles + pCyclesToNextMacro
 ; Macro to output a single sample
 zOutputSample macro pAltRegs
     if pAltRegs=0
-	exx
+	exx				; 4
     endif
 
 	; Read sample from mix buffer
@@ -83,7 +83,7 @@ zOutputSample macro pAltRegs
 	ld	(de),a			; 7
 
     if pAltRegs=1
-	exx
+	exx				; 4
     endif
 	; Total: 30 cycles
     endm
@@ -91,7 +91,7 @@ zOutputSample macro pAltRegs
 ; Macro to read a single sample from ROM
 zDoIteration macro pSample2,pCheckForEnd
     if pCheckForEnd=1
-	zCheckOutputSample 0,7+14+4+4
+	zCheckOutputSample 0,7+4+10+4+4
     else
 	zCheckOutputSample 0,7+4+4
     endif
@@ -101,7 +101,6 @@ zDoIteration macro pSample2,pCheckForEnd
     if pCheckForEnd=1
 	or	a			; 4
 	jp	nz,.sample_not_done	; 10
-	; Total: 14
 
 	; If we've reached the end of the sample, then mute the channel
 	ld	sp,zStack
@@ -117,17 +116,16 @@ zDoIteration macro pSample2,pCheckForEnd
 
 	exx				; 4
 
-	; Convert sample to signed and perform volume adjustment
 	ld	c,a			; 4
 
     if pSample2=1
-	zCheckOutputSample 1,7+17+7
+	zCheckOutputSample 1,7+7+10+7
     else
 	zCheckOutputSample 1,7+7
     endif
 
+	; Convert sample to signed and perform volume adjustment
 	ld	a,(bc)			; 7
-	; Total: 11
 
     if pSample2=1
 	; Perform mixing and clamping
@@ -145,7 +143,6 @@ zDoIteration macro pSample2,pCheckForEnd
 	zCheckOutputSample 1,4
 
 	inc	l			; 4
-	; Total: 11
 
 	zCheckOutputSample 1,4
 
@@ -286,7 +283,7 @@ zPCMLoop:
 zNextSampleCycle := 0
 zTotalCycles := 0
 zSamplesWritten := 0
-	zCheckOutputSample 0,73+53
+	zCheckOutputSample 0,73+53-4
 
 zSample1SelfModifiedCode:
 	; Bankswitch to sample 1
@@ -312,6 +309,9 @@ zSample1AccumulatorRemainder = $+1
 	exx			; 4
 zSample1Volume = $+1
 	ld	b,zSampleLookup>>8	; 7
+
+	zCheckOutputSample 1,4
+
 	exx			; 4
 
 	; Total: 53
@@ -322,17 +322,17 @@ zSample1Volume = $+1
     endm
 	zDoIteration 0,1 ; 88
 
-	zCheckOutputSample 0,33
+	zCheckOutputSample 0,16
 
 	; Save sample 1 data
 	ld	(zSample1Pointer),hl		; 16
+
+	zCheckOutputSample 0,4+13
+
 	ex	af,af'				; 4
 	ld	(zSample1AccumulatorRemainder),a	; 13
-	; Total: 33
 
 	zCheckOutputSample 0,73+68
-
-	; 2549
 
 zSample2SelfModifiedCode:
 	; Bankswitch to sample 2
@@ -343,8 +343,6 @@ zSample2Bankswitch:
     endm
 	; Total: 73
 
-	; 2622
-
 	; Bootstrap sample 2
 zSample2Pointer = $+1
 	ld	hl,zMuteSample	; 10 ; Sample address
@@ -353,8 +351,7 @@ zSample2AdvanceRemainder = $+1
 zSample2AdvanceQuotient = $+1
 	ld	sp,0		; 10 ; Sample advance quotient
 
-	; 2649
-	;zCheckOutputSample 0,XXXX ; Moved below until these offsets are un-hardcoded
+	;zCheckOutputSample 0,XXXX ; Disabled until these offsets are un-hardcoded
 
 zSample2AccumulatorRemainder = $+1
 	ld	a,0		; 7 ; Sample advance accumulator remainder
@@ -371,23 +368,23 @@ zSample2Volume = $+1
 
 	; Total: 68
 
-;	zCheckOutputSample 0,4 ; TODO - get rid of me soon
-
 	; Process sample 2
     rept zBatchSize-1
 	zDoIteration 1,0 ; 91
     endm
 	zDoIteration 1,1 ; 105
 
-	zCheckOutputSample 0,33
+	zCheckOutputSample 0,16
 
 	; Save sample 2 data
 	ld	(zSample2Pointer),hl		; 16
+
+	zCheckOutputSample 0,4+13
+
 	ex	af,af'				; 4
 	ld	(zSample2AccumulatorRemainder),a	; 13
-	; Total: 33
 
-	zCheckOutputSample 0,14
+	zCheckOutputSample 0,4+10
 
 	; Loop if there aren't any commands to process
 zRequestFlag:
