@@ -351,7 +351,7 @@ zSample2AccumulatorRemainder = $+1
 zSample2Volume = $+1
 	ld	b,zSampleLookup>>8	; 7
 
-	zCheckOutputSample 0,4+7+4+4
+	zCheckOutputSample 1,4+7+4+4
 
 	ld	a,l		; 4
 	sub	zBatchSize	; 7  ; Move back to start of this batch's mixer data
