@@ -309,9 +309,7 @@ zSample1AccumulatorRemainder = $+1
 	exx			; 4
 zSample1Volume = $+1
 	ld	b,zSampleLookup>>8	; 7
-
 	zCheckOutputSample 1,4
-
 	exx			; 4
 
 	; Total: 53
@@ -326,13 +324,11 @@ zSample1Volume = $+1
 
 	; Save sample 1 data
 	ld	(zSample1Pointer),hl		; 16
-
 	zCheckOutputSample 0,4+13
-
 	ex	af,af'				; 4
 	ld	(zSample1AccumulatorRemainder),a	; 13
 
-	zCheckOutputSample 0,73+68
+	zCheckOutputSample 0,73+68-4-4-7-4
 
 zSample2SelfModifiedCode:
 	; Bankswitch to sample 2
@@ -361,6 +357,8 @@ zSample2AccumulatorRemainder = $+1
 zSample2Volume = $+1
 	ld	b,zSampleLookup>>8	; 7
 
+	zCheckOutputSample 0,4+7+4+4
+
 	ld	a,l		; 4
 	sub	zBatchSize	; 7  ; Move back to start of this batch's mixer data
 	ld	l,a		; 4
@@ -378,9 +376,7 @@ zSample2Volume = $+1
 
 	; Save sample 2 data
 	ld	(zSample2Pointer),hl		; 16
-
 	zCheckOutputSample 0,4+13
-
 	ex	af,af'				; 4
 	ld	(zSample2AccumulatorRemainder),a	; 13
 
