@@ -116,39 +116,34 @@ zDoIteration macro pSample2,pCheckForEnd
 
 	exx				; 4
 
+	; Convert sample to signed and perform volume adjustment
 	ld	c,a			; 4
-
     if pSample2=1
 	zCheckOutputSample 1,7+7+10+7
     else
 	zCheckOutputSample 1,7+7
     endif
-
-	; Convert sample to signed and perform volume adjustment
 	ld	a,(bc)			; 7
 
     if pSample2=1
 	; Perform mixing and clamping
 	add	a,(hl)			; 7
 	jp	po,.no_overflow		; 10
-	sbc	a,a			; 4
-	xor	7Fh			; 7
+	sbc	a,a
+	xor	7Fh
 .no_overflow:
-	; Total: 17 best, 28 worse
     endif
 
 	; Write sample to mix buffer
 	ld	(hl),a			; 7
-
 	zCheckOutputSample 1,4
-
 	inc	l			; 4
 
 	zCheckOutputSample 1,4
 
 	exx				; 4
 
-	zCheckOutputSample 0,37
+	zCheckOutputSample 0,4+4+15+10+4
 
 	; Increment pointer to next sample value
 	; (performs nearest-neighbour resampling)
@@ -166,7 +161,6 @@ zDoIteration macro pSample2,pCheckForEnd
     endif
 .no_bankswitch:
 	ex	af,af'			; 4
-	; Total 37
     endm
 	; So...
 	;zDoIteration 0,0 ; 74 cycles
