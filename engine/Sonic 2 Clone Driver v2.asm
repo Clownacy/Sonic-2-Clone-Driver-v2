@@ -2762,8 +2762,8 @@ cfFadeInToPrevious:
 	add.b	d0,d0
 	add.b	d0,d0
 	add.b	d0,SMPS_Track.Volume(a5)		; Apply current volume fade-in
-	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding?
-	bne.s	.fadefm					; Branch if yes
+;	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding?
+;	bne.s	.fadefm					; Branch if yes
 	bsr.w	SetDACVolume
 
 .fadefm:
