@@ -60,6 +60,7 @@ SMPS_UpdateDriver:
 	bsr.s	UpdateMusic
 
 ;.updatesfxtracks:
+	lea	SMPS_RAM.v_sfx_track_ram(a6),a5
 	moveq	#SMPS_SFX_FM_TRACK_COUNT-1,d7	; SFX only has access to 3 FM tracks
 ; loc_71C04:
 .sfxfmloop:
