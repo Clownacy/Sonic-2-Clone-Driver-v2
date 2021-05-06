@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
-#include <unistd.h> // for unlink
 
 #include "clownlzss/kosinski.h"
 
@@ -32,7 +30,7 @@ int main(int argc, char *argv[])
 		char* arg = argv[0];
 		argc--, argv++; // pop arg
 		
-		if(!strcasecmp(arg, "-h") || !strcasecmp(arg, "--help"))
+		if(!strcmp(arg, "-h") || !strcmp(arg, "--help"))
 			printUsage(), argc = 0;
 		else if(!codeFileName)
 			codeFileName = arg;
@@ -62,7 +60,7 @@ int main(int argc, char *argv[])
 				}
 				else
 				{
-					unlink(romFileName); // error; delete the rom because it's probably hosed
+					remove(romFileName); // error; delete the rom because it's probably hosed
 				}
 			}
 			else
@@ -157,7 +155,7 @@ bool buildRom(FILE* from, FILE* to)
 
 		if(cpuType == 0x51 && start != 0 && lastSegmentCompressed)
 		{
-			printf("\nERROR: The compressed Z80 code (MegaPCM - Z80.asm) must all be in one segment. That means no ORG/ALIGN/CNOP/EVEN or memory reservation commands in the Z80 code and the size must be < 65535 bytes. The offending new segment starts at address $%lX relative to the start of the Z80 code.", start);
+			printf("\nERROR: The compressed Z80 code (DAC Driver.asm) must all be in one segment. That means no ORG/ALIGN/CNOP/EVEN or memory reservation commands in the Z80 code and the size must be < 65535 bytes. The offending new segment starts at address $%lX relative to the start of the Z80 code.", start);
 			return false;
 		}
 
