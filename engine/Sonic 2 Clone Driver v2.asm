@@ -248,7 +248,8 @@ SetDACVolume:
 	bcs.s	.cap
 	bpl.s	.do_not_cap		; $7F is the last valid volume
 .cap:
-	moveq	#$F<<3,d0	; cap at maximum value (minimum volume)
+	moveq	#(zSampleLookup>>8)|$F,d0	; cap at maximum value (minimum volume)
+	bra.s	WriteDACVolume
 .do_not_cap:
 	lsr.b	#3,d0
 	ori.b	#zSampleLookup>>8,d0
@@ -2746,7 +2747,7 @@ cfFadeInToPrevious:
 
 	movea.l	a5,a3
 
-	lea	SMPS_RAM.v_music_dac_track(a6),a5
+	lea	SMPS_RAM.v_music_track_ram(a6),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.fadefm					; Branch if not
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
@@ -2755,8 +2756,9 @@ cfFadeInToPrevious:
 	bsr.w	SetDACVolume
 
 .fadefm:
+	lea	SMPS_Track.len(a5),a5
+
 	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7 	; 6 FM tracks
-	lea	SMPS_RAM.v_music_fm_tracks(a6),a5
 ; loc_72B3A:
 .fmloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
