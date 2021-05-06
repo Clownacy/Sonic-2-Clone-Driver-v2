@@ -28,7 +28,7 @@ SMPS_UpdateDriver:
 	bsr.w	DoFadeOut
 ; loc_71BA8:
 .skipfadeout:
-	btst	#f_fadeinflag,SMPS_RAM.variables.bitfield2(a6)
+	tst.b	SMPS_RAM.variables.v_fadein_counter(a6)
 	beq.s	.skipfadein
 	bsr.w	DoFadeIn
 ; loc_71BB2:
@@ -241,10 +241,15 @@ locret_71CAA:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 SetDACVolume:
-	move.b	SMPS_Track.Volume(a5),d0
-	bpl.s	+		; $7F is the last valid volume
+	move.b	SMPS_RAM.variables.v_fadein_counter(a6),d0
+	add.b	d0,d0
+	add.b	d0,d0
+	add.b	SMPS_Track.Volume(a5),d0
+	bcs.s	.cap
+	bpl.s	.do_not_cap		; $7F is the last valid volume
+.cap:
 	moveq	#$F<<3,d0	; cap at maximum value (minimum volume)
-+
+.do_not_cap:
 	lsr.b	#3,d0
 	ori.b	#zSampleLookup>>8,d0
 
@@ -1253,8 +1258,6 @@ Sound_PlaySFX:
 	bne.w	.clear_sndprio					; Exit is it is
 ;	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)	; Is music being faded out?	; Clownacy | S2's driver doesn't bother with this
 ;	bne.w	.clear_sndprio					; Exit if it is
-	btst	#f_fadeinflag,SMPS_RAM.variables.bitfield2(a6)	; Is music being faded in?
-	bne.w	.clear_sndprio					; Exit if it is
     if SMPS_EnableSpinDashSFX
 	bclr	#f_spindash_lastsound,SMPS_RAM.bitfield1(a6)
     endif
@@ -1455,8 +1458,6 @@ Sound_PlaySpecial:
 	bne.w	.locret						; Return if so
 ;	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)	; Is music being faded out?	; Clownacy | S2's driver didn't bother with this in Sound_PlaySFX
 ;	bne.w	.locret						; Exit if it is
-	btst	#f_fadeinflag,SMPS_RAM.variables.bitfield2(a6)	; Is music being faded in?
-	bne.w	.locret						; Exit if it is
 	lea	(SpecSoundIndex).l,a0
 	subi.b	#SpecID__First,d7	; Make it 0-based
 	add.w	d7,d7
@@ -2021,47 +2022,36 @@ DoFadeIn:
 ; ===========================================================================
 ; loc_72688:
 .continuefade:
-	tst.b	SMPS_RAM.variables.v_fadein_counter(a6)	; Update fade counter
-	bne.s	.notdone
-	bclr	#f_fadeinflag,SMPS_RAM.variables.bitfield2(a6)
-	rts
-; ===========================================================================
-
-.notdone:
 	subq.b	#1,SMPS_RAM.variables.v_fadein_counter(a6)	; Update fade counter
 	move.b	#2,SMPS_RAM.variables.v_fadein_delay(a6)	; Reset fade delay
 	lea	SMPS_RAM.v_music_track_ram(a6),a5
 
-	; Fade DAC
+	; Update DAC volume
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.fadefm					; Branch if not
-	subq.b	#4,SMPS_Track.Volume(a5)		; Reduce volume attenuation
 	bsr.w	SetDACVolume
 
 .fadefm:
 	lea	SMPS_Track.len(a5),a5
 
-	; Fade FM
+	; Update FM volume
 	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7		; 6 FM tracks
 ; loc_7269E:
 .fmloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.nextfm					; Branch if not
-	subq.b	#1,SMPS_Track.Volume(a5)		; Reduce volume attenuation
 	bsr.w	SendVoiceTL
 ; loc_726AA:
 .nextfm:
 	lea	SMPS_Track.len(a5),a5
 	dbf	d7,.fmloop
 
-	; Fade PSG
+	; Update PSG volume
 	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT-1,d7	; 3 PSG tracks
 ; loc_726B4:
 .psgloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
 	bpl.s	.nextpsg			; Branch if not
-	subq.b	#4,SMPS_Track.Volume(a5)	; Reduce volume attenuation
-
 	; If a volume envelope is active, then it will handle updating the volume for us.
 	; Doing it manually will just conflict with it.
 	tst.b	SMPS_Track.VoiceIndex(a5)
@@ -2393,17 +2383,21 @@ SetPSGVolume:
 	bne.s	PSGCheckNoteFill			; Branch if yes
 ; loc_7297C:
 PSGSendVolume:
+	move.b	SMPS_RAM.variables.v_fadein_counter(a6),d0
+	add.b	d0,d0
+	add.b	d0,d0
+	add.b	d0,d6
+	bcs.s	+
 	; Clownacy | This correction is present elsewhere in S1's driver, but just having
 	; a single copy here saves space and eliminates the few instances where the correction
 	; isn't performed
-	tst.b	d6				; Is volume $10<<3 or higher?
-	bpl.s	+				; Branch if not
-	moveq	#$1F,d6				; Limit to silence and fall through
-	bra.s	++
+;	tst.b	d6				; Is volume $10<<3 or higher?
+	bpl.s	++				; Branch if not
++	moveq	#$F<<3,d6			; Limit to silence and fall through
 +
 	lsr.b	#3,d6
 	ori.b	#$10,d6				; Mark it as a volume command
-+	or.b	SMPS_Track.VoiceControl(a5),d6	; Add in track selector bits
+	or.b	SMPS_Track.VoiceControl(a5),d6	; Add in track selector bits
 	move.b	d6,(SMPS_psg_input).l
 
 locret_7298A:
@@ -2429,14 +2423,14 @@ VolEnvJump2Idx:
 
 VolEnvReset:	; For compatibility with S3K
 	clr.b	SMPS_Track.VolEnvIndex(a5)
-	bra.s	PSGDoVolFX_Loop
+	bra.w	PSGDoVolFX_Loop
 
 ; ===========================================================================
 ; loc_7299A: FlutterDone:
 VolEnvHold:
 	; Decrement volume envelope index to before flag and last volume update (PSG volume will still update on subsequent frame)
 	subq.b	#2,SMPS_Track.VolEnvIndex(a5)
-	bra.s	PSGDoVolFX_Loop
+	bra.w	PSGDoVolFX_Loop
 
 ; ===========================================================================
 
@@ -2751,16 +2745,11 @@ cfFadeInToPrevious:
 	dbf	d0,.restoreplaybackloop
 
 	movea.l	a5,a3
-	moveq	#$28,d6
-	sub.b	SMPS_RAM.variables.v_fadein_counter(a6),d6	; If fade already in progress, this adjusts track volume accordingly
+
 	lea	SMPS_RAM.v_music_dac_track(a6),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.fadefm					; Branch if not
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
-	move.b	d6,d0
-	add.b	d0,d0
-	add.b	d0,d0
-	add.b	d0,SMPS_Track.Volume(a5)		; Apply current volume fade-in
 ;	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding?
 ;	bne.s	.fadefm					; Branch if yes
 	bsr.w	SetDACVolume
@@ -2773,7 +2762,6 @@ cfFadeInToPrevious:
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.nextfm					; Branch if not
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
-	add.b	d6,SMPS_Track.Volume(a5)		; Apply current volume fade-in
 	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding?
 	bne.s	.nextfm					; Branch if yes
 	moveq	#0,d0
@@ -2792,10 +2780,6 @@ cfFadeInToPrevious:
 	bpl.s	.nextpsg				; Branch if not
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
 	bsr.w	PSGNoteOff
-	move.b	d6,d0
-	add.b	d0,d0
-	add.b	d0,d0
-	add.b	d0,SMPS_Track.Volume(a5)		; Apply current volume fade-in
 	; Clownacy | One of Valley Bell's fixes: this restores the noise mode if need be, avoiding a bug where unwanted noise plays
 	cmpi.b	#$E0,SMPS_Track.VoiceControl(a5)	; Is this a noise channel?
 	bne.s	.nextpsg				; Branch if not
@@ -2812,7 +2796,6 @@ cfFadeInToPrevious:
 	bset	#6,SMPS_RAM.v_music_dac_track.PlaybackControl(a6)
 	bset	#6,SMPS_RAM.v_music_fm6_track.PlaybackControl(a6)
 
-	bset	#f_fadeinflag,SMPS_RAM.variables.bitfield2(a6)
 	move.b	#$28,SMPS_RAM.variables.v_fadein_counter(a6)	; Fade-in delay
 	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
 	addi.w	#4*3,sp				; Tamper return value so we don't return to caller
@@ -2975,7 +2958,13 @@ SetVoice:
 	dbf	d4,-
 
 	; Send total level
-	move.b	SMPS_Track.Volume(a5),d5	; Track volume attenuation
+	move.b	SMPS_RAM.variables.v_fadein_counter(a6),d5
+	add.b	d5,d5
+;	add.b	d5,d5	; Disabled for now while I figure out how to fade more evenly
+	add.b	SMPS_Track.Volume(a5),d5	; Track volume attenuation
+	bcc.s	+
+	moveq	#$7F,d5
++
 	moveq	#(1*4)-1,d4			; Four operators
 
 -	move.b	d3,d0
@@ -3026,8 +3015,13 @@ SendVoiceTL:
 	adda.w	d0,a1
 	adda.w	d0,a1
 	addq.w	#5,a1			; Want TL (was '21(a0)' in original driver)
-	move.b	SMPS_Track.Volume(a5),d3	; Get track volume attenuation
-	bmi.s	.locret				; If negative, stop
+	move.b	SMPS_RAM.variables.v_fadein_counter(a6),d3
+	add.b	d3,d3
+;	add.b	d3,d3
+	add.b	SMPS_Track.Volume(a5),d3	; Get track volume attenuation
+	bcc.s	.do_not_cap			; If negative, stop
+	moveq	#$7F,d3
+.do_not_cap:
 
 	moveq	#$40,d4				; Total level operator 1
 	moveq	#4-1,d5				; Four operators
