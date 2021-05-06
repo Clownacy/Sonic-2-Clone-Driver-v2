@@ -64,27 +64,26 @@ SMPS_UpdateDriver:
 	moveq	#SMPS_SFX_FM_TRACK_COUNT-1,d7	; SFX only has access to 3 FM tracks
 ; loc_71C04:
 .sfxfmloop:
-	lea	SMPS_Track.len(a5),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
 	bpl.s	.sfxfmnext			; Branch if not
 	bsr.w	FMUpdateTrack
 ; loc_71C10:
 .sfxfmnext:
+	lea	SMPS_Track.len(a5),a5
 	dbf	d7,.sfxfmloop
 
 	moveq	#SMPS_SFX_PSG_TRACK_COUNT-1,d7	; SFX only has access to 3 PSG tracks
 ; loc_71C16:
 .sfxpsgloop:
-	lea	SMPS_Track.len(a5),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
 	bpl.s	.sfxpsgnext			; Branch of not
 	bsr.w	PSGUpdateTrack
 ; loc_71C22:
 .sfxpsgnext:
+	lea	SMPS_Track.len(a5),a5
 	dbf	d7,.sfxpsgloop
 
     if SMPS_EnableSpecSFX
-	lea	SMPS_Track.len(a5),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
 	bpl.s	.specfmdone			; Branch if not
 	bsr.w	FMUpdateTrack
