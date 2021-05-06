@@ -2747,6 +2747,8 @@ cfFadeInToPrevious:
 
 	movea.l	a5,a3
 
+	move.b	#$28,SMPS_RAM.variables.v_fadein_counter(a6)	; Fade-in delay
+
 	lea	SMPS_RAM.v_music_track_ram(a6),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.fadefm					; Branch if not
@@ -2798,7 +2800,6 @@ cfFadeInToPrevious:
 	bset	#6,SMPS_RAM.v_music_dac_track.PlaybackControl(a6)
 	bset	#6,SMPS_RAM.v_music_fm6_track.PlaybackControl(a6)
 
-	move.b	#$28,SMPS_RAM.variables.v_fadein_counter(a6)	; Fade-in delay
 	bclr	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)
 	addi.w	#4*3,sp				; Tamper return value so we don't return to caller
 	rts
