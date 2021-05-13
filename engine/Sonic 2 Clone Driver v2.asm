@@ -2021,9 +2021,10 @@ DoFadeIn:
 .continuefade:
 	subq.b	#1,SMPS_RAM.variables.v_fadein_counter(a6)	; Update fade counter
 	move.b	#2,SMPS_RAM.variables.v_fadein_delay(a6)	; Reset fade delay
+
 	lea	SMPS_RAM.v_music_track_ram(a6),a5
 
-	; Update DAC volume
+	; Update music DAC volume
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.fadefm					; Branch if not
 	bsr.w	SetDACVolume
@@ -2031,8 +2032,38 @@ DoFadeIn:
 .fadefm:
 	lea	SMPS_Track.len(a5),a5
 
-	; Update FM volume
+	; Update music FM volume
 	moveq	#SMPS_MUSIC_FM_TRACK_COUNT-1,d7		; 6 FM tracks
+	bsr.s	.fmloop
+
+	; Update music PSG volume
+	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT-1,d7	; 3 PSG tracks
+	bsr.s	.psgloop
+
+	lea	SMPS_RAM.v_sfx_track_ram(a6),a5
+
+	; Update SFX FM volume
+	moveq	#SMPS_SFX_FM_TRACK_COUNT-1,d7		; 3 FM tracks
+	bsr.s	.fmloop
+
+	; Update SFX PSG volume
+	moveq	#SMPS_SFX_PSG_TRACK_COUNT-1,d7		; 3 PSG tracks
+	bsr.s	.psgloop
+
+	lea	SMPS_RAM.v_spcsfx_track_ram(a6),a5
+
+	; Update Special SFX FM volume
+	moveq	#SMPS_SPECIAL_SFX_FM_TRACK_COUNT-1,d7	; 1 FM track
+	bsr.s	.fmloop
+
+	; Update Special SFX PSG volume
+	moveq	#SMPS_SPECIAL_SFX_PSG_TRACK_COUNT-1,d7	; 1 PSG track
+	bsr.s	.psgloop
+
+	; Done
+.locret:
+	rts
+
 ; loc_7269E:
 .fmloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
@@ -2042,9 +2073,8 @@ DoFadeIn:
 .nextfm:
 	lea	SMPS_Track.len(a5),a5
 	dbf	d7,.fmloop
+	rts
 
-	; Update PSG volume
-	moveq	#SMPS_MUSIC_PSG_TRACK_COUNT-1,d7	; 3 PSG tracks
 ; loc_726B4:
 .psgloop:
 	tst.b	SMPS_Track.PlaybackControl(a5)	; Is track playing?
@@ -2060,9 +2090,6 @@ DoFadeIn:
 .nextpsg:
 	lea	SMPS_Track.len(a5),a5
 	dbf	d7,.psgloop
-
-	; Done
-.locret:
 	rts
 ; End of function DoFadeIn
 
