@@ -2775,7 +2775,7 @@ cfFadeInToPrevious:
 	lea	SMPS_RAM.v_music_track_ram(a6),a5
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.fadefm					; Branch if not
-	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
+;	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit (commented-out because DAC doesn't actually use this bit)
 ;	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding?
 ;	bne.s	.fadefm					; Branch if yes
 	bsr.w	SetDACVolume
