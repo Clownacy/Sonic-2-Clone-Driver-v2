@@ -14,11 +14,7 @@
 
 ; sub_71B4C: UpdateMusic:
 SMPS_UpdateDriver:
-    if ((Clone_Driver_RAM)&$8000)==0
-	lea	(Clone_Driver_RAM).l,a6
-    else
 	lea	(Clone_Driver_RAM).w,a6
-    endif
 
 	tst.b	SMPS_RAM.f_pause(a6)
 	bne.w	HandlePause
