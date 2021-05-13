@@ -2789,8 +2789,8 @@ cfFadeInToPrevious:
 	tst.b	SMPS_Track.PlaybackControl(a5)		; Is track playing?
 	bpl.s	.nextfm					; Branch if not
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
-	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding?
-	bne.s	.nextfm					; Branch if yes
+;	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is SFX overriding?
+;	bne.s	.nextfm					; Branch if yes
 	moveq	#0,d0
 	move.b	SMPS_Track.VoiceIndex(a5),d0		; Get voice
 	movea.l	SMPS_Track.VoicePtr(a5),a1		; Voice pointer
