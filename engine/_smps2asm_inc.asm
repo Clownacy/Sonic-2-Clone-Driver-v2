@@ -236,7 +236,11 @@ smpsHeaderSFXChannel macro chanid,loc,pitch,vol
 	else
 		dc.b	pitch
 	endif
-	dc.b	vol
+	if (chanid==cPSG1) || (chanid==cPSG2) || (chanid==cPSG3)
+		dc.b	vol<<3
+	else
+		dc.b	vol
+	endif
 	endm
 ; ---------------------------------------------------------------------------------------------
 ; Co-ord Flag Macros and Equates
@@ -319,7 +323,7 @@ smpsSetVol macro val
 
 ; Works on all drivers
 smpsPSGAlterVol macro vol
-	dc.b	$FF,$0C,((vol<<3)&$7F)|(vol&$80)
+	dc.b	$FF,$0C,((vol<<3)&$7F)|((vol)&$80)
 	endm
 
 ; Clears pushing sound flag in S1
