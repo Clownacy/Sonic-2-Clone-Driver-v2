@@ -196,7 +196,7 @@ smpsHeaderPSG macro loc,pitch,vol,mod,voice
 	endif
 	dc.w	loc-songStart
 	PSGPitchConvert pitch
-	dc.b	vol<<3,mod,voice
+	dc.b	(vol)<<3,mod,voice
 	endm
 
 ; Header - Set up PWM Channel
@@ -323,7 +323,7 @@ smpsSetVol macro val
 
 ; Works on all drivers
 smpsPSGAlterVol macro vol
-	dc.b	$FF,$0C,((vol<<3)&$7F)|((vol)&$80)
+	dc.b	$FF,$0C,(((vol)<<3)&$7F)|((vol)&$80)
 	endm
 
 ; Clears pushing sound flag in S1
