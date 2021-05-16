@@ -150,6 +150,9 @@ UpdateMusic:
 
 ; sub_71C4E: UpdateDAC:
 DACUpdateTrack:
+    if SMPS_SoundTest
+	bclr	#0,SMPS_Track.PlaybackControl(a5)	; Clear 'new note playing' flag (used by my homebrew Sound Test)
+    endif
 	subq.b	#1,SMPS_Track.DurationTimeout(a5)	; Has DAC sample timeout expired?
 	bne.s	.locret					; Return if not
 	bsr.s	DACDoNext
@@ -229,6 +232,10 @@ DACUpdateSample:
 	bsr.s	SendDACSampleRequest
 	SMPS_startZ80_safe
 
+    if SMPS_SoundTest
+	bset	#0,SMPS_Track.PlaybackControl(a5)	; Set 'new note playing' flag (used by my homebrew Sound Test)
+    endif
+
 locret_71CAA:
 	rts
 ; End of function DACUpdateSample
@@ -290,6 +297,9 @@ SendDACSampleRequest:
 
 ; sub_71CCA:
 FMUpdateTrack:
+    if SMPS_SoundTest
+	bclr	#0,SMPS_Track.PlaybackControl(a5)	; Clear 'new note playing' flag (used by my homebrew Sound Test)
+    endif
 	subq.b	#1,SMPS_Track.DurationTimeout(a5)	; Update duration timeout
 	bne.s	.notegoing				; Branch if it hasn't expired
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
@@ -405,6 +415,9 @@ FinishTrackUpdate:
 	move.b	SMPS_Track.SavedDuration(a5),SMPS_Track.DurationTimeout(a5)	; Reset note timeout
 	btst	#4,SMPS_Track.PlaybackControl(a5)				; Is track set to not attack note?
 	bne.s	locret_71D9C							; If so, branch
+    if SMPS_SoundTest
+	bset	#0,SMPS_Track.PlaybackControl(a5)	; Set 'new note playing' flag (used by my homebrew Sound Test)
+    endif
 	move.b	SMPS_Track.NoteTimeoutMaster(a5),SMPS_Track.NoteTimeout(a5)	; Reset note fill timeout
 	; Clownacy | We only want VolEnvIndex clearing on PSG tracks, now.
 	; Non-PSG tracks use the RAM for something else.
@@ -2226,6 +2239,9 @@ WriteFMII:
 
 ; sub_72850:
 PSGUpdateTrack:
+    if SMPS_SoundTest
+	bclr	#0,SMPS_Track.PlaybackControl(a5)	; Clear 'new note playing' flag (used by my homebrew Sound Test)
+    endif
 	subq.b	#1,SMPS_Track.DurationTimeout(a5)	; Update note timeout
 	bne.s	.notegoing
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack note' flag
@@ -2504,6 +2520,9 @@ PSGSilenceAll:
 
     if SMPS_EnablePWM
 PWMUpdateTrack:
+    if SMPS_SoundTest
+	bclr	#0,SMPS_Track.PlaybackControl(a5)	; Clear 'new note playing' flag (used by my homebrew Sound Test)
+    endif
 	subq.b	#1,SMPS_Track.DurationTimeout(a5)	; Has PWM sample timeout expired?
 	bne.s	locret_729B4				; Return if not
 	bclr	#4,SMPS_Track.PlaybackControl(a5)	; Clear 'do not attack next note' bit
@@ -2570,6 +2589,10 @@ PWMUpdateSample:
 	move.b	SMPS_Track.VoiceControl(a5),d2
 	lea	(SMPS_pwm_comm).l,a0
 	move.w	d1,-8(a0,d2.w)
+
+    if SMPS_SoundTest
+	bset	#0,SMPS_Track.PlaybackControl(a5)	; Set 'new note playing' flag (used by my homebrew Sound Test)
+    endif
 
 .skipSampleUpdate:
 	rts
