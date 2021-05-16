@@ -202,8 +202,8 @@ DACDoNext:
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
 DACUpdateSample:
-	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
-	bne.s	locret_71CAA				; Return if yes
+;	btst	#2,SMPS_Track.PlaybackControl(a5)	; Is track being overridden?
+;	bne.s	locret_71CAA				; Return if yes
 	move.b	SMPS_Track.SavedDAC(a5),d2		; Get sample
 	cmpi.b	#$80,d2					; Is it a rest?
 	beq.s	locret_71CAA				; Return if yes
