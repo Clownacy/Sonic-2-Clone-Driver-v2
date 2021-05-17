@@ -362,6 +362,12 @@ FMSetFreq:
 	subi.b	#$80,d5				; Make it a zero-based index
 	beq.w	TrackSetRest
 	add.b	SMPS_Track.Transpose(a5),d5	; Add track transposition
+    if SMPS_SoundTest
+	cmpi.b	#12*8,d5
+	blo.s	.legal
+	illegal
+.legal:
+    endif
 	andi.w	#$7F,d5				; Clear high byte and sign bit
 	add.w	d5,d5
 	move.w	FMFrequencies(pc,d5.w),SMPS_Track.Freq(a5)
@@ -2305,6 +2311,12 @@ PSGSetFreq:
 	subi.b	#$81,d5				; Convert to 0-based index
 	bcs.s	.restpsg			; If $80, put track at rest
 	add.b	SMPS_Track.Transpose(a5),d5	; Add in channel transposition
+    if SMPS_SoundTest
+	cmpi.b	#12*7,d5
+	blo.s	.legal
+	illegal
+.legal:
+    endif
 	andi.w	#$7F,d5				; Clear high byte and sign bit
 	add.w	d5,d5
 	move.w	PSGFrequencies(pc,d5.w),SMPS_Track.Freq(a5)	; Set new frequency
