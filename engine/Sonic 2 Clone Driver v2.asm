@@ -2334,19 +2334,14 @@ PSGSetFreq:
 ; ===========================================================================
 ; word_729CE:
 PSGFrequencies:
-	; This table starts with 12 notes not in S1 or S2:
-	dc.w $3FF, $3FF, $3FF, $3FF, $3FF, $3FF, $3FF, $3FF
-	dc.w $3FF, $3F7, $3BE, $388
-	; The following notes are present on S1 and S2 too:
-	dc.w $356, $326, $2F9, $2CE, $2A5, $280, $25C, $23A
-	dc.w $21A, $1FB, $1DF, $1C4, $1AB, $193, $17D, $167
-	dc.w $153, $140, $12E, $11D, $10D,  $FE,  $EF,  $E2
-	dc.w  $D6,  $C9,  $BE,  $B4,  $A9,  $A0,  $97,  $8F
-	dc.w  $87,  $7F,  $78,  $71,  $6B,  $65,  $5F,  $5A
-	dc.w  $55,  $50,  $4B,  $47,  $43,  $40,  $3C,  $39
-	dc.w  $36,  $33,  $30,  $2D,  $2B,  $28,  $26,  $24
-	dc.w  $22,  $20,  $1F,  $1D,  $1B,  $1A,  $18,  $17
-	dc.w  $16,  $15,  $13,  $12,  $11,  $10,    0,    0
+	; This is the expanded PSG frequency table from Sonic 3 & Knuckles' driver
+	dc.w $3FF, $3FF, $3FF, $3FF, $3FF, $3FF, $3FF, $3FF, $3FF, $3F7, $3BE, $388
+	dc.w $356, $326, $2F9, $2CE, $2A5, $280, $25C, $23A, $21A, $1FB, $1DF, $1C4
+	dc.w $1AB, $193, $17D, $167, $153, $140, $12E, $11D, $10D,  $FE,  $EF,  $E2
+	dc.w  $D6,  $C9,  $BE,  $B4,  $A9,  $A0,  $97,  $8F,  $87,  $7F,  $78,  $71
+	dc.w  $6B,  $65,  $5F,  $5A,  $55,  $50,  $4B,  $47,  $43,  $40,  $3C,  $39
+	dc.w  $36,  $33,  $30,  $2D,  $2B,  $28,  $26,  $24,  $22,  $20,  $1F,  $1D
+	dc.w  $1B,  $1A,  $18,  $17,  $16,  $15,  $13,  $12,  $11,  $10,    0,    0
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
 
