@@ -341,7 +341,18 @@ FMDoNext:
 .gotnote:
 	bsr.w	FMNoteOff
 	tst.b	d5			; Is this a note?
+    if SMPS_SoundTest
+	; Crash upon detecting note-rest-duration-duration behaviour
+	; (this behaviour differs between drivers and should not be
+	; relied on)
+	bmi.s	.skip
+	tst.w	SMPS_Track.Freq(a5)
+	bne.s	.gotduration
+	illegal
+.skip:
+    else
 	bpl.s	.gotduration		; Branch if not
+    endif
 	bsr.s	FMSetFreq
 	move.b	(a4)+,d5		; Get another byte
 	bpl.s	.gotduration		; Branch if it is a duration
@@ -363,6 +374,7 @@ FMSetFreq:
 	beq.w	TrackSetRest
 	add.b	SMPS_Track.Transpose(a5),d5	; Add track transposition
     if SMPS_SoundTest
+	; Crash upon encountering out-of-bound notes
 	cmpi.b	#12*8,d5
 	blo.s	.legal
 	illegal
@@ -2289,7 +2301,18 @@ PSGDoNext:
 ; loc_72890:
 .gotnote:
 	tst.b	d5			; Is it a note?
+    if SMPS_SoundTest
+	; Crash upon detecting note-rest-duration-duration behaviour
+	; (this behaviour differs between drivers and should not be
+	; relied on)
+	bmi.s	.skip
+	cmpi.w	#-1,SMPS_Track.Freq(a5)
+	bne.s	.gotduration
+	illegal
+.skip:
+    else
 	bpl.s	.gotduration		; Branch if not
+    endif
 	bsr.s	PSGSetFreq
 	move.b	(a4)+,d5		; Get another byte
 	tst.b	d5			; Is it a duration?
@@ -2312,6 +2335,7 @@ PSGSetFreq:
 	bcs.s	.restpsg			; If $80, put track at rest
 	add.b	SMPS_Track.Transpose(a5),d5	; Add in channel transposition
     if SMPS_SoundTest
+	; Crash upon encountering out-of-bound notes
 	cmpi.b	#12*7,d5
 	blo.s	.legal
 	illegal
