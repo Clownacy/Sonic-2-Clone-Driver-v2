@@ -189,6 +189,7 @@ f_push_playing			= 3
     if SMPS_EnableContSFX
 f_continuous_sfx		= 4
     endif
+f_pal				= 5
 
     if SMPS_EnableSpinDashSFX
 	v_spindash_timer:	ds.b 1
