@@ -56,8 +56,8 @@ SMPS_S3DPSGEnvelopes	= 0
 SMPS_KCPSGEnvelopes	= 0
 
 ; ---DISASM-DEPENDANT VARIABLES AND FUNCTIONS---
-JmpTo_SoundDriverLoad	= SMPS_LoadDACDriver
-SoundDriverLoad		= SMPS_LoadDACDriver
+JmpTo_SoundDriverLoad	= SMPS_Setup
+SoundDriverLoad		= SMPS_Setup
 
 PlayMusic		= SMPS_QueueSound1
     if SMPS_EnablePlaySoundLocal

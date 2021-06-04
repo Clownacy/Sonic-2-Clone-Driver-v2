@@ -1,10 +1,16 @@
 ; ---------------------------------------------------------------------------
-; Load DAC driver (custom two-channel driver)
+; Perform sound driver initialisation and load the DAC driver
 ; ---------------------------------------------------------------------------
-; SoundDriverLoad: JmpTo_SoundDriverLoad 
-SMPS_LoadDACDriver:
+; SoundDriverLoad: JmpTo_SoundDriverLoad  SMPS_LoadDACDriver:
+SMPS_Setup:
 	SMPS_stopZ80
 	SMPS_resetZ80
+
+	; detect PAL consoles and set the PAL flag if needed
+	btst	#6,(SMPS_version_number).l
+	beq.s	.not_pal
+	bset	#f_pal,(Clone_Driver_RAM+SMPS_RAM.bitfield1).l
+.not_pal:
 
 	; load DAC driver (Kosinski-compressed)
 	lea	(DACDriver).l,a0	; source
