@@ -1,7 +1,6 @@
 SMPS_z80_ram =		$A00000
 
 SMPS_version_number =	$A10001
-SMPS_HW_Port_1_Data =	$A10003
 
 SMPS_z80_bus_request =	$A11100
 SMPS_z80_reset =	$A11200
