@@ -1,6 +1,6 @@
 ; ========SONIC 1 GIT EQUATES========
 
-Size_of_Mega_PCM_guess = $240
+Size_of_DAC_driver_guess = $240
 
 ; ---FLAGS---
 SMPS_GloopSFXBehaviour	= 0
@@ -40,6 +40,8 @@ SMPS_IsOn32X	= 0
 SMPS_EnablePWM	= 0
 ;	| If 1, support for four PWM tracks is added
 ;
+SMPS_SoundTest	= 0
+;	| If 1, some debugging logic is enabled. I would *really* advise not enabling this.
 
 SMPS_S1DACSamples	= 1
 SMPS_S2DACSamples	= 0
