@@ -414,7 +414,7 @@ Changelog
 - Added support for negative FM voice pointers in Special SFX
 - Changed DAC_Entry pitch value so it's the playback speed in Hz instead of a djnz loop counter
 
-XX/XX/XXXX
+02/07/2021
 = v2.8 =
 - Added FM volume attenuation clamping, to prevent overflow (this bug would cause Sonic 2's final boss music to have an extremely loud instrument while fading-in after a 1-UP jingle finishes playing)
 - Inconsistent DAC/FM6 panning behaviour has been corrected

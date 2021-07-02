@@ -2,7 +2,7 @@
 ; Sonic 2 Clone Driver v2
 ; ===========================================================================
 
-	dc.b	"Clownacy's Sonic 2 Clone Driver v2 (v2.8 prototype)"
+	dc.b	"Clownacy's Sonic 2 Clone Driver v2 (v2.8)"
 	even
 
 ; ---------------------------------------------------------------------------
