@@ -1,4 +1,4 @@
-Clownacy's Sonic 2 Clone Driver v2 (v2.8)
+Clownacy's Sonic 2 Clone Driver v2 (v2.8.0.1)
 
 This is a heavily-modified version of Sonic 1's SMPS sound driver (which itself is a modified SMPS 68k Type 1b),
 designed to work as a replacement for Sonic 2's SMPS sound driver (which is an improved Z80 port of Sonic 1's driver).

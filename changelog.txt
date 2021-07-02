@@ -430,3 +430,7 @@ Changelog
 - Fading-in has been overhauled, so that SFX are no longer muted while fading is performed: rather, SFX are now faded along with everything else
 - Bugs relating to PSG volume values have been corrected
 - The dependency on the 'Graphics_Flags'/'v_megadrive' variable has been removed, easing the process of integrating this driver into homebrew
+
+02/07/2021
+= v2.8.0.1 =
+- Fixed the Settings.asm files for Sonic 1 and Sonic 2
