@@ -165,7 +165,7 @@ Results_screen_2p_Loop00:
 Results_screen_2p_FM4:
 	smpsSetvoice        $01
 	smpsAlterVol        $FE
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsCall            Results_screen_2p_Call00
 	smpsAlterVol        $02
 	smpsSetvoice        $01
@@ -174,10 +174,10 @@ Results_screen_2p_FM4:
 	smpsCall            Results_screen_2p_Call01
 	smpsCall            Results_screen_2p_Call01
 	smpsAlterVol        $05
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $FB
 	smpsCall            Results_screen_2p_Call02
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $05
 	smpsPan             panCenter, $00
 	smpsJump            Results_screen_2p_FM4

@@ -1,5 +1,5 @@
 End_Boss_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     End_Boss_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $A9
@@ -78,14 +78,14 @@ End_Boss_Loop04:
 	smpsLoop            $01, $02, End_Boss_Loop04
 	smpsSetvoice        $02
 	smpsPan             panLeft, $00
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsAlterVol        $08
 
 End_Boss_Loop05:
 	smpsCall            End_Boss_Call03
 	smpsLoop            $00, $02, End_Boss_Loop05
 	smpsSetvoice        $00
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsAlterVol        $F8
 	smpsPan             panCenter, $00
 	smpsCall            End_Boss_Call05
@@ -103,11 +103,11 @@ End_Boss_Call06:
 	smpsReturn
 
 End_Boss_Call07:
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $03
 	dc.b	nRst, $0C, nA5, $06, nB5, nC6, $48, nRst, $0C, nB5, $06, nC6
 	dc.b	nD6, $48
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $FD
 	smpsReturn
 
@@ -188,7 +188,7 @@ End_Boss_Call03:
 ; FM5 Data
 End_Boss_FM5:
 	smpsSetvoice        $01
-	smpsDetune       $01
+	smpsAlterNote       $01
 	smpsPan             panRight, $00
 	smpsModSet          $13, $01, $03, $05
 	dc.b	nRst, $60, nRst
@@ -199,7 +199,7 @@ End_Boss_Loop00:
 	smpsCall            End_Boss_Call01
 	smpsPan             panLeft, $00
 	smpsSetvoice        $02
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsCall            End_Boss_Call02
 	dc.b	nC6, $54, nD6, $06, nC6, nB5, $60
 	smpsCall            End_Boss_Call02
@@ -208,7 +208,7 @@ End_Boss_Loop00:
 
 ; PSG1 Data
 End_Boss_PSG1:
-	smpsDetune       $02
+	smpsAlterNote       $02
 
 End_Boss_Jump04:
 	dc.b	nRst, $60, nRst, $60
@@ -274,7 +274,7 @@ End_Boss_Voices:
 	smpsVcDecayRate2    $01, $00, $00, $00
 	smpsVcDecayLevel    $00, $01, $0F, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $27, $28, $17
+	smpsVcTotalLevel    $80, $27, $28, $17
 
 ;	Voice $01
 ;	$3D
@@ -292,7 +292,7 @@ End_Boss_Voices:
 	smpsVcDecayRate2    $03, $03, $03, $00
 	smpsVcDecayLevel    $01, $01, $01, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $60, $00, $00, $1A
+	smpsVcTotalLevel    $60, $80, $80, $1A
 
 ;	Voice $02
 ;	$3D
@@ -310,5 +310,5 @@ End_Boss_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $01, $02, $02, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $00, $00, $1E
+	smpsVcTotalLevel    $80, $80, $80, $1E
 

@@ -1,5 +1,5 @@
 Sound54_OOZLidPop_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     Sound54_OOZLidPop_Voices
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $02
@@ -38,5 +38,5 @@ Sound54_OOZLidPop_Voices:
 	smpsVcDecayRate2    $0D, $0A, $03, $1A
 	smpsVcDecayLevel    $0F, $0F, $0F, $0F
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $07, $07, $03
+	smpsVcTotalLevel    $80, $07, $07, $03
 

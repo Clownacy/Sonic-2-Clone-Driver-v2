@@ -1,5 +1,5 @@
 HPZ_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     HPZ_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $02, $E0
@@ -19,14 +19,14 @@ HPZ_FM5:
 	smpsPan             panRight, $00
 	smpsModSet          $18, $01, $FE, $04
 	smpsSetvoice        $03
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsJump            HPZ_Loop02
 
 ; FM4 Data
 HPZ_FM4:
 	smpsModSet          $0C, $01, $FD, $05
 	smpsSetvoice        $00
-	smpsDetune       $02
+	smpsAlterNote       $02
 	dc.b	nRst, $06
 	smpsJump            HPZ_Jump02
 
@@ -38,7 +38,7 @@ HPZ_PSG1:
 ; PSG2 Data
 HPZ_PSG2:
 	smpsModSet          $0C, $01, $FF, $04
-	smpsDetune       $FF
+	smpsAlterNote       $FF
 	dc.b	nRst, $06
 	smpsJump            HPZ_Jump02
 
@@ -83,7 +83,7 @@ HPZ_Jump01:
 ; FM3 Data
 HPZ_FM3:
 	smpsPan             panLeft, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsModSet          $18, $01, $02, $04
 	smpsSetvoice        $02
 
@@ -96,9 +96,9 @@ HPZ_Jump00:
 	dc.b	nA4, nB4, nC5, nB4, nC5, nD5, $24, smpsNoAttack, $18, nE5, $0C, nD5
 	dc.b	$24
 	smpsLoop            $00, $02, HPZ_Loop02
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	dc.b	smpsNoAttack, nD4, $24, nD4, nBb3, $0C, nD4, nA4, nG4, $24
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	dc.b	nE4, $0C, nA4, nF4
 	smpsJump            HPZ_Jump00
 
@@ -108,16 +108,12 @@ HPZ_PSG3:
 	smpsNoteFill        $10
 
 HPZ_Loop05:
-	;smpsAlterVol        $FE
 	smpsPSGAlterVol     $FE
 	dc.b	nF4, $06
-	;smpsAlterVol        $02
 	smpsPSGAlterVol     $02
 	dc.b	nC5, nC5, nF4, nA4, nF4
-	;smpsAlterVol        $FE
 	smpsPSGAlterVol     $FE
 	dc.b	nB4
-	;smpsAlterVol        $02
 	smpsPSGAlterVol     $02
 	dc.b	nF4, nC5, nF4, nB4, nF4
 	smpsLoop            $01, $10, HPZ_Loop05

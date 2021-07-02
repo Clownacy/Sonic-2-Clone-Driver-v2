@@ -16,7 +16,7 @@ Mus87_Invincibility_Header:
 
 ; FM5 Data
 Mus87_Invincibility_FM5:
-	smpsDetune       $03
+	smpsAlterNote       $03
 
 ; FM1 Data
 Mus87_Invincibility_FM1:

@@ -76,31 +76,31 @@ EHZ_Jump02:
 	smpsAlterVol        $03
 	smpsModOff
 	smpsSetvoice        $05
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	dc.b	nRst, $10, nF5, nG5, nA5, nB5, nC6, nD6, nB5, nRst, nB5, nC6
 	dc.b	nD6, nC6, nD6, nE6, nC6, nRst, nF5, nG5, nA5, nB5, nC6, nD6
 	dc.b	nB5
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $FD
 	smpsSetvoice        $06
 	dc.b	nD6, $04, nD6, nRst, nE6, $20, smpsNoAttack, $14
 	smpsSetvoice        $00
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $09
 	dc.b	nA6, $04, nE6, nC6, nA5, nE6, nC6, nA5, nE5, nC6, nA5, nE5
 	dc.b	nC5, nA5, nE5, nC5, nA4
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $FA
 	smpsJump            EHZ_Jump02
 
 ; FM3 Data
 EHZ_FM3:
 	smpsSetvoice        $03
-	smpsDetune       $01
+	smpsAlterNote       $01
 	dc.b	nF5, $08, nRst, $04, nG5, $20, smpsNoAttack, $14, nE5, $20, nF5
 
 EHZ_Jump01:
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsSetvoice        $03
 	smpsPan             panLeft, $00
 	dc.b	nRst, $08, nG4, $04, nRst, nA4, nRst, nG4, nRst, nC5, nRst, nC5
@@ -120,51 +120,51 @@ EHZ_Jump01:
 	dc.b	$08, nBb4, $04, nRst, nBb4, $08, nC5, nD5, nC5, nBb4, $04, nC5
 	dc.b	$0C, nA4, $14
 	smpsSetvoice        $06
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsAlterVol        $F9
 	dc.b	nA5, $04, nE6, $02, nRst, $02, nRst, $04, nE6, $02, nRst, $02
 	dc.b	nD6, $08, nC6
 	smpsSetvoice        $04
-	smpsDetune       $01
+	smpsAlterNote       $01
 	smpsAlterVol        $07
 	dc.b	nRst, $10, nG4, nA4, $08, nC5, $04, nRst, nC5, $08, nD5, nC5
 	dc.b	nE5, nD5, $10, nA4, $20, smpsNoAttack, $08, nRst, $08, nBb4, $04, nRst
 	dc.b	nBb4, $08, nC5, nD5, nC5, nBb4, $04, nC5, $08, nA4, $04
 	smpsSetvoice        $06
 	smpsAlterVol        $F9
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	nA5, $08, nC6, $04, nRst, nA5, nRst, nD6, $0C, nC6, $04, nRst
 	dc.b	$10
 	smpsSetvoice        $03
 	smpsPan             panCenter, $00
-	smpsDetune       $01
+	smpsAlterNote       $01
 	dc.b	nC6, $18, nA5, $08, nRst, $14, nA5, $04, nC6, $08, nB5, $04
 	dc.b	nRst, nC6, nB5, $04, nRst, $10
 	smpsSetvoice        $00
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsAlterVol        $FE
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsPan             panRight, $00
 	dc.b	nB5, $02, nRst, $06, nC6, $04, nB5, $14
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $02
 	smpsSetvoice        $03
 	smpsPan             panCenter, $00
-	smpsDetune       $01
+	smpsAlterNote       $01
 	dc.b	nRst, $10, nB5, $08, nC6, nD6, nC6, nB5, nD6, nC6, $04, nRst
 	dc.b	nC6, $10, nA5, $08, nRst, $20, nC6, $18, nA5, $08, nRst, $14
 	dc.b	nA5, $04, nC6, $08, nB5, $04, nRst, nC6, nB5, $04, nRst, $10
 	smpsSetvoice        $00
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsAlterVol        $FE
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsPan             panRight, $00
 	dc.b	nB5, $02, nRst, $06, nC6, $04, nB5, $14
 	smpsAlterVol        $02
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $03
 	smpsPan             panCenter, $00
-	smpsDetune       $01
+	smpsAlterNote       $01
 	dc.b	nD6, $04, nC6, nRst, nA5, $20, smpsNoAttack, $14, smpsNoAttack, $20, smpsNoAttack, $0C
 	dc.b	nRst, $14
 	smpsJump            EHZ_Jump01
@@ -180,13 +180,13 @@ EHZ_Jump00:
 	smpsPan             panCenter, $00
 	smpsSetvoice        $08
 	smpsModSet          $02, $01, $FE, $04
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 
 EHZ_Loop05:
 	dc.b	nE5, $20, smpsNoAttack, $20, nFs5, smpsNoAttack, $20, nD5, smpsNoAttack, $20, nC5, smpsNoAttack
 	dc.b	$20
 	smpsLoop            $00, $04, EHZ_Loop05
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsModOff
 	smpsSetvoice        $02
 	smpsPan             panCenter, $00
@@ -228,7 +228,7 @@ EHZ_PSG1:
 	dc.b	nRst, $20, nRst, nRst, nRst
 
 EHZ_Jump05:
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsPSGvoice        fTone_0B
 	smpsPSGAlterVol     $02
 
@@ -248,10 +248,10 @@ EHZ_Loop0B:
 	dc.b	nB5, $02, nRst, $02
 	smpsPSGAlterVol     $FA
 	smpsPSGvoice        fTone_08
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	dc.b	nRst, $20, nRst, nC6, $04, nRst, nC6, $10, nA5, $08, nRst, $20
 	dc.b	nRst, nRst
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsPSGAlterVol     $01
 	dc.b	nRst, nB5, $02, nRst, $06, nC6, $04, nB5, $08
 	smpsPSGAlterVol     $FF
@@ -261,7 +261,7 @@ EHZ_Loop0B:
 	smpsPSGAlterVol     $03
 	dc.b	nB5, $02, nRst, $02
 	smpsPSGAlterVol     $FA
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	dc.b	nRst, $20, nRst, nRst, nRst
 	smpsJump            EHZ_Jump05
 
@@ -272,7 +272,7 @@ EHZ_PSG2:
 EHZ_Jump04:
 	smpsPSGAlterVol     $03
 	smpsPSGvoice        fTone_0B
-	smpsDetune       $00
+	smpsAlterNote       $00
 
 EHZ_Loop0A:
 	dc.b	nE5, $20, smpsNoAttack, $20, nFs5, smpsNoAttack, $20, nD5, smpsNoAttack, $20, nC5, smpsNoAttack
@@ -282,7 +282,7 @@ EHZ_Loop0A:
 	smpsPSGAlterVol     $FD
 	dc.b	nRst, $20, nRst
 	smpsPSGvoice        $00
-	smpsDetune       $01
+	smpsAlterNote       $01
 	smpsPSGAlterVol     $01
 	dc.b	nRst, nB5, $02, nRst, $06, nC6, $04, nB5, $08
 	smpsPSGAlterVol     $FF

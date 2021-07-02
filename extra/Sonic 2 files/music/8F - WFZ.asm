@@ -25,7 +25,7 @@ WFZ_PSG3:
 ; FM5 Data
 WFZ_FM5:
 	smpsSetvoice        $00
-	smpsDetune       $01
+	smpsAlterNote       $01
 	dc.b	nRst, $12
 
 WFZ_Jump05:
@@ -39,31 +39,31 @@ WFZ_Loop04:
 	dc.b	nE5, nE5, nCs5, nCs5, nA4, nA4
 	smpsPan             panCenter, $00
 	smpsAlterVol        $FA
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	dc.b	nCs4, $0C, nD4, $06, nE4, $12, nA4, $12, nAb4, $12, nFs4, $12
 	dc.b	nE4, $12, nD4, $0C, nCs4, $06, nD4, $12, nD4, $0C, nE4, $06
 	dc.b	nFs4, $12, nB4, nA4, nFs4, nFs4, $12, nAb4, $0C, nFs4, $06, nE4
 	dc.b	$24
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsPan             panLeft, $00
 	smpsAlterVol        $06
 
 WFZ_Loop05:
 	dc.b	nBb4, $03, nA4
 	smpsLoop            $00, $30, WFZ_Loop05
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $FA
 	smpsPan             panCenter, $00
 	dc.b	nB3, $12, nCs4, nD4, nE4, nFs4, nAb4, nA4, nB4, nCs4, nD4, nE4
 	dc.b	nFs4, nAb4, nA4, nB4, nCs5, nD5, $48, nEb5, nFs5, $24, nE5, nA5
 	dc.b	nAb5, $24
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsJump            WFZ_Jump05
 
 ; FM1 Data
 WFZ_FM1:
 	smpsSetvoice        $00
-	smpsDetune       $FF
+	smpsAlterNote       $FF
 	dc.b	nRst, $12
 
 WFZ_Jump04:

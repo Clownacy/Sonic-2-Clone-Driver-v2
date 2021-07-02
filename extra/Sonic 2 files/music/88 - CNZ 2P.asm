@@ -62,7 +62,7 @@ CNZ_2p_Loop08:
 	smpsCall            CNZ_2p_Call06
 	smpsLoop            $00, $02, CNZ_2p_Loop08
 	smpsSetvoice        $03
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsAlterVol        $07
 
 CNZ_2p_Loop09:
@@ -73,7 +73,7 @@ CNZ_2p_Loop0A:
 	smpsCall            CNZ_2p_Call08
 	smpsLoop            $00, $02, CNZ_2p_Loop0A
 	smpsSetvoice        $01
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsAlterVol        $F9
 	smpsCall            CNZ_2p_Call0A
 	smpsCall            CNZ_2p_Call0B
@@ -124,29 +124,29 @@ CNZ_2p_Loop07:
 	smpsAlterVol        $FC
 	smpsPan             panCenter, $00
 	smpsSetvoice        $01
-	smpsDetune       $02
-	smpsChangeTransposition      $F4
+	smpsAlterNote       $02
+	smpsAlterPitch      $F4
 	smpsAlterVol        $FF
 	smpsCall            CNZ_2p_Call0A
 	smpsCall            CNZ_2p_Call0B
 	smpsSetvoice        $02
-	smpsDetune       $00
-	smpsChangeTransposition      $0C
+	smpsAlterNote       $00
+	smpsAlterPitch      $0C
 	smpsAlterVol        $01
 	smpsJump            CNZ_2p_Loop06
 
 ; FM4 Data
 CNZ_2p_FM4:
 	smpsSetvoice        $01
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsCall            CNZ_2p_Call05
 
 CNZ_2p_Loop03:
 	smpsCall            CNZ_2p_Call06
 	smpsLoop            $00, $02, CNZ_2p_Loop03
 	smpsSetvoice        $03
-	smpsDetune       $00
-	smpsChangeTransposition      $0C
+	smpsAlterNote       $00
+	smpsAlterPitch      $0C
 	smpsAlterVol        $04
 	smpsModSet          $01, $01, $03, $03
 
@@ -168,8 +168,8 @@ CNZ_2p_Loop05:
 	smpsPan             panLeft, $00
 	dc.b	nRst, $09, nF5, nRst, $06, nF5, $09, nRst, $0C, nF5, $06, nRst
 	dc.b	$2D
-	smpsDetune       $02
-	smpsChangeTransposition      $F4
+	smpsAlterNote       $02
+	smpsAlterPitch      $F4
 	smpsAlterVol        $FC
 	smpsPan             panCenter, $00
 	smpsModOff

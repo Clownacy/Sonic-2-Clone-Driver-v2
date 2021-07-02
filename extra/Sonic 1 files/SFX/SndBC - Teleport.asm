@@ -4,8 +4,7 @@ SndBC_Teleport_Header:
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $02
 
-;	smpsHeaderSFXChannel cFM5, SndBC_Teleport_FM5,	$90, $00
-	smpsHeaderSFXChannel cFM5, SndBC_Teleport_FM5,	$10, $00	; Fixed
+	smpsHeaderSFXChannel cFM5, SndBC_Teleport_FM5,	$10, $00
 	smpsHeaderSFXChannel cPSG3, SndBC_Teleport_PSG3,	$00, $00
 
 ; FM5 Data

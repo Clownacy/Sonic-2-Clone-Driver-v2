@@ -1,5 +1,5 @@
 HTZ_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     HTZ_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $BE
@@ -25,7 +25,7 @@ HTZ_PSG3:
 ; FM1 Data
 HTZ_FM1:
 	smpsSetvoice        $01
-	smpsDetune       $06
+	smpsAlterNote       $06
 	dc.b	nRst, $60
 	smpsModSet          $08, $01, $02, $40
 	dc.b	nD4, $30
@@ -38,25 +38,25 @@ HTZ_FM1:
 	smpsCall            HTZ_Call0C
 	smpsSetvoice        $01
 	smpsCall            HTZ_Call0D
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsCall            HTZ_Call08
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $01
 	smpsCall            HTZ_Call0E
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsCall            HTZ_Call09
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $01
 	smpsCall            HTZ_Call0D
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsCall            HTZ_Call08
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $01
 	smpsCall            HTZ_Call0E
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsCall            HTZ_Call0A
-	smpsChangeTransposition      $0C
-	smpsDetune       $FE
+	smpsAlterPitch      $0C
+	smpsAlterNote       $FE
 	dc.b	nRst, $0C
 	smpsSetvoice        $03
 	dc.b	nBb2, $06, nA2, nBb2, nC3, nRst, $0C, nBb2, $06, nA2, nBb2, nC3
@@ -165,7 +165,7 @@ HTZ_Call0A:
 ; FM5 Data
 HTZ_FM5:
 	smpsSetvoice        $02
-	smpsDetune       $04
+	smpsAlterNote       $04
 
 HTZ_Jump02:
 	dc.b	nRst, $60, nRst, nRst, nRst
@@ -329,11 +329,11 @@ HTZ_Voices:
 	smpsVcDecayRate2    $03, $04, $04, $00
 	smpsVcDecayLevel    $02, $02, $02, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $04, $13, $30, $25
+	smpsVcTotalLevel    $84, $13, $30, $25
 
 ;	Voice $01
 ;	$38
-;	$3A, $0A, $11, $02, 	$D4, $14, $50, $0E, 	$05, $08, $02, $08
+;	$3A, $0A, $11, $02, 	$D4, $14, $50, $0E, 	$05, $08, $02, $88
 ;	$00, $00, $00, $00, 	$99, $09, $09, $1A, 	$2D, $2C, $19, $86
 	smpsVcAlgorithm     $00
 	smpsVcFeedback      $07
@@ -342,12 +342,12 @@ HTZ_Voices:
 	smpsVcCoarseFreq    $02, $01, $0A, $0A
 	smpsVcRateScale     $00, $01, $00, $03
 	smpsVcAttackRate    $0E, $10, $14, $14
-	smpsVcAmpMod        $00, $00, $00, $00
+	smpsVcAmpMod        $01, $00, $00, $00
 	smpsVcDecayRate1    $08, $02, $08, $05
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $01, $00, $00, $09
 	smpsVcReleaseRate   $0A, $09, $09, $09
-	smpsVcTotalLevel    $06, $19, $2C, $2D
+	smpsVcTotalLevel    $86, $19, $2C, $2D
 
 ;	Voice $02
 ;	$0D
@@ -365,7 +365,7 @@ HTZ_Voices:
 	smpsVcDecayRate2    $02, $02, $02, $00
 	smpsVcDecayLevel    $02, $02, $02, $03
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $13, $0B, $06, $28
+	smpsVcTotalLevel    $93, $8B, $86, $28
 
 ;	Voice $03
 ;	$3A
@@ -383,5 +383,5 @@ HTZ_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $00, $01, $0F, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $06, $27, $28, $17
+	smpsVcTotalLevel    $86, $27, $28, $17
 

@@ -1,5 +1,5 @@
 SndB2_Drown_Death_Header:
-	smpsHeaderStartSong 1
+	smpsHeaderStartSong 1, 1
 	smpsHeaderVoice     SndB2_Drown_Death_Voices
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $02
@@ -47,5 +47,5 @@ SndB2_Drown_Death_Voices:
 	smpsVcDecayRate2    $10, $09, $0E, $16
 	smpsVcDecayLevel    $04, $04, $02, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $12, $12, $2F
+	smpsVcTotalLevel    $80, $12, $12, $2F
 

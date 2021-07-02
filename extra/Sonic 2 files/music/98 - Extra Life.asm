@@ -16,7 +16,7 @@ ExtraLife_Header:
 
 ; FM4 Data
 ExtraLife_FM4:
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsPan             panRight, $00
 	smpsJump            ExtraLife_Jump01
 
@@ -45,7 +45,7 @@ ExtraLife_FM2:
 
 ; FM5 Data
 ExtraLife_FM5:
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsPan             panRight, $00
 	smpsJump            ExtraLife_Jump00
 

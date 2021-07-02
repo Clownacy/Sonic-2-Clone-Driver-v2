@@ -16,7 +16,7 @@ Mus83_MZ_Header:
 
 ; FM3 Data
 Mus83_MZ_FM3:
-	smpsDetune       $02
+	smpsAlterNote       $02
 
 ; FM1 Data
 Mus83_MZ_FM1:
@@ -73,10 +73,10 @@ Mus83_MZ_Call03:
 Mus83_MZ_FM5:
 	smpsSetvoice        $04
 	smpsAlterVol        $FC
-	smpsChangeTransposition      $24
+	smpsAlterPitch      $24
 	dc.b	nRst, $06, nE4, $03, $03, $06, nRst, nE3, $1E
 	smpsSetvoice        $02
-	smpsChangeTransposition      $DC
+	smpsAlterPitch      $DC
 	smpsAlterVol        $04
 	dc.b	nG6, $06
 
@@ -90,9 +90,9 @@ Mus83_MZ_Jump02:
 	dc.b	$06, nE6, $09, nRst, $03, nE6, nRst, nAb6, $06, nRst, nE6, $0C
 	dc.b	nRst, $18, nA6, $03, nRst, $0F, nA6, $03, nRst, $09, nC7, $09
 	dc.b	nRst, $03, nC7, nRst, nB6, $06, nRst, nA6, $03, nRst, nAb6, $12
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsCall            Mus83_MZ_Call02
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsJump            Mus83_MZ_Jump02
 
 Mus83_MZ_Call01:
@@ -173,14 +173,25 @@ Mus83_MZ_Call06:
 ; PSG2 Data
 Mus83_MZ_PSG2:
 	dc.b	nRst, $02
-	smpsDetune       $01
+	smpsAlterNote       $01
 	smpsJump            Mus83_MZ_PSG1
 
 ; PSG3 Data
 Mus83_MZ_PSG3:
 	smpsPSGform         $E7
 	smpsPSGAlterVol     $FF
-	dc.b	nRst, $06, nE5, $03, $03, $06, nRst, nE4, $24
+	; These first three notes are too high when combined with this track's
+	; transposition value, causing them to overflow the PSG frequency table
+	; and play invalid notes. In the Sonic 1 prototype, this problem was
+	; even worse as there were smpsChangeTransposition commands around the
+	; following line that raised the notes yet another octave higher,
+	; causing the fourth note to break too.
+	; Since the commands are gone now, we can assume that this was the
+	; developers' intended solution, though it unfortunately only fixed the
+	; fourth note. So, in order to fix the bug for good, the notes on the
+	; following line have to be lowered by yet another octave.
+	;dc.b	nRst, $06, nE5, $03, $03, $06, nRst, nE4, $24
+	dc.b	nRst, $06, nE4, $03, $03, $06, nRst, nE3, $24 ; Fixed
 	smpsPSGAlterVol     $01
 
 Mus83_MZ_Jump05:

@@ -53,7 +53,7 @@ Supersonic_FM3:
 	dc.b	nB5, $12, nC6, nCs6, $0C, nC6, $12, nCs6, nD6, $0C, nCs6, $12
 	dc.b	nD6, nEb6, $0C, nD6, $12, nEb6, nE6, $0C
 	smpsSetvoice        $02
-	smpsDetune       $03
+	smpsAlterNote       $03
 
 Supersonic_Loop07:
 	smpsCall            Supersonic_Call05
@@ -61,12 +61,12 @@ Supersonic_Loop07:
 
 Supersonic_Loop08:
 	smpsSetvoice        $00
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	nB5, $0C, nRst, nB5, nRst, nA5, nRst, nA5, nRst, nB5, $06, nRst
 	dc.b	nB5, nRst, nA5, $0C, nB5, $06, nRst, $36
-	smpsChangeTransposition      $03
+	smpsAlterPitch      $03
 	smpsLoop            $00, $02, Supersonic_Loop08
-	smpsChangeTransposition      $FA
+	smpsAlterPitch      $FA
 	dc.b	nC6, $18, nRst, nE6, nRst, nG6, nG6, nG6, nG6
 	smpsJump            Supersonic_FM3
 
@@ -90,9 +90,9 @@ Supersonic_Loop05:
 Supersonic_Loop06:
 	dc.b	nG5, $0C, nRst, nG5, nRst, nF5, nRst, nF5, nRst, nG5, $06, nRst
 	dc.b	nG5, nRst, nF5, $0C, nG5, $06, nRst, $36
-	smpsChangeTransposition      $04
+	smpsAlterPitch      $04
 	smpsLoop            $00, $02, Supersonic_Loop06
-	smpsChangeTransposition      $F8
+	smpsAlterPitch      $F8
 	dc.b	nA5, $18, nRst, nC6, nRst, nE6, nE6, nE6, nE6
 	smpsJump            Supersonic_Jump01
 
@@ -144,21 +144,21 @@ Supersonic_Loop01:
 
 Supersonic_Loop02:
 	smpsSetvoice        $02
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsPan             panLeft, $00
 	smpsCall            Supersonic_Call01
 	dc.b	nRst, $06, nF6, nRst, nE6, nRst, nF6, nG6, $12
 	smpsCall            Supersonic_Call01
 	dc.b	nRst, $06, nF6, $0C
 	smpsSetvoice        $03
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsPan             panCenter, $00
 	dc.b	nCs4, $06, nD4, nB3, $0C, nG3
 	smpsLoop            $00, $02, Supersonic_Loop02
 	smpsSetvoice        $02
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsCall            Supersonic_Call02
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsJump            Supersonic_FM5
 
 Supersonic_Call00:

@@ -16,7 +16,7 @@ Mus8D_FZ_Header:
 
 ; FM5 Data
 Mus8D_FZ_FM5:
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsJump            Mus8D_FZ_Jump03
 
 ; FM1 Data
@@ -79,7 +79,7 @@ Mus8D_FZ_Call00:
 Mus8D_FZ_FM4:
 	smpsSetvoice        $02
 	smpsAlterVol        $FC
-	smpsDetune       $03
+	smpsAlterNote       $03
 	dc.b	nE7, $03, nRst, nE6, nRst, nE6, nRst, nE7, nE7, $03, nRst, $18
 	smpsAlterVol        $04
 	smpsSetvoice        $03

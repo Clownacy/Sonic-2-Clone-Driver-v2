@@ -20,7 +20,7 @@ Continue_FM1:
 	dc.b	nRst, $30
 
 Continue_Loop04:
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	dc.b	nRst, $0C, nEb6, $12, nRst, $06, nEb6, nRst, nE6, $0C, nRst, $06
 	dc.b	nCs6, $18, nRst, $06
 	smpsLoop            $00, $03, Continue_Loop04
@@ -32,19 +32,19 @@ Continue_Loop04:
 Continue_FM2:
 	smpsSetvoice        $01
 	smpsAlterVol        $02
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsNop             $01
 	dc.b	nA5, $0C, nAb5, nG5, nFs5
 	smpsAlterVol        $FE
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $02
 
 Continue_Loop03:
 	dc.b	nA4, $06, nRst, nA4, nRst, nE4, nRst, nE4, nRst, nG4, $12, nFs4
 	dc.b	$0C, nG4, $06, nFs4, $0C
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	smpsLoop            $00, $03, Continue_Loop03
-	smpsChangeTransposition      $FD
+	smpsAlterPitch      $FD
 	dc.b	nB4, $06, nRst, nB4, nRst, nFs4, nRst, nFs4, nRst, nE5, $0C, nRst
 	dc.b	$06, nEb5, $4E
 	smpsNop             $01

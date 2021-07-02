@@ -1,5 +1,5 @@
 SndC2_Drown_Warning_Header:
-	smpsHeaderStartSong 1
+	smpsHeaderStartSong 1, 1
 	smpsHeaderVoice     SndC2_Drown_Warning_Voices
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $01
@@ -29,5 +29,5 @@ SndC2_Drown_Warning_Voices:
 	smpsVcDecayRate2    $09, $0D, $08, $0B
 	smpsVcDecayLevel    $00, $08, $09, $00
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $0A, $05, $24
+	smpsVcTotalLevel    $80, $0A, $05, $24
 

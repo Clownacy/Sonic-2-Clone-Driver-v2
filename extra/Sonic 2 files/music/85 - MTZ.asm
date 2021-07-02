@@ -1,5 +1,5 @@
 MTZ_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     MTZ_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $EA
@@ -20,7 +20,7 @@ MTZ_PSG1:
 
 ; PSG2 Data
 MTZ_PSG2:
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsJump            MTZ_Jump02
 
 ; FM1 Data
@@ -31,7 +31,7 @@ MTZ_FM1:
 MTZ_Loop09:
 	dc.b	nRst, $30, nRst
 	smpsLoop            $00, $04, MTZ_Loop09
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $03
 	smpsModSet          $01, $02, $01, $7F
 	dc.b	nB2, $60
@@ -74,31 +74,31 @@ MTZ_Loop0A:
 	dc.b	smpsNoAttack, nC3, $0C, nRst, $18
 	smpsLoop            $00, $02, MTZ_Loop0A
 	dc.b	nRst, $30, nRst, nRst, nRst, nRst, nRst
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsModSet          $06, $01, $08, $04
 	smpsSetvoice        $00
 	smpsAlterVol        $0A
 	dc.b	nG5, $0A, nRst, $02, nG5, $06, nRst
 	smpsAlterVol        $FB
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $03
 	dc.b	nG2, $06, nBb2, nC3, nEb3, $12, nC3, $05, nRst, $07, nBb2, $06
 	dc.b	nC3, $08, nRst, $0A
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $00
 	smpsAlterVol        $05
 	dc.b	nG5, $0A, nRst, $02, nG5, $06, nRst
 	smpsAlterVol        $FB
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $03
 	dc.b	nG2, $06, nBb2, nC3, nEb3, $12, nC3, $06, nRst, nBb2, $06, nC3
 	dc.b	$05, nRst, $0D, nRst, $30, nRst, nRst, nRst
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $00
 	smpsAlterVol        $05
 	dc.b	nG5, $0A, nRst, $02, nG5, $06, nRst
 	smpsAlterVol        $FB
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $03
 	dc.b	nG2, $06, nBb2, nC3, nEb3, $12, nC3, $06, nRst, nBb2, $06, nC3
 	dc.b	$05, nRst, $0D
@@ -116,7 +116,7 @@ MTZ_Loop0A:
 	dc.b	smpsNoAttack, $0C
 	smpsAlterVol        $F0
 	smpsModOff
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsJump            MTZ_Loop09
 
 MTZ_Jump02:
@@ -144,7 +144,7 @@ MTZ_Loop0E:
 ; FM3 Data
 MTZ_FM3:
 	smpsSetvoice        $01
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	dc.b	nRst, $30, nRst, nRst, nRst, nF3, $0C, smpsNoAttack
 
 MTZ_Loop05:
@@ -159,7 +159,7 @@ MTZ_Loop05:
 	smpsLoop            $00, $06, MTZ_Loop05
 	dc.b	nRst, $24
 	smpsSetvoice        $00
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 
 MTZ_Loop06:
 	dc.b	nRst, $18, nG4, $0B, nRst, $0D, nA4, $0C, $0B, nRst, $19, nC5
@@ -184,7 +184,7 @@ MTZ_Loop08:
 ; FM4 Data
 MTZ_FM4:
 	smpsSetvoice        $01
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	dc.b	nRst, $30, nRst, nRst, nRst, nBb3, $0C, smpsNoAttack
 
 MTZ_Loop03:
@@ -198,7 +198,7 @@ MTZ_Loop03:
 	dc.b	smpsNoAttack, nBb3, $08
 	smpsLoop            $00, $06, MTZ_Loop03
 	dc.b	nRst, $24
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $00
 
 MTZ_Loop04:
@@ -208,17 +208,17 @@ MTZ_Loop04:
 	dc.b	nG4, $30, smpsNoAttack, $0C
 	smpsLoop            $00, $04, MTZ_Loop04
 	smpsPan             panLeft, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $02
 	dc.b	nF3, $30, smpsNoAttack, $30, nA3, nF3
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $00
 	dc.b	nC5, $0A, nRst, $02, nC5, $06, nRst, nRst, $30, nRst, $0C, nBb3
 	dc.b	nC5, $0A, nRst, $02, nC5, $06, nRst, nRst, $30, nRst, $18
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $02
 	dc.b	nF3, $30, smpsNoAttack, $30, nA3, nF3
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsPan             panCenter, $00
 	smpsSetvoice        $00
 	dc.b	nC5, $0A, nRst, $02, nC5, $06, nRst, nRst, $30, nRst, nRst, nRst
@@ -241,17 +241,17 @@ MTZ_Loop02:
 	dc.b	nE4, $30, smpsNoAttack, $0C
 	smpsLoop            $00, $04, MTZ_Loop02
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $02
 	dc.b	nBb3, $30, smpsNoAttack, $30, nD4, nBb3
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $00
 	dc.b	nC4, $0A, nRst, $02, nC4, $06, nRst, nRst, $30, nRst, $0C, nBb3
 	dc.b	nC4, $0A, nRst, $02, nC4, $06, nRst, nRst, $30, nRst, $18
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $02
 	dc.b	nBb3, $30, smpsNoAttack, $30, nD4, nBb3
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsPan             panCenter, $00
 	smpsSetvoice        $00
 	dc.b	nC4, $0A, nRst, $02, nC4, $06, nRst, nRst, $30, nRst, $18, nRst
@@ -364,7 +364,7 @@ MTZ_Voices:
 	smpsVcDecayRate2    $00, $04, $00, $04
 	smpsVcDecayLevel    $00, $01, $00, $01
 	smpsVcReleaseRate   $0D, $00, $0B, $00
-	smpsVcTotalLevel    $00, $0B, $00, $19
+	smpsVcTotalLevel    $80, $0B, $80, $19
 
 ;	Voice $01
 ;	$3A
@@ -382,7 +382,7 @@ MTZ_Voices:
 	smpsVcDecayRate2    $01, $00, $00, $00
 	smpsVcDecayLevel    $00, $01, $0F, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $27, $28, $17
+	smpsVcTotalLevel    $80, $27, $28, $17
 
 ;	Voice $02
 ;	$3A
@@ -400,7 +400,7 @@ MTZ_Voices:
 	smpsVcDecayRate2    $02, $03, $04, $02
 	smpsVcDecayLevel    $02, $05, $01, $05
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $11, $05, $18
+	smpsVcTotalLevel    $80, $11, $05, $18
 
 ;	Voice $03
 ;	$29
@@ -436,7 +436,7 @@ MTZ_Voices:
 	smpsVcDecayRate2    $03, $04, $04, $00
 	smpsVcDecayLevel    $02, $02, $02, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $04, $0E, $30, $25
+	smpsVcTotalLevel    $84, $0E, $30, $25
 
 ;	Voice $05
 ;	$08
@@ -454,5 +454,5 @@ MTZ_Voices:
 	smpsVcDecayRate2    $03, $04, $04, $00
 	smpsVcDecayLevel    $02, $02, $02, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $04, $13, $30, $25
+	smpsVcTotalLevel    $84, $13, $30, $25
 

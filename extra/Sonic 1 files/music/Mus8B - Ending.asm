@@ -25,7 +25,7 @@ Mus8B_Ending_FM1:
 	dc.b	nRst, nB6, nE6, $06, nRst, $18
 	smpsAlterVol        $05
 	dc.b	nRst, $0C, nA3, nRst, nA3, nRst, $24
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsAlterVol        $08
 	dc.b	nA2, $6C
 	smpsStop
@@ -72,7 +72,7 @@ Mus8B_Ending_Loop02:
 	dc.b	nEb6, nE6, $06, nRst
 	smpsAlterVol        $F8
 	smpsSetvoice        $01
-	smpsDetune       $03
+	smpsAlterNote       $03
 	dc.b	nA2, $6C
 	smpsStop
 
@@ -86,7 +86,7 @@ Mus8B_Ending_Loop01:
 	dc.b	$1E, nCs6, $06, nRst, nCs6, nRst, nA5, nRst, nA5, nRst, nD6, $12
 	dc.b	nD6, $1E
 	smpsLoop            $00, $02, Mus8B_Ending_Loop01
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsAlterVol        $08
 	smpsCall            Mus8B_Ending_Call01
 	smpsAlterVol        $F0
@@ -105,7 +105,7 @@ Mus8B_Ending_Call01:
 ; FM5 Data
 Mus8B_Ending_FM5:
 	smpsSetvoice        $03
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsAlterVol        $F7
 	dc.b	nRst, $60
 	smpsCall            Mus8B_Ending_Call00
@@ -123,7 +123,7 @@ Mus8B_Ending_PSG1:
 
 ; PSG2 Data
 Mus8B_Ending_PSG2:
-	smpsDetune       $01
+	smpsAlterNote       $01
 	dc.b	nRst, $60, nRst, nRst, nRst, nRst, nRst, nRst, $0C, nE6, $06, nRst
 	dc.b	nB6, nE6, nRst, $0C, nE6, $06, nRst, nB6, nE6, nRst, $18
 	smpsStop

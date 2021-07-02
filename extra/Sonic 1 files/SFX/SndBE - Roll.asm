@@ -1,5 +1,5 @@
 SndBE_Roll_Header:
-	smpsHeaderStartSong 1
+	smpsHeaderStartSong 1, 1
 	smpsHeaderVoice     SndBE_Roll_Voices
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $01

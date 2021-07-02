@@ -42,7 +42,7 @@ Mus91_Credits_FM1:
 	dc.b	nB5, nA5, nG5, $09, nA5, $06, nG5, $03, nE5, $06, nRst, $06
 	dc.b	nA5, nC6, nA5, nC6, $09, nD6, nE6, $0C, nF6, $06, nE6, nD6
 	dc.b	nC6, $0C, nA5, $0C, nD6, $04, nC6, nD6, nC6, $24
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $09
 	smpsSetvoice        $08
 	dc.b	nRst, $18, nA5, $06, nB5, nC6, nE6
@@ -55,7 +55,7 @@ Mus91_Credits_FM1:
 	smpsNop             $01
 	smpsSetTempoMod     $0A
 	smpsSetvoice        $0F
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $0B
 	smpsCall            Mus91_Credits_Call0E
 	smpsNop             $01
@@ -77,13 +77,13 @@ Mus91_Credits_FM1:
 	dc.b	nRst, $60
 	smpsCall            Mus91_Credits_Call07
 	smpsAlterVol        $09
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsSetvoice        $18
 	smpsModSet          $00, $01, $06, $04
 	smpsCall            Mus91_Credits_Call0B
 	smpsAlterVol        $EF
 	smpsSetvoice        $1B
-	smpsDetune       $02
+	smpsAlterNote       $02
 	dc.b	nA1, $6C, smpsNoAttack, $60
 	smpsNop             $01
 	smpsStop
@@ -143,16 +143,16 @@ Mus91_Credits_Loop11:
 	dc.b	nC3, $06, nRst, nC3, $0C, nA2, $06, nRst, nA2, $0C, nBb2, $06
 	dc.b	nRst, nBb2, $0C, nB2, $06, nRst, nB2, $0C
 	smpsSetvoice        $06
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsAlterVol        $02
 
 Mus91_Credits_Loop12:
 	dc.b	nC4, $0F, nRst, $03, nE4, nRst, nG4, $09, nRst, $03, nA4, $09
 	dc.b	nRst, $03, nB4, $0F, nRst, $03, nA4, nRst, nG4, $09, nRst, $03
 	dc.b	nE4, $09, nRst, $03
-	smpsChangeTransposition      $05
+	smpsAlterPitch      $05
 	smpsLoop            $00, $02, Mus91_Credits_Loop12
-	smpsChangeTransposition      $F6
+	smpsAlterPitch      $F6
 	dc.b	nC4, $0F, nRst, $03, nE4, nRst, nG4, $09, nRst, $03, nE4, $09
 	dc.b	nRst, $03, nC4, $06, nRst, $12, nE4, $18
 	smpsAlterVol        $01
@@ -182,9 +182,9 @@ Mus91_Credits_Loop14:
 Mus91_Credits_Loop15:
 	dc.b	nD4, $06, nRst, $03, nD4, $06, nRst, $03, nD4, $02, nRst, $01
 	dc.b	nD4, $02, nRst, $01
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	smpsLoop            $00, $04, Mus91_Credits_Loop15
-	smpsChangeTransposition      $04
+	smpsAlterPitch      $04
 	dc.b	nG3, $06, nRst, $03, nG3, nRst, $06, nG3, $12, nRst, $06, nG3
 	dc.b	$02, nRst, $01, nG3, $02, nRst, $01, nB3, $06, nRst, $03, nB3
 	dc.b	nRst, $06, nB3, $12, nRst, $06, nD4, $02, nRst, $01, nB3, $02
@@ -192,22 +192,22 @@ Mus91_Credits_Loop15:
 	dc.b	$06, nE4, $02, nRst, $01, nF4, $02, nRst, $01, nG4, $06, nRst
 	dc.b	nG3, $24
 	smpsSetvoice        $10
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $07
 	smpsNoteFill        $06
 
 Mus91_Credits_Loop16:
 	smpsCall            Mus91_Credits_Call10
-	smpsChangeTransposition      $06
+	smpsAlterPitch      $06
 	smpsCall            Mus91_Credits_Call10
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	smpsCall            Mus91_Credits_Call10
-	smpsChangeTransposition      $02
+	smpsAlterPitch      $02
 	smpsCall            Mus91_Credits_Call10
-	smpsChangeTransposition      $F9
+	smpsAlterPitch      $F9
 	smpsLoop            $02, $02, Mus91_Credits_Loop16
 	smpsNoteFill        $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $FC
 	smpsSetvoice        $14
 	dc.b	nRst, $30, nRst, $30, nA4, $03, nRst, nA4, nRst, nG4, nRst, nG4
@@ -218,7 +218,7 @@ Mus91_Credits_Loop16:
 	dc.b	nRst, nG4, nRst, nF4, nRst, nF4, nRst, nG4, $04, nF4, nRst, $02
 	dc.b	nE4, nRst, $04, nE4, $08, nE4, $03, nRst, nE4, nRst, nA4, $09
 	dc.b	nRst, $03, nA4, $0A, nD4, $02
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $FE
 	smpsSetvoice        $19
 	dc.b	nRst, $60
@@ -268,7 +268,7 @@ Mus91_Credits_Loop0C:
 	smpsPan             panCenter, $00
 	smpsSetvoice        $02
 	smpsAlterVol        $E5
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	dc.b	nG6, $06, nA6, nC7, $0C, nA6, nRst, $4E, nRst, nG6, $06, nA6
 	dc.b	nC7, $0C, nE7, nRst, $4E, nRst, nG6, $06, nA6, nC7, $0C, nA6
 	dc.b	nRst, $36, nRst, nC7, $06, nRst, $12, nA6, $18, nG6, $06, nRst
@@ -284,33 +284,33 @@ Mus91_Credits_Loop0D:
 	dc.b	nC6, $01, smpsNoAttack, nB5, $0B, nRst, $0C, nBb5, $01, smpsNoAttack, nA5, $0B
 	dc.b	nRst, $0C, nCs6, $01, smpsNoAttack, nC6, $1B, nRst, $08, nC6, $01, smpsNoAttack
 	dc.b	nB5, $24, smpsNoAttack, $18, smpsNoAttack, $5A, nRst, $06
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	dc.b	nRst, $60, nRst, nRst, $30
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsSetvoice        $08
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $03
-	smpsDetune       $02
+	smpsAlterNote       $02
 	dc.b	nRst, $18, nA5, $06, nB5, nC6, nE6
 	smpsCall            Mus91_Credits_Call0C
 	smpsSetvoice        $0D
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $0B
 	dc.b	nRst, $0C, nG5, nA5, nG6
 	smpsCall            Mus91_Credits_Call0D
 	smpsSetvoice        $0A
 	smpsAlterVol        $EC
 	dc.b	nRst, $06
-	smpsDetune       $14
+	smpsAlterNote       $14
 	dc.b	nG5, $01, smpsNoAttack
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	$02, nA5, $03
 	smpsNoteFill        $05
 	dc.b	nC6, $03, nC6, $06, nA5, $03, nC6
 	smpsNoteFill        $00
 	dc.b	nC6
 	smpsAlterVol        $FC
-	smpsChangeTransposition      $33
+	smpsAlterPitch      $33
 	smpsSetvoice        $0E
 	dc.b	nEb4, $03
 	smpsAlterVol        $07
@@ -321,19 +321,19 @@ Mus91_Credits_Loop0D:
 	dc.b	nEb4
 	smpsSetvoice        $0A
 	smpsAlterVol        $EF
-	smpsChangeTransposition      $CD
+	smpsAlterPitch      $CD
 	dc.b	nE6, $03, nF6, nG6, nRst, $09
-	smpsDetune       $EC
+	smpsAlterNote       $EC
 	dc.b	nC7, $01, smpsNoAttack
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsModSet          $2C, $01, $04, $04
 	dc.b	nC7, $23
 	smpsModOff
 	smpsSetvoice        $0F
 	smpsAlterVol        $FF
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsCall            Mus91_Credits_Call0E
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsSetvoice        $15
 	smpsAlterVol        $09
 	dc.b	nRst, $30, nRst, $30, nRst, $2E, nF5, $02, nRst, $04, nF5, $08
@@ -355,7 +355,7 @@ Mus91_Credits_Loop0E:
 	dc.b	nEb6, nE6, $06, nRst
 	smpsSetvoice        $19
 	smpsAlterVol        $F8
-	smpsDetune       $03
+	smpsAlterNote       $03
 	dc.b	nA2, $6C, smpsNoAttack, $60
 	smpsStop
 
@@ -384,11 +384,11 @@ Mus91_Credits_Loop09:
 	dc.b	nAb5, $01, smpsNoAttack, nG5, $0B, nRst, $0C, nFs5, $01, smpsNoAttack, nF5, $0B
 	dc.b	nRst, $0C, nBb5, $01, smpsNoAttack, nA5, $1B, nRst, $08, nAb5, $01, smpsNoAttack
 	dc.b	nG5, $24, smpsNoAttack, $18, smpsNoAttack, $5A, nRst, $06
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	dc.b	nRst, $60, nRst, nRst, $5A
 	smpsPan             panCenter, $00
 	smpsSetvoice        $0A
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $05
 
 Mus91_Credits_Loop0A:
@@ -400,34 +400,34 @@ Mus91_Credits_Loop0A:
 	dc.b	nA6, $06, nRst, nF6, $0C, nRst, $06, nAb6, $09, nRst, $03, nAb6
 	dc.b	nRst, nB6, $06, nRst, nAb6, $0C, nRst, $06, nRst, nRst, $0C, nC7
 	dc.b	$03, nRst, $0F, nC7, $03, nRst, $0F, nC7, $03, nRst, $2D
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $03
 	smpsSetvoice        $0C
 	smpsPan             panLeft, $00
 	smpsCall            Mus91_Credits_Call09
 	smpsSetvoice        $11
 	smpsAlterVol        $F6
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsCall            Mus91_Credits_Call0A
 	dc.b	nRst, $0C
-	smpsDetune       $EC
+	smpsAlterNote       $EC
 	dc.b	nA5, $02
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	smpsNoAttack, $0A, nRst, $03, nA5, nRst, nRst, nA5, nRst, $09
 	smpsCall            Mus91_Credits_Call0A
-	smpsDetune       $EC
+	smpsAlterNote       $EC
 	dc.b	nA5, $02
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	$0A, nRst, $06
 	smpsModSet          $18, $01, $07, $04
-	smpsDetune       $E2
+	smpsAlterNote       $E2
 	dc.b	nA5, $02, smpsNoAttack
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	$1C
-	smpsDetune       $00
-	smpsDetune       $03
+	smpsAlterNote       $00
+	smpsAlterNote       $03
 	smpsCall            Mus91_Credits_Call06
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsPan             panCenter, $00
 	smpsSetvoice        $0A
 	smpsAlterVol        $F5
@@ -439,7 +439,7 @@ Mus91_Credits_Loop0B:
 	dc.b	nD6, $1E
 	smpsLoop            $00, $02, Mus91_Credits_Loop0B
 	smpsSetvoice        $18
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsAlterVol        $08
 	smpsCall            Mus91_Credits_Call0B
 	smpsSetvoice        $19
@@ -454,7 +454,7 @@ Mus91_Credits_Call08:
 
 Mus91_Credits_Call03:
 	smpsSetvoice        $02
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsAlterVol        $0D
 
 Mus91_Credits_Loop2D:
@@ -464,10 +464,10 @@ Mus91_Credits_Loop2D:
 	smpsCall            Mus91_Credits_Call1B
 	dc.b	nE4, nE4, nC5, nC5, nA4, nA4, nF4, nF4, nD4, nD4, nB4, nB4
 	smpsAlterVol        $03
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $01
 	dc.b	nG6, $18, nA6, nB6
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $04
 	smpsReturn
 
@@ -478,17 +478,17 @@ Mus91_Credits_Call1B:
 
 Mus91_Credits_Call0A:
 	dc.b	nRst, $0C
-	smpsDetune       $EC
+	smpsAlterNote       $EC
 	dc.b	nG5, $02
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	smpsNoAttack, $06, nRst, $01, nG5, $03, nRst, $18, nRst, $0C
-	smpsDetune       $EC
+	smpsAlterNote       $EC
 	dc.b	nCs6, $02
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	smpsNoAttack, $06, nRst, $01, nCs6, $03, nRst, $18, nRst, $0C
-	smpsDetune       $EC
+	smpsAlterNote       $EC
 	dc.b	nC6, $02
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	smpsNoAttack, $06, nRst, $01, nC6, $03, nRst, $18
 	smpsReturn
 
@@ -541,15 +541,15 @@ Mus91_Credits_Loop07:
 	dc.b	nF5, $01, smpsNoAttack, nE5, $0B, nRst, $0C, nEb5, $01, smpsNoAttack, nD5, $0B
 	dc.b	nRst, $0C, nFs5, $01, smpsNoAttack, nF5, $1B, nRst, $08, nF5, $01, smpsNoAttack
 	dc.b	nE5, $24, smpsNoAttack, $18, smpsNoAttack, $5A, nRst, $06
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsPan             panCenter, $00
 	smpsAlterVol        $03
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $07
 	dc.b	nRst, $4E, nG4, $03, nA4, nC5, nRst, nA4, nRst, $51, nA5, $03
 	dc.b	nF5, nC5, nRst, nF5, nRst, $5D
 	smpsSetvoice        $0A
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsAlterVol        $02
 
 Mus91_Credits_Loop08:
@@ -563,21 +563,21 @@ Mus91_Credits_Loop08:
 	dc.b	nA6, $03, nRst, $0F, nA6, $03, nRst, $2D
 	smpsSetvoice        $0C
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $03
 	smpsCall            Mus91_Credits_Call04
 	smpsSetvoice        $12
-	smpsChangeTransposition      $24
+	smpsAlterPitch      $24
 	smpsAlterVol        $F4
 	smpsCall            Mus91_Credits_Call05
 	dc.b	nE6, nF6, nG6
 	smpsCall            Mus91_Credits_Call05
 	dc.b	nG6, nF6, nE6
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsCall            Mus91_Credits_Call06
 	smpsPan             panCenter, $00
 	smpsSetvoice        $1A
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsAlterVol        $F8
 	dc.b	nRst, $60
 	smpsCall            Mus91_Credits_Call07
@@ -623,19 +623,19 @@ Mus91_Credits_Loop2A:
 Mus91_Credits_Loop2B:
 	dc.b	nRst, $06, nE6, $0C, nE6, nE6, nE6, $06, nRst, nE6, $0C, nE6
 	dc.b	nE6, $03, $09, $06
-	smpsChangeTransposition      $05
+	smpsAlterPitch      $05
 	smpsLoop            $00, $02, Mus91_Credits_Loop2B
-	smpsChangeTransposition      $F6
+	smpsAlterPitch      $F6
 	dc.b	nRst, $06, nE6, $0C, nE6, nE6, nE6, $06, nRst, $30
 	smpsPSGvoice        fTone_08
 	smpsPSGAlterVol     $01
 	smpsCall            Mus91_Credits_Call15
 	dc.b	nRst, $02, nRst, $30
 	smpsPSGAlterVol     $03
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsPSGvoice        fTone_05
 	smpsCall            Mus91_Credits_Call09
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsPSGAlterVol     $FC
 	smpsPSGvoice        $00
 	smpsCall            Mus91_Credits_Call16
@@ -694,20 +694,20 @@ Mus91_Credits_Loop25:
 Mus91_Credits_Loop26:
 	dc.b	nRst, $06, nG6, $0C, nG6, nG6, nG6, $06, nRst, nG6, $0C, nG6
 	dc.b	nG6, $03, $09, $06
-	smpsChangeTransposition      $05
+	smpsAlterPitch      $05
 	smpsLoop            $00, $02, Mus91_Credits_Loop26
-	smpsChangeTransposition      $F6
+	smpsAlterPitch      $F6
 	dc.b	nRst, $06, nG6, $0C, nG6, nG6, nG6, $06, nRst, $30, nRst, $02
-	smpsDetune       $01
+	smpsAlterNote       $01
 	smpsPSGAlterVol     $03
 	smpsCall            Mus91_Credits_Call15
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	nRst, $30
 	smpsPSGAlterVol     $01
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsPSGvoice        fTone_05
 	smpsCall            Mus91_Credits_Call04
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsPSGAlterVol     $FD
 	smpsNoteFill        $03
 
@@ -725,7 +725,7 @@ Mus91_Credits_Loop29:
 	smpsLoop            $01, $02, Mus91_Credits_Loop27
 	dc.b	nRst, $60, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst
 	smpsAlterVol        $0C
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsPSGAlterVol     $02
 	dc.b	nRst, $0C, nE6, $06, nRst, nB6, nE6, $06, nRst, $0C, nE6, $06
 	dc.b	nRst, nB6, nE6
@@ -756,7 +756,7 @@ Mus91_Credits_Loop1A:
 	smpsLoop            $00, $04, Mus91_Credits_Loop1A
 	smpsPSGvoice        fTone_09
 	smpsPSGAlterVol     $01
-	smpsChangeTransposition      $0B
+	smpsAlterPitch      $0B
 
 Mus91_Credits_Loop1B:
 	dc.b	nA3, $06, nA3, nE4, nE4, nD4, nD4, nE4, nE4
@@ -769,7 +769,7 @@ Mus91_Credits_Loop1C:
 	dc.b	nAb4, nAb4, nB4, nB4, nA3, nA3, nE4, nE4, nC4, nC4, nE4, nE4
 	dc.b	nA3, $06, nRst, $1E
 	smpsNoteFill        $02
-	smpsChangeTransposition      $F5
+	smpsAlterPitch      $F5
 
 Mus91_Credits_Loop1D:
 	smpsPSGvoice        fTone_04
@@ -957,11 +957,11 @@ Mus91_Credits_Loop2C:
 	dc.b	nF6, $06, nRst, $03, nE6, $06, nRst, $03, nD6, nRst
 	smpsLoop            $00, $02, Mus91_Credits_Loop2C
 	dc.b	nF6, $06, nRst, $03, nE6, $06, nRst, $03, nD6, $18, nRst, $06
-	smpsChangeTransposition      $FE
+	smpsAlterPitch      $FE
 	smpsCall            Mus91_Credits_Call19
-	smpsChangeTransposition      $03
+	smpsAlterPitch      $03
 	smpsCall            Mus91_Credits_Call19
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	dc.b	nRst, $06
 	smpsNoteFill        $08
 	dc.b	nG6, $09, $09, $09, $09

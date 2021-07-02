@@ -1,5 +1,5 @@
 Options_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     Options_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $87
@@ -72,13 +72,13 @@ Options_PSG2:
 
 ; PSG3 Data
 Options_PSG3:
-	smpsDetune       $01
+	smpsAlterNote       $01
 	dc.b	nRst, $03
 	smpsJump            Options_Jump00
 
 ; PSG1 Data
 Options_PSG1:
-	smpsDetune       $01
+	smpsAlterNote       $01
 	smpsJump            Options_Jump01
 
 ; DAC Data
@@ -104,7 +104,7 @@ Options_Voices:
 	smpsVcDecayRate2    $08, $08, $05, $0E
 	smpsVcDecayLevel    $00, $06, $00, $05
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $2F, $2D, $25
+	smpsVcTotalLevel    $80, $2F, $2D, $25
 
 ;	Voice $01
 ;	$3D
@@ -122,7 +122,7 @@ Options_Voices:
 	smpsVcDecayRate2    $04, $02, $03, $02
 	smpsVcDecayLevel    $00, $01, $0F, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $27, $28, $16
+	smpsVcTotalLevel    $80, $27, $28, $16
 
 ;	Voice $02
 ;	$3A
@@ -140,7 +140,7 @@ Options_Voices:
 	smpsVcDecayRate2    $04, $04, $01, $03
 	smpsVcDecayLevel    $0A, $00, $00, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $31, $47, $21
+	smpsVcTotalLevel    $80, $31, $47, $21
 
 ;	Voice $03
 ;	$3C
@@ -158,7 +158,7 @@ Options_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $03, $00, $03, $00
 	smpsVcReleaseRate   $08, $02, $07, $02
-	smpsVcTotalLevel    $00, $1F, $00, $1E
+	smpsVcTotalLevel    $80, $1F, $80, $1E
 
 ;	Voice $04
 ;	$3A
@@ -176,5 +176,5 @@ Options_Voices:
 	smpsVcDecayRate2    $01, $00, $00, $00
 	smpsVcDecayLevel    $05, $00, $0F, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $3B, $2E, $1F
+	smpsVcTotalLevel    $80, $3B, $2E, $1F
 

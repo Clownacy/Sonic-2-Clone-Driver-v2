@@ -1,5 +1,5 @@
 CNZ_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     CNZ_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $48
@@ -54,7 +54,7 @@ CNZ_Jump03:
 	dc.b	nRst, $04, nF5, $04, $02, nRst, $04, nF5, $02, nRst, $18
 	smpsCall            CNZ_Call02
 	smpsSetvoice        $01
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $FC
 	smpsCall            CNZ_Call03
 	dc.b	nE6, $18, nD6, $0C, nE6, $06, nD6, nC6, $18, nF6, nRst, $06
@@ -63,7 +63,7 @@ CNZ_Jump03:
 	dc.b	nRst, nG5, nRst, nG5, nRst, nA5, nRst, nA5
 	smpsAlterVol        $FC
 	dc.b	nRst, nG5, nRst, nG5, nRst, nA5, $0C, $04, nG5, $02, nRst, $30
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $04
 	smpsJump            CNZ_Jump03
 
@@ -103,7 +103,7 @@ CNZ_Jump02:
 	dc.b	nRst, $04, nD5, $04, $02, nRst, $04, nD5, $02, nRst, $18
 	smpsCall            CNZ_Call00
 	smpsSetvoice        $01
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $FC
 	smpsCall            CNZ_Call01
 	dc.b	nC6, $18, nB5, $0C, nC6, $06, nB5, nA5, $18, nC6, nRst, $06
@@ -112,7 +112,7 @@ CNZ_Jump02:
 	dc.b	nRst, nE5, nRst, nE5, nRst, nF5, nRst, nF5
 	smpsAlterVol        $FC
 	dc.b	nRst, nE5, nRst, nE5, nRst, nF5, $0C, $04, nE5, $02, nRst, $30
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $04
 	smpsJump            CNZ_Jump02
 
@@ -223,9 +223,9 @@ CNZ_Jump06:
 	smpsCall            CNZ_Call02
 	smpsPSGAlterVol     $01
 	smpsPSGvoice        $00
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsCall            CNZ_Call03
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsPSGAlterVol     $02
 	dc.b	nE4, $18, nD4, $0C, nE4, $06, nD4, nC4, $18, nF4
 	smpsPSGAlterVol     $FE
@@ -250,9 +250,9 @@ CNZ_Jump05:
 	smpsCall            CNZ_Call00
 	smpsPSGAlterVol     $01
 	smpsPSGvoice        $00
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsCall            CNZ_Call01
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsPSGAlterVol     $02
 	dc.b	nC4, $18, nB3, $0C, nC4, $06, nB3, nA3, $18, nC4
 	smpsPSGAlterVol     $FE
@@ -371,5 +371,5 @@ CNZ_Voices:
 	smpsVcDecayRate2    $02, $02, $02, $02
 	smpsVcDecayLevel    $0A, $01, $06, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $1E, $00, $1E
+	smpsVcTotalLevel    $80, $1E, $80, $1E
 

@@ -1,5 +1,5 @@
 Sound5A_Gloop_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     Sound5A_Gloop_Voices
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $01
@@ -30,5 +30,5 @@ Sound5A_Gloop_Voices:
 	smpsVcDecayRate2    $0A, $0A, $0A, $09
 	smpsVcDecayLevel    $03, $03, $03, $04
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $23, $00, $00, $7F
+	smpsVcTotalLevel    $A3, $80, $80, $7F
 

@@ -26,7 +26,7 @@ Mus85_SYZ_Jump02:
 	smpsCall            Mus85_SYZ_Call08
 	dc.b	nD6, nF6, $02, nRst, $04, nF6, $02, nRst, $04, nG6, $04, nF6
 	dc.b	$02, nG6, $04, nRst, $02, nA6, $06
-	smpsMaxRelRate
+	smpsWeirdD1LRR
 	dc.b	nRst, $12
 	smpsSetvoice        $04
 	smpsModOff
@@ -132,9 +132,9 @@ Mus85_SYZ_Call05:
 ; FM4 Data
 Mus85_SYZ_FM4:
 	smpsPan             panLeft, $00
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsCall            Mus85_SYZ_Call01
-	smpsDetune       $00
+	smpsAlterNote       $00
 
 Mus85_SYZ_Jump00:
 	smpsModSet          $01, $01, $01, $04
@@ -197,7 +197,7 @@ Mus85_SYZ_FM5:
 	smpsPan             panRight, $00
 	smpsCall            Mus85_SYZ_Call01
 	smpsModSet          $02, $01, $02, $04
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsJump            Mus85_SYZ_Jump00
 
 ; PSG1 Data

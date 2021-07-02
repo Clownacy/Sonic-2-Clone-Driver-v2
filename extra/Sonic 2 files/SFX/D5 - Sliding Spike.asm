@@ -29,6 +29,5 @@ Sound55_SlidingSpike_Voices:
 	smpsVcDecayRate2    $0E, $0E, $0F, $0F
 	smpsVcDecayLevel    $00, $00, $00, $00
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-;	smpsVcTotalLevel    $00, $80, $20, $2E
-	smpsVcTotalLevel    $00, $00, $20, $2E	; Fixed
+	smpsVcTotalLevel    $00, $80, $20, $2E
 

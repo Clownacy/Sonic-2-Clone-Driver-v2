@@ -46,13 +46,13 @@ Sound5F_6C_PSG2:
 Sound5F_SuperTransform_Loop01:
 	dc.b	nD5, $04, nE5, nFs5
 	smpsPSGAlterVol     $01
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	smpsLoop            $00, $05, Sound5F_SuperTransform_Loop01
 
 Sound5F_SuperTransform_Loop02:
 	dc.b	nD5, $04, nE5, nFs5
 	smpsPSGAlterVol     $01
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	smpsLoop            $00, $07, Sound5F_SuperTransform_Loop02
 	smpsStop
 

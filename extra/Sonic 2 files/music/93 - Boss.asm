@@ -1,5 +1,5 @@
 Boss_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     Boss_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $E3
@@ -65,13 +65,13 @@ Boss_Loop09:
 	smpsNoteFill        $17
 	dc.b	nB3, $18, nB3, nB3, nB3
 	smpsLoop            $00, $02, Boss_Loop09
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $03
 
 Boss_Loop0A:
 	smpsCall            Boss_Call01
 	smpsLoop            $00, $04, Boss_Loop0A
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsJump            Boss_FM2
 
 Boss_Call01:
@@ -95,20 +95,20 @@ Boss_Loop06:
 Boss_Loop07:
 	dc.b	nRst, $30
 	smpsLoop            $00, $10, Boss_Loop07
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsAlterVol        $FC
 
 Boss_Loop08:
 	smpsCall            Boss_Call01
 	smpsLoop            $00, $02, Boss_Loop08
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsAlterVol        $04
 	smpsJump            Boss_FM3
 
 ; FM4 Data
 Boss_FM4:
 	smpsPan             panLeft, $00
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsModSet          $0C, $01, $04, $04
 	smpsJump            Boss_Jump00
 
@@ -250,7 +250,7 @@ Boss_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $00, $01, $0F, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $06, $27, $28, $17
+	smpsVcTotalLevel    $86, $27, $28, $17
 
 ;	Voice $03
 ;	$3A
@@ -268,5 +268,5 @@ Boss_Voices:
 	smpsVcDecayRate2    $02, $00, $00, $00
 	smpsVcDecayLevel    $01, $00, $00, $00
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $01, $22, $28, $1C
+	smpsVcTotalLevel    $81, $22, $28, $1C
 

@@ -97,7 +97,7 @@ Mus82_LZ_Call02:
 ; FM4 Data
 Mus82_LZ_FM4:
 	smpsPan             panRight, $00
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsCall            Mus82_LZ_Call02
 	smpsModSet          $02, $01, $02, $04
 	smpsJump            Mus82_LZ_Jump01
@@ -144,9 +144,9 @@ Mus82_LZ_PSG1:
 
 Mus82_LZ_Loop06:
 	smpsCall            Mus82_LZ_Call09
-	smpsChangeTransposition      $05
+	smpsAlterPitch      $05
 	smpsLoop            $00, $02, Mus82_LZ_Loop06
-	smpsChangeTransposition      $F6
+	smpsAlterPitch      $F6
 	dc.b	nRst, $06, nE6, $0C, $0C, $0C, $06, nRst, $06, nE6, $03, $09
 	dc.b	$0C, nBb6, nBb6, $06
 	smpsCall            Mus82_LZ_Call0B
@@ -172,13 +172,13 @@ Mus82_LZ_PSG2:
 	dc.b	nC7, $03, nC7, nA6, nA6, nF6, nF6, $21
 
 Mus82_LZ_Jump03:
-	smpsChangeTransposition      $03
+	smpsAlterPitch      $03
 
 Mus82_LZ_Loop05:
 	smpsCall            Mus82_LZ_Call09
-	smpsChangeTransposition      $05
+	smpsAlterPitch      $05
 	smpsLoop            $00, $02, Mus82_LZ_Loop05
-	smpsChangeTransposition      $F3
+	smpsAlterPitch      $F3
 	dc.b	nRst, $06, nG6, $0C, $0C, $0C, $06, nRst, $06, nG6, $03, $09
 	dc.b	$0C, nCs7, $0C, $06
 	smpsCall            Mus82_LZ_Call0A

@@ -1,5 +1,5 @@
 SpecStg_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     SpecStg_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $FF
@@ -17,11 +17,11 @@ SpecStg_Header:
 ; FM1 Data
 SpecStg_FM1:
 	smpsAlterVol        $08
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsPan             panRight, $00
 	smpsSetvoice        $02
 	smpsCall            SpecStg_Call00
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsPan             panCenter, $00
 	smpsAlterVol        $F8
 	smpsSetvoice        $03
@@ -39,12 +39,12 @@ SpecStg_Loop0C:
 SpecStg_FM2:
 	smpsSetvoice        $06
 	smpsAlterVol        $0A
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsPan             panLeft, $00
 	smpsModSet          $06, $01, $02, $04
 	smpsCall            SpecStg_Call00
 	dc.b	nAb5, $06, nRst, $30, nRst, $2A
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $F6
 	smpsPan             panCenter, $00
 	dc.b	nRst, $30, nRst, $30
@@ -108,12 +108,12 @@ SpecStg_Call00:
 ; FM3 Data
 SpecStg_FM3:
 	smpsSetvoice        $02
-	smpsDetune       $F8
+	smpsAlterNote       $F8
 	smpsPan             panLeft, $00
 	smpsCall            SpecStg_Call00
 	smpsPan             panCenter, $00
 	smpsSetvoice        $05
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	nAb5, $06, nRst, $30, nRst, $2A, nRst, $30, nRst, nG4, $12, nAb4
 	dc.b	nA4, $0C, nBb4, $12, nB4, nC5, $0C, nB4, $12, nC5, nCs5, $0C
 	dc.b	nC5, $12, nCs5, nD5, $0C
@@ -133,7 +133,7 @@ SpecStg_Loop07:
 	dc.b	nAb4, nRst, $2A
 	smpsLoop            $00, $02, SpecStg_Loop08
 	smpsPan             panLeft, $00
-	smpsDetune       $FE
+	smpsAlterNote       $FE
 	smpsAlterVol        $F8
 
 SpecStg_Loop09:
@@ -143,19 +143,19 @@ SpecStg_Loop09:
 	dc.b	nRst, nCs5, nE5, $12, nB4, $06, nRst, nB4, nRst, nCs5, nB4, $12
 	dc.b	nAb4, $18, nRst
 	smpsLoop            $00, $02, SpecStg_Loop09
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsAlterVol        $08
 	smpsJump            SpecStg_Loop08
 
 ; FM4 Data
 SpecStg_FM4:
 	smpsSetvoice        $06
-	smpsDetune       $08
+	smpsAlterNote       $08
 	smpsPan             panRight, $00
 	smpsCall            SpecStg_Call00
 	smpsPan             panCenter, $00
 	smpsSetvoice        $05
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	nE5, $06, nRst, $30, nRst, $2A, nRst, $30, nRst, nEb4, $12, nE4
 	dc.b	nF4, $0C, nFs4, $12, nG4, nAb4, $0C, nG4, $12, nAb4, nA4, $0C
 	dc.b	nAb4, $12, nA4, nBb4, $0C
@@ -184,12 +184,12 @@ SpecStg_Loop06:
 
 ; FM5 Data
 SpecStg_FM5:
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsPan             panCenter, $00
 	smpsSetvoice        $06
-	smpsDetune       $FA
+	smpsAlterNote       $FA
 	smpsCall            SpecStg_Call00
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $01
 	smpsModSet          $06, $01, $02, $03
 
@@ -221,19 +221,19 @@ SpecStg_Loop11:
 	smpsLoop            $00, $02, SpecStg_Loop11
 	dc.b	nRst, $30, nRst, nRst, nRst, nRst, nRst, nRst, nRst
 	smpsPSGAlterVol     $FF
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	dc.b	nB6, $06, nRst, nB6, nRst, nCs7, nB6, $12, nE7, $0C, nRst, nE7
 	dc.b	nRst, nB6, $06, nRst, nB6, nRst, nCs7, nB6, $12, nAb6, $18, nRst
 	dc.b	nB6, $06, nRst, nB6, nRst, nCs7, nB6, $12, nE7, $06, nRst, nE7
 	dc.b	nRst, nCs7, nE7, $12, nB6, $06, nRst, nB6, nRst, nCs7, nB6, $12
 	dc.b	nAb6, $18, nRst
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsPSGAlterVol     $01
 	smpsJump            SpecStg_Loop11
 
 ; PSG2 Data
 SpecStg_PSG2:
-	smpsDetune       $FF
+	smpsAlterNote       $FF
 	dc.b	nRst, $30, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst
 	dc.b	nRst, nRst, nRst
 
@@ -249,14 +249,14 @@ SpecStg_Jump00:
 	dc.b	nRst, nAb5, $18, nB5, $0C, nEb6, $18, nCs6, nB5, $0C, smpsNoAttack, nB5
 	dc.b	nA5, $18, nAb5, nB5, $0C, nA5, nAb5, nFs6, $30, smpsNoAttack, $30, nRst
 	dc.b	$30, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	dc.b	nAb6, $06, nRst, nAb6, nRst, nA6, nAb6, $12, nB6, $0C, nRst, nB6
 	dc.b	nRst, nAb6, $06, nRst, nAb6, nRst, nA6, nAb6, $12, nE6, $18, nRst
 	dc.b	nAb6, $06, nRst, nAb6, nRst, nA6, nAb6, $12, nB6, $06, nRst, nB6
 	dc.b	nRst, nA6, nB6, $12, nAb6, $06, nRst, nAb6, nRst, nA6, nAb6, $12
 	dc.b	nE6, $18, nRst
 	smpsPSGAlterVol     $04
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsJump            SpecStg_Jump00
 
 ; DAC Data
@@ -329,7 +329,7 @@ SpecStg_Voices:
 	smpsVcDecayRate2    $04, $00, $00, $00
 	smpsVcDecayLevel    $00, $01, $0F, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $27, $28, $18
+	smpsVcTotalLevel    $80, $27, $28, $18
 
 ;	Voice $01
 ;	$3A
@@ -347,7 +347,7 @@ SpecStg_Voices:
 	smpsVcDecayRate2    $06, $03, $03, $02
 	smpsVcDecayLevel    $0B, $0A, $07, $05
 	smpsVcReleaseRate   $05, $02, $02, $02
-	smpsVcTotalLevel    $00, $23, $1C, $1A
+	smpsVcTotalLevel    $80, $23, $1C, $1A
 
 ;	Voice $02
 ;	$3D
@@ -365,7 +365,7 @@ SpecStg_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $01, $02, $02, $02
 	smpsVcReleaseRate   $0B, $0B, $0B, $0B
-	smpsVcTotalLevel    $00, $00, $00, $19
+	smpsVcTotalLevel    $80, $80, $80, $19
 
 ;	Voice $03
 ;	$38
@@ -401,7 +401,7 @@ SpecStg_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $01, $02, $02, $02
 	smpsVcReleaseRate   $08, $08, $08, $06
-	smpsVcTotalLevel    $00, $00, $00, $19
+	smpsVcTotalLevel    $80, $80, $80, $19
 
 ;	Voice $05
 ;	$3A
@@ -419,7 +419,7 @@ SpecStg_Voices:
 	smpsVcDecayRate2    $07, $00, $00, $00
 	smpsVcDecayLevel    $00, $01, $0F, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $27, $28, $18
+	smpsVcTotalLevel    $80, $27, $28, $18
 
 ;	Voice $06
 ;	$3A

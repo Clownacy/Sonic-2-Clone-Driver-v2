@@ -10,7 +10,7 @@ Sound6F_LargeLaser_Header:
 
 ; FM4 Data
 Sound6F_LargeLaser_FM4:
-	smpsDetune       $02
+	smpsAlterNote       $02
 	dc.b	nRst, $02
 
 ; FM5 Data
@@ -32,13 +32,10 @@ Sound6F_LargeLaser_FM5:
 Sound6F_LargeLaser_PSG3:
 	smpsPSGform         $E7
 	dc.b	nMaxPSG, $04, nEb5, nA4, nEb4, nA3
-	;smpsAlterVol        $01
 	smpsPSGAlterVol     $01
 	dc.b	nA3
-	;smpsAlterVol        $01
 	smpsPSGAlterVol     $01
 	dc.b	nA3
-	;smpsAlterVol        $01
 	smpsPSGAlterVol     $01
 	dc.b	nA3
 	smpsStop

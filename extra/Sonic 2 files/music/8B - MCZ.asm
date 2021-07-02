@@ -1,5 +1,5 @@
 MCZ_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     MCZ_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $B6
@@ -22,27 +22,27 @@ MCZ_Call00:
 	smpsReturn
 
 MCZ_Call03:
-	smpsChangeTransposition      $FE
+	smpsAlterPitch      $FE
 	dc.b	nA5, $04, smpsNoAttack, nAb5, smpsNoAttack, nA5, $04, smpsNoAttack, nAb5, smpsNoAttack, nA5, smpsNoAttack
 	dc.b	nAb5, smpsNoAttack, nA5, smpsNoAttack, nAb5
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	dc.b	smpsNoAttack, nA5, smpsNoAttack, nAb5, smpsNoAttack, nA5, smpsNoAttack, nAb5, smpsNoAttack, nA5, smpsNoAttack, nAb5
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	dc.b	smpsNoAttack, nA5, smpsNoAttack, nAb5, smpsNoAttack, nA5, smpsNoAttack, nAb5, smpsNoAttack, nA5, $05, smpsNoAttack
 	dc.b	nAb5, smpsNoAttack, nA5, $05, smpsNoAttack, nAb5, nRst, $04
 	smpsReturn
 
 MCZ_Call04:
-	smpsChangeTransposition      $FD
+	smpsAlterPitch      $FD
 	dc.b	nA5, $04, smpsNoAttack, nAb5, smpsNoAttack, nA5, smpsNoAttack, nAb5, smpsNoAttack, nA5, smpsNoAttack, nAb5
 	dc.b	smpsNoAttack, nA5, smpsNoAttack, nAb5
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	dc.b	smpsNoAttack, nA5, smpsNoAttack, nAb5, smpsNoAttack, nA5, smpsNoAttack, nAb5
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	dc.b	smpsNoAttack, nA5, smpsNoAttack, nAb5, smpsNoAttack, nA5, smpsNoAttack, nAb5, smpsNoAttack, nA5, smpsNoAttack, nAb5
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	dc.b	smpsNoAttack, nA5, $05, smpsNoAttack, nAb5, smpsNoAttack, nA5, $05, smpsNoAttack, nAb5, nRst, $04
-	smpsChangeTransposition      $06
+	smpsAlterPitch      $06
 	smpsReturn
 
 ; FM5 Data
@@ -117,24 +117,24 @@ MCZ_FM1:
 
 MCZ_Jump02:
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $02
+	smpsAlterPitch      $02
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $FC
+	smpsAlterPitch      $FC
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	smpsCall            MCZ_Call01
 	dc.b	smpsNoAttack, $30, smpsNoAttack, $30
 	smpsCall            MCZ_Call02
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $03
+	smpsAlterPitch      $03
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	smpsCall            MCZ_Call01
 	dc.b	smpsNoAttack, $30, smpsNoAttack, $24
 	smpsCall            MCZ_Call02
@@ -145,10 +145,10 @@ MCZ_Loop04:
 	smpsLoop            $00, $09, MCZ_Loop04
 	smpsCall            MCZ_Call03
 	dc.b	nRst, $30, nRst
-	smpsChangeTransposition      $03
+	smpsAlterPitch      $03
 	smpsCall            MCZ_Call04
 	dc.b	nRst, $30, nRst
-	smpsChangeTransposition      $FD
+	smpsAlterPitch      $FD
 	smpsCall            MCZ_Call03
 	dc.b	nRst, $30, nRst, nRst, nRst
 	smpsJump            MCZ_Jump02
@@ -159,24 +159,24 @@ MCZ_PSG1:
 
 MCZ_Jump05:
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $02
+	smpsAlterPitch      $02
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $FC
+	smpsAlterPitch      $FC
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	smpsCall            MCZ_Call01
 	dc.b	smpsNoAttack, $30, smpsNoAttack, $30
 	smpsCall            MCZ_Call02
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $03
+	smpsAlterPitch      $03
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	smpsCall            MCZ_Call01
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	smpsCall            MCZ_Call01
 	dc.b	smpsNoAttack, $30, smpsNoAttack, $24
 	smpsCall            MCZ_Call02
@@ -187,10 +187,10 @@ MCZ_Loop08:
 	smpsLoop            $00, $09, MCZ_Loop08
 	smpsCall            MCZ_Call03
 	dc.b	nRst, $30, nRst
-	smpsChangeTransposition      $03
+	smpsAlterPitch      $03
 	smpsCall            MCZ_Call04
 	dc.b	nRst, $30, nRst
-	smpsChangeTransposition      $FD
+	smpsAlterPitch      $FD
 	smpsCall            MCZ_Call03
 	dc.b	nRst, $30, nRst, nRst, nRst
 	smpsJump            MCZ_Jump05
@@ -322,11 +322,11 @@ MCZ_Loop00:
 	smpsLoop            $00, $04, MCZ_Loop00
 	smpsCall            MCZ_Call00
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	dc.b	nRst, $0C, nA3, $08, nB3, $04, nC4, $08, nB3, $04, nA3, $0C
 	dc.b	$08, nB3, $04, nC4, $08, nB3, $04, nA3, $06, nRst, $12
 	smpsPan             panCenter, $00
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsCall            MCZ_Call00
 	smpsPan             panRight, $00
 	dc.b	nA2, $0C, nRst, nG2, nRst, nF2, nRst, nE2, nRst
@@ -378,7 +378,7 @@ MCZ_Voices:
 	smpsVcDecayRate2    $0B, $00, $0B, $00
 	smpsVcDecayLevel    $00, $01, $00, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $1D, $14, $23
+	smpsVcTotalLevel    $80, $1D, $14, $23
 
 ;	Voice $01
 ;	$3A
@@ -396,7 +396,7 @@ MCZ_Voices:
 	smpsVcDecayRate2    $00, $02, $02, $01
 	smpsVcDecayLevel    $02, $00, $00, $05
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $18, $22, $18
+	smpsVcTotalLevel    $80, $18, $22, $18
 
 ;	Voice $02
 ;	$3C
@@ -468,7 +468,7 @@ MCZ_Voices:
 	smpsVcDecayRate2    $08, $07, $07, $07
 	smpsVcDecayLevel    $02, $01, $01, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $14, $32, $17
+	smpsVcTotalLevel    $80, $14, $32, $17
 
 ;	Voice $06
 ;	$3D
@@ -486,5 +486,5 @@ MCZ_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $01
 	smpsVcDecayLevel    $01, $01, $01, $02
 	smpsVcReleaseRate   $0A, $0A, $0A, $00
-	smpsVcTotalLevel    $04, $04, $04, $19
+	smpsVcTotalLevel    $84, $84, $84, $19
 

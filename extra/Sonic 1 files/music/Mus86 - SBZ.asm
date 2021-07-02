@@ -25,16 +25,16 @@ Mus86_SBZ_FM1:
 	smpsModSet          $0D, $01, $08, $05
 	smpsCall            Mus86_SBZ_Call06
 	smpsSetvoice        $05
-	smpsDetune       $FE
+	smpsAlterNote       $FE
 	smpsPan             panRight, $00
 	smpsAlterVol        $03
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsCall            Mus86_SBZ_Call04
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $FD
 	smpsPan             panCenter, $00
 	smpsAlterVol        $FE
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsSetvoice        $03
 
 Mus86_SBZ_Loop0F:
@@ -109,7 +109,7 @@ Mus86_SBZ_FM3:
 	smpsNoteFill        $00
 	dc.b	nG5, $4B
 	smpsSetvoice        $03
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsAlterVol        $FA
 	smpsCall            Mus86_SBZ_Call06
 	smpsSetvoice        $00
@@ -134,16 +134,16 @@ Mus86_SBZ_FM4:
 	smpsModSet          $5C, $01, $05, $04
 	smpsNoteFill        $06
 	smpsCall            Mus86_SBZ_Call03
-	smpsDetune       $04
+	smpsAlterNote       $04
 	smpsCall            Mus86_SBZ_Call01
 	smpsAlterVol        $06
 	smpsSetvoice        $05
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsAlterVol        $ED
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsCall            Mus86_SBZ_Call04
 	smpsAlterVol        $13
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $F3
 	smpsSetvoice        $04
 	smpsModOff
@@ -153,16 +153,16 @@ Mus86_SBZ_Loop05:
 	smpsModOff
 	smpsCall            Mus86_SBZ_Call05
 	dc.b	nRst, $0C, nA5, $02
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	smpsNoAttack, $0A, nRst, $03, nA5, nRst, nRst, nA5, nRst, $09
 	smpsCall            Mus86_SBZ_Call05
 	dc.b	nA5, $02
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	$0A, nRst, $06
 	smpsModSet          $18, $01, $07, $04
-	smpsDetune       $E2
+	smpsAlterNote       $E2
 	dc.b	nA5, $02, smpsNoAttack
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	$1C
 	smpsLoop            $00, $02, Mus86_SBZ_Loop05
 	smpsAlterVol        $06
@@ -187,19 +187,19 @@ Mus86_SBZ_Call0A:
 
 Mus86_SBZ_Call05:
 	dc.b	nRst, $0C
-	smpsDetune       $EC
+	smpsAlterNote       $EC
 	dc.b	nG5, $02
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	smpsNoAttack, $06, nRst, $01, nG5, $03, nRst, $18, nRst, $0C
-	smpsDetune       $EC
+	smpsAlterNote       $EC
 	dc.b	nCs6, $02
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	smpsNoAttack, $06, nRst, $01, nCs6, $03, nRst, $18, nRst, $0C
-	smpsDetune       $EC
+	smpsAlterNote       $EC
 	dc.b	nC6, $02
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	smpsNoAttack, $06, nRst, $01, nC6, $03, nRst, $18
-	smpsDetune       $EC
+	smpsAlterNote       $EC
 	smpsReturn
 
 ; FM5 Data
@@ -219,7 +219,7 @@ Mus86_SBZ_Loop03:
 	smpsLoop            $00, $01, Mus86_SBZ_Loop03
 	smpsSetvoice        $06
 	smpsAlterVol        $EB
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsModOff
 
 Mus86_SBZ_Loop04:
@@ -229,7 +229,7 @@ Mus86_SBZ_Loop04:
 	dc.b	nG6, nF6, nE6
 	smpsLoop            $00, $02, Mus86_SBZ_Loop04
 	smpsAlterVol        $09
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsJump            Mus86_SBZ_FM5
 
 Mus86_SBZ_Call02:

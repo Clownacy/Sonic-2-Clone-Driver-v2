@@ -1,5 +1,5 @@
 SndBF_Get_Continue_Header:
-	smpsHeaderStartSong 1
+	smpsHeaderStartSong 1, 1
 	smpsHeaderVoice     SndBF_Get_Continue_Voices
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $03
@@ -23,7 +23,7 @@ SndBF_Get_Continue_Loop02:
 ; FM4 Data
 SndBF_Get_Continue_FM4:
 	smpsSetvoice        $00
-	smpsDetune       $01
+	smpsAlterNote       $01
 	dc.b	nRst, $07, nE6, $15, nF6, nG6, nA6
 
 SndBF_Get_Continue_Loop01:
@@ -35,7 +35,7 @@ SndBF_Get_Continue_Loop01:
 ; FM5 Data
 SndBF_Get_Continue_FM5:
 	smpsSetvoice        $00
-	smpsDetune       $01
+	smpsAlterNote       $01
 	dc.b	nC6, $15, nD6, nE6, nF6
 
 SndBF_Get_Continue_Loop00:
@@ -61,5 +61,5 @@ SndBF_Get_Continue_Voices:
 	smpsVcDecayRate2    $09, $0D, $08, $0B
 	smpsVcDecayLevel    $00, $08, $09, $00
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $0A, $05, $24
+	smpsVcTotalLevel    $80, $0A, $05, $24
 

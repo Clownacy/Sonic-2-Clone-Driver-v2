@@ -16,7 +16,7 @@ Title_screen_Header:
 
 ; FM5 Data
 Title_screen_FM5:
-	smpsDetune       $03
+	smpsAlterNote       $03
 
 ; FM1 Data
 Title_screen_FM1:
@@ -51,7 +51,7 @@ Title_screen_FM3:
 	dc.b	$0C, nRst, nE6, nRst, nRst, $06, nEb6, $12, nE6, $0C
 	smpsAlterVol        $FC
 	smpsSetvoice        $01
-	smpsDetune       $03
+	smpsAlterNote       $03
 	dc.b	nA2, $6C
 	smpsStop
 
@@ -115,13 +115,13 @@ Title_screen_PSG1:
 Title_screen_Loop00:
 	dc.b	nD5, $03, nE5, nFs5
 	smpsPSGAlterVol     $01
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	smpsLoop            $00, $05, Title_screen_Loop00
 
 Title_screen_Loop01:
 	dc.b	nD5, $03, nE5, nFs5
 	smpsPSGAlterVol     $01
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	smpsLoop            $00, $07, Title_screen_Loop01
 	smpsStop
 
@@ -196,6 +196,5 @@ Title_screen_Voices:
 	smpsVcDecayRate2    $03, $04, $04, $05
 	smpsVcDecayLevel    $02, $02, $02, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-;	smpsVcTotalLevel    $00, $97, $2C, $27
-	smpsVcTotalLevel    $00, $17, $2C, $27	; Fixed
+	smpsVcTotalLevel    $00, $97, $2C, $27
 

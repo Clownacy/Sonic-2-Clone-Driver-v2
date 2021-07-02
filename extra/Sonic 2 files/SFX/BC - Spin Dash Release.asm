@@ -4,8 +4,7 @@ Sound3C_SpindashRelease_Header:
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $02
 
-;	smpsHeaderSFXChannel cFM5, Sound3C_SpindashRelease_FM5,	$90, $00
-	smpsHeaderSFXChannel cFM5, Sound3C_SpindashRelease_FM5,	$10, $00	; Fixed
+	smpsHeaderSFXChannel cFM5, Sound3C_SpindashRelease_FM5,	$10, $00
 	smpsHeaderSFXChannel cPSG3, Sound3C_SpindashRelease_PSG3,	$00, $00
 
 ; FM5 Data

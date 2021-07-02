@@ -16,7 +16,7 @@ Invincible_Header:
 
 ; FM5 Data
 Invincible_FM5:
-	smpsDetune       $03
+	smpsAlterNote       $03
 
 ; FM1 Data
 Invincible_FM1:

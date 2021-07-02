@@ -1,5 +1,5 @@
 Credits_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     Credits_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $F0
@@ -16,10 +16,10 @@ Credits_Header:
 
 ; FM1 Data
 Credits_FM1:
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $FE
 	smpsCall            Credits_Call03
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $02
 
 Credits_Loop24:
@@ -38,7 +38,7 @@ Credits_Loop25:
 	smpsLoop            $00, $02, Credits_Loop25
 	dc.b	nRst, $06, nRst, nRst, $30, nRst
 	smpsSetvoice        $0B
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsAlterVol        $02
 
 Credits_Loop26:
@@ -48,7 +48,7 @@ Credits_Loop26:
 	dc.b	nRst, $30, nRst
 	smpsSetvoice        $0E
 	smpsAlterVol        $FF
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsCall            Credits_Call23
 	dc.b	nRst, $12, nE1, nG1, $06, nRst, $18, nA1, $12, nCs2, $06, nRst
 	dc.b	nRst, $12, nD1, nFs1, $08, nRst, $16, nA1, $06, nE1, nF1, nG1
@@ -64,7 +64,7 @@ Credits_Loop26:
 	dc.b	nE5, smpsNoAttack, nEb5, smpsNoAttack, nD5, smpsNoAttack, nCs5, smpsNoAttack, nC5, smpsNoAttack, nB4, smpsNoAttack
 	dc.b	nBb4, smpsNoAttack, nA4, nRst, $60
 	smpsSetvoice        $01
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $FA
 	smpsModOff
 	smpsCall            Credits_Call25
@@ -72,7 +72,7 @@ Credits_Loop26:
 	smpsCall            Credits_Call25
 	dc.b	nRst, $03, nRst, $60
 	smpsAlterVol        $04
-	smpsDetune       $01
+	smpsAlterNote       $01
 	smpsSetvoice        $1B
 	smpsAlterVol        $06
 	dc.b	nE5, $0C
@@ -105,25 +105,25 @@ Credits_Loop26:
 	smpsNoteFill        $00
 	dc.b	nFs5, $0C, nG5, $06, nRst, nRst, $24, nRst, $30, nRst
 	smpsSetvoice        $1F
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsAlterVol        $F7
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	nRst, $06, nG3, nA3, nRst, nC4, nRst, nD4, nRst, nEb4, nRst, nD4
 	dc.b	nRst, nC4, nD4, nRst, nC4
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $00
 	dc.b	nRst, $0C, nG3, $06, nA3, nC4, nRst, $12, nG3, $06, nA3, nC4
 	dc.b	nRst, nEb4, nC4, nRst, nC4
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $1F
 	dc.b	nRst, $06, nG4, $12, nEb4, $06, nRst, nD4, nRst, nEb4, nRst, nD4
 	dc.b	nRst, nC4, nA3, nRst, nC4
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $00
 	dc.b	nRst, $06, nBb3, $12, nA3, $06, nRst, $12, nBb3, $06, nRst, nA3
 	dc.b	nRst, nBb3, nC4, nRst, nC4, nRst, $30, nRst
 	smpsSetvoice        $21
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	dc.b	nRst, $30, nRst, $08, nG2, $04, nF2, $0C, nE2, nD2, nC2, $08
 	dc.b	$04, nE1, $0C, nF1, nFs1, nG1, nB1, nC2, nD2, nE2, nB1, nAb1
 	dc.b	nFs1, nE1, nB1, nE2, nE1, nA1, nB1, nC2, nB1, nA1, nC2, nE2
@@ -139,7 +139,7 @@ Credits_Loop26:
 	smpsCall            Credits_Call26
 	dc.b	nF2, $08, nC2, $04
 	smpsSetvoice        $23
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsAlterVol        $07
 	dc.b	nRst, $60
 	smpsCall            Credits_Call0A
@@ -149,7 +149,7 @@ Credits_Loop26:
 	dc.b	nRst, nB6, nE6, $06, nRst, $18
 	smpsAlterVol        $05
 	dc.b	nRst, $0C, nA3, nRst, nA3, nRst, $24
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsAlterVol        $08
 	dc.b	nA2, $6C
 	smpsStop
@@ -179,13 +179,13 @@ Credits_Call22:
 
 Credits_Call24:
 	dc.b	nFs5, $01, smpsNoAttack, nG5, smpsNoAttack, nAb5, smpsNoAttack, nA5, $2D
-	smpsChangeTransposition      $02
+	smpsAlterPitch      $02
 	dc.b	nFs5, $01, smpsNoAttack, nG5, smpsNoAttack, nAb5, smpsNoAttack, nA5, $2D
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	dc.b	nFs5, $01, smpsNoAttack, nG5, smpsNoAttack, nAb5, smpsNoAttack, nA5, $2D
-	smpsChangeTransposition      $FC
+	smpsAlterPitch      $FC
 	dc.b	nFs5, $01, smpsNoAttack, nG5, smpsNoAttack, nAb5, smpsNoAttack, nA5, $2D
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	dc.b	nFs5, $01, smpsNoAttack, nG5, smpsNoAttack, nAb5, smpsNoAttack, nA5, $2D, smpsNoAttack, $30, smpsNoAttack
 	dc.b	$30
 	smpsReturn
@@ -260,7 +260,7 @@ Credits_Loop1B:
 	dc.b	nC1, $06, nC2
 	smpsNoteFill        $00
 	dc.b	nA0, $0C, nBb0, nB0
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsAlterVol        $0C
 	smpsSetvoice        $04
 
@@ -312,14 +312,14 @@ Credits_Loop21:
 	smpsLoop            $00, $02, Credits_Loop21
 	dc.b	nRst, $60
 	smpsSetvoice        $17
-	smpsDetune       $02
-	smpsChangeTransposition      $F4
+	smpsAlterNote       $02
+	smpsAlterPitch      $F4
 	smpsAlterVol        $0A
 	smpsCall            Credits_Call10
 	dc.b	nF6, $15, nE6, $03, nD6, $06, nRst, nC6, $0C, nE6, $06, nRst
 	dc.b	nC6, $0C, nD6, $06, nRst, $12, nRst, $60
 	smpsSetvoice        $1B
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsNoteFill        $06
 	dc.b	nRst, $3C, nG4, $06, $06, nA4, nC5, nC5, nA4
 	smpsSetvoice        $1D
@@ -335,7 +335,7 @@ Credits_Loop21:
 	smpsCall            Credits_Call1E
 	dc.b	nRst, $30, nRst
 	smpsSetvoice        $01
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsAlterVol        $F9
 
 Credits_Loop22:
@@ -346,7 +346,7 @@ Credits_Loop22:
 	smpsLoop            $00, $02, Credits_Loop22
 	dc.b	nRst, $60
 	smpsSetvoice        $22
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsAlterVol        $03
 	smpsModSet          $1C, $01, $06, $04
 	dc.b	nRst, $50, nG3, $04, nA3, $08, nC4, $04, nE4, $30, nRst, $0C
@@ -445,15 +445,15 @@ Credits_Call1A:
 Credits_FM3:
 	dc.b	nRst, $60
 	smpsCall            Credits_Call0C
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsSetvoice        $02
 	smpsCall            Credits_Call13
 	dc.b	nG4, $3C
 	smpsCall            Credits_Call13
 	dc.b	nC5, $3C
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsAlterVol        $02
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsSetvoice        $04
 	smpsPan             panLeft, $00
 
@@ -461,11 +461,11 @@ Credits_Loop12:
 	smpsCall            Credits_Call14
 	smpsLoop            $00, $02, Credits_Loop12
 	smpsSetvoice        $09
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $FD
 	smpsPan             panRight, $00
 	smpsModSet          $06, $01, $05, $04
-	smpsDetune       $00
+	smpsAlterNote       $00
 
 Credits_Loop13:
 	dc.b	nFs2, $0C, nFs3, $06, nRst, nE3, nRst, nFs3, nFs2, nRst, nFs2, nFs3
@@ -503,7 +503,7 @@ Credits_Loop15:
 	dc.b	nRst, $30
 	smpsLoop            $00, $0A, Credits_Loop15
 	smpsSetvoice        $18
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $08
 	smpsModOff
 	smpsPan             panRight, $00
@@ -536,13 +536,13 @@ Credits_Loop15:
 	smpsSetvoice        $1C
 	dc.b	nRst, $1E, nF5, $0C, nF5, nC5, $06, nRst, $60, nRst, $60
 	smpsSetvoice        $00
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	dc.b	nRst, $60, nRst, $0C, nG3, $06, nA3, nC4, nRst, $12, nG3, $06
 	dc.b	nA3, nC4, nRst, nEb4, nC4, nRst, nC4, nRst, $60, nRst, $06, nBb3
 	dc.b	$12, nA3, $06, nRst, $12, nBb3, $06, nRst, nA3, nRst, nBb3, nC4
 	dc.b	nRst, nC4, nRst, $60
 	smpsSetvoice        $22
-	smpsChangeTransposition      $DC
+	smpsAlterPitch      $DC
 	smpsAlterVol        $FF
 	smpsPan             panLeft, $00
 	dc.b	nRst, $60
@@ -553,7 +553,7 @@ Credits_Loop15:
 	smpsCall            Credits_Call18
 	smpsAlterVol        $FC
 	dc.b	nRst, nG5, nRst, nG5, nRst, nA5, $18, $08, nG5, $04
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $FF
 	smpsPan             panCenter, $00
 	smpsSetvoice        $00
@@ -570,7 +570,7 @@ Credits_Loop16:
 	dc.b	nEb6, nE6, $06, nRst
 	smpsAlterVol        $F8
 	smpsSetvoice        $01
-	smpsDetune       $03
+	smpsAlterNote       $03
 	dc.b	nA2, $6C
 	smpsStop
 
@@ -605,7 +605,7 @@ Credits_Call19:
 
 Credits_Call0C:
 	smpsSetvoice        $05
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	dc.b	nA5, $60, nD6, nE6, smpsNoAttack, nE6, nA5, $60, nG6, nG6, $24, nA6
 	dc.b	$60, smpsNoAttack, $3C
 	smpsReturn
@@ -613,10 +613,10 @@ Credits_Call0C:
 ; FM4 Data
 Credits_FM4:
 	dc.b	nRst, $60
-	smpsChangeTransposition      $FB
+	smpsAlterPitch      $FB
 	smpsAlterVol        $FE
 	smpsCall            Credits_Call0C
-	smpsChangeTransposition      $1D
+	smpsAlterPitch      $1D
 	smpsAlterVol        $02
 	smpsSetvoice        $02
 	smpsCall            Credits_Call0D
@@ -632,7 +632,7 @@ Credits_Loop0D:
 	dc.b	$30
 	smpsLoop            $00, $02, Credits_Loop0D
 	smpsSetvoice        $0A
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $F7
 	smpsModSet          $0C, $01, $FB, $04
 
@@ -647,13 +647,13 @@ Credits_Loop0E:
 	smpsSetvoice        $0C
 	smpsAlterVol        $05
 	smpsModOff
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsPan             panLeft, $00
 	smpsCall            Credits_Call06
 	dc.b	$24, nRst, $0C, nRst, $60
 	smpsSetvoice        $10
 	smpsAlterVol        $F7
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsPan             panRight, $00
 	smpsCall            Credits_Call0F
 	dc.b	nD4, nFs4, $06, nA3, $0C, nC4, nD4, nFs4, $06, nRst, nFs4, nA3
@@ -675,7 +675,7 @@ Credits_Loop0F:
 	smpsLoop            $00, $02, Credits_Loop0F
 	dc.b	nRst, $60
 	smpsSetvoice        $17
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $02
 	smpsPan             panCenter, $00
 	smpsModSet          $01, $01, $03, $03
@@ -687,7 +687,7 @@ Credits_Loop10:
 	smpsSetvoice        $1E
 	smpsPan             panRight, $00
 	smpsAlterVol        $FE
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsModOff
 	smpsNoteFill        $06
 	dc.b	nRst, $0C, nE5, $06, $12, $18, nG5, $06, $12, $0C
@@ -704,17 +704,17 @@ Credits_Loop10:
 	dc.b	nG5, $06, $12, $0C
 	smpsSetvoice        $1A
 	smpsPan             panCenter, $00
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	dc.b	nA5, $06, nA5, nRst, nA5, nRst, nA5
 	smpsNoteFill        $00
 	dc.b	nBb5, $0C, nB5, $06
 	smpsSetvoice        $1E
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsNoteFill        $06
 	dc.b	nRst, nG5, $06, $12, $0C, nRst, $60
 	smpsSetvoice        $20
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsAlterVol        $FA
 	smpsPan             panCenter, $00
 	smpsNoteFill        $00
@@ -722,7 +722,7 @@ Credits_Loop10:
 	dc.b	smpsNoAttack, nD4, $5D, nD4, $03, smpsNoAttack, nE4, $5D, nRst, $60
 	smpsSetvoice        $22
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsAlterVol        $04
 	dc.b	nRst, $30, nRst
 	smpsCall            Credits_Call11
@@ -732,7 +732,7 @@ Credits_Loop10:
 	dc.b	nRst, nE5, nRst, nE5, nRst, nF5, nRst, nF5
 	smpsAlterVol        $FC
 	dc.b	nRst, nE5, nRst, nE5, nRst, nF5, $18, $08, nE5, $04
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $FF
 	smpsPan             panCenter, $00
 	smpsSetvoice        $00
@@ -744,7 +744,7 @@ Credits_Loop11:
 	smpsCall            Credits_Call12
 	dc.b	nD6, $12, nD6, $1E
 	smpsLoop            $00, $02, Credits_Loop11
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsAlterVol        $08
 	smpsCall            Credits_Call0B
 	smpsAlterVol        $F0
@@ -762,29 +762,9 @@ Credits_Call11:
 	dc.b	nRst, $0C, nC6, $04, nRst, $10, nC6, $04, nRst, $0C, nC6, $0C
 	dc.b	nD6, $08, nC6, $04, nRst, $18, nRst, $0C, nB5, $04, nRst, $10
 	dc.b	nB5, $04, nRst, $0C, nB5, $0C, nC6, $08, nB5, $04, nRst, $18
-	dc.b	nRst, $0C
-	if 1==1
-	; this part of the original credits music (CNZ PSG) sounds buggy (dissonant)
-	dc.b	nA5, $04, nRst, $10, nA5, $04, nRst, $0C, nA5, $0C, nB5, $08
-	dc.b	nA5, $04, nRst, $18, nRst, $0C, nAb5, $04, nRst, $10, nAb5, $04
-	dc.b	nRst, $0C, nAb5, $0C, nBb5, $08
-	else
-	; replace the above block of notes with this to fix it.
-	; (I'm not sure why, but the notes $C6 and $C7 are broken here,
-	;  so I've replaced them with pitch-shifted $C8s)
-	smpsDetune       $C0
-	dc.b	nB5, $04, nRst, $10, nB5, $04, nRst, $0C, nB5, $0C
-	smpsDetune       $00
-	dc.b	nB5, $08
-	smpsDetune       $C0
-	dc.b	nB5, $04, nRst, $24
-	smpsDetune       $00
-	dc.b	nAb5, $04, nRst, $10, nAb5, $04, nRst, $0C, nAb5, $0C
-	smpsDetune       $E0
-	dc.b	nB5, $08
-	smpsDetune       $00
-	endif
-	dc.b	nAb5, $04, nRst, $18
+	dc.b	nRst, $0C, nA5, $04, nRst, $10, nA5, $04, nRst, $0C, nA5, $0C
+	dc.b	nB5, $08, nA5, $04, nRst, $18, nRst, $0C, nAb5, $04, nRst, $10
+	dc.b	nAb5, $04, nRst, $0C, nAb5, $0C, nBb5, $08, nAb5, $04, nRst, $18
 	smpsReturn
 
 Credits_Call0B:
@@ -816,20 +796,20 @@ Credits_Call0F:
 
 ; FM5 Data
 Credits_FM5:
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsAlterVol        $F8
-	smpsDetune       $05
+	smpsAlterNote       $05
 	smpsCall            Credits_Call03
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsAlterVol        $08
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsSetvoice        $02
 	smpsModSet          $0C, $01, $FC, $04
 	smpsCall            Credits_Call04
 	dc.b	nC4, $3C
 	smpsCall            Credits_Call04
 	dc.b	nE4, $3C
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $07
 	smpsModSet          $30, $01, $04, $04
 	smpsSetvoice        $06
@@ -855,14 +835,14 @@ Credits_Loop0B:
 	smpsModOff
 	dc.b	nRst, $01
 	smpsSetvoice        $0C
-	smpsDetune       $FE
+	smpsAlterNote       $FE
 	smpsPan             panRight, $00
 	smpsCall            Credits_Call06
 	dc.b	$23, nRst, $0C, nRst, $60
 	smpsSetvoice        $11
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $F4
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsPan             panCenter, $00
 	smpsModSet          $06, $01, $06, $05
 	dc.b	nRst, $60, nRst, $30, nF5, $06, nF5, nC6, nA5, $1E, nRst, $60
@@ -870,7 +850,7 @@ Credits_Loop0B:
 	dc.b	nRst, nA5, $03, nRst, nA5, nRst, $09, nRst, $06, nRst, $60, nRst
 	dc.b	$30, nF5, $06, nF5, nC6, nA5, $1E, nRst, $60
 	smpsSetvoice        $16
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsAlterVol        $04
 	smpsModOff
 	smpsPan             panLeft, $00
@@ -882,14 +862,14 @@ Credits_Loop0B:
 	smpsCall            Credits_Call08
 	dc.b	nRst, $60
 	smpsSetvoice        $19
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsPan             panCenter, $00
 	smpsCall            Credits_Call09
 	dc.b	nRst, $27, nC4, $03
 	smpsCall            Credits_Call09
 	dc.b	nRst, $2A, nRst, $60
 	smpsSetvoice        $1E
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsNoteFill        $06
 
 Credits_Loop0C:
@@ -899,12 +879,12 @@ Credits_Loop0C:
 	dc.b	nRst, $60
 	smpsSetvoice        $20
 	smpsNoteFill        $00
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsAlterVol        $FA
 	dc.b	nG4, $03, smpsNoAttack, nA4, $5D, nF4, $03, smpsNoAttack, nG4, $5D, nEb4, $03
 	dc.b	smpsNoAttack, nF4, $5D, nF4, $03, smpsNoAttack, nG4, $5D, nRst, $60
 	smpsSetvoice        $22
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsAlterVol        $05
 	smpsModSet          $1C, $01, $06, $04
 	dc.b	nRst, $50, nD3, $04, nE3, $08, nG3, $04, nC4, $30, nRst, $0C
@@ -922,7 +902,7 @@ Credits_Loop0C:
 	dc.b	nF4, $04, nRst, $08, nE4, $18, nC4, nA3, nF3, $14, nE3, $04
 	smpsAlterVol        $0C
 	smpsSetvoice        $23
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsAlterVol        $F7
 	dc.b	nRst, $60
 	smpsCall            Credits_Call0A
@@ -973,8 +953,7 @@ Credits_Loop3E:
 	dc.b	nRst, $30
 	smpsLoop            $00, $0A, Credits_Loop3E
 	dc.b	nRst, $60
-	smpsChangeTransposition      $F4
-	;smpsAlterVol        $FE
+	smpsAlterPitch      $F4
 	smpsPSGAlterVol     $FE
 	smpsPSGvoice        fTone_01
 	smpsCall            Credits_Call28
@@ -989,13 +968,13 @@ Credits_Loop3E:
 	dc.b	nBb4, smpsNoAttack, nA4, nRst, $60
 	smpsPSGvoice        $00
 	smpsNoteFill        $06
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsCall            Credits_Call29
 	dc.b	nF5, nRst, nF5
 	smpsCall            Credits_Call29
 	dc.b	nF5, $04, nRst, nF5, nRst, $0C, nF5, nRst, $60
 	smpsPSGvoice        fTone_08
-	smpsChangeTransposition      $04
+	smpsAlterPitch      $04
 	smpsPSGAlterVol     $02
 	smpsNoteFill        $06
 
@@ -1008,11 +987,11 @@ Credits_Loop40:
 	smpsLoop            $00, $0A, Credits_Loop40
 	dc.b	nRst, $60
 	smpsPSGvoice        $00
-	smpsChangeTransposition      $F0
+	smpsAlterPitch      $F0
 	smpsPSGAlterVol     $FF
 	dc.b	nRst, $60
 	smpsCall            Credits_Call17
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsPSGAlterVol     $02
 	dc.b	nE4, $30, nD4, $18, nE4, $0C, nD4, nC4, $30, nF4
 	smpsPSGAlterVol     $FE
@@ -1021,7 +1000,7 @@ Credits_Loop40:
 	dc.b	nG5, $18, nE5, nC5, nD5, $0C, nRst
 	smpsPSGAlterVol     $FC
 	dc.b	nRst, nG4, nRst, nG4, nRst, nA4, $18, $08, nG4, $04
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsPSGAlterVol     $01
 	smpsPSGvoice        fTone_05
 
@@ -1031,7 +1010,7 @@ Credits_Loop41:
 	dc.b	nRst, $0C, nB5, $12, nRst, $06, nB5, nRst, nA5, $12, nB5, nA5
 	dc.b	$0C, nE5, $18, nAb5, nB5, nD6, nRst, $0C, nCs6, nRst, nCs6, $12
 	dc.b	nC6, nCs6, $06, nRst, $09
-	smpsChangeTransposition      $30
+	smpsAlterPitch      $30
 	smpsPSGAlterVol     $FC
 	smpsJump            Credits_Jump00
 
@@ -1066,7 +1045,7 @@ Credits_Loop35:
 	dc.b	nRst, $30
 	smpsLoop            $00, $10, Credits_Loop35
 	dc.b	nRst, $60
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsPSGAlterVol     $FD
 	smpsPSGvoice        fTone_04
 	dc.b	nRst
@@ -1077,7 +1056,7 @@ Credits_Loop36:
 	dc.b	nRst, $60
 	smpsModSet          $03, $02, $01, $05
 	smpsPSGvoice        fTone_0A
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsPSGAlterVol     $02
 	dc.b	nRst, $30, nRst, nRst, nC5, $06, nD5, nA5, nF5, $1E, nRst, $60
 	dc.b	nRst, $06, nA5, nRst, nA5, nG5, nRst, nG5, nRst, nFs5, nRst, nFs5
@@ -1105,12 +1084,17 @@ Credits_Loop39:
 	smpsLoop            $00, $0A, Credits_Loop39
 	dc.b	nRst, $60
 	smpsPSGvoice        $00
-	smpsChangeTransposition      $F4
+	; This is wrong: it should convert from EHZ 2P's PSG2 transpose ($D0)
+	; to CNZ's PSG2 transpose ($DC), but instead of adding $C, it subtracts
+	; $C, causing the note to be too low and underflow the sound driver's
+	; frequency table, producing invalid notes.
+	;smpsAlterPitch      $F4
+	smpsAlterPitch      $0C ; Correct command
 	smpsPSGAlterVol     $FF
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	dc.b	nRst, $60
 	smpsCall            Credits_Call11
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsPSGAlterVol     $02
 	dc.b	nC4, $30, nB3, $18, nC4, $0C, nB3, nA3, $30, nC4
 	smpsPSGAlterVol     $FE
@@ -1120,13 +1104,15 @@ Credits_Loop39:
 	smpsPSGAlterVol     $FC
 	dc.b	nRst, nC4, nRst, nC4, nRst, nC4, $18, $08, nC4, $04
 	smpsPSGAlterVol     $01
-	smpsChangeTransposition      $18
+	; If the above bug is fixed, then this line needs removing (the track
+	; will already be two octaves higher).
+;	smpsAlterPitch      $18 ; Removed
 	smpsPSGvoice        fTone_05
-	smpsDetune       $01
+	smpsAlterNote       $01
 	dc.b	nRst, $60, nRst, nRst, nRst, nRst, nRst, nRst, $0C, nE6, $06, nRst
 	dc.b	nB6, nE6, nRst, $0C, nE6, $06, nRst, nB6, nE6, nRst, $18, nRst
 	dc.b	$54
-	smpsChangeTransposition      $24
+	smpsAlterPitch      $24
 	smpsPSGAlterVol     $FD
 
 Credits_Jump00:
@@ -1136,13 +1122,13 @@ Credits_Jump00:
 Credits_Loop3A:
 	dc.b	nD5, $03, nE5, nFs5
 	smpsPSGAlterVol     $01
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	smpsLoop            $00, $05, Credits_Loop3A
 
 Credits_Loop3B:
 	dc.b	nD5, $03, nE5, nFs5
 	smpsPSGAlterVol     $01
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	smpsLoop            $00, $07, Credits_Loop3B
 	smpsStop
 
@@ -1373,7 +1359,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $01, $00, $00, $00
 	smpsVcDecayLevel    $00, $01, $0F, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $27, $28, $17
+	smpsVcTotalLevel    $80, $27, $28, $17
 
 ;	Voice $01
 ;	$08
@@ -1391,7 +1377,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $03, $04, $04, $00
 	smpsVcDecayLevel    $02, $02, $02, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $04, $0E, $30, $25
+	smpsVcTotalLevel    $84, $0E, $30, $25
 
 ;	Voice $02
 ;	$3C
@@ -1409,7 +1395,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $00, $04, $00, $04
 	smpsVcDecayLevel    $00, $01, $00, $01
 	smpsVcReleaseRate   $0D, $00, $0B, $00
-	smpsVcTotalLevel    $00, $0B, $00, $19
+	smpsVcTotalLevel    $80, $0B, $80, $19
 
 ;	Voice $03
 ;	$08
@@ -1427,7 +1413,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $03, $04, $04, $00
 	smpsVcDecayLevel    $02, $02, $02, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $13, $2D, $24
+	smpsVcTotalLevel    $80, $13, $2D, $24
 
 ;	Voice $04
 ;	$3D
@@ -1445,7 +1431,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $01, $02, $02, $02
 	smpsVcReleaseRate   $0B, $0B, $0B, $0B
-	smpsVcTotalLevel    $00, $00, $00, $19
+	smpsVcTotalLevel    $80, $80, $80, $19
 
 ;	Voice $05
 ;	$04
@@ -1463,7 +1449,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $0A, $00, $0A, $06
 	smpsVcDecayLevel    $00, $00, $00, $00
 	smpsVcReleaseRate   $0F, $00, $0F, $00
-	smpsVcTotalLevel    $00, $10, $00, $1A
+	smpsVcTotalLevel    $80, $10, $80, $1A
 
 ;	Voice $06
 ;	$35
@@ -1481,7 +1467,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $03, $02, $00, $00
 	smpsVcDecayLevel    $01, $01, $00, $00
 	smpsVcReleaseRate   $06, $05, $06, $00
-	smpsVcTotalLevel    $00, $03, $00, $1E
+	smpsVcTotalLevel    $80, $83, $80, $1E
 
 ;	Voice $07
 ;	$3C
@@ -1499,7 +1485,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $00, $04, $00, $04
 	smpsVcDecayLevel    $00, $01, $00, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $08, $16, $08, $1A
+	smpsVcTotalLevel    $88, $16, $88, $1A
 
 ;	Voice $08
 ;	$20
@@ -1517,7 +1503,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $08, $06, $06, $07
 	smpsVcDecayLevel    $0F, $01, $01, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $0F, $37, $14
+	smpsVcTotalLevel    $80, $0F, $37, $14
 
 ;	Voice $09
 ;	$3B
@@ -1535,7 +1521,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $01, $00, $00, $0F
 	smpsVcDecayLevel    $05, $05, $00, $0F
 	smpsVcReleaseRate   $0C, $05, $05, $03
-	smpsVcTotalLevel    $00, $22, $20, $22
+	smpsVcTotalLevel    $80, $22, $20, $22
 
 ;	Voice $0A
 ;	$3C
@@ -1553,7 +1539,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $00, $04, $00, $04
 	smpsVcDecayLevel    $00, $01, $00, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $14, $04, $1C
+	smpsVcTotalLevel    $80, $14, $84, $1C
 
 ;	Voice $0B
 ;	$3A
@@ -1643,7 +1629,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $01
 	smpsVcDecayLevel    $01, $01, $01, $02
 	smpsVcReleaseRate   $08, $08, $08, $04
-	smpsVcTotalLevel    $02, $02, $02, $1C
+	smpsVcTotalLevel    $82, $82, $82, $1C
 
 ;	Voice $10
 ;	$32
@@ -1661,7 +1647,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $02, $02, $02, $02
 	smpsVcDecayLevel    $07, $01, $01, $01
 	smpsVcReleaseRate   $02, $01, $01, $01
-	smpsVcTotalLevel    $00, $26, $2D, $23
+	smpsVcTotalLevel    $80, $26, $2D, $23
 
 ;	Voice $11
 ;	$3A
@@ -1715,7 +1701,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $08, $07, $07, $07
 	smpsVcDecayLevel    $02, $01, $01, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $14, $32, $17
+	smpsVcTotalLevel    $80, $14, $32, $17
 
 ;	Voice $14
 ;	$3D
@@ -1733,7 +1719,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $01
 	smpsVcDecayLevel    $01, $01, $01, $02
 	smpsVcReleaseRate   $0A, $0A, $0A, $00
-	smpsVcTotalLevel    $04, $04, $04, $19
+	smpsVcTotalLevel    $84, $84, $84, $19
 
 ;	Voice $15
 ;	$24
@@ -1769,7 +1755,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $00, $02, $02, $01
 	smpsVcDecayLevel    $02, $00, $00, $05
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $18, $22, $18
+	smpsVcTotalLevel    $80, $18, $22, $18
 
 ;	Voice $17
 ;	$3A
@@ -1787,7 +1773,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $00, $01, $0F, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $16, $4E, $18
+	smpsVcTotalLevel    $80, $16, $4E, $18
 
 ;	Voice $18
 ;	$3A
@@ -1805,7 +1791,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $00, $01, $0F, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $20, $28, $17
+	smpsVcTotalLevel    $80, $20, $28, $17
 
 ;	Voice $19
 ;	$20
@@ -1823,7 +1809,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $08, $08, $08, $0F
 	smpsVcDecayLevel    $0B, $0B, $05, $05
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $17, $2B, $14
+	smpsVcTotalLevel    $80, $17, $2B, $14
 
 ;	Voice $1A
 ;	$3A
@@ -1841,7 +1827,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $00, $00, $05, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $22, $1E, $22
+	smpsVcTotalLevel    $80, $22, $1E, $22
 
 ;	Voice $1B
 ;	$02
@@ -1859,7 +1845,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $05, $00, $02, $0F
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $1D, $2A, $16
+	smpsVcTotalLevel    $80, $1D, $2A, $16
 
 ;	Voice $1C
 ;	$02
@@ -1877,7 +1863,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $05, $01, $04, $01
 	smpsVcDecayLevel    $02, $03, $02, $0F
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $30, $29, $24
+	smpsVcTotalLevel    $80, $30, $29, $24
 
 ;	Voice $1D
 ;	$20
@@ -1895,7 +1881,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $08, $06, $06, $07
 	smpsVcDecayLevel    $0F, $01, $01, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $16, $3A, $1C
+	smpsVcTotalLevel    $80, $16, $3A, $1C
 
 ;	Voice $1E
 ;	$0D
@@ -1913,11 +1899,11 @@ Credits_Voices:
 	smpsVcDecayRate2    $02, $02, $02, $00
 	smpsVcDecayLevel    $02, $02, $02, $03
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $0D, $06, $00, $28
+	smpsVcTotalLevel    $8D, $86, $80, $28
 
 ;	Voice $1F
 ;	$38
-;	$3A, $0A, $11, $02, 	$D4, $14, $50, $0E, 	$05, $08, $02, $08
+;	$3A, $0A, $11, $02, 	$D4, $14, $50, $0E, 	$05, $08, $02, $88
 ;	$00, $00, $00, $00, 	$99, $09, $09, $1A, 	$2D, $2C, $19, $86
 	smpsVcAlgorithm     $00
 	smpsVcFeedback      $07
@@ -1926,12 +1912,12 @@ Credits_Voices:
 	smpsVcCoarseFreq    $02, $01, $0A, $0A
 	smpsVcRateScale     $00, $01, $00, $03
 	smpsVcAttackRate    $0E, $10, $14, $14
-	smpsVcAmpMod        $00, $00, $00, $00
+	smpsVcAmpMod        $01, $00, $00, $00
 	smpsVcDecayRate1    $08, $02, $08, $05
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $01, $00, $00, $09
 	smpsVcReleaseRate   $0A, $09, $09, $09
-	smpsVcTotalLevel    $06, $19, $2C, $2D
+	smpsVcTotalLevel    $86, $19, $2C, $2D
 
 ;	Voice $20
 ;	$0D
@@ -1949,7 +1935,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $02, $02, $02, $00
 	smpsVcDecayLevel    $02, $02, $02, $03
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $13, $0B, $06, $28
+	smpsVcTotalLevel    $93, $8B, $86, $28
 
 ;	Voice $21
 ;	$3A
@@ -2003,7 +1989,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $02, $00, $00, $00
 	smpsVcDecayLevel    $01, $00, $00, $00
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $01, $22, $24, $18
+	smpsVcTotalLevel    $81, $22, $24, $18
 
 ;	Voice $24
 ;	$20
@@ -2021,7 +2007,7 @@ Credits_Voices:
 	smpsVcDecayRate2    $08, $06, $06, $07
 	smpsVcDecayLevel    $0F, $01, $01, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $13, $37, $19
+	smpsVcTotalLevel    $80, $13, $37, $19
 
 ;	Voice $25
 ;	$3D
@@ -2039,5 +2025,5 @@ Credits_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $01, $01, $01, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $00, $00, $1A
+	smpsVcTotalLevel    $80, $80, $80, $1A
 

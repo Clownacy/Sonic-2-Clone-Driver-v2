@@ -91,37 +91,37 @@ CPZ_Call03:
 	smpsReturn
 
 CPZ_Call0A:
-	smpsDetune       $F8
+	smpsAlterNote       $F8
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $F0
+	smpsAlterNote       $F0
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $E8
+	smpsAlterNote       $E8
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $E0
+	smpsAlterNote       $E0
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $D8
+	smpsAlterNote       $D8
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $D0
+	smpsAlterNote       $D0
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $C8
+	smpsAlterNote       $C8
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $C0
+	smpsAlterNote       $C0
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $C8
+	smpsAlterNote       $C8
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $D0
+	smpsAlterNote       $D0
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $D8
+	smpsAlterNote       $D8
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $E0
+	smpsAlterNote       $E0
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $E8
+	smpsAlterNote       $E8
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $F0
+	smpsAlterNote       $F0
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $F8
+	smpsAlterNote       $F8
 	dc.b	smpsNoAttack, $03
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	smpsNoAttack, $03
 	smpsReturn
 

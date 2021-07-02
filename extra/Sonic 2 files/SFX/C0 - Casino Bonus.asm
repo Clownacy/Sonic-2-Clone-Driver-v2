@@ -9,7 +9,7 @@ Sound40_CasinoBonus_Header:
 
 ; FM4 Data
 Sound40_CasinoBonus_FM4:
-	smpsDetune       $03
+	smpsAlterNote       $03
 	dc.b	nRst, $02
 
 ; FM5 Data

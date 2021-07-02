@@ -26,7 +26,6 @@ Sound5C_Fire_PSG3:
 
 Sound5C_Fire_Loop01:
 	dc.b	smpsNoAttack, $08
-	;smpsAlterVol        $01
 	smpsPSGAlterVol     $01
 	smpsLoop            $00, $05, Sound5C_Fire_Loop01
 	smpsStop
@@ -48,6 +47,5 @@ Sound5C_Fire_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $00, $00, $00, $00
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-;	smpsVcTotalLevel    $00, $8E, $14, $81
-	smpsVcTotalLevel    $00, $0E, $14, $01	; Fixed
+	smpsVcTotalLevel    $00, $8E, $14, $81
 

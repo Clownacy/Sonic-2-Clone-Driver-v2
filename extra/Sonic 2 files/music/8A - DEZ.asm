@@ -85,7 +85,7 @@ DEZ_FM4:
 	smpsModSet          $08, $01, $05, $04
 
 DEZ_Loop03:
-	smpsDetune       $02
+	smpsAlterNote       $02
 	dc.b	nRst, $30
 
 DEZ_Loop02:
@@ -149,7 +149,7 @@ DEZ_Jump00:
 
 ; PSG2 Data
 DEZ_PSG2:
-	smpsDetune       $FE
+	smpsAlterNote       $FE
 
 ; PSG1 Data
 DEZ_PSG1:

@@ -16,7 +16,7 @@ Mus88_Extra_Life_Header:
 
 ; FM4 Data
 Mus88_Extra_Life_FM4:
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsPan             panRight, $00
 	smpsJump            Mus88_Extra_Life_Jump01
 
@@ -45,7 +45,7 @@ Mus88_Extra_Life_FM2:
 
 ; FM5 Data
 Mus88_Extra_Life_FM5:
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsPan             panRight, $00
 	smpsJump            Mus88_Extra_Life_Jump00
 

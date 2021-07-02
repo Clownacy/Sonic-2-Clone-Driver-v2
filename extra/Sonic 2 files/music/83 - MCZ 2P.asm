@@ -1,5 +1,5 @@
 MCZ_2p_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     MCZ_2p_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $EC
@@ -73,7 +73,7 @@ MCZ_2p_Jump04:
 
 ; PSG1 Data
 MCZ_2p_PSG1:
-	smpsDetune       $02
+	smpsAlterNote       $02
 	dc.b	nRst, $1B
 
 MCZ_2p_Jump08:
@@ -96,7 +96,6 @@ MCZ_2p_Jump07:
 	dc.b	nRst, $30, nRst, nRst, nRst, nRst, nRst, nRst, nRst
 	smpsCall            MCZ_2p_Call03
 	dc.b	$24, nB4, nD5, $18, smpsNoAttack, $30, smpsNoAttack, $30
-	;smpsAlterVol        $FE
 	smpsPSGAlterVol     $FE
 	dc.b	nG5, $24, nF5, nE5, $18, nF5, $24, nE5, nC5, $18, nC5, nD5
 	dc.b	$0C, nB4, $30, smpsNoAttack, $0C, smpsNoAttack, $30, smpsNoAttack, $24, nRst, $0C, nRst
@@ -104,23 +103,22 @@ MCZ_2p_Jump07:
 	dc.b	nG4, $18, nF4, nD4, $0C, nG4, $30, smpsNoAttack, $0C, smpsNoAttack, $30, smpsNoAttack
 	dc.b	$18, nRst, $18, nA4, $24, nC5, nE5, $18, nD5, $24, nB4, nG4
 	dc.b	$18, nG5, $30, smpsNoAttack, $30, smpsNoAttack, $30, smpsNoAttack, $0C, nRst, $24
-	;smpsAlterVol        $02
 	smpsPSGAlterVol     $02
 	smpsJump            MCZ_2p_Jump07
 
 ; FM4 Data
 MCZ_2p_FM4:
 	smpsSetvoice        $02
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsPan             panLeft, $00
 	smpsCall            MCZ_2p_Call01
 
 MCZ_2p_Jump03:
 	smpsCall            MCZ_2p_Call02
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsSetvoice        $01
 	smpsAlterVol        $F2
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	dc.b	nA3, $0C, nB3, $06, nRst, $30, nRst, $2A, nRst, $30, nRst, $24
 	dc.b	nC4, $0C, nB3, $06, nRst, $30, nRst, $2A, nRst, $30, nRst, $24
 	dc.b	nA3, $0C, nB3, $06, nRst, $30, nRst, $2A, nRst, $30, nRst, $24
@@ -129,12 +127,12 @@ MCZ_2p_Jump03:
 	dc.b	nB3, nD4, $18, smpsNoAttack, $30, smpsNoAttack, $30, nB4, $24, nA4, nG4, $18
 	dc.b	nA4, $24, nG4, nE4, $18, nE4, nF4, $0C, nD4, $24
 	smpsAlterVol        $0E
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $02
 	smpsCall            MCZ_2p_Call01
 	dc.b	nF4, $30, smpsNoAttack, $30, smpsNoAttack, $30, smpsNoAttack, $18, nRst, $18
 	smpsAlterVol        $F2
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $01
 	dc.b	nRst, $30, nRst, nRst, nRst, $24, nG4, $06, nF4, nG4, $0C, nG4
 	dc.b	nF4, $06, nG4, $0C, $06, nRst, $24, nRst, $06, nF4, nG4, $0C
@@ -143,7 +141,7 @@ MCZ_2p_Jump03:
 	dc.b	$06, nRst, $24, nRst, $06, nF4, nG4, $0C, nG4, nF4, $06, nG4
 	dc.b	$0C, $06, nRst, $18
 	smpsAlterVol        $0E
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $02
 	smpsCall            MCZ_2p_Call01
 	smpsJump            MCZ_2p_Jump03
@@ -152,15 +150,15 @@ MCZ_2p_Jump03:
 MCZ_2p_FM5:
 	dc.b	nRst, $01
 	smpsSetvoice        $02
-	smpsDetune       $FE
+	smpsAlterNote       $FE
 	smpsPan             panRight, $00
 	smpsCall            MCZ_2p_Call01
 
 MCZ_2p_Jump02:
 	smpsCall            MCZ_2p_Call02
-	smpsDetune       $FA
+	smpsAlterNote       $FA
 	smpsAlterVol        $F2
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $01
 	dc.b	nF3, $0B, nG3, $06, nRst, $30, nRst, $2A, nRst, $30, nRst, $24
 	dc.b	nA3, $0C, nG3, $06, nRst, $30, nRst, $2A, nRst, $30, nRst, $24
@@ -170,12 +168,12 @@ MCZ_2p_Jump02:
 	dc.b	nB3, nD4, $18, smpsNoAttack, $30, smpsNoAttack, $30, nG4, $24, nF4, nE4, $18
 	dc.b	nF4, $24, nE4, nC4, $18, nC4, nD4, $0C, nB3, $24
 	smpsAlterVol        $0E
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $02
 	smpsCall            MCZ_2p_Call01
 	dc.b	nF4, $30, smpsNoAttack, $30, smpsNoAttack, $30, smpsNoAttack, $18, nRst, $18
 	smpsAlterVol        $F2
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsSetvoice        $01
 	dc.b	nRst, $30, nRst, $30, nRst, $30, nRst, $24, nD4, $06, nC4, nD4
 	dc.b	$0C, nD4, nC4, $06, nD4, $0C, $06, nRst, $24, nRst, $06, nC4
@@ -184,7 +182,7 @@ MCZ_2p_Jump02:
 	dc.b	nD4, $0C, $06, nRst, $24, nRst, $06, nC4, nD4, $0C, nD4, nD4
 	dc.b	$06, nC4, $0C, $06, nRst, $19
 	smpsAlterVol        $0E
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsSetvoice        $02
 	smpsCall            MCZ_2p_Call01
 	smpsJump            MCZ_2p_Jump02
@@ -319,7 +317,7 @@ MCZ_2p_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $02, $02, $02, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $17, $14, $10
+	smpsVcTotalLevel    $80, $97, $94, $10
 
 ;	Voice $04
 ;	$2C

@@ -1,5 +1,5 @@
 Sound53_Signpost2P_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     Sound53_Signpost2P_Voices
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $01
@@ -38,5 +38,5 @@ Sound53_Signpost2P_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $0F, $0F, $0F, $0F
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $0F, $0F, $2A
+	smpsVcTotalLevel    $80, $0F, $0F, $2A
 

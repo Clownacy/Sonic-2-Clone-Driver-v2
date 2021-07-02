@@ -74,9 +74,9 @@ Mus84_SLZ_Call07:
 Mus84_SLZ_Loop01:
 	dc.b	nD4, $06, nRst, $03, nD4, $06, nRst, $03, nD4, $02, nRst, $01
 	dc.b	nD4, $02, nRst, $01
-	smpsChangeTransposition      $FF
+	smpsAlterPitch      $FF
 	smpsLoop            $00, $04, Mus84_SLZ_Loop01
-	smpsChangeTransposition      $04
+	smpsAlterPitch      $04
 	dc.b	nG3, $06, nRst, $03, nG3, nRst, $06, nG3, $12, nRst, $06, nG3
 	dc.b	$02, nRst, $01, nG3, $02, nRst, $01, nB3, $06, nRst, $03, nB3
 	dc.b	nRst, $06, nB3, $12
@@ -197,9 +197,9 @@ Mus84_SLZ_Jump01:
 	smpsSetvoice        $03
 	smpsAlterVol        $EC
 	smpsCall            Mus84_SLZ_Call01
-	smpsDetune       $14
+	smpsAlterNote       $14
 	dc.b	nA5, $01, smpsNoAttack
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	nA5, $05
 	smpsCall            Mus84_SLZ_Call02
 	dc.b	nEb4
@@ -207,11 +207,11 @@ Mus84_SLZ_Jump01:
 	dc.b	nEb4
 	smpsSetvoice        $03
 	smpsAlterVol        $E8
-	smpsChangeTransposition      $CD
+	smpsAlterPitch      $CD
 	dc.b	nRst, $06
-	smpsDetune       $14
+	smpsAlterNote       $14
 	dc.b	nE6, $01, smpsNoAttack
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	nE6, $05, nF6, $06, nE6, nF6, nG6, nRst, nC6, nRst, $06
 	smpsCall            Mus84_SLZ_Call01
 	smpsNoteFill        $05
@@ -220,11 +220,11 @@ Mus84_SLZ_Jump01:
 	smpsCall            Mus84_SLZ_Call02
 	smpsSetvoice        $03
 	smpsAlterVol        $EF
-	smpsChangeTransposition      $CD
+	smpsAlterPitch      $CD
 	dc.b	nE6, $03, nF6, nG6, $03, nRst, $09
-	smpsDetune       $EC
+	smpsAlterNote       $EC
 	dc.b	nC7, $01, smpsNoAttack
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsModSet          $2C, $01, $04, $04
 	dc.b	nC7, $23
 	smpsModOff
@@ -238,15 +238,15 @@ Mus84_SLZ_Call01:
 	dc.b	nEb4
 	smpsSetvoice        $03
 	smpsAlterVol        $E8
-	smpsChangeTransposition      $CD
+	smpsAlterPitch      $CD
 	dc.b	nRst, $06
-	smpsDetune       $14
+	smpsAlterNote       $14
 	dc.b	nE6, $01, smpsNoAttack
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	$05, nRst, $06
-	smpsDetune       $14
+	smpsAlterNote       $14
 	dc.b	nC6, $01, smpsNoAttack
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	$05, nRst, $06
 	smpsReturn
 
@@ -254,16 +254,16 @@ Mus84_SLZ_Call02:
 	dc.b	nC6, $06, nA5, nRst, $06
 
 Mus84_SLZ_Call09:
-	smpsDetune       $14
+	smpsAlterNote       $14
 	dc.b	nG5, $01, smpsNoAttack
-	smpsDetune       $00
+	smpsAlterNote       $00
 	dc.b	$02, nA5, $03
 	smpsNoteFill        $05
 	dc.b	nC6, $03, nC6, $06, nA5, $03, nC6, $03
 	smpsNoteFill        $00
 	dc.b	nC6, nRst
 	smpsAlterVol        $FC
-	smpsChangeTransposition      $33
+	smpsAlterPitch      $33
 	smpsSetvoice        $05
 	dc.b	nEb4, $03
 	smpsAlterVol        $07

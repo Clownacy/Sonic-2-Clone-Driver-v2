@@ -61,7 +61,7 @@ Mus8C_Boss_Call02:
 
 ; PSG2 Data
 Mus8C_Boss_PSG2:
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsJump            Mus8C_Boss_Jump01
 
 ; FM3 Data
@@ -85,7 +85,7 @@ Mus8C_Boss_Call01:
 
 ; FM1 Data
 Mus8C_Boss_FM1:
-	smpsDetune       $03
+	smpsAlterNote       $03
 	smpsJump            Mus8C_Boss_Jump00
 
 ; FM4 Data

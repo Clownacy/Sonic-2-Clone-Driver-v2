@@ -13,7 +13,7 @@ SndA8_SS_Goal_FM5:
 
 SndA8_SS_Goal_Loop00:
 	dc.b	$02, smpsNoAttack, nB2, $01, smpsNoAttack
-	smpsChangeTransposition      $02
+	smpsAlterPitch      $02
 	smpsLoop            $00, $26, SndA8_SS_Goal_Loop00
 	smpsStop
 

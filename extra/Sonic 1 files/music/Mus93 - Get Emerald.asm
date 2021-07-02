@@ -1,5 +1,5 @@
 Mus93_Get_Emerald_Header:
-	smpsHeaderStartSong 1
+	smpsHeaderStartSong 1, 1
 	smpsHeaderVoice     Mus93_Get_Emerald_Voices
 	smpsHeaderChan      $07, $03
 	smpsHeaderTempo     $01, $06
@@ -17,7 +17,7 @@ Mus93_Get_Emerald_Header:
 
 ; FM3 Data
 Mus93_Get_Emerald_FM3:
-	smpsDetune       $02
+	smpsAlterNote       $02
 
 ; FM1 Data
 Mus93_Get_Emerald_FM1:
@@ -93,7 +93,7 @@ Mus93_Get_Emerald_Voices:
 	smpsVcDecayRate2    $0B, $00, $0B, $00
 	smpsVcDecayLevel    $00, $01, $00, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $1D, $14, $23
+	smpsVcTotalLevel    $80, $1D, $14, $23
 
 ;	Voice $01
 ;	$3C
@@ -111,5 +111,5 @@ Mus93_Get_Emerald_Voices:
 	smpsVcDecayRate2    $00, $04, $00, $04
 	smpsVcDecayLevel    $00, $01, $00, $01
 	smpsVcReleaseRate   $07, $00, $07, $00
-	smpsVcTotalLevel    $00, $16, $00, $1A
+	smpsVcTotalLevel    $80, $16, $80, $1A
 

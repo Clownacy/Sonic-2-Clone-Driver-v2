@@ -1,5 +1,5 @@
 Sound61_Rumbling2_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     Sound61_Rumbling2_Voices
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $01

@@ -1,5 +1,5 @@
 Sound6C_Teleport_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     Sound6C_Teleport_Voices
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $04
@@ -11,7 +11,7 @@ Sound6C_Teleport_Header:
 
 ; FM4 Data
 Sound6C_Teleport_FM4:
-	smpsDetune       $10
+	smpsAlterNote       $10
 
 ; FM5 Data
 Sound6C_Teleport_FM5:
@@ -25,7 +25,7 @@ Sound6C_Teleport_FM5:
 Sound6C_Teleport_Loop00:
 	dc.b	nBb4, $02, smpsNoAttack
 	smpsAlterVol        $02
-	smpsChangeTransposition      $01
+	smpsAlterPitch      $01
 	smpsLoop            $00, $20, Sound6C_Teleport_Loop00
 	smpsStop
 
@@ -46,7 +46,7 @@ Sound6C_Teleport_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $00, $00, $00, $00
 	smpsVcReleaseRate   $0F, $00, $00, $00
-	smpsVcTotalLevel    $00, $06, $23, $0F
+	smpsVcTotalLevel    $80, $06, $23, $0F
 
 ;	Voice $01
 ;	$3C

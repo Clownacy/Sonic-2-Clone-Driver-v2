@@ -16,7 +16,7 @@ Mus8A_Title_Screen_Header:
 
 ; FM5 Data
 Mus8A_Title_Screen_FM5:
-	smpsDetune       $03
+	smpsAlterNote       $03
 
 ; FM1 Data
 Mus8A_Title_Screen_FM1:
@@ -49,7 +49,7 @@ Mus8A_Title_Screen_FM3:
 	dc.b	$0C, nRst, nE6, nRst, nRst, $06, nEb6, $12, nE6, $0C
 	smpsAlterVol        $FC
 	smpsSetvoice        $01
-	smpsDetune       $03
+	smpsAlterNote       $03
 	dc.b	nA2, $6C
 	smpsStop
 

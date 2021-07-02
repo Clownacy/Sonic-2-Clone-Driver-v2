@@ -1,5 +1,5 @@
 Sound2D_InhalingBubble_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     Sound2D_InhalingBubble_Voices
 	smpsHeaderTempoSFX  $01
 	smpsHeaderChanSFX   $01
@@ -32,5 +32,5 @@ Sound2D_InhalingBubble_Voices:
 	smpsVcDecayRate2    $10, $09, $0E, $16
 	smpsVcDecayLevel    $01, $01, $02, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $12, $12, $15
+	smpsVcTotalLevel    $80, $12, $12, $15
 

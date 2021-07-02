@@ -24,15 +24,15 @@ SCZ_Loop03:
 
 SCZ_Jump03:
 	smpsPan             panRight, $00
-	smpsDetune       $FE
+	smpsAlterNote       $FE
 	smpsAlterVol        $14
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	smpsSetvoice        $04
 	smpsCall            SCZ_Call05
 	smpsSetvoice        $03
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsAlterVol        $EC
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsPan             panCenter, $00
 
 SCZ_Loop04:
@@ -51,9 +51,9 @@ SCZ_FM5:
 
 SCZ_Jump02:
 	smpsPan             panLeft, $00
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsCall            SCZ_Call05
-	smpsDetune       $00
+	smpsAlterNote       $00
 	smpsPan             panCenter, $00
 	smpsAlterVol        $FB
 	smpsCall            SCZ_Call06
@@ -128,7 +128,7 @@ SCZ_Call04:
 
 ; FM3 Data
 SCZ_FM3:
-	smpsDetune       $02
+	smpsAlterNote       $02
 	smpsSetvoice        $01
 	dc.b	nRst, $06, nB4, $03, nC5, nB4, $0C, nD5, $03, nE5, nD5, $0C
 	dc.b	nG5, $03, nA5, nG5, $30
@@ -234,13 +234,11 @@ SCZ_PSG1:
 SCZ_Loop05:
 	dc.b	nG4, $30, nFs4
 	smpsLoop            $00, $04, SCZ_Loop05
-	;smpsAlterVol        $FE
 	smpsPSGAlterVol     $FE
 	dc.b	nG4, $03, $03, $06, nRst, $24, nFs4, $03, $03, $06, nRst, $24
 	dc.b	nE4, $03, $03, $06, nRst, $24, nD4, $03, $03, $06, nRst, $18
 	dc.b	nE4, $06, nFs4, nG4, $03, $03, $06, nRst, $24, nFs4, $03, $03
 	dc.b	$06, nRst, $24, nE4, $03, $03, $06, nRst, $24, nFs4, $30
-	;smpsAlterVol        $02
 	smpsPSGAlterVol     $02
 	smpsJump            SCZ_Loop05
 
@@ -255,13 +253,11 @@ SCZ_Jump05:
 	dc.b	nD6, nD6, nD6, $27, nRst, $12, nD6, $03, nD6, nD6, $06, nD6
 	dc.b	nD6, nD6, nD6, $30, nRst, $12, nD6, $03, nD6, nD6, $06, nD6
 	dc.b	nD6, nD6, nD6, $03, nD6, nD6, nD6, $27
-	;smpsAlterVol        $01
 	smpsPSGAlterVol     $01
 	dc.b	nB4, $03, $03, $06, nRst, $24, nA4, $03, $03, $06, nRst, $24
 	dc.b	nG4, $03, $03, $06, nRst, $24, nFs4, $03, $03, $06, nRst, $18
 	dc.b	nG4, $06, nA4, nB4, $03, $03, $06, nRst, $24, nA4, $03, $03
 	dc.b	$06, nRst, $24, nG4, $03, $03, $06, nRst, $24, nD4, $30
-	;smpsAlterVol        $FF
 	smpsPSGAlterVol     $FF
 	smpsJump            SCZ_Jump05
 

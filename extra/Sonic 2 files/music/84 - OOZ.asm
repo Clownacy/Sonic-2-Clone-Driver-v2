@@ -1,5 +1,5 @@
 OOZ_Header:
-	smpsHeaderStartSong 2
+	smpsHeaderStartSong 2, 1
 	smpsHeaderVoice     OOZ_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $02, $D0
@@ -23,24 +23,24 @@ OOZ_FM1:
 OOZ_Jump00:
 	smpsSetvoice        $02
 	smpsAlterVol        $FB
-	smpsChangeTransposition      $DC
+	smpsAlterPitch      $DC
 	smpsCall            OOZ_Call03
 	smpsAlterVol        $05
-	smpsChangeTransposition      $24
+	smpsAlterPitch      $24
 	smpsSetvoice        $04
 	smpsCall            OOZ_Call04
 	smpsSetvoice        $02
 	smpsAlterVol        $FC
-	smpsChangeTransposition      $DC
+	smpsAlterPitch      $DC
 	smpsCall            OOZ_Call05
 	smpsAlterVol        $04
-	smpsChangeTransposition      $24
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $24
+	smpsAlterPitch      $E8
 	smpsSetvoice        $05
 	smpsAlterVol        $07
 	smpsCall            OOZ_Call06
 	smpsAlterVol        $F9
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsJump            OOZ_Jump00
 
 OOZ_Call02:
@@ -137,12 +137,12 @@ OOZ_Call01:
 OOZ_FM4:
 	smpsSetvoice        $02
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $DC
+	smpsAlterPitch      $DC
 	smpsAlterVol        $F9
 	smpsCall            OOZ_Call00
 	smpsAlterVol        $07
 	dc.b	nG4, $30
-	smpsChangeTransposition      $24
+	smpsAlterPitch      $24
 	smpsSetvoice        $01
 	smpsPan             panCenter, $00
 
@@ -154,9 +154,9 @@ OOZ_Loop04:
 OOZ_Loop05:
 	dc.b	nRst, $06, nBb5, $03, nBb5, nRst, nBb5, nRst, $06, nBb5, $09, nBb5
 	dc.b	$03, nRst, $0C
-	smpsChangeTransposition      $02
+	smpsAlterPitch      $02
 	smpsLoop            $00, $03, OOZ_Loop05
-	smpsChangeTransposition      $FA
+	smpsAlterPitch      $FA
 
 OOZ_Loop06:
 	dc.b	nA5, $03, nRst
@@ -173,13 +173,13 @@ OOZ_Call00:
 OOZ_FM5:
 	smpsSetvoice        $02
 	smpsPan             panLeft, $00
-	smpsChangeTransposition      $E8
+	smpsAlterPitch      $E8
 	dc.b	nRst, $01
 	smpsAlterVol        $F9
 	smpsCall            OOZ_Call00
 	smpsAlterVol        $07
 	dc.b	nG4, $2F
-	smpsChangeTransposition      $18
+	smpsAlterPitch      $18
 	smpsSetvoice        $01
 	smpsPan             panCenter, $00
 
@@ -191,9 +191,9 @@ OOZ_Loop02:
 OOZ_Loop03:
 	dc.b	nRst, $06, nG5, $03, nG5, nRst, nG5, nRst, $06, nG5, $09, nG5
 	dc.b	$03, nRst, $0C
-	smpsChangeTransposition      $02
+	smpsAlterPitch      $02
 	smpsLoop            $00, $02, OOZ_Loop03
-	smpsChangeTransposition      $FC
+	smpsAlterPitch      $FC
 	dc.b	nRst, $06, nBb5, $03, nBb5, nRst, nBb5, nRst, $06, nBb5, $09, nBb5
 	dc.b	$03, nRst, $0C, nF5, $03, nRst, nF5, nRst, nF5, nRst, nF5, nRst
 	dc.b	nFs5, nRst, nFs5, nRst, nFs5, nRst, nFs5, nRst, nRst, $30
@@ -218,7 +218,7 @@ OOZ_Loop01:
 
 ; PSG1 Data
 OOZ_PSG1:
-	smpsDetune       $01
+	smpsAlterNote       $01
 	dc.b	nRst, $02, nRst, $01
 	smpsCall            OOZ_Call02
 
@@ -229,9 +229,9 @@ OOZ_Jump02:
 	smpsPSGAlterVol     $FD
 	smpsCall            OOZ_Call04
 	smpsCall            OOZ_Call05
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsCall            OOZ_Call06
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsJump            OOZ_Jump02
 
 ; PSG2 Data
@@ -243,19 +243,17 @@ OOZ_Jump01:
 	smpsPSGAlterVol     $03
 	dc.b	nRst, $18, nRst, $03, nRst, $01
 	smpsPSGvoice        fTone_0C
-	;smpsAlterVol        $FE
 	smpsPSGAlterVol     $FE
 	dc.b	nC6, $01, nD6, $02, nEb6, $02, nFs6, $2D, nAb6, $01, nG6, $0B
 	dc.b	nEb6, $01, nD6, $30, smpsNoAttack, $30, smpsNoAttack, $05
-	;smpsAlterVol        $02
 	smpsPSGAlterVol     $02
 	smpsPSGvoice        $00
 	smpsPSGAlterVol     $FD
 	smpsCall            OOZ_Call04
 	smpsCall            OOZ_Call05
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsCall            OOZ_Call06
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsJump            OOZ_Jump01
 
 ; PSG3 Data
@@ -303,8 +301,7 @@ OOZ_Voices:
 	smpsVcDecayRate2    $03, $04, $04, $05
 	smpsVcDecayLevel    $02, $02, $02, $02
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-;	smpsVcTotalLevel    $00, $97, $2C, $23
-	smpsVcTotalLevel    $00, $17, $2C, $23	; Fixed
+	smpsVcTotalLevel    $80, $97, $2C, $23
 
 ;	Voice $01
 ;	$3A
@@ -322,7 +319,7 @@ OOZ_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $00, $01, $0F, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $27, $28, $17
+	smpsVcTotalLevel    $80, $27, $28, $17
 
 ;	Voice $02
 ;	$3E
@@ -330,17 +327,17 @@ OOZ_Voices:
 ;	$23, $22, $06, $05, 	$3F, $4F, $2F, $0F, 	$19, $8E, $87, $87
 	smpsVcAlgorithm     $06
 	smpsVcFeedback      $07
-	smpsVcUnusedBits    $00
+	smpsVcUnusedBits    $00, $01, $00, $00, $00
 	smpsVcDetune        $01, $03, $01, $05
 	smpsVcCoarseFreq    $04, $04, $06, $06
 	smpsVcRateScale     $01, $02, $01, $01
 	smpsVcAttackRate    $18, $15, $15, $0E
-	smpsVcAmpMod        $01, $00, $00, $00
+	smpsVcAmpMod        $00, $00, $00, $00
 	smpsVcDecayRate1    $04, $14, $11, $0E
 	smpsVcDecayRate2    $05, $06, $22, $23
 	smpsVcDecayLevel    $00, $02, $04, $03
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $07, $07, $0E, $19
+	smpsVcTotalLevel    $87, $87, $8E, $19
 
 ;	Voice $03
 ;	$36
@@ -358,7 +355,7 @@ OOZ_Voices:
 	smpsVcDecayRate2    $0A, $0A, $00, $00
 	smpsVcDecayLevel    $0F, $0F, $0F, $0F
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $00, $00, $05
+	smpsVcTotalLevel    $80, $80, $80, $05
 
 ;	Voice $04
 ;	$06
@@ -376,7 +373,7 @@ OOZ_Voices:
 	smpsVcDecayRate2    $00, $00, $00, $00
 	smpsVcDecayLevel    $02, $02, $02, $01
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $17, $14, $10
+	smpsVcTotalLevel    $80, $97, $94, $10
 
 ;	Voice $05
 ;	$14
@@ -394,5 +391,5 @@ OOZ_Voices:
 	smpsVcDecayRate2    $00, $00, $02, $03
 	smpsVcDecayLevel    $00, $02, $04, $03
 	smpsVcReleaseRate   $0F, $0F, $0F, $0F
-	smpsVcTotalLevel    $00, $33, $10, $0F
+	smpsVcTotalLevel    $80, $33, $90, $0F
 

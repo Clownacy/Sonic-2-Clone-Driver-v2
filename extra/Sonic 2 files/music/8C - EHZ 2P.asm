@@ -17,7 +17,7 @@ EHZ_2p_Header:
 ; FM1 Data
 EHZ_2p_FM1:
 	smpsSetvoice        $04
-	smpsDetune       $01
+	smpsAlterNote       $01
 	dc.b	nG6, $06, nE6, nF6, nD6, nE6, nC6, nC6, nA5
 
 EHZ_2p_Jump01:
@@ -94,7 +94,7 @@ EHZ_2p_FM4:
 EHZ_2p_Loop05:
 	smpsSetvoice        $01
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsNoteFill        $06
 	dc.b	nRst, $06, nE5, $03, $09, $0C, nG5, $03, $09, $06
 	smpsSetvoice        $04
@@ -110,42 +110,42 @@ EHZ_2p_Loop05:
 	dc.b	nG5, $03, $09, $06
 	smpsSetvoice        $02
 	smpsPan             panCenter, $00
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	dc.b	nA5, $03, nA5, nRst, nA5, nRst, nA5
 	smpsNoteFill        $00
 	dc.b	nBb5, $06, nB5, $03
 	smpsSetvoice        $01
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsNoteFill        $06
 	dc.b	nRst, nG5, $03, $09, $06
 	smpsSetvoice        $02
 	smpsPan             panCenter, $00
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsNoteFill        $00
 	smpsLoop            $00, $02, EHZ_2p_Loop05
 	smpsSetvoice        $01
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsNoteFill        $06
 	dc.b	nRst, $06, nA5, $03, $09, $03, $09, $03, $09, $03, $03, nRst
 	dc.b	$06, nG5, $03, $09, $03, $09, $03, $09, $03, $03, nRst, $06
 	dc.b	nA5, $03, $09, $03, $09, $03, $09, $03, $03
 	smpsSetvoice        $02
 	smpsPan             panCenter, $00
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsNoteFill        $00
 	dc.b	nRst, $06, nG5, nA5, nG5, nRst, nG5, nA5, nG5
 	smpsSetvoice        $01
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsNoteFill        $06
 	dc.b	nRst, $06, nA5, $03, $09, $03, $09, $03, $09, $03, $03, nRst
 	dc.b	$06, nG5, $03, $09, $03, $09, $03, $09, $03, $03, nRst, $06
 	dc.b	nF5, $03, $09, $03, $09, $03, $09, $03, $03
 	smpsSetvoice        $02
 	smpsPan             panCenter, $00
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsNoteFill        $00
 	dc.b	nB5, $03, nRst, nB5, $06, nC6, $03, nB5, nC6, $06, nB5, $03
 	dc.b	nRst, $15
@@ -161,13 +161,13 @@ EHZ_2p_Jump00:
 	smpsCall            EHZ_2p_Call00
 	smpsSetvoice        $01
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsNoteFill        $06
 	smpsAlterVol        $06
 	dc.b	nRst, $06, nF5, $03, $09, $06
 	smpsSetvoice        $03
 	smpsPan             panCenter, $00
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsNoteFill        $00
 	smpsAlterVol        $FA
 	dc.b	nRst, nG5
@@ -176,13 +176,13 @@ EHZ_2p_Jump00:
 	smpsCall            EHZ_2p_Call00
 	smpsSetvoice        $01
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsNoteFill        $06
 	smpsAlterVol        $06
 	dc.b	nRst, $06, nF5, $03, $09, $06, nRst, nG5, $03, $09, $06
 	smpsSetvoice        $03
 	smpsPan             panCenter, $00
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsNoteFill        $00
 	smpsAlterVol        $FA
 	smpsCall            EHZ_2p_Call01
@@ -190,26 +190,26 @@ EHZ_2p_Jump00:
 	smpsCall            EHZ_2p_Call01
 	smpsSetvoice        $01
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsNoteFill        $06
 	smpsAlterVol        $06
 	dc.b	nRst, $06, nG5, $03, $09, $03, $09, $03, $09, $03, $03
 	smpsSetvoice        $03
 	smpsPan             panCenter, $00
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsNoteFill        $00
 	smpsAlterVol        $FA
 	smpsCall            EHZ_2p_Call01
 	dc.b	nRst, $30, nD6, $0C, nE6, nF6, nFs6, nG6, $06
 	smpsSetvoice        $01
 	smpsPan             panRight, $00
-	smpsChangeTransposition      $F4
+	smpsAlterPitch      $F4
 	smpsNoteFill        $06
 	smpsAlterVol        $06
 	dc.b	nB5, $03, $09, $03, $03
 	smpsSetvoice        $03
 	smpsPan             panCenter, $00
-	smpsChangeTransposition      $0C
+	smpsAlterPitch      $0C
 	smpsNoteFill        $00
 	smpsAlterVol        $FA
 	smpsNoteFill        $00
@@ -316,13 +316,11 @@ EHZ_2p_Loop00:
 EHZ_2p_PSG1:
 	dc.b	nRst, $02
 	smpsPSGvoice        fTone_08
-	;smpsAlterVol        $04
 	smpsPSGAlterVol     $04
 	dc.b	nG6, $03, nF6, nE6, nD6, nF6, nE6, nD6, nC6, nE6, nD6, nC6
 	dc.b	nB5, nC6, nB5, nA5, nG5, $01
-	;smpsAlterVol        $FC
 	smpsPSGAlterVol     $FC
-	smpsChangeTransposition      $04
+	smpsAlterPitch      $04
 	smpsJump            EHZ_2p_Loop06
 
 ; PSG2 Data

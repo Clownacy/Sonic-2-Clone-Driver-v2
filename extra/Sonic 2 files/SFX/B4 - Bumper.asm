@@ -16,7 +16,7 @@ Sound34_Bumper_FM5:
 ; FM4 Data
 Sound34_Bumper_FM4:
 	smpsSetvoice        $00
-	smpsDetune       $07
+	smpsAlterNote       $07
 	dc.b	nRst, $01
 
 Sound34_Bumper_Jump00:
