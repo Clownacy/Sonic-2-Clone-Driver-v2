@@ -419,7 +419,7 @@ Changelog
 - Added FM volume attenuation clamping, to prevent overflow (this bug would cause Sonic 2's final boss music to have an extremely loud instrument while fading-in after a 1-UP jingle finishes playing)
 - Inconsistent DAC/FM6 panning behaviour has been corrected
 - Ported SMPS Z80-style frequency modulation, fixing several issues in SMPS Z80 songs (such as broken pitch bends at the start of Sonic & Knuckles' credits music)
-- Bugs in the 'smpsSetVol' coordination flag have been corrected (fixes misses PSG notes in the Sonic & Knuckles credits music)
+- Bugs in the 'smpsSetVol' coordination flag have been corrected (fixes missing PSG notes in the Sonic & Knuckles credits music)
 - Ported FM frequency modulation from SMPS 68k Type 2, so that Carnival Night Zone's and Launch Base Zone's music are finally compatible with this driver
 - Fix note timeout being performed on first frame of playback
 - The sound queue processing logic has been completely remade, hopefully fixing a number of subtle bugs (the old code was *very* bad)
