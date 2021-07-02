@@ -1,6 +1,6 @@
 ; ========SONIC 2 GIT EQUATES========
 
-Size_of_DAC_driver_guess = $296
+Size_of_DAC_driver_guess = $389
 
 ; ---FLAGS---
 SMPS_GloopSFXBehaviour	= 1
