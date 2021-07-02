@@ -1,7 +1,5 @@
 ; ========SONIC 2 GIT EQUATES========
 
-Size_of_DAC_driver_guess = $389
-
 ; ---FLAGS---
 SMPS_GloopSFXBehaviour	= 1
 ;	| If 1, SndID_Gloop only plays on every other call.
