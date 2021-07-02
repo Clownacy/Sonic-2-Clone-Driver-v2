@@ -430,4 +430,3 @@ Changelog
 - Fading-in has been overhauled, so that SFX are no longer muted while fading is performed: rather, SFX are now faded along with everything else
 - Bugs relating to PSG volume values have been corrected
 - The dependency on the 'Graphics_Flags'/'v_megadrive' variable has been removed, easing the process of integrating this driver into homebrew
-- 'include'/'binclude' paths are now relative, for compatibility with newer versions of AS (if you intend to use this driver with older versions, you will have to convert the paths back to absolute)
