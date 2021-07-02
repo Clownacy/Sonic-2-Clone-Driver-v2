@@ -386,7 +386,7 @@ Changelog
 - Made MegaPCM check that YM2612 isn't busy before enabling DAC (fixes muted drums at start of some songs)
 - SFX now properly update on the frame that a new song is played
 
-XX/XX/XXXX
+20/03/2020
 = v2.7+ =
 - Changed FM voice format, like what S2's driver did, for optimised reading
 - Split DAC table from Mega PCM Z80 .asm file
@@ -414,3 +414,20 @@ XX/XX/XXXX
 - Added support for negative FM voice pointers in Special SFX
 - Changed DAC_Entry pitch value so it's the playback speed in Hz instead of a djnz loop counter
 
+XX/XX/XXXX
+= v2.8 =
+- Added FM volume attenuation clamping, to prevent overflow (this bug would cause Sonic 2's final boss music to have an extremely loud instrument while fading-in after a 1-UP jingle finishes playing)
+- Inconsistent DAC/FM6 panning behaviour has been corrected
+- Ported SMPS Z80-style frequency modulation, fixing several issues in SMPS Z80 songs (such as broken pitch bends at the start of Sonic & Knuckles' credits music)
+- Bugs in the 'smpsSetVol' coordination flag have been corrected (fixes misses PSG notes in the Sonic & Knuckles credits music)
+- Ported FM frequency modulation from SMPS 68k Type 2, so that Carnival Night Zone's and Launch Base Zone's music are finally compatible with this driver
+- Fix note timeout being performed on first frame of playback
+- The sound queue processing logic has been completely remade, hopefully fixing a number of subtle bugs (the old code was *very* bad)
+- Assorted optimisations
+- TempoWait can no longer delay tracks on their first frame of playback (this is a proper fix to the hanging-note bug that Sonic 2's driver used a work-around for, which can sometimes be heard at the start of Sonic 2's Death Egg Zone music)
+- Mega PCM has been replaced with a custom two-channel DAC driver: the first channel is used by music, while the second channel can be used by DAC SFX
+- Fix SFX and Special SFX tracks not being updated on the same frame that a music track uses the 'fade to prevous song' coordination flag
+- Fading-in has been overhauled, so that SFX are no longer muted while fading is performed: rather, SFX are now faded along with everything else
+- Bugs relating to PSG volume values have been corrected
+- The dependency on the 'Graphics_Flags'/'v_megadrive' variable has been removed, easing the process of integrating this driver into homebrew
+- 'include'/'binclude' paths are now relative, for compatibility with newer versions of AS (if you intend to use this driver with older versions, you will have to convert the paths back to absolute)
