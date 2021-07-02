@@ -14,7 +14,6 @@ of this file.
 
 The following games and disassemblies are officially supported:
 - Sonic 1 Git disassembly
-- Sonic 2 Xenowhirl 2007 disassembly (users must update their copy of AS to that of the Git disasm)
 - Sonic 2 Git disassembly
 
 This driver is intended to have its sound/music files in SMPS2ASM v0.2 (.asm) format: assembled (.bin) files are not supported.
