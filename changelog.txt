@@ -433,4 +433,16 @@ Changelog
 
 02/07/2021
 = v2.8.0.1 =
-- Fixed the Settings.asm files for Sonic 1 and Sonic 2
+- Fixed the 'Settings.asm' files for Sonic 1 and Sonic 2
+
+XX/XX/XXXX
+= v2.8.1 =
+- Moved Size_of_DAC_driver_guess out of 'Settings.asm'
+- Added a set of SMPS2ASM songs and SFX in the 'extras/SMPS2ASM files' directory, including...
+-- Sonic 1
+-- Sonic 2
+-- Sonic 3
+-- Sonic 3 (prototype) (music only)
+-- Sonic 3D Blast
+-- Knuckles' Chaotix (music only)
+-- Sonic CD (SFX only)
