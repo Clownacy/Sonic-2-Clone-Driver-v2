@@ -147,7 +147,7 @@ SoundB6:	include	"Sonic-2-Clone-Driver-v2/SFX/B6 - Spikes Move.asm"
 		even
 SoundB7:	include	"Sonic-2-Clone-Driver-v2/SFX/B7 - Rumbling.asm"
 		even
-SoundB8:	include	"Sonic-2-Clone-Driver-v2/SFX/B8.asm"
+SoundB8:	include	"Sonic-2-Clone-Driver-v2/SFX/B8 - Unknown (Unused).asm"
 		even
 SoundB9:	include	"Sonic-2-Clone-Driver-v2/SFX/B9 - Smash.asm"
 		even
@@ -197,9 +197,9 @@ SoundCF:	include	"Sonic-2-Clone-Driver-v2/SFX/CF - Signpost.asm"
 		even
 SoundD0:	include	"Sonic-2-Clone-Driver-v2/SFX/D0 - CNZ Boss Zap.asm"
 		even
-SoundD1:	include	"Sonic-2-Clone-Driver-v2/SFX/D1.asm"
+SoundD1:	include	"Sonic-2-Clone-Driver-v2/SFX/D1 - Unknown (Unused).asm"
 		even
-SoundD2:	include	"Sonic-2-Clone-Driver-v2/SFX/D2.asm"
+SoundD2:	include	"Sonic-2-Clone-Driver-v2/SFX/D2 - Unknown (Unused).asm"
 		even
 SoundD3:	include	"Sonic-2-Clone-Driver-v2/SFX/D3 - Signpost 2P.asm"
 		even

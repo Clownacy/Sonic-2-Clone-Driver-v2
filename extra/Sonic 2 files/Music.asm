@@ -82,7 +82,7 @@ Music93:	include		"Sonic-2-Clone-Driver-v2/music/93 - Boss.asm"
 		even
 Music94:	include		"Sonic-2-Clone-Driver-v2/music/94 - Final Boss.asm"
 		even
-Music95:	include		"Sonic-2-Clone-Driver-v2/music/95 - SWEET SWEET SWEET.asm"
+Music95:	include		"Sonic-2-Clone-Driver-v2/music/95 - Ending.asm"
 		even
 Music96:	include		"Sonic-2-Clone-Driver-v2/music/96 - Super Sonic.asm"
 		even
