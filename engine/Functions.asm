@@ -3,6 +3,10 @@
 ; ---------------------------------------------------------------------------
 ; SoundDriverLoad: JmpTo_SoundDriverLoad  SMPS_LoadDACDriver:
 SMPS_Setup:
+	; mask off interrupts so that an interrupt cannot occur and mess with
+	; the Z80 bus request or DAC driver before they are finished with
+	move.w	sr,-(sp)
+	move.w	#$2700,sr	; mask off interrupts
 	SMPS_stopZ80
 	SMPS_resetZ80
 
@@ -25,6 +29,7 @@ SMPS_Setup:
 	nop
 	SMPS_resetZ80
 	move.w	d1,(SMPS_z80_bus_request).l	; start the Z80
+	move.w	(sp)+,sr
 	rts
 ; End of function SMPS_LoadDACDriver
 
