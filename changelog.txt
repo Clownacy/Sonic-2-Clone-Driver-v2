@@ -446,3 +446,4 @@ XX/XX/XXXX
 -- Sonic 3D Blast
 -- Knuckles' Chaotix (music only)
 -- Sonic CD (SFX only)
+- Fixed a race condition in 'SMPS_Setup' that could cause a freeze
