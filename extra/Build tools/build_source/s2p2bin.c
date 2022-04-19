@@ -83,12 +83,7 @@ void editShareFile()
 		if(share)
 		{
 			fseek(share, 0, SEEK_SET);
-			#ifdef __MINGW32__
-			#define FPRINTF __mingw_fprintf
-			#else
-			#define FPRINTF fprintf
-			#endif
-			FPRINTF(share, "comp_z80_size 0x%zX ", compressedLength);
+			fprintf(share, "comp_z80_size 0x%zX ", compressedLength);
 			fclose(share);
 		}
 	}
@@ -99,7 +94,7 @@ bool buildRom(FILE* from, FILE* to)
 	if(fgetc(from) != 0x89) printf("\nWarning: First byte of a .p file should be $89");
 	if(fgetc(from) != 0x14) printf("\nWarning: Second byte of a .p file should be $14");
 	
-	int cpuType = 0, segmentType = 0, granularity = 0;
+	int cpuType = 0, /*segmentType = 0,*/ granularity = 0;
 	signed long start = 0, lastStart = 0;
 	unsigned short length = 0, lastLength = 0;
 	static const int scratchSize = 4096;
@@ -121,7 +116,7 @@ bool buildRom(FILE* from, FILE* to)
 				continue;
 			case 0x81:  // code or data segment
 				cpuType = fgetc(from);
-				segmentType = fgetc(from);
+				/*segmentType =*/ fgetc(from);
 				granularity = fgetc(from);
 				if(granularity != 1)
 					{ printf("\nERROR: Unsupported granularity %d.", granularity); return false; }
@@ -178,23 +173,18 @@ bool buildRom(FILE* from, FILE* to)
 		if(!lastSegmentCompressed)
 		{
 			if(start+3 < ftell(to)) // 3 bytes of leeway for instruction patching
-				printf("\nWarning: overlapping allocation detected! $%X < $%X", start, ftell(to));
+				printf("\nWarning: overlapping allocation detected! $%lX < $%lX", start, ftell(to));
 		}
 		else
 		{
 			if(start < ftell(to))
 			{
-				#ifdef __MINGW32__
-				#define PRINTF __mingw_printf
-				#else
-				#define PRINTF printf
-				#endif
-				PRINTF("\nERROR: Compressed DAC driver might not fit.\nPlease increase the value of Size_of_DAC_driver_guess (found in 'Sonic-2-Clone-Driver-v2/engine/Sonic 2 Clone Driver v2.asm') to at least $%zX and try again.", compressedLength);
+				printf("\nERROR: Compressed DAC driver might not fit.\nPlease increase the value of 'Size_of_DAC_driver_guess' (found in 'Sonic-2-Clone-Driver-v2/engine/Sonic 2 Clone Driver v2.asm') to at least $%zX and try again.", compressedLength);
 				return false;
 			}
 			else
 			{
-				printf("\nCompressed DAC driver size: 0x%X", compressedLength);
+				printf("\nCompressed DAC driver size: 0x%zX", compressedLength);
 			}
 		}
 
