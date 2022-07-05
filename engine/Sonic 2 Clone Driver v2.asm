@@ -29,8 +29,12 @@ SMPS_UpdateDriver:
 	bsr.w	DoFadeIn
 ; loc_71BB2:
 .skipfadein:
-	tst.l	SMPS_RAM.variables.queue(a6)	; Is a music or sound queued for played?
-	beq.s	.nosndinput			; If not, branch
+	tst.l	SMPS_RAM.variables.queue+0(a6)	; Is a music or sound queued for played?
+	bne.s	.sndinput			; If not, branch
+	tst.l	SMPS_RAM.variables.queue+4(a6)	; Ditto
+	beq.s	.nosndinput
+
+.sndinput:
 	bsr.w	CycleSoundQueue
 ; loc_71BBC:
 .nosndinput:
@@ -808,21 +812,20 @@ RestoreFMTrackVoices:
 CycleSoundQueue:
 	lea	(SoundIndex).l,a0
 	lea	SMPS_RAM.variables.queue(a6),a1		; Load music track number
-	moveq	#SMPS_Queue.len-1,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
+	moveq	#SMPS_Queue.len/2-1,d4			; Clownacy | Number of sound queues-1, now 3 to match the new fourth queue
 ; loc_71F12:
 .inputloop:
-	moveq	#0,d0
-	move.b	(a1),d0			; Move track number to d0
-	clr.b	(a1)+			; Clear entry
-	cmpi.b	#MusID__First,d0	; Make it into 0-based index
+	move.w	(a1),d0			; Move track number to d0
+	clr.w	(a1)+			; Clear entry
+	cmpi.w	#MusID__First,d0	; Make it into 0-based index
 	blo.s	.next_queue
 
 	move.w	d0,d7
 
 	; TODO - Handle special SFX
-	cmpi.b	#SndID__End,d0		; Is it a special command?
+	cmpi.w	#SndID__End,d0		; Is it a special command?
 	bhs.s	.skip_priority		; If so, branch
-	subi.b	#SndID__First,d0	; Subtract first SFX index
+	subi.w	#SndID__First,d0	; Subtract first SFX index
 	bcs.s	.skip_priority		; If it was music, branch
 
 	add.w	d0,d0
@@ -855,29 +858,29 @@ CycleSoundQueue:
 ; Sound_ChkValue:
 PlaySoundID:	; For the love of god, don't rearrange the order of the groups, it has to be 'music --> SFX --> flags'
 	; Music
-	cmpi.b	#MusID__First,d7	; Is this before music?
+	cmpi.w	#MusID__First,d7	; Is this before music?
 	blo.s	CycleSoundQueue.locret	; Return if yes
-	cmpi.b	#MusID__End,d7		; Is this music ($01-$1F)?
+	cmpi.w	#MusID__End,d7		; Is this music ($01-$1F)?
 	blo.w	Sound_PlayBGM		; Branch if yes
 
 	; SFX
-	cmpi.b	#SndID__First,d7	; Is this after music but before sfx?
+	cmpi.w	#SndID__First,d7	; Is this after music but before sfx?
 	blo.s	CycleSoundQueue.locret	; Return if yes
-	cmpi.b	#SndID__End,d7		; Is this sfx ($80-$D0)?
+	cmpi.w	#SndID__End,d7		; Is this sfx ($80-$D0)?
 	blo.w	Sound_PlaySFX		; Branch if yes
 
     if SMPS_EnableSpecSFX
 	; Special SFX
-	cmpi.b	#SpecID__First,d7	; Is this after sfx but before spec sfx?
+	cmpi.w	#SpecID__First,d7	; Is this after sfx but before spec sfx?
 	blo.s	CycleSoundQueue.locret	; Return if yes
-	cmpi.b	#SpecID__End,d7		; Is this spec sfx
+	cmpi.w	#SpecID__End,d7		; Is this spec sfx
 	blo.w	Sound_PlaySpecial	; Branch if yes
     endif
 
 	; Commands
-	subi.b	#FlgID__First,d7		; Is this after sfx (spec if above code is assembled) but before commands?
+	subi.w	#FlgID__First,d7		; Is this after sfx (spec if above code is assembled) but before commands?
 	bcs.s	CycleSoundQueue.locret		; Return if yes
-	cmpi.b	#FlgID__End-FlgID__First,d7	; Is this after commands?
+	cmpi.w	#FlgID__End-FlgID__First,d7	; Is this after commands?
 	bhs.s	CycleSoundQueue.locret		; Return if yes
 	add.w	d7,d7
 	move.w	Sound_ExIndex(pc,d7.w),d7
@@ -954,7 +957,7 @@ Sound_PlayBGM:
 ;    if SMPS_EnableSpecSFX
 ;	bsr.w	StopSpecSFX
 ;    endif
-	cmpi.b	#MusID_ExtraLife,d7				; Is the "extra life" music to be played?
+	cmpi.w	#MusID_ExtraLife,d7				; Is the "extra life" music to be played?
 	bne.s	.bgmnot1up					; If not, branch
 	bset	#f_1up_playing,SMPS_RAM.variables.bitfield2(a6)	; Is a 1-up music playing?
 	bne.s	.bgm_loadMusic					; If yes, branch	; Clownacy | (From S2)
@@ -1027,7 +1030,7 @@ Sound_PlayBGM:
 ; loc_7202C:
 .bgm_loadMusic:
 	bsr.w	InitMusicPlayback
-	subi.b	#MusID__First,d7
+	subi.w	#MusID__First,d7
 	add.w	d7,d7
 	add.w	d7,d7
 	lea	MusicIndex(pc),a4
@@ -1243,7 +1246,7 @@ PWMInitBytes:
 PlaySFX_Ring:
 	bchg	#v_ring_speaker,SMPS_RAM.bitfield1(a6)	; Is the ring sound playing on right speaker?
 	bne.s	.gotringspeaker				; Branch if not
-	move.b	#SndID_RingLeft,d7			; Play ring sound in left speaker
+	move.w	#SndID_RingLeft,d7			; Play ring sound in left speaker
 ; loc_721EE:
 .gotringspeaker:
 	bra.s	Sound_PlaySFX.play_sfx
@@ -1294,32 +1297,30 @@ Sound_PlaySFX:
 	bclr	#f_spindash_lastsound,SMPS_RAM.bitfield1(a6)
     endif
 
-	cmpi.b	#SndID_Ring,d7			; Is ring sound	effect played?
+	cmpi.w	#SndID_Ring,d7			; Is ring sound	effect played?
 	beq.s	PlaySFX_Ring
     if SMPS_PushSFXBehaviour
-	cmpi.b	#sfx_Push,d7			; Is "pushing" sound played?
+	cmpi.w	#sfx_Push,d7			; Is "pushing" sound played?
 	beq.s	PlaySFX_Push
     endif
     if SMPS_GloopSFXBehaviour
-	cmpi.b	#SndID_Gloop,d7			; Is bloop/gloop sound played?
+	cmpi.w	#SndID_Gloop,d7			; Is bloop/gloop sound played?
 	beq.s	PlaySFX_Gloop
     endif
     if SMPS_EnableSpinDashSFX
-	cmpi.b	#SndID_SpindashRev,d7		; Is this the Spin Dash sound?
+	cmpi.w	#SndID_SpindashRev,d7		; Is this the Spin Dash sound?
 	beq.s	PlaySFX_SpinDashRev
     endif
 
 .play_sfx:
 
     if SMPS_EnableContSFX
-	cmpi.b	#SMPS_First_ContSFX,d7		; Is this a continuous SFX?
+	cmpi.w	#SMPS_First_ContSFX,d7		; Is this a continuous SFX?
 	blo.s	.sfx_notcont			; If not, branch
-	moveq	#0,d0
-	move.b	SMPS_RAM.variables.v_current_contsfx(a6),d0
-	cmp.b	d7,d0						; Is this the same continuous sound that was playing?
+	cmp.w	SMPS_RAM.variables.v_current_contsfx(a6),d7	; Is this the same continuous sound that was playing?
 	bne.s	.sfx_notsame					; If not, branch
 	bset	#f_continuous_sfx,SMPS_RAM.bitfield1(a6)	; Set flag for continuous playback mode
-	subi.b	#SndID__First,d7
+	subi.w	#SndID__First,d7
 	add.w	d7,d7						; Convert sfx ID into index
 	add.w	d7,d7
 	lea	(SoundIndex).l,a0
@@ -1329,12 +1330,12 @@ Sound_PlaySFX:
 
 .sfx_notsame:
 	bclr	#f_continuous_sfx,SMPS_RAM.bitfield1(a6)	; Clear flag for continuous playback mode
-	move.b	d7,SMPS_RAM.variables.v_current_contsfx(a6)	; Mark this as the current continuous SFX
+	move.w	d7,SMPS_RAM.variables.v_current_contsfx(a6)	; Mark this as the current continuous SFX
 
 .sfx_notcont:
     endif
 
-	subi.b	#SndID__First,d7	; Make it 0-based
+	subi.w	#SndID__First,d7	; Make it 0-based
 	add.w	d7,d7			; Convert sfx ID into index
 	add.w	d7,d7
 	lea	(SoundIndex).l,a0
@@ -1491,7 +1492,7 @@ Sound_PlaySpecial:
 ;	tst.b	SMPS_RAM.variables.v_fadeout_counter(a6)	; Is music being faded out?	; Clownacy | S2's driver didn't bother with this in Sound_PlaySFX
 ;	bne.w	.locret						; Exit if it is
 	lea	(SpecSoundIndex).l,a0
-	subi.b	#SpecID__First,d7	; Make it 0-based
+	subi.w	#SpecID__First,d7	; Make it 0-based
 	add.w	d7,d7
 	add.w	d7,d7
 	movea.l	(a0,d7.w),a3
@@ -1917,11 +1918,12 @@ InitMusicPlayback:
 	; WARNING: Must not use d7
 
 	; Save several values
-	move.b	SMPS_RAM.variables.v_sndprio(a6),d3
-	move.b	SMPS_RAM.variables.bitfield2(a6),d4
-	andi.b	#(1<<f_1up_playing)|(1<<f_speedup),d4
-	move.b	SMPS_RAM.variables.v_fadein_counter(a6),d5
-	move.l	SMPS_RAM.variables.queue(a6),d6
+	move.b	SMPS_RAM.variables.v_sndprio(a6),d2
+	move.b	SMPS_RAM.variables.bitfield2(a6),d3
+	andi.b	#(1<<f_1up_playing)|(1<<f_speedup),d3
+	move.b	SMPS_RAM.variables.v_fadein_counter(a6),d4
+	move.l	SMPS_RAM.variables.queue+0(a6),d5
+	move.l	SMPS_RAM.variables.queue+4(a6),d6
 
 	; Clear variables
 	lea	SMPS_RAM.variables(a6),a0
@@ -1957,10 +1959,11 @@ InitMusicPlayback:
     endif
 
 	; Restore the values saved above
-	move.b	d3,SMPS_RAM.variables.v_sndprio(a6)
-	move.b	d4,SMPS_RAM.variables.bitfield2(a6)
-	move.b	d5,SMPS_RAM.variables.v_fadein_counter(a6)
-	move.l	d6,SMPS_RAM.variables.queue(a6)
+	move.b	d2,SMPS_RAM.variables.v_sndprio(a6)
+	move.b	d3,SMPS_RAM.variables.bitfield2(a6)
+	move.b	d4,SMPS_RAM.variables.v_fadein_counter(a6)
+	move.l	d5,SMPS_RAM.variables.queue+0(a6)
+	move.l	d6,SMPS_RAM.variables.queue+4(a6)
 
 	; Reset DAC volume
 	moveq	#zSampleLookup>>8,d0	; Clownacy | Reset DAC volume to maximum
@@ -3383,7 +3386,9 @@ cfPlayDACSample:
 ;
 ; cfPlaySoundByIndex
 cfPlaySound:
-	move.b	(a4)+,SMPS_RAM.variables.queue.v_playsnd2(a6)
+	moveq	#0,d0
+	move.b	(a4)+,d0
+	move.w	d0,SMPS_RAM.variables.queue.v_playsnd2(a6)
 	rts
 ; ===========================================================================
 ; Changes the track's key displacement.
@@ -3433,7 +3438,7 @@ cfLoopContinuousSFX:
     if SMPS_EnableContSFX
 	btst	#f_continuous_sfx,SMPS_RAM.bitfield1(a6)	; Is the flag for continuous playback mode set?
 	bne.s	.continuousmode					; If so, branch
-	clr.b	SMPS_RAM.variables.v_current_contsfx(a6)	; Communicate that there is no continuous SFX playing
+	clr.w	SMPS_RAM.variables.v_current_contsfx(a6)	; Communicate that there is no continuous SFX playing
 	addq.w	#2,a4						; Clownacy | Advance reading counter to skip the address
 	rts
 

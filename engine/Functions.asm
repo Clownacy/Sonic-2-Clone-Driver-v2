@@ -38,12 +38,14 @@ SMPS_Setup:
 ; ---------------------------------------------------------------------------
 ; sub_135E: PlayMusic:
 SMPS_QueueSound1:
-	tst.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
+	tst.w	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
 	bne.s	+
-	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
+	clr.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1+0).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1+1).w
 	rts
 +
-	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd4).w
+	clr.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd4+0).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd4+1).w
 	rts
 ; End of function SMPS_QueueSound1
 
@@ -59,7 +61,8 @@ SMPS_QueueSound2Local:
     endif
 ; sub_1370: PlaySound:
 SMPS_QueueSound2:
-	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
+	clr.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2+0).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2+1).w
 +	rts
 ; End of function SMPS_QueueSound2
 
@@ -68,9 +71,49 @@ SMPS_QueueSound2:
 ; ---------------------------------------------------------------------------
 ; sub_1376: PlaySoundStereo:
 SMPS_QueueSound3:
-	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3).w
+	clr.b	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3+0).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3+1).w
 	rts
 ; End of function SMPS_QueueSound3
+
+; ---------------------------------------------------------------------------
+; Queue sound for play (queue 1)
+; ---------------------------------------------------------------------------
+
+SMPS_QueueSound1_Extended:
+	tst.w	(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
+	bne.s	+
+	move.w	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd1).w
+	rts
++
+	move.w	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd4).w
+	rts
+; End of function SMPS_QueueSound1Word
+
+; ---------------------------------------------------------------------------
+; Queue sound for play (queue 2)
+; and optionally only do so if object is on-screen (Sonic engine feature)
+; ---------------------------------------------------------------------------
+
+    if SMPS_EnablePlaySoundLocal
+SMPS_QueueSound2Local_Extended:
+	tst.b	render_flags(a0)
+	bpl.s	+	; rts
+    endif
+
+SMPS_QueueSound2_Extended:
+	move.w	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd2).w
++	rts
+; End of function SMPS_QueueSound2Word
+
+; ---------------------------------------------------------------------------
+; Queue sound for play (queue 3)
+; ---------------------------------------------------------------------------
+
+SMPS_QueueSound3_Extended:
+	move.w	d0,(Clone_Driver_RAM+SMPS_RAM.variables.queue.v_playsnd3).w
+	rts
+; End of function SMPS_QueueSound3Word
 
 ; ---------------------------------------------------------------------------
 ; Play a DAC sample
