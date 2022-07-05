@@ -258,6 +258,10 @@ zEntryPoint:
 	ld	hl,zMixBuffer	; Mix buffer address
 	exx
 
+	; Latch the DAC sample register so that writes to the data port go to the proper place
+	ld	a,2Ah
+	ld	(zYM2612_A0),a
+
 	jp	zPCMLoop
 
 zVolumeDeltas:

@@ -3499,7 +3499,7 @@ cfChanFMCommand:
 ; ---------------------------------------------------------------------------
 ; DAC driver
 ; ---------------------------------------------------------------------------
-Size_of_DAC_driver_guess = $389
+Size_of_DAC_driver_guess = $38F
 
 DACDriver:
 	include "Sonic-2-Clone-Driver-v2/engine/DAC Driver.asm"
