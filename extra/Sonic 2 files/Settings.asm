@@ -38,8 +38,11 @@ SMPS_IsOn32X	= 0
 SMPS_EnablePWM	= 0
 ;	| If 1, support for four PWM tracks is added
 ;
+SMPS_Asserts	= 0
+;	| If 1, some debugging logic is enabled to catch broken behaviour in songs and sounds.
+;
 SMPS_SoundTest	= 0
-;	| If 1, some debugging logic is enabled. I would *really* advise not enabling this.
+;	| If 1, some some extra logic for my 'sound test' homebrew is enabled.
 
 SMPS_S1DACSamples	= 0
 SMPS_S2DACSamples	= 1

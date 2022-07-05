@@ -341,7 +341,7 @@ FMDoNext:
 .gotnote:
 	bsr.w	FMNoteOff
 	tst.b	d5			; Is this a note?
-    if SMPS_SoundTest
+    if SMPS_Asserts
 	; Crash upon detecting note-rest-duration-duration behaviour
 	; (this behaviour differs between drivers and should not be
 	; relied on)
@@ -373,7 +373,7 @@ FMSetFreq:
 	subi.b	#$80,d5				; Make it a zero-based index
 	beq.w	TrackSetRest
 	add.b	SMPS_Track.Transpose(a5),d5	; Add track transposition
-    if SMPS_SoundTest
+    if SMPS_Asserts
 	; Crash upon encountering out-of-bound notes
 	cmpi.b	#12*8,d5
 	blo.s	.legal
@@ -2305,7 +2305,7 @@ PSGDoNext:
 ; loc_72890:
 .gotnote:
 	tst.b	d5			; Is it a note?
-    if SMPS_SoundTest
+    if SMPS_Asserts
 	; Crash upon detecting note-rest-duration-duration behaviour
 	; (this behaviour differs between drivers and should not be
 	; relied on)
@@ -2338,7 +2338,7 @@ PSGSetFreq:
 	subi.b	#$81,d5				; Convert to 0-based index
 	bcs.s	.restpsg			; If $80, put track at rest
 	add.b	SMPS_Track.Transpose(a5),d5	; Add in channel transposition
-    if SMPS_SoundTest
+    if SMPS_Asserts
 	; Crash upon encountering out-of-bound notes
 	cmpi.b	#12*7,d5
 	blo.s	.legal
