@@ -1,6 +1,9 @@
 ; ========SONIC 2 GIT EQUATES========
 
 ; ---FLAGS---
+SMPS_RingSFXBehaviour	= 1
+;	| If 1, SndID_Ring alternates between the left and right speakers.
+;
 SMPS_GloopSFXBehaviour	= 1
 ;	| If 1, SndID_Gloop only plays on every other call.
 ;

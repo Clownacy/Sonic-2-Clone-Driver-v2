@@ -1243,6 +1243,7 @@ PWMInitBytes:
 	even
 ; ===========================================================================
 
+    if SMPS_RingSFXBehaviour
 PlaySFX_Ring:
 	bchg	#v_ring_speaker,SMPS_RAM.bitfield1(a6)	; Is the ring sound playing on right speaker?
 	bne.s	.gotringspeaker				; Branch if not
@@ -1250,6 +1251,7 @@ PlaySFX_Ring:
 ; loc_721EE:
 .gotringspeaker:
 	bra.s	Sound_PlaySFX.play_sfx
+    endif
 
     if SMPS_PushSFXBehaviour
 PlaySFX_Push:
@@ -1297,8 +1299,10 @@ Sound_PlaySFX:
 	bclr	#f_spindash_lastsound,SMPS_RAM.bitfield1(a6)
     endif
 
+    if SMPS_RingSFXBehaviour
 	cmpi.w	#SndID_Ring,d7			; Is ring sound	effect played?
 	beq.s	PlaySFX_Ring
+    endif
     if SMPS_PushSFXBehaviour
 	cmpi.w	#sfx_Push,d7			; Is "pushing" sound played?
 	beq.s	PlaySFX_Push
