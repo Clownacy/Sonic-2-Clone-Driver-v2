@@ -116,7 +116,7 @@ s3p39_PSG2:
 	smpsPSGvoice        sTone_09
 	dc.b	nC5, $30, nF5, $20, nC5, $10, nB4, $30, nF5, $20, nB4, $10
 	dc.b	nRst, $60, nRst, $60
-	;smpsModChange       $FF
+	smpsModChange       $00	; This coordination flag works different in the prototype, being relative to 1 instead of 0, so this parameter is $FF (-1) in the original binary.
 	dc.b	nCs4, $60
 	smpsStop
 
