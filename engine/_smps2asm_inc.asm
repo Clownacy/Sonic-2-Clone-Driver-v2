@@ -196,7 +196,17 @@ smpsHeaderPSG macro loc,pitch,vol,mod,voice
 	endif
 	dc.w	loc-songStart
 	PSGPitchConvert pitch
-	dc.b	(vol)<<3,mod,voice
+	dc.b	(vol)<<3
+	if (SourceDriver>=3)
+		if (MOMPASS==2) && (mod <> 0) && (~~SMPS_EnableModulationEnvelopes)
+			warning "PSG track header specifies a frequency modulation envelope (of \{mod}) but support for it is disabled - go set SMPS_EnableModulationEnvelopes to 1"
+		endif
+		dc.b	mod
+	else
+		; Sometimes Sonic 1/2 songs specify a modulation envelope despite the driver not supporting them. Ignore them.
+		dc.b	0
+	endif
+	dc.b	voice
 	endm
 
 ; Header - Set up PWM Channel
