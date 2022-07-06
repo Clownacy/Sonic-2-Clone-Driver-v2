@@ -99,6 +99,8 @@ SMPS_RAM_Variables ENDSTRUCT
 ; Global sound driver variables
 ; ---------------------------------------------------------------------------
 SMPS_RAM STRUCT DOTS
+	v_track_ram:
+
 	v_music_track_ram:
 	v_music_fmdac_tracks:
 	v_music_dac_track:	SMPS_Track
@@ -146,6 +148,7 @@ SMPS_RAM STRUCT DOTS
 	v_sfx_psg_tracks_end:
 	v_sfx_track_ram_end:
 
+    if SMPS_EnableSpecSFX
 	v_spcsfx_track_ram:
 	v_spcsfx_fm_tracks:
 	v_1up_fm6_track:
@@ -156,6 +159,9 @@ SMPS_RAM STRUCT DOTS
 	v_spcsfx_psg3_track:	SMPS_Track
 	v_spcsfx_psg_tracks_end:
 	v_spcsfx_track_ram_end:
+    endif
+
+	v_track_ram_end:
 
 	v_1up_psg2_track:	SMPS_Track
 	v_1up_psg3_track:	SMPS_Track

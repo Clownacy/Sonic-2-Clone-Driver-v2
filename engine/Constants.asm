@@ -28,6 +28,8 @@ SMPS_SFX_TRACK_COUNT = ((SMPS_RAM.v_sfx_track_ram_end-SMPS_RAM.v_sfx_track_ram)/
 SMPS_SFX_FM_TRACK_COUNT = ((SMPS_RAM.v_sfx_fm_tracks_end-SMPS_RAM.v_sfx_fm_tracks)/SMPS_Track.len)
 SMPS_SFX_PSG_TRACK_COUNT = ((SMPS_RAM.v_sfx_psg_tracks_end-SMPS_RAM.v_sfx_psg_tracks)/SMPS_Track.len)
 
+    if SMPS_EnableSpecSFX
 SMPS_SPECIAL_SFX_TRACK_COUNT = ((SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.v_spcsfx_track_ram)/SMPS_Track.len)
 SMPS_SPECIAL_SFX_FM_TRACK_COUNT = ((SMPS_RAM.v_spcsfx_fm_tracks_end-SMPS_RAM.v_spcsfx_fm_tracks)/SMPS_Track.len)
 SMPS_SPECIAL_SFX_PSG_TRACK_COUNT = ((SMPS_RAM.v_spcsfx_psg_tracks_end-SMPS_RAM.v_spcsfx_psg_tracks)/SMPS_Track.len)
+    endif

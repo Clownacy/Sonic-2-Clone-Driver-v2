@@ -1888,17 +1888,17 @@ StopAllSound:
     endif
 
 	; Clear track RAM
-	lea	SMPS_RAM.v_music_track_ram(a6),a0
-	move.w	#((SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d1	; Clear all variables and track data (don't really care about clearing the music track backup)
+	lea	SMPS_RAM.v_track_ram(a6),a0
+	move.w	#((SMPS_RAM.v_track_ram_end-SMPS_RAM.v_track_ram)/4)-1,d1	; Clear all variables and track data (don't really care about clearing the music track backup)
 
 .cleartrackRAMloop:
 	move.l	d0,(a0)+
 	dbf	d1,.cleartrackRAMloop
 
-    if (SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.v_music_track_ram)&2
+    if (SMPS_RAM.v_track_ram_end-SMPS_RAM.v_track_ram)&2
 	move.w	d0,(a0)+
     endif
-    if (SMPS_RAM.v_spcsfx_track_ram_end-SMPS_RAM.v_music_track_ram)&1
+    if (SMPS_RAM.v_track_ram_end-SMPS_RAM.v_track_ram)&1
 	move.b	d0,(a0)+
     endif
 
@@ -2092,6 +2092,7 @@ DoFadeIn:
 	moveq	#SMPS_SFX_PSG_TRACK_COUNT-1,d7		; 3 PSG tracks
 	bsr.s	.psgloop
 
+    if SMPS_EnableSpecSFX
 	lea	SMPS_RAM.v_spcsfx_track_ram(a6),a5
 
 	; Update Special SFX FM volume
@@ -2101,6 +2102,7 @@ DoFadeIn:
 	; Update Special SFX PSG volume
 	moveq	#SMPS_SPECIAL_SFX_PSG_TRACK_COUNT-1,d7	; 1 PSG track
 	bsr.s	.psgloop
+    endif
 
 	; Done
 .locret:
