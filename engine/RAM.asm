@@ -180,7 +180,9 @@ SMPS_RAM STRUCT DOTS
 	f_pause:		ds.b 1
 
 	bitfield1:		ds.b 1
+    if SMPS_RingSFXBehaviour
 v_ring_speaker			= 0	; which speaker the "ring" sound is played in (0 = right; 1 = left)
+    endif
     if SMPS_GloopSFXBehaviour
 v_gloop_toggle			= 1	; if set, prevents further gloop sounds from playing
     endif
