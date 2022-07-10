@@ -16,6 +16,8 @@ SMPS_pwm_comm =		$A15128
 
 SMPS_psg_input =	$C00011
 
+SMPS_TRACK_COUNT = ((SMPS_RAM.v_track_ram_end-SMPS_RAM.v_track_ram)/SMPS_Track.len)
+
 SMPS_MUSIC_TRACK_COUNT = ((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/SMPS_Track.len)
 SMPS_MUSIC_FM_DAC_TRACK_COUNT = ((SMPS_RAM.v_music_fmdac_tracks_end-SMPS_RAM.v_music_fmdac_tracks)/SMPS_Track.len)
 SMPS_MUSIC_FM_TRACK_COUNT = ((SMPS_RAM.v_music_fm_tracks_end-SMPS_RAM.v_music_fm_tracks)/SMPS_Track.len)
