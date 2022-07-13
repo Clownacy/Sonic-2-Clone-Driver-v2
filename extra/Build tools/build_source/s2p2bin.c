@@ -161,7 +161,7 @@ bool buildRom(FILE* from, FILE* to)
 			int srcStart = ftell(from);
 			unsigned char *uncompressed_buffer = malloc(length);
 			fread(uncompressed_buffer, length, 1, from);
-			unsigned char *compressed_buffer = KosinskiCompress(uncompressed_buffer, length, &compressedLength);
+			unsigned char *compressed_buffer = ClownLZSS_KosinskiCompress(uncompressed_buffer, length, &compressedLength);
 			free(uncompressed_buffer);
 			fwrite(compressed_buffer, 1, compressedLength, to);
 			free(compressed_buffer);
