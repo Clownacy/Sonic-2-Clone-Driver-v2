@@ -728,6 +728,7 @@ Mus91_Credits_Loop29:
 	smpsLoop            $00, $04, Mus91_Credits_Loop29
 	smpsLoop            $01, $02, Mus91_Credits_Loop27
 	dc.b	nRst, $60, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst
+	; This erroneous FM-only command causes the following notes to be inaudible.
 	smpsAlterVol        $0C
 	smpsAlterNote       $02
 	smpsPSGAlterVol     $02
