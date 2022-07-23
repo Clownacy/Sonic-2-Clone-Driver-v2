@@ -3143,7 +3143,7 @@ SendVoiceTL:
 cfModulationSMPSZ80:
 	; Turn on modulation and enable SMPS Z80 modulation mode.
     if SMPS_EnableModulationEnvelopes
-	; Note that this clears the resets the modulation envelope index to 0.
+	; Note that this resets the modulation envelope index to 0.
 	; This is relied on by Sonic 3's Miniboss music.
 	move.b	#(1<<7)|(1<<6),SMPS_Track.ModulationCtrl(a5)
     else
