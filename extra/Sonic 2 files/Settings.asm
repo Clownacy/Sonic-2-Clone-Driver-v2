@@ -70,4 +70,5 @@ PlayMusic		= SMPS_QueueSound1
 PlaySoundLocal		= SMPS_QueueSound2Local
     endif
 PlaySound		= SMPS_QueueSound2
+PlaySound2		= SMPS_QueueSound3
 PlaySoundStereo		= SMPS_QueueSound3
