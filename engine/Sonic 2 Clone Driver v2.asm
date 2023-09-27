@@ -987,7 +987,8 @@ Sound_PlayBGM:
 
 	; Clownacy | We're backing-up the variables and tracks separately, to put the backed-up variables after the backed-up tracks
 	; this is so the backed-up tracks and SFX tracks start at the same place: at the end of the music tracks
-;	clr.b	SMPS_RAM.variables.v_sndprio(a6)	; Clear priority (S2 removes this one)
+	clr.b	SMPS_RAM.variables.v_sndprio(a6)	; Clear priority
+
 	lea	SMPS_RAM.v_music_track_ram(a6),a0
 	lea	SMPS_RAM.v_1up_ram_copy(a6),a1
 	move.w	#((SMPS_RAM.v_music_track_ram_end-SMPS_RAM.v_music_track_ram)/4)-1,d0	; Backup music track data
@@ -1018,7 +1019,7 @@ Sound_PlayBGM:
 	move.b	(a0)+,(a1)+
     endif
 
-	clr.b	SMPS_RAM.variables.v_sndprio(a6)	; Clear priority twice?
+	;clr.b	SMPS_RAM.variables.v_sndprio(a6)	; Clear priority twice?
 	bra.s	.bgm_loadMusic
 ; ===========================================================================
 ; loc_72024:
