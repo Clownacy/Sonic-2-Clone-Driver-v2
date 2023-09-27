@@ -2,10 +2,10 @@ Sound_9B_Header:
 	smpsHeaderStartSong 3
 	smpsHeaderVoice     Sound_9B_Voices
 	smpsHeaderTempoSFX  $01
-	smpsHeaderChanSFX   $02
+	smpsHeaderChanSFX   $02 ; In S3, the third channel was used.
 
 	smpsHeaderSFXChannel cFM4, Sound_9B_FM4,	$F2, $00
-	smpsHeaderSFXChannel cFM5, Sound_9B_FM5,	$F9, $00
+	smpsHeaderSFXChannel cFM5, Sound_9B_FM5,	$F9, $00 ; These parameters were $02 $06 in S3.
 ; Unused header:
 	smpsHeaderSFXChannel cFM3, Sound_9B_FM3,	$F9, $08
 

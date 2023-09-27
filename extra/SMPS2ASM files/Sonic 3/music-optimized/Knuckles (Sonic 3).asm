@@ -1,10 +1,10 @@
-Snd_Knux_Header:
+Snd_S3_Knux_Header:
 	smpsHeaderStartSong 3
-	smpsHeaderVoice     Snd_Knux_Voices
+	smpsHeaderVoice     Snd_S3_Knux_Voices
 	smpsHeaderChan      $06, $03
 	smpsHeaderTempo     $01, $43
 
-	smpsHeaderDAC       Snd_Knux_DAC
+	smpsHeaderDAC       Snd_S3_Knux_DAC
 	; The transposition of $C2 is too low, causing the octave calculation to underflow.
 	; In drivers that don't calculate the octave (such as Sonic 1's and Sonic 2's
 	; drivers, which are derived from SMPS 68k Type 1b), this invalid transpose causes
@@ -18,17 +18,18 @@ Snd_Knux_Header:
 	; $C2 run through the formula is $02, and the notes that this displacement is used
 	; with are in the low octaves, so the sum will never exceed $60. Because of this,
 	; $02 is the correct displacement.
-	smpsHeaderFM        Snd_Knux_FM1,	$C2, $03
-	smpsHeaderFM        Snd_Knux_FM2,	$E0, $18
-	smpsHeaderFM        Snd_Knux_FM3,	$0C, $10
-	smpsHeaderFM        Snd_Knux_FM4,	$00, $14
-	smpsHeaderFM        Snd_Knux_FM5,	$00, $14
-	smpsHeaderPSG       Snd_Knux_PSG1,	$03, $01, $00, $00
-	smpsHeaderPSG       Snd_Knux_PSG2,	$00, $01, $00, $00
-	smpsHeaderPSG       Snd_Knux_PSG3,	$00, $00, $00, $00
+	;smpsHeaderFM        Snd_S3_Knux_FM1,	$C2, $03
+	smpsHeaderFM        Snd_S3_Knux_FM1,	$02, $03 ; Fixed
+	smpsHeaderFM        Snd_S3_Knux_FM2,	$E0, $18
+	smpsHeaderFM        Snd_S3_Knux_FM3,	$0C, $10
+	smpsHeaderFM        Snd_S3_Knux_FM4,	$00, $14
+	smpsHeaderFM        Snd_S3_Knux_FM5,	$00, $14
+	smpsHeaderPSG       Snd_S3_Knux_PSG1,	$03, $01, $00, $00
+	smpsHeaderPSG       Snd_S3_Knux_PSG2,	$00, $01, $00, $00
+	smpsHeaderPSG       Snd_S3_Knux_PSG3,	$00, $00, $00, $00
 
 ; FM1 Data
-Snd_Knux_FM1:
+Snd_S3_Knux_FM1:
 	smpsSetvoice        $01
 	dc.b	nC1, $08, $04, nRst, $07, nC1, $05
 	smpsSetvoice        $02
@@ -45,43 +46,43 @@ Snd_Knux_FM1:
 	dc.b	nC1, nRst, $07, nRst, $05, nC1, $0C
 	smpsSetvoice        $02
 	dc.b	nE3, $13, nRst, $05
-	smpsJump            Snd_Knux_FM1
+	smpsJump            Snd_S3_Knux_FM1
 
 ; FM2 Data
-Snd_Knux_FM2:
+Snd_S3_Knux_FM2:
 	smpsSetvoice        $00
 	dc.b	nC4, $07, $05, $07, nRst, $05, nRst, $07, nC4, $05, $07, $05
 	dc.b	nC4, $07, $05, $07, $05, $07, $05, $07, $05
-	smpsJump            Snd_Knux_FM2
+	smpsJump            Snd_S3_Knux_FM2
 
 ; FM3 Data
-Snd_Knux_FM3:
+Snd_S3_Knux_FM3:
 ; FM4 Data
-Snd_Knux_FM4:
+Snd_S3_Knux_FM4:
 ; FM5 Data
-Snd_Knux_FM5:
+Snd_S3_Knux_FM5:
 ; PSG1 Data
-Snd_Knux_PSG1:
+Snd_S3_Knux_PSG1:
 ; PSG2 Data
-Snd_Knux_PSG2:
+Snd_S3_Knux_PSG2:
 ; PSG3 Data
-Snd_Knux_PSG3:
+Snd_S3_Knux_PSG3:
 	smpsStop
 
 ; DAC Data
-Snd_Knux_DAC:
-	smpsCall            Snd_Knux_Call00
-	smpsLoop            $00, $04, Snd_Knux_DAC
+Snd_S3_Knux_DAC:
+	smpsCall            Snd_S3_Knux_Call00
+	smpsLoop            $00, $04, Snd_S3_Knux_DAC
 
-Snd_Knux_Jump00:
-	smpsCall            Snd_Knux_Call01
+Snd_S3_Knux_Jump00:
+	smpsCall            Snd_S3_Knux_Call01
 
-Snd_Knux_Loop00:
-	smpsCall            Snd_Knux_Call00
-	smpsLoop            $00, $03, Snd_Knux_Loop00
-	smpsJump            Snd_Knux_Jump00
+Snd_S3_Knux_Loop00:
+	smpsCall            Snd_S3_Knux_Call00
+	smpsLoop            $00, $03, Snd_S3_Knux_Loop00
+	smpsJump            Snd_S3_Knux_Jump00
 
-Snd_Knux_Call00:
+Snd_S3_Knux_Call00:
 	dc.b	nRst, $0C, dLowerEchoedClapHit_S3, dEchoedClapHit_S3, $08, dLowerEchoedClapHit_S3, $04, $0C, $0C, $08, $04, dEchoedClapHit_S3
 	dc.b	$18, nRst, $0C, dLowerEchoedClapHit_S3, dEchoedClapHit_S3, $08, dLowerEchoedClapHit_S3, $04, $0C, $14, $04, dEchoedClapHit_S3
 	dc.b	$18, nRst, $0C, dLowerEchoedClapHit_S3, dEchoedClapHit_S3, $08, dLowerEchoedClapHit_S3, $04, $0C, $0C, $08, $04
@@ -89,7 +90,7 @@ Snd_Knux_Call00:
 	dc.b	dEchoedClapHit_S3, $18
 	smpsReturn
 
-Snd_Knux_Call01:
+Snd_S3_Knux_Call01:
 	dc.b	dBassHey, $0C, dLowerEchoedClapHit_S3, dEchoedClapHit_S3, $08, dLowerEchoedClapHit_S3, $04, $0C, $0C, $08, $04, dEchoedClapHit_S3
 	dc.b	$18, nRst, $0C, dLowerEchoedClapHit_S3, dEchoedClapHit_S3, $08, dLowerEchoedClapHit_S3, $04, $0C, $14, $04, dEchoedClapHit_S3
 	dc.b	$18, nRst, $0C, dLowerEchoedClapHit_S3, dEchoedClapHit_S3, $08, dLowerEchoedClapHit_S3, $04, $0C, $0C, $08, $04
@@ -97,7 +98,7 @@ Snd_Knux_Call01:
 	dc.b	dEchoedClapHit_S3, $18
 	smpsReturn
 
-Snd_Knux_Voices:
+Snd_S3_Knux_Voices:
 ;	Voice $00
 ;	$01
 ;	$02, $00, $00, $00, 	$1F, $1F, $1F, $1F, 	$10, $18, $18, $10
