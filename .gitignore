@@ -1,12 +1,5 @@
-/music
-/SFX
 /PWM
 /engine/Stub 32X
-/Music.asm
-/SFX.asm
-/Special SFX.asm
-/Settings.asm
-/Sound IDs.asm
 /PWM Samples.asm
 /SMPS2ASM - PWM Sample Equates.asm
 /engine/PWM Driver.asm

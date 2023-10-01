@@ -3485,29 +3485,29 @@ cfChanFMCommand:
 ; ---------------------------------------------------------------------------
 ; Music 'include's and pointers
 ; ---------------------------------------------------------------------------
-	include "Sonic-2-Clone-Driver-v2/Music.asm"
+	include "sound/Music.asm"
 
 ; ---------------------------------------------------------------------------
 ; SFX 'include's and pointers
 ; ---------------------------------------------------------------------------
-	include "Sonic-2-Clone-Driver-v2/SFX.asm"
+	include "sound/SFX.asm"
 
 ; ---------------------------------------------------------------------------
 ; Special SFX 'include's and pointers
 ; ---------------------------------------------------------------------------
     if SMPS_EnableSpecSFX
-	include "Sonic-2-Clone-Driver-v2/Special SFX.asm"
+	include "sound/Special SFX.asm"
     endif
 ; ---------------------------------------------------------------------------
 ; FM Universal Voice Bank
 ; ---------------------------------------------------------------------------
     if SMPS_EnableUniversalVoiceBank
-	include "Sonic-2-Clone-Driver-v2/FM Universal Voice Bank.asm"
+	include "sound/Sonic-2-Clone-Driver-v2/FM Universal Voice Bank.asm"
     endif
 ; ---------------------------------------------------------------------------
 ; PSG volume envelopes 'include's and pointers
 ; ---------------------------------------------------------------------------
-	include "Sonic-2-Clone-Driver-v2/PSG Volume Envelopes.asm"
+	include "sound/Sonic-2-Clone-Driver-v2/PSG Volume Envelopes.asm"
 
 ; ---------------------------------------------------------------------------
 ; DAC driver
@@ -3515,13 +3515,13 @@ cfChanFMCommand:
 Size_of_DAC_driver_guess = $38F
 
 DACDriver:
-	include "Sonic-2-Clone-Driver-v2/engine/DAC Driver.asm"
+	include "sound/Sonic-2-Clone-Driver-v2/engine/DAC Driver.asm"
 	!org (DACDriver+Size_of_DAC_driver_guess)
 
 ; ---------------------------------------------------------------------------
 ; DAC samples
 ; ---------------------------------------------------------------------------
-	include "Sonic-2-Clone-Driver-v2/DAC Samples.asm"
+	include "sound/Sonic-2-Clone-Driver-v2/DAC Samples.asm"
 
 	dc.b	$43,$6C,$6F,$77,$6E,$61,$63,$79
 	even
