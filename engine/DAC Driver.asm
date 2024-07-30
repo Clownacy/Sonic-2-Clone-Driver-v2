@@ -275,7 +275,9 @@ zVolumeDeltas:
 	dw	040h*040h/100h, 030h*030h/100h, 020h*020h/100h, 010h*010h/100h
 
 
-	align 100h
+    rept 100h-$
+	db	0
+    endm
 zPCMLoop:
 
 zNextSampleCycle := 0
