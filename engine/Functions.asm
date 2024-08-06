@@ -7,8 +7,9 @@ SMPS_Setup:
 	; the Z80 bus request or DAC driver before they are finished with
 	move.w	sr,-(sp)
 	move.w	#$2700,sr	; mask off interrupts
-	SMPS_stopZ80
 	SMPS_resetZ80
+	SMPS_stopZ80
+	SMPS_waitZ80
 
 	; detect PAL consoles and set the PAL flag if needed
 	btst	#6,(SMPS_version_number).l
