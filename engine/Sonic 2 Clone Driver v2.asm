@@ -1349,8 +1349,15 @@ Sound_PlaySFX:
 	movea.l	(a0,d7.w),a3		; SFX data pointer
 	movea.l	a3,a1
 	move.w	(a1)+,d1		; Voice pointer
+    if SMPS_EnableUniversalVoiceBank
+	bne.s	.doesNotUseUniVoiceBank
+	move.l	#UniVoiceBank,d1
+	bra.s	.got_voice_pointer
+.doesNotUseUniVoiceBank:
+    endif
 	ext.l	d1
 	add.l	a3,d1			; Relative pointer
+.got_voice_pointer:
 	move.b	(a1)+,d5		; Dividing timing
 	; DANGER! Ugh, this bug.
 	; In the stock driver, sounds >= $E0 would cause a crash.
@@ -1504,8 +1511,15 @@ Sound_PlaySpecial:
 	movea.l	(a0,d7.w),a3
 	movea.l	a3,a1
 	move.w	(a1)+,d1	; Store voice pointer
+    if SMPS_EnableUniversalVoiceBank
+	bne.s	.doesNotUseUniVoiceBank
+	move.l	#UniVoiceBank,d1
+	bra.s	.got_voice_pointer
+.doesNotUseUniVoiceBank:
+    endif
 	ext.l	d1
 	add.l	a3,d1
+.got_voice_pointer:
 	move.b	(a1)+,d5	; Dividing timing
 	; DANGER! there is a missing 'moveq	#0,d7' here, without which Special SFXes whose
 	; index entry is above $3F will cause a crash. Ristar's driver didn't have this
