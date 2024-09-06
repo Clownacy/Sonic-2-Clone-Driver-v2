@@ -889,6 +889,7 @@ PlaySoundID:	; For the love of god, don't rearrange the order of the groups, it 
 ; ===========================================================================
 
 Sound_ExIndex:
+ptr_flgF9:	dc.w	StopSpecSFX-Sound_ExIndex	; $F9	; Clownacy | Brand new.
 ptr_flgFA:	dc.w	StopSFX-Sound_ExIndex		; $FA	; Clownacy | Brand new. Was missing from the stock S1 driver because Sonic Team had stripped out various unused components of the driver
 ptr_flgFB:	dc.w	FadeOutMusic-Sound_ExIndex	; $FB	; Clownacy | Was $E0
 ptr_flgFC:	dc.w	PlaySegaSound-Sound_ExIndex	; $FC	; Clownacy | Was $E1
@@ -1395,8 +1396,7 @@ Sound_PlaySFX:
 	move.b	d0,(SMPS_psg_input).l
 	cmpi.b	#$C0,d4			; Is this PSG 3?
 	bne.s	.sfxoverridedone	; Branch if not
-	bchg	#5,d0			; Command to silence noise channel
-	move.b	d0,(SMPS_psg_input).l	; Silence PSG 4 (noise), too
+	move.b	#$FF,(SMPS_psg_input).l	; Silence PSG 4 (noise), too
 ; loc_7226E:
 .sfxoverridedone:
 	movea.w	SFX_SFXChannelRAM(pc,d3.w),a5
@@ -1644,10 +1644,14 @@ StopSFX:
 	bsr.w	PSGNoteOff
     if SMPS_EnableSpecSFX
 	lea	SMPS_RAM.v_spcsfx_psg3_track(a6),a0
-	cmpi.b	#$E0,d3					; Is this a noise channel:
+	tst.b	SMPS_Track.PlaybackControl(a0)		; Is track playing?
+	bpl.s	.getchannelptr				; Branch if not
+	cmpi.b	#$E0,d3					; Is this a noise channel?
 	beq.s	.gotpsgpointer				; Branch if yes
 	cmpi.b	#$C0,d3					; Is this PSG 3?
 	beq.s	.gotpsgpointer				; Branch if yes
+
+.getchannelptr:
     endif
 	lsr.w	#4,d3
 	lea	SFX_BGMChannelRAM(pc),a0
@@ -1669,13 +1673,12 @@ StopSFX:
 
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-    if SMPS_EnableSpecSFX
 ; Snd_FadeOut2: Snd_FadeOutSFX2: FadeOutSpecSFX:
 StopSpecSFX:
+    if SMPS_EnableSpecSFX
 	lea	SMPS_RAM.v_spcsfx_fm4_track(a6),a5
-	tst.b	SMPS_Track.PlaybackControl(a5)			; Is track playing?
-	bpl.s	.fadedfm					; Branch if not
 	bclr	#7,SMPS_Track.PlaybackControl(a5)		; Stop track
+	beq.s	.fadedfm					; Branch if already not playing
 	btst	#2,SMPS_Track.PlaybackControl(a5)		; Is SFX overriding?
 	bne.s	.fadedfm					; Branch if not
 	bsr.w	SendFMNoteOff
@@ -1688,9 +1691,8 @@ StopSpecSFX:
 ; loc_724AE:
 .fadedfm:
 	lea	SMPS_RAM.v_spcsfx_psg3_track(a6),a5
-	tst.b	SMPS_Track.PlaybackControl(a5)			; Is track playing?
-	bpl.s	.fadedpsg					; Branch if not
 	bclr	#7,SMPS_Track.PlaybackControl(a5)		; Stop track
+	beq.s	.fadedpsg					; Branch if already not playing
 	btst	#2,SMPS_Track.PlaybackControl(a5)		; Is SFX overriding?
 	bne.s	.fadedpsg					; Return if not
 	bsr.w	SendPSGNoteOff
@@ -1704,9 +1706,9 @@ StopSpecSFX:
 	move.b	SMPS_Track.PSGNoise(a5),(SMPS_psg_input).l	; Set noise type
 ; locret_724E4:
 .fadedpsg
+    endif
 	rts
 ; End of function StopSpecSFX
-    endif
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Fade out music
