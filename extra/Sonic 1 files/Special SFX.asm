@@ -8,5 +8,5 @@ ptr_specend
 ; ---------------------------------------------------------------------------
 ; Special SFX data
 ; ---------------------------------------------------------------------------
-SoundWaterfall:	include	"sound/Sonic-2-Clone-Driver-v2/SFX/SndD0 - Waterfall.asm"
+SoundWaterfall:	include	"sound/SFX/SndD0 - Waterfall.asm"
 		even
