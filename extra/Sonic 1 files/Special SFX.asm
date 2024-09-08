@@ -2,7 +2,7 @@
 ; Special SFX metadata (pointers, flags)
 ; ---------------------------------------------------------------------------
 SpecSoundIndex:
-ptr_sndD0:	SMPS_SPECIAL_SFX_METADATA	SoundWaterfall, 0
+ptr_sndD0:	SMPS_SPECIAL_SFX_METADATA	SoundWaterfall, $80, 0
 ptr_specend
 
 ; ---------------------------------------------------------------------------

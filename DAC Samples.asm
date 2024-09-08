@@ -4,7 +4,7 @@
 
 DACMetadata macro pSampleRate,pStart
 	dc.w	(pStart&$7FFF)|$8000		; Pointer into Z80->68k bank
-	dc.w	(pSampleRate*$100)/zDriverSampleRate	; Playback increment (8.8 format)
+	dc.w	(pSampleRate*$100)/SMPS_DAC_SAMPLE_RATE	; Playback increment (8.8 format)
 	dc.b	(pStart&$FF8000)/$8000		; Z80->68k bank index (TODO - tweak this to allow access to the 32X address range?)
     endm
 
@@ -134,12 +134,13 @@ ptr_dacDF:	DACMetadata	13610, Hey		; $DF	- "Hey!"
 	endif
 
 ptr_dacE0:	DACMetadata	16270, SegaPCM		; $E0	- Sega!
+ptr_dacend
 
 
 IncludeDAC macro Path,{INTLABEL}
 __LABEL__ label *
 	binclude Path
-    rept zBatchSize * 2
+    rept SMPS_DAC_BATCH_SIZE * 2
 	dc.b	0 ; 0 marks the end of the sample, but the DAC driver only checks every 32 iterations (multiply it by two for high playback speeds)
     endm
 	endm

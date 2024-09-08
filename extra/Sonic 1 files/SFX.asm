@@ -9,7 +9,6 @@
 ; will only override special SFX and music will only override music.
 ; Of course, this isn't the case anymore, as priorities no longer apply to
 ; special SFX or music.
-; TODO Maybe I should make it apply to Special SFX, too.
 ; ---------------------------------------------------------------------------
 ; SoundTypes: SoundPriorities:
 SoundIndex:

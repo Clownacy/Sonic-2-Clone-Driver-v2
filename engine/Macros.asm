@@ -2,23 +2,41 @@
 ; Music	macros and constants
 ; ---------------------------------------------------------------------------
 SMPS_MUSIC_METADATA macro address,fasttempo,flags
-	dc.l	((fasttempo)<<24)|(((address)|(flags))&$FFFFFF)
+	dc.l	address
+	dc.b	fasttempo,flags
 	endm
 
-SMPS_MUSIC_METADATA_FORCE_PAL_SPEED = $00000001	; Forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)
+SMPS_MUSIC_METADATA_FORCE_PAL_SPEED = 1 << 7	; Forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)
+SMPS_MUSIC_METADATA_EXTRA_LIFE_JINGLE = 1 << 6	; Resumes the previous song when this song ends
 
 ; ---------------------------------------------------------------------------
 ; SFX macros and constants
 ; ---------------------------------------------------------------------------
 SMPS_SFX_METADATA macro address,priority,flags
-	dc.l	((priority)<<24)|((address)&$FFFFFF)
+	dc.l	address
+	dc.b	priority,flags
 	endm
+
+	enum		SMPS_SFX_METADATA_NORMAL
+    if SMPS_FEATURE_PUSH_SFX
+	nextenum	SMPS_SFX_METADATA_BLOCK_PUSH
+    endif
+    if SMPS_FEATURE_GLOOP_SFX
+	nextenum	SMPS_SFX_METADATA_GLOOP
+    endif
+    if SMPS_FEATURE_SPIN_DASH_SFX
+	nextenum	SMPS_SFX_METADATA_SPIN_DASH_REV
+    endif
+    if SMPS_FEATURE_CONTINUOUS_SFX
+	nextenum	SMPS_SFX_METADATA_CONTINUOUS
+    endif
 
 ; ---------------------------------------------------------------------------
 ; Special SFX macros and constants
 ; ---------------------------------------------------------------------------
-SMPS_SPECIAL_SFX_METADATA macro address,flags
+SMPS_SPECIAL_SFX_METADATA macro address,priority,flags
 	dc.l	address
+	dc.b	priority,flags
 	endm
 
 ; ---------------------------------------------------------------------------
@@ -97,14 +115,14 @@ SMPS_waitYM macro target
 ; Pauses the driver: music, SFX, everything
 ; ---------------------------------------------------------------------------
 SMPS_Pause macro
-	move.b	#1,(Clone_Driver_RAM+SMPS_RAM.f_pause).w
+	move.b	#1,(Clone_Driver_RAM+SMPS_PAUSE_OFFSET).w
 	endm
 
 ; ---------------------------------------------------------------------------
 ; Unpauses the driver
 ; ---------------------------------------------------------------------------
 SMPS_Unpause macro
-	move.b	#$80,(Clone_Driver_RAM+SMPS_RAM.f_pause).w
+	move.b	#$80,(Clone_Driver_RAM+SMPS_PAUSE_OFFSET).w
 	endm
 
 ; ---------------------------------------------------------------------------
@@ -112,10 +130,10 @@ SMPS_Unpause macro
 ; ---------------------------------------------------------------------------
 SMPS_UpdateSoundDriver macro
 	move	#$2300,sr					; enable interrupts (we can accept horizontal interrupts from now on)
-	bset	#0,(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w	; set "SMPS running flag"
+	bset	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).w	; set "SMPS running flag"
 	bne.s	.skip						; if it was set already, don't call another instance of SMPS
 	jsr	(SMPS_UpdateDriver).l 				; update Sonic 2 Clone Driver v2
-	clr.b	(Clone_Driver_RAM+SMPS_RAM.SMPS_running_flag).w	; reset "SMPS running flag"
+	bclr	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).w	; reset "SMPS running flag"
 .skip:
 	endm
 

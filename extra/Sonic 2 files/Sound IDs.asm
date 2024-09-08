@@ -1,10 +1,25 @@
 ; ---------------------------------------------------------------------------
 ; Sound IDs
 ; ---------------------------------------------------------------------------
+; $00 is reserved for silence
+
+; Sound command IDs
+FlgID__First			= MusID_Stop
+MusID_Stop =			1
+MusID_StopSFX =			2
+MusID_StopSpecSFX =		3
+MusID_StopDACSFX =		4
+MusID_FadeOut =			5
+MusID_SpeedUp =			6
+MusID_SlowDown =		7
+FlgID__End =			MusID_SlowDown + 1
+
+SndID_SegaSound =		DACID__First+dSega-$81
+
 ; Music IDs
 offset :=	MusicIndex
-ptrsize :=	4
-idstart :=	1
+ptrsize :=	6
+idstart :=	$10
 ; $00 is reserved for silence
 
 MusID__First = idstart
@@ -48,8 +63,8 @@ MusID__End =			SMPS_id(ptr_musend)	; 20
 
 ; Sound IDs
 offset :=       SoundIndex
-ptrsize :=      4
-idstart :=      $80
+ptrsize :=      6
+idstart :=      $30
 
 SndID__First                    = idstart
 SndID_Jump =                    SMPS_id(ptr_sndA0)   ; 80
@@ -135,19 +150,14 @@ SndID_LargeLaser =              SMPS_id(ptr_sndEF)   ; CF
 SndID_OilSlide =                SMPS_id(ptr_sndF0)   ; D0
 SndID__End =                    SMPS_id(ptr_sndend)  ; D1
 
-; Sound command IDs
-offset :=	Sound_ExIndex
-ptrsize :=	2
-idstart :=	$FA
+; DAC IDs
+offset :=       DACMetadataTable
+ptrsize :=      5
+idstart :=      $80
 
-FlgID__First			= idstart
-MusID_StopSFX =			SMPS_id(ptr_flgFA)	; FA
-MusID_FadeOut =			SMPS_id(ptr_flgFB)	; FB
-SndID_SegaSound =		SMPS_id(ptr_flgFC)	; FC
-MusID_SpeedUp =			SMPS_id(ptr_flgFD)	; FD
-MusID_SlowDown =		SMPS_id(ptr_flgFE)	; FE
-MusID_Stop =			SMPS_id(ptr_flgFF)	; FF
-FlgID__End =			SMPS_id(ptr_flgend)	; FF + 1 (rollover)
+DACID__First =                  idstart
+DACID__End =                    SMPS_id(ptr_dacend)
+
     if MOMPASS == 2
 	if SndID__End > FlgID__First
 		fatal "You have too many SndPtrs. SndID__End ($\{SndID__End}) can't exceed FlgID__First ($\{FlgID__First})."
