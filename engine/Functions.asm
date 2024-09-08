@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 ; SoundDriverLoad: JmpTo_SoundDriverLoad  SMPS_LoadDACDriver:
 SMPS_Setup:
-	lea	(Clone_Driver_RAM).l,a5
+	lea	(Clone_Driver_RAM).w,a5
 	binclude "c++/initialise.bin"
 	even
 ; End of function SMPS_LoadDACDriver
