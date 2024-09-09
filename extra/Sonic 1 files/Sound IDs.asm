@@ -4,7 +4,7 @@
 ; $00 is reserved for silence
 
 ; Sound commands
-flg__First		= bgm_Stop
+flg__First = bgm_Stop
 bgm_Stop =		1
 sfx_Fade =		2
 specsfx_Fade =		3
@@ -14,15 +14,13 @@ bgm_Speedup =		6
 bgm_Slowdown =		7
 flg__Last =		bgm_Slowdown + 1
 
-sfx_Sega =		DACID__First+dSega-$81
-
 
 ; Background music
 SMPS_offset :=	MusicIndex
 SMPS_ptrsize :=	6
-SMPS_idstart :=	$10
+SMPS_idstart :=	flg__Last+1
 
-bgm__First = idstart
+bgm__First = SMPS_idstart
 bgm_GHZ =		SMPS_id(ptr_mus81)
 bgm_LZ =		SMPS_id(ptr_mus82)
 bgm_MZ =		SMPS_id(ptr_mus83)
@@ -48,9 +46,9 @@ bgm__Last =		SMPS_id(ptr_musend)-1
 ; Sound effects
 SMPS_offset :=	SoundIndex
 SMPS_ptrsize :=	6
-SMPS_idstart :=	$30
+SMPS_idstart :=	bgm__Last+1
 
-sfx__First = idstart
+sfx__First = SMPS_idstart
 sfx_Jump =		SMPS_id(ptr_sndA0)
 sfx_Lamppost =		SMPS_id(ptr_sndA1)
 sfx_A2 =		SMPS_id(ptr_sndA2)
@@ -107,7 +105,7 @@ SMPS_offset :=	SpecSoundIndex
 SMPS_ptrsize :=	6
 SMPS_idstart :=	sfx__Last+1
 
-spec__First = idstart
+spec__First = SMPS_idstart
 sfx_Waterfall =		SMPS_id(ptr_sndD0)
 spec__Last =		SMPS_id(ptr_specend)-1
 
@@ -115,7 +113,27 @@ spec__Last =		SMPS_id(ptr_specend)-1
 ; DAC sound effects
 SMPS_offset :=       DACMetadataTable
 SMPS_ptrsize :=      5
-SMPS_idstart :=      $80
+SMPS_idstart :=      spec__Last+1
 
-DACID__First = idstart
-DACID__End =		SMPS_id(ptr_dacend)
+dac__First = SMPS_idstart
+sfx_Sega =		SMPS_id(ptr_dacE0)
+dac__Last =		SMPS_id(ptr_dacend)-1
+
+
+    if MOMPASS > 1 ; Avoid undefined symbol errors by checking only after the first pass.
+        if FlgID__End > MusID__First
+            fatal "You have too many sound commands. FlgID__End ($\{FlgID__End}) can't exceed MusID__First ($\{MusID__First})."
+        endif
+
+        if MusID__End > SndID__First
+            fatal "You have too many songs. MusID__End ($\{MusID__End}) can't exceed SndID__First ($\{SndID__First})."
+        endif
+
+        if SndID__End > SpecID__First
+            fatal "You have too many sounds. SndID__End ($\{SndID__End}) can't exceed SpecID__First ($\{SpecID__First})."
+        endif
+
+        if SpecID__End > DACID__First
+            fatal "You have too many background sounds. SpecID__End ($\{SpecID__End}) can't exceed DACID__First ($\{DACID__First})."
+        endif
+    endif

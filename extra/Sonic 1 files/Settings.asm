@@ -58,6 +58,12 @@ SpecID__First		= spec__First
 SpecID__End		= spec__Last+1
 ;	| ID of your last Special SFX+1
 ;
+DACID__First		= dac__First
+;	| ID of your first DAC SFX
+;
+DACID__End		= dac__Last+1
+;	| ID of your last DAC SFX+1
+;
 FlgID__First		= flg__First
 ;	| ID of your first command
 ;
