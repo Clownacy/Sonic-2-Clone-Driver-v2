@@ -32,12 +32,17 @@ SMPS_KCPSGEnvelopes	= 0
 
 ; ---DISASM-DEPENDANT VARIABLES AND FUNCTIONS---
 SoundDriverLoad		= SMPS_Setup
+DACDriverLoad		= SMPS_Setup
 
 PlaySound		= SMPS_QueueSound1
 PlaySound_Special	= SMPS_QueueSound2
 PlaySound_Unused	= SMPS_QueueSound3
 
 Clone_Driver_RAM	= (-(v_snddriver_ram&$80000000)<<1)|v_snddriver_ram
+
+	if ~~DEFINED(FixMusicAndSFXDataBugs)
+FixMusicAndSFXDataBugs	= 1 ; Needs to be set to fix compatibility issues with some songs and sounds.
+	endif
 
 ; ---SOUND ID BOUNDARIES---
 MusID__First		= bgm__First
@@ -77,4 +82,7 @@ SndID_Ring		= sfx_Ring
 ;
 SndID_RingLeft		= sfx_RingLeft
 ;	| ID of your alternate ring SFX
+;
+MusID_StopDACSFX	= dac_Fade
+;	| ID of the command to stop DAC SFX
 ;

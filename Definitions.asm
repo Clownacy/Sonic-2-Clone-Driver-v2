@@ -1,6 +1,6 @@
 	include "sound/Sonic-2-Clone-Driver-v2/engine/Constants.asm"
 	include "sound/Sonic-2-Clone-Driver-v2/engine/Macros.asm"
+	include "sound/Sound IDs.asm"
 	include "sound/Settings.asm"
 	include "sound/Sonic-2-Clone-Driver-v2/engine/RAM.asm"
 	include "sound/Sonic-2-Clone-Driver-v2/engine/_smps2asm_inc.asm"
-	include "sound/Sound IDs.asm"

@@ -33,7 +33,7 @@ nMaxPSG2			EQU nB6
 
 	include "sound/Sonic-2-Clone-Driver-v2/SMPS2ASM - PSG Volume Envelope Equates.asm"
 	include "sound/Sonic-2-Clone-Driver-v2/SMPS2ASM - DAC Sample Equates.asm"
-    if SMPS_EnablePWM
+    if SMPS_FEATURE_PWM
 	include "sound/Sonic-2-Clone-Driver-v2/SMPS2ASM - PWM Sample Equates.asm"
     endif
 
@@ -129,10 +129,10 @@ smpsHeaderVoiceUVB macro
 	if songStart<>*
 		fatal "Missing smpsHeaderStartSong"
 	endif
-	if SMPS_EnableUniversalVoiceBank
+	if SMPS_FEATURE_UNIVERSAL_VOICE_BANK
 		dc.w	$0000
 	else
-		fatal "Go set SMPS_EnableUniversalVoiceBank to 1."
+		fatal "The C++ code was not compiled with support for the universal voice bank!"
 	endif
 	endm
 
@@ -190,8 +190,8 @@ smpsHeaderPSG macro loc,pitch,vol,mod,voice
 	PSGPitchConvert pitch
 	dc.b	(vol)<<3
 	if (SourceDriver>=3)
-		if (MOMPASS==1) && (mod <> 0) && (~~SMPS_EnableModulationEnvelopes)
-			warning "PSG track header specifies a frequency modulation envelope (of \{mod}) but support for it is disabled - go set SMPS_EnableModulationEnvelopes to 1"
+		if (MOMPASS==1) && (mod <> 0) && (~~SMPS_FEATURE_MODULATION_ENVELOPES)
+			warning "PSG track header specifies a frequency modulation envelope (of \{mod}) but the C++ code was not compiled with support for it!"
 		endif
 		dc.b	mod
 	else
@@ -203,10 +203,10 @@ smpsHeaderPSG macro loc,pitch,vol,mod,voice
 
 ; Header - Set up PWM Channel
 smpsHeaderPWM macro loc,pitch,vol
-    if SMPS_EnablePWM
+    if SMPS_FEATURE_PWM
 	smpsHeaderFM loc,pitch,vol
     else
-	fatal "Go set SMPS_EnablePWM to 1."
+	fatal "The C++ code was not compiled with support for PWM samples!"
     endif
 	endm
 
@@ -328,19 +328,19 @@ smpsPSGAlterVol macro vol
 
 ; Clears pushing sound flag in S1
 smpsClearPush macro
-	if SMPS_PushSFXBehaviour
+	if SMPS_FEATURE_PUSH_SFX
 		dc.b	$FF,$1F
 	else
-		fatal "Go set SMPS_PushSFXBehaviour to 1."
+		fatal "The C++ code was not compiled with support for the block-pushing sound!"
 	endif
 	endm
 
 ; Stops special SFX (S1 only) and restarts overridden music track
 smpsStopSpecial macro
-	if SMPS_EnableSpecSFX
+	if SMPS_FEATURE_BACKGROUND_SFX
 		dc.b	$FF,$07
 	else
-		fatal "Go set SMPS_EnableSpecSFX to 1."
+		fatal "The C++ code was not compiled with support for background sounds!"
 	endif
 	endm
 
@@ -362,10 +362,10 @@ smpsModSet macro wait,speed,change,step
 ; Turn on Modulation
 smpsModOn macro type
 	if "type"<>""
-		if SMPS_EnableModulationEnvelopes
+		if SMPS_FEATURE_MODULATION_ENVELOPES
 			dc.b	$FF,$22,type
 		else
-			fatal "Go set SMPS_EnableModulationEnvelopes to 1"
+			fatal "The C++ code was not compiled with support for modulation envelopes!"
 		endif
 	else
 		dc.b	$FF,$0F
@@ -438,20 +438,20 @@ smpsSetNote macro val
 
 ; Set Modulation
 smpsModChange macro val
-	if SMPS_EnableModulationEnvelopes
+	if SMPS_FEATURE_MODULATION_ENVELOPES
 		dc.b	$FF,$22,val
 	else
-		fatal "Go set SMPS_EnableModulationEnvelopes to 1"
+		fatal "The C++ code was not compiled with support for modulation envelopes!"
 	endif
 	endm
 
 ; FCxxxx - Jump to xxxx
 smpsContinuousLoop macro loc
-	if SMPS_EnableContSFX
+	if SMPS_FEATURE_CONTINUOUS_SFX
 		dc.b	$FF,$1E
 		dc.w	loc-(*+1)
 	else
-		fatal "You're using a Continuous SFX, but don't have SMPS_EnableContSFX set"
+		fatal "You're using a Continuous SFX, but the C++ code was not compiled with support for continuous sounds!"
 	endif
 	endm
 

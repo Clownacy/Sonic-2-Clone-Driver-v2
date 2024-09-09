@@ -129,12 +129,7 @@ SMPS_Unpause macro
 ; update sound driver
 ; ---------------------------------------------------------------------------
 SMPS_UpdateSoundDriver macro
-	move	#$2300,sr					; enable interrupts (we can accept horizontal interrupts from now on)
-	bset	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).w	; set "SMPS running flag"
-	bne.s	.skip						; if it was set already, don't call another instance of SMPS
 	jsr	(SMPS_UpdateDriver).l 				; update Sonic 2 Clone Driver v2
-	bclr	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).w	; reset "SMPS running flag"
-.skip:
 	endm
 
 ; ---------------------------------------------------------------------------
