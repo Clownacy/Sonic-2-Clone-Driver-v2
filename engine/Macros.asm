@@ -149,4 +149,4 @@ SMPS_RAM_even macro
 ; ---------------------------------------------------------------------------
 ; helper for sound IDs
 ; ---------------------------------------------------------------------------
-SMPS_id function ptr,((ptr-offset)/ptrsize+idstart)
+SMPS_id function ptr,((ptr-SMPS_offset)/SMPS_ptrsize+SMPS_idstart)

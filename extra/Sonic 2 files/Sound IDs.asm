@@ -18,9 +18,9 @@ SndID_SegaSound =		DACID__First+dSega-$81
 
 
 ; Music IDs
-offset :=	MusicIndex
-ptrsize :=	6
-idstart :=	FlgID__End
+SMPS_offset :=	MusicIndex
+SMPS_ptrsize :=	6
+SMPS_idstart :=	FlgID__End
 ; $00 is reserved for silence
 
 MusID__First = idstart
@@ -59,9 +59,9 @@ MusID__End =			SMPS_id(ptr_musend)	; 20
 
 
 ; Sound IDs
-offset :=       SoundIndex
-ptrsize :=      6
-idstart :=      MusID__End
+SMPS_offset :=       SoundIndex
+SMPS_ptrsize :=      6
+SMPS_idstart :=      MusID__End
 
 SndID__First                    = idstart
 SndID_Jump =                    SMPS_id(ptr_sndA0)   ; 80
@@ -149,18 +149,18 @@ SndID__End =                    SMPS_id(ptr_sndend)  ; D1
 
 
 ; Special sound effects
-offset :=	SpecSoundIndex
-ptrsize :=	6
-idstart :=	SndID__End
+SMPS_offset :=	SpecSoundIndex
+SMPS_ptrsize :=	6
+SMPS_idstart :=	SndID__End
 
 SpecID__First = idstart
 SpecID__End =		SMPS_id(ptr_specend)
 
 
 ; DAC IDs
-offset :=       DACMetadataTable
-ptrsize :=      5
-idstart :=      SpecID__End
+SMPS_offset :=       DACMetadataTable
+SMPS_ptrsize :=      5
+SMPS_idstart :=      SpecID__End
 
 DACID__First =                  idstart
 DACID__End =                    SMPS_id(ptr_dacend)

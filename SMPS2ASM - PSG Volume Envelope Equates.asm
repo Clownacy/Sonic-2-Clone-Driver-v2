@@ -1,7 +1,7 @@
 ; PSG volume envelope equates
-offset :=	PSG_Index
-ptrsize :=	4
-idstart :=	1
+SMPS_offset :=	PSG_Index
+SMPS_ptrsize :=	4
+SMPS_idstart :=	1
 
 	if SMPS_S1PSGEnvelopes||SMPS_S2PSGEnvelopes
 ; S1/S2
