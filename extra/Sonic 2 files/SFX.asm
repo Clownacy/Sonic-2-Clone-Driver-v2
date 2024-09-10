@@ -98,165 +98,165 @@ ptr_sndend
 ; ---------------------------------------------------------------------------
 ; SFX data
 ; ---------------------------------------------------------------------------
-SoundA0:	include	"sound/SFX/A0 - Jump.asm"
+SoundA0:	include	"sound/sfx/A0 - Jump.asm"
 		even
-SoundA1:	include	"sound/SFX/A1 - Checkpoint.asm"
+SoundA1:	include	"sound/sfx/A1 - Checkpoint.asm"
 		even
-SoundA2:	include	"sound/SFX/A2 - Spike Switch.asm"
+SoundA2:	include	"sound/sfx/A2 - Spike Switch.asm"
 		even
-SoundA3:	include	"sound/SFX/A3 - Hurt.asm"
+SoundA3:	include	"sound/sfx/A3 - Hurt.asm"
 		even
-SoundA4:	include	"sound/SFX/A4 - Skidding.asm"
+SoundA4:	include	"sound/sfx/A4 - Skidding.asm"
 		even
-SoundA5:	include	"sound/SFX/A5 - Block Push.asm"
+SoundA5:	include	"sound/sfx/A5 - Block Push.asm"
 		even
-SoundA6:	include	"sound/SFX/A6 - Hurt by Spikes.asm"
+SoundA6:	include	"sound/sfx/A6 - Hurt by Spikes.asm"
 		even
-SoundA7:	include	"sound/SFX/A7 - Sparkle.asm"
+SoundA7:	include	"sound/sfx/A7 - Sparkle.asm"
 		even
-SoundA8:	include	"sound/SFX/A8 - Beep.asm"
+SoundA8:	include	"sound/sfx/A8 - Beep.asm"
 		even
-SoundA9:	include	"sound/SFX/A9 - Special Stage Item (Unused).asm"
+SoundA9:	include	"sound/sfx/A9 - Special Stage Item (Unused).asm"
 		even
-SoundAA:	include	"sound/SFX/AA - Splash.asm"
+SoundAA:	include	"sound/sfx/AA - Splash.asm"
 		even
-SoundAB:	include	"sound/SFX/AB - Swish.asm"
+SoundAB:	include	"sound/sfx/AB - Swish.asm"
 		even
-SoundAC:	include	"sound/SFX/AC - Boss Hit.asm"
+SoundAC:	include	"sound/sfx/AC - Boss Hit.asm"
 		even
-SoundAD:	include	"sound/SFX/AD - Inhaling Bubble.asm"
+SoundAD:	include	"sound/sfx/AD - Inhaling Bubble.asm"
 		even
-SoundAE:	include	"sound/SFX/AE - Lava Ball.asm"
+SoundAE:	include	"sound/sfx/AE - Lava Ball.asm"
 		even
-SoundAF:	include	"sound/SFX/AF - Shield.asm"
+SoundAF:	include	"sound/sfx/AF - Shield.asm"
 		even
-SoundB0:	include	"sound/SFX/B0 - Laser Beam.asm"
+SoundB0:	include	"sound/sfx/B0 - Laser Beam.asm"
 		even
-SoundB1:	include	"sound/SFX/B1 - Electricity (Unused).asm"
+SoundB1:	include	"sound/sfx/B1 - Electricity (Unused).asm"
 		even
-SoundB2:	include	"sound/SFX/B2 - Drown.asm"
+SoundB2:	include	"sound/sfx/B2 - Drown.asm"
 		even
-SoundB3:	include	"sound/SFX/B3 - Fire Burn.asm"
+SoundB3:	include	"sound/sfx/B3 - Fire Burn.asm"
 		even
-SoundB4:	include	"sound/SFX/B4 - Bumper.asm"
+SoundB4:	include	"sound/sfx/B4 - Bumper.asm"
 		even
-SoundB5:	include	"sound/SFX/B5 - Ring.asm"
+SoundB5:	include	"sound/sfx/B5 - Ring.asm"
 		even
-SoundB6:	include	"sound/SFX/B6 - Spikes Move.asm"
+SoundB6:	include	"sound/sfx/B6 - Spikes Move.asm"
 		even
-SoundB7:	include	"sound/SFX/B7 - Rumbling.asm"
+SoundB7:	include	"sound/sfx/B7 - Rumbling.asm"
 		even
-SoundB8:	include	"sound/SFX/B8 - Unknown (Unused).asm"
+SoundB8:	include	"sound/sfx/B8 - Unknown (Unused).asm"
 		even
-SoundB9:	include	"sound/SFX/B9 - Smash.asm"
+SoundB9:	include	"sound/sfx/B9 - Smash.asm"
 		even
-SoundBA:	include	"sound/SFX/BA - Special Stage Glass (Unused).asm"
+SoundBA:	include	"sound/sfx/BA - Special Stage Glass (Unused).asm"
 		even
-SoundBB:	include	"sound/SFX/BB - Door Slam.asm"
+SoundBB:	include	"sound/sfx/BB - Door Slam.asm"
 		even
-SoundBC:	include	"sound/SFX/BC - Spin Dash Release.asm"
+SoundBC:	include	"sound/sfx/BC - Spin Dash Release.asm"
 		even
-SoundBD:	include	"sound/SFX/BD - Hammer.asm"
+SoundBD:	include	"sound/sfx/BD - Hammer.asm"
 		even
-SoundBE:	include	"sound/SFX/BE - Roll.asm"
+SoundBE:	include	"sound/sfx/BE - Roll.asm"
 		even
-SoundBF:	include	"sound/SFX/BF - Continue Jingle.asm"
+SoundBF:	include	"sound/sfx/BF - Continue Jingle.asm"
 		even
-SoundC0:	include	"sound/SFX/C0 - Casino Bonus.asm"
+SoundC0:	include	"sound/sfx/C0 - Casino Bonus.asm"
 		even
-SoundC1:	include	"sound/SFX/C1 - Explosion.asm"
+SoundC1:	include	"sound/sfx/C1 - Explosion.asm"
 		even
-SoundC2:	include	"sound/SFX/C2 - Water Warning.asm"
+SoundC2:	include	"sound/sfx/C2 - Water Warning.asm"
 		even
-SoundC3:	include	"sound/SFX/C3 - Enter Giant Ring (Unused).asm"
+SoundC3:	include	"sound/sfx/C3 - Enter Giant Ring (Unused).asm"
 		even
-SoundC4:	include	"sound/SFX/C4 - Boss Explosion.asm"
+SoundC4:	include	"sound/sfx/C4 - Boss Explosion.asm"
 		even
-SoundC5:	include	"sound/SFX/C5 - Tally End.asm"
+SoundC5:	include	"sound/sfx/C5 - Tally End.asm"
 		even
-SoundC6:	include	"sound/SFX/C6 - Ring Spill.asm"
+SoundC6:	include	"sound/sfx/C6 - Ring Spill.asm"
 		even
-SoundC7:	include	"sound/SFX/C7 - Chain Rise (Unused).asm"
+SoundC7:	include	"sound/sfx/C7 - Chain Rise (Unused).asm"
 		even
-SoundC8:	include	"sound/SFX/C8 - Flamethrower.asm"
+SoundC8:	include	"sound/sfx/C8 - Flamethrower.asm"
 		even
-SoundC9:	include	"sound/SFX/C9 - Hidden Bonus (Unused).asm"
+SoundC9:	include	"sound/sfx/C9 - Hidden Bonus (Unused).asm"
 		even
-SoundCA:	include	"sound/SFX/CA - Special Stage Entry.asm"
+SoundCA:	include	"sound/sfx/CA - Special Stage Entry.asm"
 		even
-SoundCB:	include	"sound/SFX/CB - Slow Smash.asm"
+SoundCB:	include	"sound/sfx/CB - Slow Smash.asm"
 		even
-SoundCC:	include	"sound/SFX/CC - Spring.asm"
+SoundCC:	include	"sound/sfx/CC - Spring.asm"
 		even
-SoundCD:	include	"sound/SFX/CD - Switch.asm"
+SoundCD:	include	"sound/sfx/CD - Switch.asm"
 		even
-SoundCE:	include	"sound/SFX/CE - Ring Left Speaker.asm"
+SoundCE:	include	"sound/sfx/CE - Ring Left Speaker.asm"
 		even
-SoundCF:	include	"sound/SFX/CF - Signpost.asm"
+SoundCF:	include	"sound/sfx/CF - Signpost.asm"
 		even
-SoundD0:	include	"sound/SFX/D0 - CNZ Boss Zap.asm"
+SoundD0:	include	"sound/sfx/D0 - CNZ Boss Zap.asm"
 		even
-SoundD1:	include	"sound/SFX/D1 - Unknown (Unused).asm"
+SoundD1:	include	"sound/sfx/D1 - Unknown (Unused).asm"
 		even
-SoundD2:	include	"sound/SFX/D2 - Unknown (Unused).asm"
+SoundD2:	include	"sound/sfx/D2 - Unknown (Unused).asm"
 		even
-SoundD3:	include	"sound/SFX/D3 - Signpost 2P.asm"
+SoundD3:	include	"sound/sfx/D3 - Signpost 2P.asm"
 		even
-SoundD4:	include	"sound/SFX/D4 - OOZ Lid Pop.asm"
+SoundD4:	include	"sound/sfx/D4 - OOZ Lid Pop.asm"
 		even
-SoundD5:	include	"sound/SFX/D5 - Sliding Spike.asm"
+SoundD5:	include	"sound/sfx/D5 - Sliding Spike.asm"
 		even
-SoundD6:	include	"sound/SFX/D6 - CNZ Elevator.asm"
+SoundD6:	include	"sound/sfx/D6 - CNZ Elevator.asm"
 		even
-SoundD7:	include	"sound/SFX/D7 - Platform Knock.asm"
+SoundD7:	include	"sound/sfx/D7 - Platform Knock.asm"
 		even
-SoundD8:	include	"sound/SFX/D8 - Bonus Bumper.asm"
+SoundD8:	include	"sound/sfx/D8 - Bonus Bumper.asm"
 		even
-SoundD9:	include	"sound/SFX/D9 - Large Bumper.asm"
+SoundD9:	include	"sound/sfx/D9 - Large Bumper.asm"
 		even
-SoundDA:	include	"sound/SFX/DA - Gloop.asm"
+SoundDA:	include	"sound/sfx/DA - Gloop.asm"
 		even
-SoundDB:	include	"sound/SFX/DB - Pre-Arrow Firing.asm"
+SoundDB:	include	"sound/sfx/DB - Pre-Arrow Firing.asm"
 		even
-SoundDC:	include	"sound/SFX/DC - Fire.asm"
+SoundDC:	include	"sound/sfx/DC - Fire.asm"
 		even
-SoundDD:	include	"sound/SFX/DD - Arrow Stick.asm"
+SoundDD:	include	"sound/sfx/DD - Arrow Stick.asm"
 		even
-SoundDE:	include	"sound/SFX/DE - Helicopter.asm"
+SoundDE:	include	"sound/sfx/DE - Helicopter.asm"
 		even
-SoundDF:	include	"sound/SFX/DF - Super Transform.asm"
+SoundDF:	include	"sound/sfx/DF - Super Transform.asm"
 		even
-SoundE0:	include	"sound/SFX/E0 - Spin Dash Rev.asm"
+SoundE0:	include	"sound/sfx/E0 - Spin Dash Rev.asm"
 		even
-SoundE1:	include	"sound/SFX/E1 - Rumbling 2.asm"
+SoundE1:	include	"sound/sfx/E1 - Rumbling 2.asm"
 		even
-SoundE2:	include	"sound/SFX/E2 - CNZ Launch.asm"
+SoundE2:	include	"sound/sfx/E2 - CNZ Launch.asm"
 		even
-SoundE3:	include	"sound/SFX/E3 - Flipper.asm"
+SoundE3:	include	"sound/sfx/E3 - Flipper.asm"
 		even
-SoundE4:	include	"sound/SFX/E4 - HTZ Lift Click.asm"
+SoundE4:	include	"sound/sfx/E4 - HTZ Lift Click.asm"
 		even
-SoundE5:	include	"sound/SFX/E5 - Leaves.asm"
+SoundE5:	include	"sound/sfx/E5 - Leaves.asm"
 		even
-SoundE6:	include	"sound/SFX/E6 - Mega Mack Drop.asm"
+SoundE6:	include	"sound/sfx/E6 - Mega Mack Drop.asm"
 		even
-SoundE7:	include	"sound/SFX/E7 - Drawbridge Move.asm"
+SoundE7:	include	"sound/sfx/E7 - Drawbridge Move.asm"
 		even
-SoundE8:	include	"sound/SFX/E8 - Quick Door Slam.asm"
+SoundE8:	include	"sound/sfx/E8 - Quick Door Slam.asm"
 		even
-SoundE9:	include	"sound/SFX/E9 - Drawbridge Down.asm"
+SoundE9:	include	"sound/sfx/E9 - Drawbridge Down.asm"
 		even
-SoundEA:	include	"sound/SFX/EA - Laser Burst.asm"
+SoundEA:	include	"sound/sfx/EA - Laser Burst.asm"
 		even
-SoundEB:	include	"sound/SFX/EB - Scatter.asm"
+SoundEB:	include	"sound/sfx/EB - Scatter.asm"
 		even
-SoundEC:	include	"sound/SFX/EC - Teleport.asm"
+SoundEC:	include	"sound/sfx/EC - Teleport.asm"
 		even
-SoundED:	include	"sound/SFX/ED - Error.asm"
+SoundED:	include	"sound/sfx/ED - Error.asm"
 		even
-SoundEE:	include	"sound/SFX/EE - Mecha Sonic Buzz.asm"
+SoundEE:	include	"sound/sfx/EE - Mecha Sonic Buzz.asm"
 		even
-SoundEF:	include	"sound/SFX/EF - Large Laser.asm"
+SoundEF:	include	"sound/sfx/EF - Large Laser.asm"
 		even
-SoundF0:	include	"sound/SFX/F0 - Oil Slide.asm"
+SoundF0:	include	"sound/sfx/F0 - Oil Slide.asm"
 		even

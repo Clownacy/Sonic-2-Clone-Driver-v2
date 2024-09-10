@@ -326,6 +326,10 @@ smpsPSGAlterVol macro vol
 	dc.b	$FF,$0C,(((vol)<<3)&$7F)|((vol)&$80)
 	endm
 
+smpsPSGAlterVolS2 macro vol
+	smpsPSGAlterVol vol
+	endm
+
 ; Clears pushing sound flag in S1
 smpsClearPush macro
 	if SMPS_FEATURE_PUSH_SFX

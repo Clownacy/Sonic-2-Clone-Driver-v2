@@ -41,3 +41,7 @@ PlaySoundLocal		= SMPS_QueueSound2Local
 PlaySound		= SMPS_QueueSound2
 PlaySound2		= SMPS_QueueSound3
 PlaySoundStereo		= SMPS_QueueSound3
+
+	if ~~DEFINED(FixMusicAndSFXDataBugs)
+FixMusicAndSFXDataBugs	= 1 ; Needs to be set to fix compatibility issues with some songs and sounds.
+	endif

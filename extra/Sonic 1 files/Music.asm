@@ -10,7 +10,7 @@ ptr_mus84:	SMPS_MUSIC_METADATA	Music84, s1TempotoS3($26), 0	; SLZ
 ptr_mus85:	SMPS_MUSIC_METADATA	Music85, s1TempotoS3($15), 0	; SYZ
 ptr_mus86:	SMPS_MUSIC_METADATA	Music86, s1TempotoS3($08), 0	; SBZ
 ptr_mus87:	SMPS_MUSIC_METADATA	Music87, s1TempotoS3($FF), 0	; Invincible
-ptr_mus88:	SMPS_MUSIC_METADATA	Music88, s1TempotoS3($05), 0	; Extra Life
+ptr_mus88:	SMPS_MUSIC_METADATA	Music88, s1TempotoS3($05), SMPS_MUSIC_METADATA_EXTRA_LIFE_JINGLE	; Extra Life
 ptr_mus89:	SMPS_MUSIC_METADATA	Music89, s1TempotoS3($08), 0	; Special Stage
 ptr_mus8A:	SMPS_MUSIC_METADATA	Music8A, s1TempotoS3($05), 0	; Title Screen
 ptr_mus8B:	SMPS_MUSIC_METADATA	Music8B, s1TempotoS3($05), SMPS_MUSIC_METADATA_FORCE_PAL_SPEED	; Ending
