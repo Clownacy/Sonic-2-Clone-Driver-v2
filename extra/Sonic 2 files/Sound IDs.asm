@@ -4,7 +4,6 @@
 ; $00 is reserved for silence
 
 ; Sound command IDs
-FlgID__First = MusID_Stop
 MusID_Stop =			1
 MusID_StopSFX =			2
 MusID_StopSpecSFX =		3
@@ -12,13 +11,14 @@ MusID_StopDACSFX =		4
 MusID_FadeOut =			5
 MusID_SpeedUp =			6
 MusID_SlowDown =		7
+FlgID__First =			MusID_Stop
 FlgID__End =			MusID_SlowDown + 1
 
 
 ; Music IDs
 SMPS_offset :=	MusicIndex
 SMPS_ptrsize :=	6
-SMPS_idstart :=	FlgID__End
+SMPS_idstart :=	$10
 ; $00 is reserved for silence
 
 MusID__First = SMPS_idstart
@@ -59,7 +59,7 @@ MusID__End =			SMPS_id(ptr_musend)	; 20
 ; Sound IDs
 SMPS_offset :=	SoundIndex
 SMPS_ptrsize :=	6
-SMPS_idstart :=	MusID__End
+SMPS_idstart :=	$30
 
 SndID__First                    = SMPS_idstart
 SndID_Jump =                    SMPS_id(ptr_sndA0)   ; 80
@@ -149,7 +149,7 @@ SndID__End =                    SMPS_id(ptr_sndend)  ; D1
 ; Special sound effects
 SMPS_offset :=	SpecSoundIndex
 SMPS_ptrsize :=	6
-SMPS_idstart :=	SndID__End
+SMPS_idstart :=	$90
 
 SpecID__First = SMPS_idstart
 SpecID__End =                   SMPS_id(ptr_specend)
@@ -158,7 +158,7 @@ SpecID__End =                   SMPS_id(ptr_specend)
 ; DAC IDs
 SMPS_offset :=	DACMetadataTable
 SMPS_ptrsize :=	5
-SMPS_idstart :=	SpecID__End
+SMPS_idstart :=	$90
 
 DACID__First = SMPS_idstart
 SndID_SegaSound =		SMPS_id(ptr_dacE0)
