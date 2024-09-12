@@ -83,6 +83,9 @@ SndID_Ring		= sfx_Ring
 SndID_RingLeft		= sfx_RingLeft
 ;	| ID of your alternate ring SFX
 ;
-MusID_StopDACSFX	= dac_Fade
+MusID_StopDACSFX	= dacsfx_Fade
 ;	| ID of the command to stop DAC SFX
+;
+SndID_SegaSound		= sfx_Sega
+;	| ID of your 'Sega' chant DAC SFX
 ;

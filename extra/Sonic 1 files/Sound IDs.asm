@@ -4,7 +4,6 @@
 ; $00 is reserved for silence
 
 ; Sound commands
-flg__First = bgm_Stop
 bgm_Stop =		1
 sfx_Fade =		2
 specsfx_Fade =		3
@@ -12,13 +11,14 @@ dacsfx_Fade =		4
 bgm_Fade =		5
 bgm_Speedup =		6
 bgm_Slowdown =		7
+flg__First =		bgm_Stop
 flg__Last =		bgm_Slowdown
 
 
 ; Background music
 SMPS_offset :=	MusicIndex
 SMPS_ptrsize :=	6
-SMPS_idstart :=	flg__Last+1
+SMPS_idstart :=	$10
 
 bgm__First = SMPS_idstart
 bgm_GHZ =		SMPS_id(ptr_mus81)
@@ -46,7 +46,7 @@ bgm__Last =		SMPS_id(ptr_musend)-1
 ; Sound effects
 SMPS_offset :=	SoundIndex
 SMPS_ptrsize :=	6
-SMPS_idstart :=	bgm__Last+1
+SMPS_idstart :=	$30
 
 sfx__First = SMPS_idstart
 sfx_Jump =		SMPS_id(ptr_sndA0)
@@ -103,7 +103,7 @@ sfx__Last =		SMPS_id(ptr_sndend)-1
 ; Special sound effects
 SMPS_offset :=	SpecSoundIndex
 SMPS_ptrsize :=	6
-SMPS_idstart :=	sfx__Last+1
+SMPS_idstart :=	$60
 
 spec__First = SMPS_idstart
 sfx_Waterfall =		SMPS_id(ptr_sndD0)
@@ -111,9 +111,9 @@ spec__Last =		SMPS_id(ptr_specend)-1
 
 
 ; DAC sound effects
-SMPS_offset :=       DACMetadataTable
-SMPS_ptrsize :=      5
-SMPS_idstart :=      spec__Last+1
+SMPS_offset :=  DACMetadataTable
+SMPS_ptrsize := 5
+SMPS_idstart := $70
 
 dac__First = SMPS_idstart
 sfx_Sega =		SMPS_id(ptr_dacE0)

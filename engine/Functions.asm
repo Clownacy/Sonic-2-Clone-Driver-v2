@@ -27,6 +27,26 @@ SMPS_DoRingFilter:
 	rts
     endif
 
+    if SMPS_IdlingSegaSound
+SMPS_DoSegaFilter:
+	cmpi.w	#SndID_SegaSound,d0
+	bne.s	.not_sega
+	; Waste cycles until the Sega sound finishes playing
+	move.w	#$11,d1
+; loc_71FC0:
+.busyloop_outer:
+	move.w	#-1,d0
+; loc_71FC4:
+.busyloop:
+	nop
+	dbf	d0,.busyloop
+
+	dbf	d1,.busyloop_outer
+.not_sega:
+
+	rts
+    endif
+
 ; ---------------------------------------------------------------------------
 ; Queue sound for play (queue 1)
 ; ---------------------------------------------------------------------------
@@ -45,10 +65,18 @@ SMPS_QueueSound1_Extended:
 	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+0).w
 	bne.s	+
 	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+0).w
+    if SMPS_IdlingSegaSound
+	bra.s	SMPS_DoSegaFilter
+    else
 	rts
+    endif
 +
 	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+6).w
+    if SMPS_IdlingSegaSound
+	bra.s	SMPS_DoSegaFilter
+    else
 	rts
+    endif
 ; End of function SMPS_QueueSound1Word
 
 ; ---------------------------------------------------------------------------
@@ -79,6 +107,9 @@ SMPS_QueueSound2_Extended:
 	bsr.s	SMPS_DoRingFilter
     endif
 	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+2).w
+    if SMPS_IdlingSegaSound
+	bra.s	SMPS_DoSegaFilter
+    endif
 +	rts
 ; End of function SMPS_QueueSound2Word
 
@@ -98,7 +129,11 @@ SMPS_QueueSound3_Extended:
 	bsr.s	SMPS_DoRingFilter
     endif
 	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+4).w
+    if SMPS_IdlingSegaSound
+	bra.s	SMPS_DoSegaFilter
+    else
 	rts
+    endif
 ; End of function SMPS_QueueSound3Word
 
 ; ---------------------------------------------------------------------------
