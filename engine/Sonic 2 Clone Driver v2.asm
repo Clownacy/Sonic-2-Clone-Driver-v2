@@ -33,6 +33,14 @@ SMPS_Table:
 
 ; sub_71B4C: UpdateMusic:
 SMPS_UpdateDriver:
+	move	#$2300,sr					; enable interrupts (we can accept horizontal interrupts from now on)
+	bset	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).w	; set "SMPS running flag"
+	bne.s	.skip						; if it was set already, don't call another instance of SMPS
+	bsr.s	.inner
+	bclr	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).w	; reset "SMPS running flag"
+.skip:
+	rts
+.inner:
 	lea	SMPS_Table(pc),a5
 	binclude "c++/core.bin"
 	even

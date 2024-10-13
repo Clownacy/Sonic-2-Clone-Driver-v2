@@ -3,15 +3,7 @@
 ; ---------------------------------------------------------------------------
 ; SoundDriverLoad: JmpTo_SoundDriverLoad  SMPS_LoadDACDriver:
 SMPS_Setup:
-	move	#$2300,sr					; enable interrupts (we can accept horizontal interrupts from now on)
 	lea	(Clone_Driver_RAM).w,a5
-	bset	#SMPS_FLAGS_ALREADY_RUNNING,SMPS_RAM.flags(a5)	; set "SMPS running flag"
-	bne.s	.skip						; if it was set already, don't call another instance of SMPS
-	bsr.s	.inner
-	bclr	#SMPS_FLAGS_ALREADY_RUNNING,SMPS_RAM.flags(a5)	; reset "SMPS running flag"
-.skip:
-	rts
-.inner:
 	binclude "c++/initialise.bin"
 	even
 ; End of function SMPS_LoadDACDriver
