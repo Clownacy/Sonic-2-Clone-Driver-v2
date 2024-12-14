@@ -365,6 +365,11 @@ FMDoNext:
 ; ===========================================================================
 ; loc_71D1A:
 .gotduration:
+	tst.w	SMPS_Track.Freq(a5)
+	bne.s	.notrest
+	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
+
+.notrest:
 	bsr.w	SetDuration
 	bra.w	FinishTrackUpdate
 ; End of function FMDoNext
@@ -2348,6 +2353,11 @@ PSGDoNext:
 ; ===========================================================================
 ; loc_728A4:
 .gotduration:
+	cmpi.w	#-1,SMPS_Track.Freq(a5)
+	bne.s	.notrest
+	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
+
+.notrest:
 	bsr.w	SetDuration
 	bra.w	FinishTrackUpdate
 ; End of function PSGDoNext
