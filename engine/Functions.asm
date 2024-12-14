@@ -24,6 +24,7 @@ SMPS_DoSegaFilter:
 	cmpi.w	#SndID_SegaSound,d0
 	bne.s	.not_sega
 	; Waste cycles until the Sega sound finishes playing
+	movem.l	d0/d1,-(sp)
 	move.w	#$11,d1
 ; loc_71FC0:
 .busyloop_outer:
@@ -34,6 +35,8 @@ SMPS_DoSegaFilter:
 	dbf	d0,.busyloop
 
 	dbf	d1,.busyloop_outer
+
+	movem.l	(sp)+,d0/d1
 .not_sega:
 
 	rts
