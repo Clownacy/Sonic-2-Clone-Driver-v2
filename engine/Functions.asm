@@ -40,93 +40,74 @@ SMPS_DoSegaFilter:
     endif
 
 ; ---------------------------------------------------------------------------
-; Queue sound for play (queue 1)
+; Queue sound for play
+; and optionally only do so if object is on-screen (Sonic engine feature)
 ; ---------------------------------------------------------------------------
-; sub_135E: PlayMusic:
+    if SMPS_EnablePlaySoundLocal
+SMPS_QueueSound2Local:
+	tst.b	render_flags(a0)
+	bpl.s	SMPS_QueueSound3.return
+    endif
 SMPS_QueueSound1:
+SMPS_QueueSound2:
+SMPS_QueueSound3:
 	move.w	d0,-(sp)
 	andi.w	#$FF,d0
 	bsr.s	SMPS_QueueSound1_Extended
 	move.w	(sp)+,d0
+.return:
 	rts
 
+    if SMPS_EnablePlaySoundLocal
+SMPS_QueueSound2Local_Extended:
+	tst.b	render_flags(a0)
+	bpl.s	SMPS_QueueSound3.return
+    endif
 SMPS_QueueSound1_Extended:
+SMPS_QueueSound2_Extended:
+SMPS_QueueSound3_Extended:
     if SMPS_RingSFXBehaviour
 	bsr.s	SMPS_DoRingFilter
     endif
 	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+0).w
-	bne.s	+
+	beq.s	.slot0
+	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+2).w
+	beq.s	.slot1
+	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+4).w
+	beq.s	.slot2
+	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+6).w
+	beq.s	.slot3
+	rts
+
+.slot0:
 	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+0).w
     if SMPS_IdlingSegaSound
 	bra.s	SMPS_DoSegaFilter
     else
 	rts
     endif
-+
-	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+6).w
+.slot1:
+	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+2).w
     if SMPS_IdlingSegaSound
 	bra.s	SMPS_DoSegaFilter
     else
 	rts
     endif
-; End of function SMPS_QueueSound1Word
-
-; ---------------------------------------------------------------------------
-; Queue sound for play (queue 2)
-; and optionally only do so if object is on-screen (Sonic engine feature)
-; ---------------------------------------------------------------------------
-; sub_137C: PlaySoundLocal:
-    if SMPS_EnablePlaySoundLocal
-SMPS_QueueSound2Local:
-	tst.b	render_flags(a0)
-	bpl.s	+	; rts
-    endif
-; sub_1370: PlaySound:
-SMPS_QueueSound2:
-	move.w	d0,-(sp)
-	andi.w	#$FF,d0
-	bsr.s	SMPS_QueueSound2_Extended
-	move.w	(sp)+,d0
-	rts
-
-    if SMPS_EnablePlaySoundLocal
-SMPS_QueueSound2Local_Extended:
-	tst.b	render_flags(a0)
-	bpl.s	+	; rts
-    endif
-SMPS_QueueSound2_Extended:
-    if SMPS_RingSFXBehaviour
-	bsr.s	SMPS_DoRingFilter
-    endif
-	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+2).w
-    if SMPS_IdlingSegaSound
-	bra.s	SMPS_DoSegaFilter
-    endif
-+	rts
-; End of function SMPS_QueueSound2Word
-
-; ---------------------------------------------------------------------------
-; Queue sound for play (queue 3)
-; ---------------------------------------------------------------------------
-; sub_1376: PlaySoundStereo:
-SMPS_QueueSound3:
-	move.w	d0,-(sp)
-	andi.w	#$FF,d0
-	bsr.s	SMPS_QueueSound3_Extended
-	move.w	(sp)+,d0
-	rts
-
-SMPS_QueueSound3_Extended:
-    if SMPS_RingSFXBehaviour
-	bsr.s	SMPS_DoRingFilter
-    endif
+.slot2:
 	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+4).w
     if SMPS_IdlingSegaSound
 	bra.s	SMPS_DoSegaFilter
     else
 	rts
     endif
-; End of function SMPS_QueueSound3Word
+.slot3:
+	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+6).w
+    if SMPS_IdlingSegaSound
+	bra.s	SMPS_DoSegaFilter
+    else
+	rts
+    endif
+; End of function SMPS_QueueSound1_Extended
 
 ; ---------------------------------------------------------------------------
 ; Play a DAC sample
