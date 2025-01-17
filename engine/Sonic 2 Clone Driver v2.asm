@@ -311,7 +311,7 @@ FMUpdateTrack:
 	btst	#1,SMPS_Track.PlaybackControl(a5)	; If resting, return
 	bne.s	.locret
 	bsr.w	DoModulation
-	bsr.w	FMPrepareNote
+	bsr.w	FMPrepareNote	; 'bsr' is necessary in case this function alters the stack pointer
 	bra.w	FMNoteOn
 ; ===========================================================================
 ; loc_71CE0:
@@ -320,7 +320,7 @@ FMUpdateTrack:
 	bne.s	.locret
 	bsr.w	NoteTimeoutUpdate
 	bsr.w	DoModulation
-	bra.w	FMUpdateFreq
+	bsr.w	FMUpdateFreq	; 'bsr' is necessary in case this function alters the stack pointer
 .locret:
 	rts
 ; End of function FMUpdateTrack
@@ -2299,7 +2299,8 @@ PSGUpdateTrack:
 	bne.s	.locret
 	bsr.w	DoModulation
 	bsr.w	PSGDoNoteOn
-	bra.w	PSGDoVolFX
+	bsr.w	PSGDoVolFX	; 'bsr' is necessary in case this function alters the stack pointer
+	rts
 ; ===========================================================================
 ; loc_72866:
 .notegoing:
@@ -2308,7 +2309,7 @@ PSGUpdateTrack:
 	bsr.w	NoteTimeoutUpdate
 	bsr.w	PSGUpdateVolFX
 	bsr.w	DoModulation
-	bra.w	PSGUpdateFreq
+	bsr.w	PSGUpdateFreq	; 'bsr' is necessary in case this function alters the stack pointer
 .locret:
 	rts
 ; End of function PSGUpdateTrack
@@ -2547,7 +2548,7 @@ VolEnvHold:
 VolEnvOff:	; For compatibility with S3K
 	bset	#1,SMPS_Track.PlaybackControl(a5)	; Set 'track at rest' bit
 	; Do not return (I cannot find a single version of SMPS that includes this fix)
-	addq.w	#8,sp
+	addq.w	#4,sp
 ;	bra.s	PSGNoteOff
 
 ; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
