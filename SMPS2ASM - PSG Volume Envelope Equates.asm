@@ -92,7 +92,7 @@ sTone_19 = sTone_0C
 sTone_1B = sTone_0C
 	endif
 
-    if SMPS_KCPSGEnvelopes
+	if SMPS_KCPSGEnvelopes
 ; Knuckles' Chaotix
 KCVolEnv_01 =		SMPS_id(ptr_kcpsg01)
 KCVolEnv_02 =		SMPS_id(ptr_kcpsg02)
@@ -108,6 +108,30 @@ KCVolEnv_0B =		SMPS_id(ptr_kcpsg0B)
 KCVolEnv_0C =		SMPS_id(ptr_kcpsg0C)
 KCVolEnv_0D =		SMPS_id(ptr_kcpsg0D)
 KCVolEnv_0E =		SMPS_id(ptr_kcpsg0E)
+	endif
+
+	if SMPS_S28BitPSGEnvelopes
+s28BitTone_01 =		SMPS_id(ptr_s28bitpsg01)
+s28BitTone_02 =		SMPS_id(ptr_s28bitpsg02)
+s28BitTone_03 =		SMPS_id(ptr_s28bitpsg03)
+s28BitTone_04 =		SMPS_id(ptr_s28bitpsg04)
+s28BitTone_05 =		SMPS_id(ptr_s28bitpsg05)
+s28BitTone_06 =		SMPS_id(ptr_s28bitpsg06)
+s28BitTone_07 =		SMPS_id(ptr_s28bitpsg07)
+s28BitTone_08 =		SMPS_id(ptr_s28bitpsg08)
+s28BitTone_09 =		SMPS_id(ptr_s28bitpsg09)
+s28BitTone_0A =		SMPS_id(ptr_s28bitpsg0A)
+s28BitTone_0B =		SMPS_id(ptr_s28bitpsg0B)
+s28BitTone_0C =		SMPS_id(ptr_s28bitpsg0C)
+s28BitTone_0D =		SMPS_id(ptr_s28bitpsg0D)
+s28BitTone_0E =		SMPS_id(ptr_s28bitpsg0E)
+s28BitTone_0F =		SMPS_id(ptr_s28bitpsg0F)
+s28BitTone_10 =		SMPS_id(ptr_s28bitpsg10)
+s28BitTone_11 =		SMPS_id(ptr_s28bitpsg11)
+s28BitTone_12 =		SMPS_id(ptr_s28bitpsg12)
+s28BitTone_13 =		SMPS_id(ptr_s28bitpsg13)
+s28BitTone_14 =		SMPS_id(ptr_s28bitpsg14)
+s28BitTone_15 =		SMPS_id(ptr_s28bitpsg15)
 	endif
 
 	; Insert custom equates here

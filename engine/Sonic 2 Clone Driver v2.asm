@@ -19,10 +19,21 @@ SMPS_Table:
 	dc.l	DACMetadataTable
 	dc.w	DACID__First,DACID__End
 	dc.l	PSG_Index
+    if SMPS_FEATURE_PSG_NOISE_DRUMS
+	dc.l	PSGNoiseDrumIndex
+    endif
     if SMPS_FEATURE_UNIVERSAL_VOICE_BANK
 	dc.l	UniVoiceBank
     endif
 	dc.l	Clone_Driver_RAM
+
+PSGNoiseDrumIndex:
+	dc.b	s28BitTone_01, 2, $E4
+	dc.b	s28BitTone_03, 2, $E4
+	dc.b	s28BitTone_02, 2, $E5
+	dc.b	s28BitTone_03, 2, $E4
+	dc.b	s28BitTone_03, 3, $E6
+	dc.b	s28BitTone_04, 4, $E4
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to update music more than once per frame

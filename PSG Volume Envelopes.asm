@@ -93,6 +93,30 @@ ptr_kcpsg0D:	dc.l KC_PSG0D
 ptr_kcpsg0E:	dc.l KC_PSG0E
 	endif
 
+	if SMPS_S28BitPSGEnvelopes
+ptr_s28bitpsg01:	dc.l S28Bit_PSG01
+ptr_s28bitpsg02:	dc.l S28Bit_PSG02
+ptr_s28bitpsg03:	dc.l S28Bit_PSG03
+ptr_s28bitpsg04:	dc.l S28Bit_PSG04
+ptr_s28bitpsg05:	dc.l S28Bit_PSG05
+ptr_s28bitpsg06:	dc.l S28Bit_PSG06
+ptr_s28bitpsg07:	dc.l S28Bit_PSG07
+ptr_s28bitpsg08:	dc.l S28Bit_PSG08
+ptr_s28bitpsg09:	dc.l S28Bit_PSG09
+ptr_s28bitpsg0A:	dc.l S28Bit_PSG0A
+ptr_s28bitpsg0B:	dc.l S28Bit_PSG0B
+ptr_s28bitpsg0C:	dc.l S28Bit_PSG0C
+ptr_s28bitpsg0D:	dc.l S28Bit_PSG0D
+ptr_s28bitpsg0E:	dc.l S28Bit_PSG0E
+ptr_s28bitpsg0F:	dc.l S28Bit_PSG0F
+ptr_s28bitpsg10:	dc.l S28Bit_PSG10
+ptr_s28bitpsg11:	dc.l S28Bit_PSG11
+ptr_s28bitpsg12:	dc.l S28Bit_PSG12
+ptr_s28bitpsg13:	dc.l S28Bit_PSG13
+ptr_s28bitpsg14:	dc.l S28Bit_PSG14
+ptr_s28bitpsg15:	dc.l S28Bit_PSG15
+	endif
+
 	; Insert custom envelopes' addresses here
 
 ; ---------------------------------------------------------------------------
@@ -187,6 +211,30 @@ KC_PSG0B:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Knuckles' Chaotix/PSG B.bi
 KC_PSG0C:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Knuckles' Chaotix/PSG C.bin"
 KC_PSG0D:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Knuckles' Chaotix/PSG D.bin"
 KC_PSG0E:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Knuckles' Chaotix/PSG E.bin"
+	endif
+
+	if SMPS_S28BitPSGEnvelopes
+S28Bit_PSG01:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 1.bin"
+S28Bit_PSG02:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 2.bin"
+S28Bit_PSG03:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 3.bin"
+S28Bit_PSG04:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 4.bin"
+S28Bit_PSG05:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 5.bin"
+S28Bit_PSG06:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 6.bin"
+S28Bit_PSG07:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 7.bin"
+S28Bit_PSG08:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 8.bin"
+S28Bit_PSG09:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 9.bin"
+S28Bit_PSG0A:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG A.bin"
+S28Bit_PSG0B:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG B.bin"
+S28Bit_PSG0C:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG C.bin"
+S28Bit_PSG0D:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG D.bin"
+S28Bit_PSG0E:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG E.bin"
+S28Bit_PSG0F:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG F.bin"
+S28Bit_PSG10:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 10.bin"
+S28Bit_PSG11:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 11.bin"
+S28Bit_PSG12:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 12.bin"
+S28Bit_PSG13:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 13.bin"
+S28Bit_PSG14:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 14.bin"
+S28Bit_PSG15:	BINCLUDE	"sound/Sonic-2-Clone-Driver-v2/PSG/Sonic 2 (8-bit)/PSG 15.bin"
 	endif
 
 	; Insert custom envelopes here

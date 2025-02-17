@@ -29,6 +29,7 @@ SMPS_S3PSGEnvelopes	= 0
 SMPS_SKPSGEnvelopes	= 0
 SMPS_S3DPSGEnvelopes	= 0
 SMPS_KCPSGEnvelopes	= 0
+SMPS_S28BitPSGEnvelopes	= 0
 
 ; ---DISASM-DEPENDANT VARIABLES AND FUNCTIONS---
 SoundDriverLoad		= SMPS_Setup

@@ -133,3 +133,10 @@ dHey =				SMPS_id(ptr_dacDF)
 	endif
 
 dSega =				SMPS_id(ptr_dacE0)
+
+dNoise1 =			$81
+dNoise2 =			$82
+dNoise3 =			$83
+dNoise4 =			$84
+dNoise5 =			$85
+dNoise6 =			$86

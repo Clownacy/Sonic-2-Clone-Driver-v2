@@ -414,6 +414,10 @@ smpsCall macro loc
 	dc.b	$FF,$16
 	dc.w	loc-(*+2)
 	endm
+
+smpsPSGDrumAlterVol macro vol
+	dc.b	$FF,$23,vol
+	endm
 ; ---------------------------------------------------------------------------------------------
 ; Alter Volume
 smpsFMAlterVol macro val1
