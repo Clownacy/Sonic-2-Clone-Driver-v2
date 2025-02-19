@@ -28,12 +28,14 @@ SMPS_Table:
 	dc.l	Clone_Driver_RAM
 
 PSGNoiseDrumIndex:
+    if SMPS_S28BitPSGEnvelopes
 	dc.b	s28BitTone_01, 2, $E4
 	dc.b	s28BitTone_03, 2, $E4
 	dc.b	s28BitTone_02, 2, $E5
 	dc.b	s28BitTone_03, 2, $E4
 	dc.b	s28BitTone_03, 3, $E6
 	dc.b	s28BitTone_04, 4, $E4
+    endif
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to update music more than once per frame
