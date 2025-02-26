@@ -3,7 +3,7 @@
 ; ---------------------------------------------------------------------------
 ; SoundDriverLoad: JmpTo_SoundDriverLoad  SMPS_LoadDACDriver:
 SMPS_Setup:
-	lea	(Clone_Driver_RAM).w,a5
+	lea	(Clone_Driver_RAM).l,a5
 	binclude "c++/initialise.bin"
 	even
 ; End of function SMPS_LoadDACDriver
@@ -12,7 +12,7 @@ SMPS_Setup:
 SMPS_DoRingFilter:
 	cmpi.w	#SndID_Ring,d0
 	bne.s	+
-	bchg	#SMPS_FLAGS_RING_TOGGLE,(Clone_Driver_RAM+SMPS_RAM.flags).w
+	bchg	#SMPS_FLAGS_RING_TOGGLE,(Clone_Driver_RAM+SMPS_RAM.flags).l
 	bne.s	+
 	move.w	#SndID_RingLeft,d0
 +
@@ -72,39 +72,39 @@ SMPS_QueueSound3_Extended:
     if SMPS_RingSFXBehaviour
 	bsr.s	SMPS_DoRingFilter
     endif
-	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+0).w
+	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+0).l
 	beq.s	.slot0
-	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+2).w
+	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+2).l
 	beq.s	.slot1
-	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+4).w
+	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+4).l
 	beq.s	.slot2
-	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+6).w
+	tst.w	(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+6).l
 	beq.s	.slot3
 	rts
 
 .slot0:
-	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+0).w
+	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+0).l
     if SMPS_IdlingSegaSound
 	bra.s	SMPS_DoSegaFilter
     else
 	rts
     endif
 .slot1:
-	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+2).w
+	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+2).l
     if SMPS_IdlingSegaSound
 	bra.s	SMPS_DoSegaFilter
     else
 	rts
     endif
 .slot2:
-	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+4).w
+	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+4).l
     if SMPS_IdlingSegaSound
 	bra.s	SMPS_DoSegaFilter
     else
 	rts
     endif
 .slot3:
-	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+6).w
+	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+6).l
     if SMPS_IdlingSegaSound
 	bra.s	SMPS_DoSegaFilter
     else
@@ -166,6 +166,7 @@ SMPS_PlayPWMSample:
 ; d0 = X
 ; ---------------------------------------------------------------------------
 SMPS_ChangeMusicTempo:
-	move.b	d0,(Clone_Driver_RAM+SMPS_TEMPO_OFFSET).w
+	move.b	d0,(Clone_Driver_RAM+SMPS_TEMPO_OFFSET).l
 	rts
 ; End of function SMPS_ChangeMusicTempo
+

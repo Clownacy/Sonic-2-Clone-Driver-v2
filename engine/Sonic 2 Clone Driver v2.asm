@@ -47,10 +47,10 @@ PSGNoiseDrumIndex:
 ; sub_71B4C: UpdateMusic:
 SMPS_UpdateDriver:
 	move	#$2300,sr					; enable interrupts (we can accept horizontal interrupts from now on)
-	bset	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).w	; set "SMPS running flag"
+	bset	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).l	; set "SMPS running flag"
 	bne.s	.skip						; if it was set already, don't call another instance of SMPS
 	bsr.s	.inner
-	bclr	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).w	; reset "SMPS running flag"
+	bclr	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).l	; reset "SMPS running flag"
 .skip:
 	rts
 .inner:

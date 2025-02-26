@@ -418,6 +418,14 @@ smpsCall macro loc
 smpsPSGDrumAlterVol macro vol
 	dc.b	$FF,$23,vol<<3
 	endm
+
+smpsSpindashRev macro
+	; Not needed, since we handle this the Sonic 2 way.
+	endm
+
+smpsResetSpindashRev macro
+	; Not needed, since we handle this the Sonic 2 way.
+	endm
 ; ---------------------------------------------------------------------------------------------
 ; Alter Volume
 smpsFMAlterVol macro val1

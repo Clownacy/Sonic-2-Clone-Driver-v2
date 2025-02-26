@@ -8,6 +8,7 @@ SMPS_MUSIC_METADATA macro address,fasttempo,flags
 
 SMPS_MUSIC_METADATA_FORCE_PAL_SPEED = 1 << 7	; Forces song to play at PAL speeds on PAL consoles for synchronisation (used by drowning theme)
 SMPS_MUSIC_METADATA_EXTRA_LIFE_JINGLE = 1 << 6	; Resumes the previous song when this song ends
+SMPS_MUSIC_METADATA_IGNORE_SPEEDUP = 1 << 5	; Makes the song ignore any changes to the tempo. This is needed by S3K's 1UP jingle.
 
 ; ---------------------------------------------------------------------------
 ; SFX macros and constants
@@ -115,14 +116,14 @@ SMPS_waitYM macro target
 ; Pauses the driver: music, SFX, everything
 ; ---------------------------------------------------------------------------
 SMPS_Pause macro
-	move.b	#1,(Clone_Driver_RAM+SMPS_PAUSE_OFFSET).w
+	move.b	#1,(Clone_Driver_RAM+SMPS_PAUSE_OFFSET).l
 	endm
 
 ; ---------------------------------------------------------------------------
 ; Unpauses the driver
 ; ---------------------------------------------------------------------------
 SMPS_Unpause macro
-	move.b	#$80,(Clone_Driver_RAM+SMPS_PAUSE_OFFSET).w
+	move.b	#$80,(Clone_Driver_RAM+SMPS_PAUSE_OFFSET).l
 	endm
 
 ; ---------------------------------------------------------------------------
