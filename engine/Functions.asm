@@ -69,6 +69,13 @@ SMPS_QueueSound2Local_Extended:
 SMPS_QueueSound1_Extended:
 SMPS_QueueSound2_Extended:
 SMPS_QueueSound3_Extended:
+	; Reset tempo if a new song is playing.
+	cmpi.w	#MusID__First,d0
+	blo.s	.not_music
+	cmpi.w	#MusID__End,d0
+	bhs.s	.not_music
+	clr.b	(Clone_Driver_RAM+SMPS_TEMPO_OFFSET).l
+.not_music:
     if SMPS_RingSFXBehaviour
 	bsr.s	SMPS_DoRingFilter
     endif
