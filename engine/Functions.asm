@@ -159,3 +159,13 @@ SMPS_PlayPWMSample:
 	rts
 ; End of function SMPS_PlayPWMSample
     endif
+
+; ---------------------------------------------------------------------------
+; Increases music tempo by 1/X
+;
+; d0 = X
+; ---------------------------------------------------------------------------
+SMPS_ChangeMusicTempo:
+	move.b	d0,(Clone_Driver_RAM+SMPS_TEMPO_OFFSET).w
+	rts
+; End of function SMPS_ChangeMusicTempo
