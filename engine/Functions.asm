@@ -19,29 +19,6 @@ SMPS_DoRingFilter:
 	rts
     endif
 
-    if SMPS_IdlingSegaSound
-SMPS_DoSegaFilter:
-	cmpi.w	#SndID_SegaSound,d0
-	bne.s	.not_sega
-	; Waste cycles until the Sega sound finishes playing
-	movem.l	d0/d1,-(sp)
-	move.w	#$11,d1
-; loc_71FC0:
-.busyloop_outer:
-	move.w	#-1,d0
-; loc_71FC4:
-.busyloop:
-	nop
-	dbf	d0,.busyloop
-
-	dbf	d1,.busyloop_outer
-
-	movem.l	(sp)+,d0/d1
-.not_sega:
-
-	rts
-    endif
-
 ; ---------------------------------------------------------------------------
 ; Queue sound for play
 ; and optionally only do so if object is on-screen (Sonic engine feature)
@@ -118,6 +95,29 @@ SMPS_QueueSound3_Extended:
 	rts
     endif
 ; End of function SMPS_QueueSound1_Extended
+
+    if SMPS_IdlingSegaSound
+SMPS_DoSegaFilter:
+	cmpi.w	#SndID_SegaSound,d0
+	bne.s	.not_sega
+	; Waste cycles until the Sega sound finishes playing
+	movem.l	d0/d1,-(sp)
+	move.w	#$11,d1
+; loc_71FC0:
+.busyloop_outer:
+	move.w	#-1,d0
+; loc_71FC4:
+.busyloop:
+	nop
+	dbf	d0,.busyloop
+
+	dbf	d1,.busyloop_outer
+
+	movem.l	(sp)+,d0/d1
+.not_sega:
+
+	rts
+    endif
 
 ; ---------------------------------------------------------------------------
 ; Play a DAC sample
