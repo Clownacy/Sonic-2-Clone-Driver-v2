@@ -90,7 +90,7 @@ SMPS_QueueSound3_Extended:
 .slot3:
 	move.w	d0,(Clone_Driver_RAM+SMPS_QUEUE_OFFSET+6).l
     if SMPS_IdlingSegaSound
-	bra.s	SMPS_DoSegaFilter
+	;bra.s	SMPS_DoSegaFilter
     else
 	rts
     endif
