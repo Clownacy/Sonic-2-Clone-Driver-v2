@@ -20,6 +20,31 @@ SMPS_DoRingFilter:
     endif
 
 ; ---------------------------------------------------------------------------
+; Play a DAC sample
+;
+; Actual DAC samples start at $81.
+; Using $80 will stop the currently-playing sample.
+;
+; d0 = Sample ID
+; ---------------------------------------------------------------------------
+SMPS_PlayDACSample:
+	movem.w	d0/d1,-(sp)
+	; Convert the 'legacy' ID to a 'modern' ID.
+	clr.w	d1
+	move.b	d0,d1
+	move.w	#MusID_StopDACSFX,d0
+	cmpi.w	#$80,d1
+	bne.s	+
+	move.w	d1,d0
+	addi.w	#DACID__First-$81,d0
++
+	; Send it.
+	bsr.s	SMPS_QueueSound1_Extended
+	movem.w	(sp)+,d0/d1
+	rts
+; End of function SMPS_PlayDACSample
+
+; ---------------------------------------------------------------------------
 ; Queue sound for play
 ; and optionally only do so if object is on-screen (Sonic engine feature)
 ; ---------------------------------------------------------------------------
@@ -118,31 +143,6 @@ SMPS_DoSegaFilter:
 
 	rts
     endif
-
-; ---------------------------------------------------------------------------
-; Play a DAC sample
-;
-; Actual DAC samples start at $81.
-; Using $80 will stop the currently-playing sample.
-;
-; d0 = Sample ID
-; ---------------------------------------------------------------------------
-SMPS_PlayDACSample:
-	movem.w	d0/d1,-(sp)
-	; Convert the 'legacy' ID to a 'modern' ID.
-	clr.w	d1
-	move.b	d0,d1
-	move.w	#MusID_StopDACSFX,d0
-	cmpi.w	#$80,d1
-	bne.s	+
-	move.w	d1,d0
-	addi.w	#DACID__First-$81,d0
-+
-	; Send it.
-	bsr.s	SMPS_QueueSound1_Extended
-	movem.w	(sp)+,d0/d1
-	rts
-; End of function SMPS_PlayDACSample
 
 ; ---------------------------------------------------------------------------
 ; Play a PWM sample
