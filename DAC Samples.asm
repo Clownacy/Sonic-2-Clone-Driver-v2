@@ -58,8 +58,8 @@ ptr_dacA1:	DACMetadata	20513, ElectricTom	; $A1	- Electric High-Tom
 ptr_dacA2:	DACMetadata	15803, ElectricTom	; $A2	- Electric Mid-Tom
 ptr_dacA3:	DACMetadata	13482, ElectricTom	; $A3	- Electric Low-Tom
 ptr_dacA4:	DACMetadata	11274, ElectricTom	; $A4	- Electric Floor-Tom
-ptr_dacA5:	DACMetadata	16766, SnareS32		; $A5	- Mid-Pitch Snare
-ptr_dacA6:	DACMetadata	13482, SnareS32		; $A6	- Tight Snare
+ptr_dacA5:	DACMetadata	16766, SnareS32		; $A5	- Tight Snare
+ptr_dacA6:	DACMetadata	13482, SnareS32		; $A6	- Mid-Pitch Snare
 ptr_dacA7:	DACMetadata	11755, SnareS32		; $A7	- Loose Snare
 ptr_dacA8:	DACMetadata	 9687, SnareS32		; $A8	- Looser Snare
 ptr_dacA9:	DACMetadata	12852, TimpaniS3	; $A9	- Hi-Timpani (S3)
