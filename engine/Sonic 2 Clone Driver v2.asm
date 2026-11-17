@@ -6,8 +6,28 @@
 	even
 
 ; ---------------------------------------------------------------------------
+; Subroutine to update music more than once per frame
+; (Called by horizontal & vert. interrupts)
+; ---------------------------------------------------------------------------
 
-SMPS_Table:
+; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
+
+; sub_71B4C: UpdateMusic:
+SMPS_UpdateDriver:
+	move	#$2300,sr					; enable interrupts (we can accept horizontal interrupts from now on)
+	bset	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).l	; set "SMPS running flag"
+	bne.s	.skip						; if it was set already, don't call another instance of SMPS
+	bsr.s	.inner
+	bclr	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).l	; reset "SMPS running flag"
+.skip:
+	rts
+.inner:
+	lea	(Clone_Driver_RAM).l,a5
+	binclude "c++/core.bin"
+	even
+
+; Data must come directly after the binary blob!
+;SMPS_Table:
 	dc.l	MusicIndex
 	dc.w	MusID__First,MusID__End
 	dc.l	SoundIndex
@@ -25,7 +45,6 @@ SMPS_Table:
     if SMPS_FEATURE_UNIVERSAL_VOICE_BANK
 	dc.l	UniVoiceBank
     endif
-	dc.l	Clone_Driver_RAM
 
 PSGNoiseDrumIndex:
     if SMPS_S28BitPSGEnvelopes
@@ -36,27 +55,6 @@ PSGNoiseDrumIndex:
 	dc.b	s28BitTone_03, 3, $E6
 	dc.b	s28BitTone_04, 4, $E4
     endif
-
-; ---------------------------------------------------------------------------
-; Subroutine to update music more than once per frame
-; (Called by horizontal & vert. interrupts)
-; ---------------------------------------------------------------------------
-
-; ||||||||||||||| S U B	R O U T	I N E |||||||||||||||||||||||||||||||||||||||
-
-; sub_71B4C: UpdateMusic:
-SMPS_UpdateDriver:
-	move	#$2300,sr					; enable interrupts (we can accept horizontal interrupts from now on)
-	bset	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).l	; set "SMPS running flag"
-	bne.s	.skip						; if it was set already, don't call another instance of SMPS
-	bsr.s	.inner
-	bclr	#SMPS_FLAGS_ALREADY_RUNNING,(Clone_Driver_RAM+SMPS_RAM.flags).l	; reset "SMPS running flag"
-.skip:
-	rts
-.inner:
-	lea	SMPS_Table(pc),a5
-	binclude "c++/core.bin"
-	even
 
 ; ---------------------------------------------------------------------------
 ; Music 'include's and pointers
