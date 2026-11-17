@@ -61,6 +61,6 @@ S28Bit_GameOver_Loop00:
 
 S28Bit_GameOver_Loop01:
 	dc.b	dNoise4, $01, dNoise4, dNoise4
-	smpsPSGDrumAlterVol $FF
+	smpsPSGDrumAlterVol -$01
 	smpsLoop            $00, $08, S28Bit_GameOver_Loop01
 	smpsStop

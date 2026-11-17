@@ -90,5 +90,5 @@ S28Bit_PowerSneakers_Jump01:
 	dc.b	dNoise1, $04
 	smpsPSGDrumAlterVol $02
 	dc.b	dNoise1, $04, dNoise1, dNoise1
-	smpsPSGDrumAlterVol $FE
+	smpsPSGDrumAlterVol -$02
 	smpsJump            S28Bit_PowerSneakers_Jump01

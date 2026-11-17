@@ -483,7 +483,7 @@ S28Bit_BadEnding_PSG4:
 
 S28Bit_BadEnding_Loop08:
 	dc.b	dNoise1, $02, $02
-	smpsPSGDrumAlterVol $FF
+	smpsPSGDrumAlterVol -$01
 	smpsLoop            $00, $07, S28Bit_BadEnding_Loop08
 	dc.b	dNoise1, $02, dNoise4, $06, dNoise4, $04, $02, dNoise3, $06
 

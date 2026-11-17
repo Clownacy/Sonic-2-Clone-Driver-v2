@@ -427,7 +427,7 @@ smpsCall macro loc
 	endm
 
 smpsPSGDrumAlterVol macro vol
-	dc.b	$FF,$23,vol<<3
+	dc.b	$FF,$23,(vol)<<3
 	endm
 
 smpsSpindashRev macro

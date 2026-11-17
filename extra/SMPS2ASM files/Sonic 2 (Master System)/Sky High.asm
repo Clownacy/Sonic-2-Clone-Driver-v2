@@ -159,7 +159,7 @@ S28Bit_SkyHigh_Call00:
 	dc.b	dNoise4, $04
 	smpsPSGDrumAlterVol $02
 	dc.b	dNoise4, $02
-	smpsPSGDrumAlterVol $FA
+	smpsPSGDrumAlterVol -$06
 	dc.b	dNoise3, $04, dNoise4, $02, dNoise1, $04, $02, dNoise4, $04, dNoise1, $02, $04
 	dc.b	$02
 	smpsReturn

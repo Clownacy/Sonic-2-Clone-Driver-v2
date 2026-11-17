@@ -64,7 +64,7 @@ S28Bit_ChaosEmerald_PSG4:
 
 S28Bit_ChaosEmerald_Loop03:
 	dc.b	dNoise1, $02
-	smpsPSGDrumAlterVol $FF
+	smpsPSGDrumAlterVol -$01
 	smpsLoop            $00, $0C, S28Bit_ChaosEmerald_Loop03
 
 S28Bit_ChaosEmerald_Loop04:
